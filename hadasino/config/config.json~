@@ -1,0 +1,17 @@
+{
+	"projectRoot": "/home/matan/ingi/repos/ezreed",
+	"run": {
+		"target": "sails",
+		"targetArgs": "lift --verbose"
+	},
+	"doNotWatchDirs": [
+		".git",
+		"node_modules",
+		".tmp"
+	],
+	"server": {
+		"hostname": "localhost",
+		"port": 1338
+  }
+}
+
