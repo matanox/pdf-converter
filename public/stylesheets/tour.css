@@ -1,0 +1,71 @@
+html {
+  background-color: #ffffff;
+  background-image: url(../images/tour-background.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+body {
+  padding-left: 0;
+  padding-right: 0;
+  background: transparent;
+}
+#hero-container .pull-right {
+  padding: 15px 0px 0px 0px;
+}
+#hero-container p {
+  font-family:"lobster";
+  font-size: 20px;
+  margin: 6px 0px 10px 0px;
+}
+#hero-container .icon.icon-google-plus-sign {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+}
+#hero-container .icon.icon-facebook-sign {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+}
+#hero-container .icon.icon-twitter-sign {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+}
+#hero-container .icon.icon-user {
+  font-size: 23px;
+  text-shadow: 0px 1px 2px #000000;
+  margin: 3px 0px 0px 0px;
+  color: rgba(36, 3, 12, 0.568627);
+  height: 23px;
+  width: 23px;
+}
+#title {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.129412);
+  font-size: 50px;
+  text-align: center;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 90px 0px 10px 0px;
+}
+#subtitle {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.168627);
+  font-weight: normal;
+  font-size: 20px;
+  text-align: center;
+  color: #f0f0f0;
+}
+#hero-container div .btn {
+  background: #1b8af5;
+  background-image: -moz-linear-gradient(270deg, #1b8af5 72%, #81a8da 98%);
+  background-image: -webkit-linear-gradient(270deg, #1b8af5 72%, #81a8da 98%);
+  background-image: -o-linear-gradient(270deg, #1b8af5 72%, #81a8da 98%);
+  background-image: linear-gradient(180deg, #1b8af5 72%, #81a8da 98%);
+  font-weight: bold;
+  border: none;
+  margin-top: 70px;
+}
