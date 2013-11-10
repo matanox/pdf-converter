@@ -14,12 +14,7 @@ body {
   background: transparent;
 }
 #hero-container .pull-right {
-  padding: 15px 0px 0px 0px;
-}
-#hero-container p {
-  font-family:"lobster";
-  font-size: 20px;
-  margin: 6px 0px 10px 0px;
+  padding: 5px 0px 0px 0px;
 }
 #hero-container .icon.icon-google-plus-sign {
   font-size: 30px;
@@ -68,4 +63,10 @@ body {
   font-weight: bold;
   border: none;
   margin-top: 70px;
+}
+#hero-container .connect {
+  font-family:"lobster";
+  font-size: 20px;
+  margin: 7px 0px 3px 0px;
+  padding: 0px 0px 0px 0px;
 }
