@@ -48,8 +48,8 @@ passport.use new GoogleStrategy(
   console.log "authorized user " + identifier + "\n" + JSON.stringify(profile),
   #User.findOrCreate
   #  openId: identifier,
-    (err, user) ->
-    done err, user
+  #  (err, user) ->
+  #  done err, user
 
 )
 
