@@ -27,7 +27,9 @@ path = require("path");
 
 app = express();
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 80);
+
+console.log("Port is " + app.get("port"));
 
 app.set("views", __dirname + "/views");
 
@@ -77,6 +79,6 @@ passport.use(new GoogleStrategy({
 app.get("/auth/google", passport.authenticate("google"));
 
 app.get("/auth/google/return", passport.authenticate("google", {
-  successRedirect: "/landing.html",
-  failureRedirect: "/login"
+  successRedirect: "/",
+  failureRedirect: "/"
 }));

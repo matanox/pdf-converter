@@ -18,7 +18,9 @@ path = require("path")
 app = express()
 
 # all environments
-app.set "port", process.env.PORT or 3000
+app.set "port", process.env.PORT or 80
+console.log("Port is " + app.get("port"))
+
 app.set "views", __dirname + "/views"
 app.set "view engine", "ejs"
 app.use express.favicon()
@@ -44,12 +46,12 @@ passport.use new GoogleStrategy(
   #returnURL: "http://localhost:3000/auth/google/return"
   returnURL: "http://" + host + "/auth/google/return"
   realm: "http://" + host + "/auth/google",
- (identifier, profile, done) ->
-  console.log "authorized user " + identifier + "\n" + JSON.stringify(profile)
-  #User.findOrCreate
-  #  openId: identifier,
-  #  (err, user) ->
-  #  done err, user
+  (identifier, profile, done) ->
+    console.log "authorized user " + identifier + "\n" + JSON.stringify(profile)
+    #User.findOrCreate
+    #  openId: identifier,
+    #  (err, user) ->
+    #  done err, user
 
 )
 
@@ -62,6 +64,6 @@ app.get "/auth/google", passport.authenticate("google")
 # the process by verifying the assertion.  If valid, the user will be
 # logged in.  Otherwise, authentication has failed.
 app.get "/auth/google/return", passport.authenticate("google",
-  successRedirect: "/landing.html"
-  failureRedirect: "/login"
+  successRedirect: "/"
+  failureRedirect: "/"
 )
