@@ -27,7 +27,7 @@ path = require("path");
 
 app = express();
 
-app.set("port", process.env.PORT || 80);
+app.set("port", process.env.PORT || 3000);
 
 console.log("Port is " + app.get("port"));
 
@@ -43,7 +43,7 @@ app.use(express.bodyParser());
 
 app.use(express.methodOverride());
 
-app.use(express.cookieParser("your secret here"));
+app.use(express.cookieParser("93ADEE3820567DB"));
 
 app.use(express.session());
 
@@ -78,7 +78,4 @@ passport.use(new GoogleStrategy({
 
 app.get("/auth/google", passport.authenticate("google"));
 
-app.get("/auth/google/return", passport.authenticate("google", {
-  successRedirect: "/",
-  failureRedirect: "/"
-}));
+app.get("/auth/google/return", routes.index);

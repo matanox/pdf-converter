@@ -18,7 +18,7 @@ path = require("path")
 app = express()
 
 # all environments
-app.set "port", process.env.PORT or 80
+app.set "port", process.env.PORT or 3000
 console.log("Port is " + app.get("port"))
 
 app.set "views", __dirname + "/views"
@@ -27,7 +27,7 @@ app.use express.favicon()
 app.use express.logger("dev")
 app.use express.bodyParser()
 app.use express.methodOverride()
-app.use express.cookieParser("your secret here")
+app.use express.cookieParser("93ADEE3820567DB")
 app.use express.session()
 app.use app.router
 app.use require("stylus").middleware(__dirname + "/public")
@@ -63,7 +63,10 @@ app.get "/auth/google", passport.authenticate("google")
 # Google will redirect the user to this URL after authentication.  Finish
 # the process by verifying the assertion.  If valid, the user will be
 # logged in.  Otherwise, authentication has failed.
-app.get "/auth/google/return", passport.authenticate("google",
-  successRedirect: "/"
-  failureRedirect: "/"
-)
+
+app.get "/auth/google/return", routes.index
+
+#app.get "/auth/google/return", passport.authenticate("google",
+#  successRedirect: "/"
+#  failureRedirect: "/"
+#)
