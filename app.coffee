@@ -3,7 +3,8 @@ fs = require("fs")
 nconf = require("nconf")
 nconf.argv().env()
 nconf.defaults host: "localhost"
-host = nconf.get("host")
+host = nconf.get "host"
+console.log "Host is " + nconf.get("host")
 
 #
 # Express Module dependencies.

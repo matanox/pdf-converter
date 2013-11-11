@@ -13,6 +13,8 @@ nconf.defaults({
 
 host = nconf.get("host");
 
+console.log("Host is " + nconf.get("host"));
+
 express = require("express");
 
 routes = require("./routes");
