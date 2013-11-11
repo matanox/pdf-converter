@@ -71,9 +71,7 @@ passport.use(new GoogleStrategy({
   returnURL: "http://" + host + "/auth/google/return",
   realm: "http://" + host + "/auth/google"
 }, function(identifier, profile, done) {
-  return User.findOrCreate({
-    openId: identifier
-  }, function(err, user) {}, done(err, user));
+  return console.log("authorized user " + identifier + "\n" + json.stringify(profile), function(err, user) {}, done(err, user));
 }));
 
 app.get("/auth/google", passport.authenticate("google"));
