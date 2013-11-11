@@ -12,6 +12,8 @@
     "coffee-script": "~1.6.3",
     "passport": "~0.1.17",
     "passport-google": "~0.3.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "waterline": "~0.9.9",
+    "nconf": "~0.6.8"
   }
 }

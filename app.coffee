@@ -1,7 +1,14 @@
+# Get own config
+fs = require("fs")
+nconf = require("nconf")
+nconf.argv().env()
+nconf.defaults host: "localhost"
+host = nconf.get("host")
 
-###
-Module dependencies.
-###
+#
+# Express Module dependencies.
+#
+
 express = require("express")
 routes = require("./routes")
 user = require("./routes/user")
@@ -34,12 +41,12 @@ passport = require("passport")
 GoogleStrategy = require("passport-google").Strategy
 passport.use new GoogleStrategy(
   #returnURL: "http://localhost:3000/auth/google/return"
-  returnURL: "http://ancient-savannah-3233.herokuapp.com/auth/google/return"
-  realm: "http://ancient-savannah-3233.herokuapp.com/auth/google"
-, (identifier, profile, done) ->
+  returnURL: "http://" + host + "/auth/google/return"
+  realm: "http://" + host + "/auth/google",
+ (identifier, profile, done) ->
   User.findOrCreate
-    openId: identifier
-  , (err, user) ->
+    openId: identifier,
+    (err, user) ->
     done err, user
 
 )
