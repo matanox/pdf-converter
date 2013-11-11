@@ -45,7 +45,7 @@ passport.use new GoogleStrategy(
   returnURL: "http://" + host + "/auth/google/return"
   realm: "http://" + host + "/auth/google",
  (identifier, profile, done) ->
-  console.log "authorized user " + identifier + "\n" + JSON.stringify(profile),
+  console.log "authorized user " + identifier + "\n" + JSON.stringify(profile)
   #User.findOrCreate
   #  openId: identifier,
   #  (err, user) ->
