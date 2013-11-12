@@ -18,7 +18,7 @@ path = require("path")
 app = express()
 
 # all environments
-app.set "port", process.env.PORT or 3000
+app.set "port", process.env.PORT or 80
 console.log("Port is " + app.get("port"))
 
 app.set "views", __dirname + "/views"

@@ -27,7 +27,7 @@ path = require("path");
 
 app = express();
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 80);
 
 console.log("Port is " + app.get("port"));
 
