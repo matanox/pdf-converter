@@ -13,6 +13,7 @@ console.log "Host is " + nconf.get("host")
 express = require("express")
 routes = require("./routes")
 user = require("./routes/user")
+convert = require("./routes/convert")
 http = require("http")
 path = require("path")
 app = express()
@@ -37,6 +38,9 @@ app.use express.static(path.join(__dirname, "public"))
 app.use express.errorHandler() if "development" is app.get("env")
 app.get "/", routes.index
 app.get "/users", user.list
+app.get "/convert", convert.go
+
+
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 

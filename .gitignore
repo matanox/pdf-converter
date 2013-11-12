@@ -31,3 +31,8 @@ nbproject
 .idea
 hadasino-server
 recycle-bin
+
+####################
+# app local storage 
+####################
+local-copies
