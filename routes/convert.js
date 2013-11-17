@@ -12,7 +12,7 @@ execCommand = executable + ' '
 function fetch(inkUrl, callback)
 {
 	//outFile = inkUrl + '.pdf';
-	outFile = 'local-copies/upload.pdf'
+	outFile = 'local-copies/' + 'pdf/' + inkUrl.replace("https://www.filepicker.io/api/file/","") + '.pdf'
 	download = getFromUrl(inkUrl, function(error, response, body){
 		if (!error && response.statusCode == 200) 
 			callback(outFile);
@@ -32,7 +32,7 @@ exports.go = function(req, res){
 	function convert(localCopy)
 	{
 
-		execCommand += localCopy
+		execCommand += localCopy += ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/'
 		console.log(execCommand)
 
 	  	exec(execCommand, function (error, stdout, stderr) {
