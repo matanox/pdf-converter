@@ -32,9 +32,11 @@ exports.go = function(req, res){
 	function convert(localCopy)
 	{
 			
+		console.log('Starting the conversion from pdf to html')
+
 		//res.send('Please wait...'');	
 
-		execCommand += localCopy += ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/'
+		execCommand += localCopy + ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/'
 		console.log(execCommand)
 
 	  	exec(execCommand, function (error, stdout, stderr) {
@@ -51,10 +53,10 @@ exports.go = function(req, res){
 				 * readability cleanup, if this code survives.
 				 *
 				 */
-				redirectString = 'http://localhost:8080/' + '?' 
+				redirectString = 'http://localhost:8080/' + 'process-file' + '?location=' 
 				+ '../front-end/' + 'local-copies/' + 'html-converted/' + 
 				localCopy.replace('local-copies/pdf/', '').replace('.pdf', '') + '.html'
-				    	
+
     			res.writeHead(301, {'Location': redirectString});
 		    	res.end();
 		    }

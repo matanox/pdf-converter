@@ -1,1 +1,1 @@
-authbind coffee app
+authbind --deep coffee app
