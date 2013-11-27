@@ -1,1 +1,1 @@
-authbind --deep coffee app
+authbind --deep nodemon app.coffee

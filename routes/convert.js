@@ -3,7 +3,7 @@ exec = require('child_process').exec;
 fs = require('fs')
 require('stream')
 executable = 'pdf2htmlEX'
-execCommand = executable + ' '
+executalbeParams = '--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0'
 
 /*
  * Fetches the upload from Ink File Picker (writing it into local file).
@@ -34,9 +34,10 @@ exports.go = function(req, res){
 			
 		console.log('Starting the conversion from pdf to html')
 
-		//res.send('Please wait...'');	
+		//res.send('Please wait...'');
 
-		execCommand += localCopy + ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/'
+		execCommand = executable + ' '
+		execCommand += localCopy + ' ' + executalbeParams + ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/' 
 		console.log(execCommand)
 
 	  	exec(execCommand, function (error, stdout, stderr) {
@@ -53,7 +54,7 @@ exports.go = function(req, res){
 				 * readability cleanup, if this code survives.
 				 *
 				 */
-				redirectString = 'http://localhost:8080/' + 'process-file' + '?location=' 
+				redirectString = 'http://localhost:8080/' + 'serve-local-file' + '?location=' 
 				+ '../front-end/' + 'local-copies/' + 'html-converted/' + 
 				localCopy.replace('local-copies/pdf/', '').replace('.pdf', '') + '.html'
 
