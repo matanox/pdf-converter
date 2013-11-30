@@ -12,7 +12,7 @@ executalbeParams = '--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 function fetch(inkUrl, callOnSuccess)
 {
 	//outFile = inkUrl + '.pdf';
-	outFile = 'local-copies/' + 'pdf/' + inkUrl.replace("https://www.filepicker.io/api/file/","") + '.pdf'
+	outFile = '../local-copies/' + 'pdf/' + inkUrl.replace("https://www.filepicker.io/api/file/","") + '.pdf'
 	download = getFromUrl(inkUrl, function(error, response, body){
 		if (!error && response.statusCode == 200) 
 			callOnSuccess(outFile);
@@ -37,7 +37,10 @@ exports.go = function(req, res){
 		//res.send('Please wait...'');
 
 		execCommand = executable + ' '
-		execCommand += localCopy + ' ' + executalbeParams + ' ' + '--dest-dir=' + 'local-copies/' + 'html-converted/' 
+		name = localCopy.replace('../local-copies/pdf/', '').replace('.pdf', '')
+		outFileName = name + '.html'
+		outFolder = '../local-copies/' + 'html-converted/'
+		execCommand += localCopy + ' ' + executalbeParams + ' ' + '--dest-dir=' + outFolder + "/" + name
 		console.log(execCommand)
 
 	  	exec(execCommand, function (error, stdout, stderr) {
@@ -48,15 +51,12 @@ exports.go = function(req, res){
 		    }
 		    else {
 		    	console.log('Passing html result to next level handler')
-/* 
+				/* 
 				 * this long concatentaion is the redirect to the back-end server, 
-				 * with the relative location of the output file. Needs some 
-				 * readability cleanup, if this code survives.
-				 *
+				 * Needs some readability cleanup, if this code survives.
 				 */
-				redirectString = 'http://localhost:8080/' + 'serve-local-file' + '?location=' 
-				+ '../front-end/' + 'local-copies/' + 'html-converted/' + 
-				localCopy.replace('local-copies/pdf/', '').replace('.pdf', '') + '.html'
+				redirectString = 'http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName
+				console.log("Redirecting to: " + redirectString)
 
     			res.writeHead(301, {'Location': redirectString});
 		    	res.end();
