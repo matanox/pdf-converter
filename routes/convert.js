@@ -33,7 +33,7 @@ function fetch(inkUrl, callOnSuccess)
 
 exports.go = function(req, res){
 
-	function redirectToRawHTML(redirectString)
+	function redirectToShowHtml(redirectString)
 	{
 		
 		console.log("Passing html result to next level handler, by redirecting to: " + redirectString)
@@ -42,7 +42,7 @@ exports.go = function(req, res){
     	res.end();
 	}
 
-	function processFile(redirectString)
+	function redirectToExtract(redirectString)
 	{
 		
 		console.log("Passing html result to next level handler, by redirecting to: " + redirectString)
@@ -83,8 +83,8 @@ exports.go = function(req, res){
 	      		console.log(executable + '\'sexec error: ' + error)
 		    }
 		    else {
-			  // KEEP THIS FOR LATER: redirectToRawHTML('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
-			  processFile('http://localhost:8080/' + 'process-file/' + name + "/" + outFileName)
+			  // KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
+			  redirectToExtract('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
 		    }
 		});
 	}

@@ -14,6 +14,7 @@ express = require("express")
 routes = require("./routes")
 user = require("./routes/user")
 convert = require("./routes/convert")
+extract = require("./routes/extract")
 http = require("http")
 path = require("path")
 app = express()
@@ -39,6 +40,7 @@ app.use express.errorHandler() if "development" is app.get("env")
 app.get "/", routes.index
 app.get "/users", user.list
 app.get "/convert", convert.go
+app.get "/extract", extract.go
 
 
 http.createServer(app).listen app.get("port"), ->
