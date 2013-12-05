@@ -15,6 +15,7 @@
     "socket.io": "~0.9.16",
     "waterline": "~0.9.9",
     "nconf": "~0.6.8",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "xmldom": "~0.1.16"
   }
 }
