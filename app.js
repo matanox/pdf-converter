@@ -15,14 +15,20 @@ host = nconf.get("host");
 
 console.log("Host is " + nconf.get("host"));
 
-require("appRequires")
+express = require("express");
 
 routes = require("./routes");
+
 user = require("./routes/user");
 
+convert = require("./routes/convert");
+
+extract = require("./routes/extract");
+
 http = require("http");
+
 path = require("path");
-express = require("express");
+
 app = express();
 
 app.set("port", process.env.PORT || 80);
@@ -81,3 +87,7 @@ passport.use(new GoogleStrategy({
 app.get("/auth/google", passport.authenticate("google"));
 
 app.get("/auth/google/return", routes.index);
+
+http.get('http://localhost/extract?file=q3DRztlQhutYapOO0zuw/q3DRztlQhutYapOO0zuw.html', function(res) {
+  return console.log("server response is: " + res.statusCode);
+});

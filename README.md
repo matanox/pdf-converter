@@ -13,6 +13,7 @@ To install: clone this repo and `./install.sh` (and install mocha for testing, i
 
 ## Guidelines
 Each significant step is built as its own http directive, so that it can be invoked on its own during development.
+For asynchronous testing, it is suggested to use [vows.js](http://vowsjs.org/) and mocha for the rest. [sinon.js](http://sinonjs.org/docs/) may be used for time related testing or mocks and stubs, if applicable.
 
 ## License
 There is no license permitting reuse of this code for now. 

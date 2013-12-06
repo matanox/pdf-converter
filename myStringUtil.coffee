@@ -1,10 +1,10 @@
-exports.endsWith = (string, match) ->
+endsWith = (string, match) ->
   string.indexOf(match) is string.length - match.length
 
-exports.startsWith = (string, match) ->
+startsWith = (string, match) ->
   string.indexOf(match) is 0
 
-exports.contains = (string, match) ->
+contains = (string, match) ->
   string.indexOf(match) isnt -1
 
 #
@@ -13,7 +13,7 @@ exports.contains = (string, match) ->
 # at least with html2pdfEX as the original source.
 #
 exports.removeOuterDivs = (string) ->
-  regex = new RegExp("<div((?!div).)*</div>", "g") # g indicates to yield all, not just first match
+  regex = new RegExp('<div((?!div).)*</div>', 'g') # g indicates to yield all, not just first match
   return string.match(regex) 
 
 #
@@ -25,7 +25,7 @@ exports.simpleGetDivContent = (xmlNode) ->
   
   # console.log(xmlNode.length)
   # console.log('</div>'.length)
-  content = xmlNode.slice(0, xmlNode.length - "</div>".length) # remove closing div tag
+  content = xmlNode.substr(0, xmlNode.length - "</div>".length) # remove closing div tag
   
   # console.log(content)
   # console.log(content.match('>'))
@@ -33,3 +33,29 @@ exports.simpleGetDivContent = (xmlNode) ->
   console.log xmlNode
   console.log content + "\n" + "\n"
   content
+
+strip = (string, prefix, suffix) ->
+  if !startsWith(string, prefix)
+    throw("Cannot strip string of the supplied prefix")
+  if !endsWith(string, suffix)
+    throw("Cannot strip string of the supplied suffix")
+
+  string.slice(string.indexOf(prefix)+prefix.length, string.indexOf(suffix))      
+
+simpleGetCssFileNames = (string) ->
+  prefix = '<link rel="stylesheet" href="'
+  suffix = '"/>'
+  regex = new RegExp(prefix + '.*' + suffix, 'g') # g indicates to yield all, not just first match
+  linkStripper = (string) -> strip(string, prefix, suffix)
+
+  cssFiles = (linkStripper stylesheetElem for stylesheetElem in string.match(regex)) # a small for comprehension
+  cssFiles
+  # console.log cssLinks
+
+appendPrefix = (string) -> '../local-copies/' + 'html-converted' + string
+
+exports.simpleGetCssFiles = (string) ->
+  cssFilePaths = (appendPrefix string for string in simpleGetCssFileNames(string))
+  console.log cssFilePaths
+
+  

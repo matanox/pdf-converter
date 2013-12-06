@@ -18,5 +18,7 @@ exports.go = function(req, res) {
     }
     return _results;
   })();
-  return res.send("read raw html of length " + rawHtml.length + " bytes");
+  res.write("read raw html of length " + rawHtml.length + " bytes");
+  util.simpleGetCssFiles(rawHtml);
+  return res.end;
 };

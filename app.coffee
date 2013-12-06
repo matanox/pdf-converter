@@ -76,3 +76,6 @@ app.get "/auth/google/return", routes.index
 #  successRedirect: "/"
 #  failureRedirect: "/"
 #)
+
+http.get('http://localhost/extract?file=q3DRztlQhutYapOO0zuw/q3DRztlQhutYapOO0zuw.html', (res) ->
+  console.log("server response is: " + res.statusCode))
