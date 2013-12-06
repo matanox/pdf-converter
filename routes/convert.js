@@ -71,7 +71,7 @@ exports.go = function(req, res){
 
 		execCommand = executable + ' '
 		name = localCopy.replace('../local-copies/pdf/', '').replace('.pdf', '') // extract the file name
-		outFileName = name + '.html'
+		//outFileName = name + '.html'
 		outFolder = '../local-copies/' + 'html-converted/'
 		execCommand += localCopy + ' ' + executalbeParams + ' ' + '--dest-dir=' + outFolder + "/" + name
 		console.log(execCommand)
@@ -84,7 +84,8 @@ exports.go = function(req, res){
 		    }
 		    else {
 			  // KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
-			  redirectToExtract('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
+			  // redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
+			  redirectToExtract('http://localhost/' + 'extract' +'?name=' + name)			  
 		    }
 		});
 	}

@@ -42,7 +42,7 @@ strip = (string, prefix, suffix) ->
 
   string.slice(string.indexOf(prefix)+prefix.length, string.indexOf(suffix))      
 
-simpleGetCssFileNames = (string) ->
+extractCssFileNames = (string) ->
   prefix = '<link rel="stylesheet" href="'
   suffix = '"/>'
   regex = new RegExp(prefix + '.*' + suffix, 'g') # g indicates to yield all, not just first match
@@ -52,10 +52,9 @@ simpleGetCssFileNames = (string) ->
   cssFiles
   # console.log cssLinks
 
-appendPrefix = (string) -> '../local-copies/' + 'html-converted' + string
-
-exports.simpleGetCssFiles = (string) ->
-  cssFilePaths = (appendPrefix string for string in simpleGetCssFileNames(string))
+exports.simpleGetCssFiles = (rawHtml, path) ->
+  cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
   console.log cssFilePaths
-
+  cssContents = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
+  console.log cssContents
   

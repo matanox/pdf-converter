@@ -6,8 +6,10 @@ require("fs");
 util = require("../myStringUtil");
 
 exports.go = function(req, res) {
-  var div, divs, divsContent, rawHtml;
-  rawHtml = fs.readFileSync("../local-copies/" + "html-converted/" + req.query.file).toString();
+  var div, divs, divsContent, name, path, rawHtml;
+  path = '../local-copies/' + 'html-converted/';
+  name = req.query.name;
+  rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   divs = util.removeOuterDivs(rawHtml);
   divsContent = (function() {
     var _i, _len, _results;
@@ -19,6 +21,6 @@ exports.go = function(req, res) {
     return _results;
   })();
   res.write("read raw html of length " + rawHtml.length + " bytes");
-  util.simpleGetCssFiles(rawHtml);
+  util.simpleGetCssFiles(rawHtml, path + name + '/');
   return res.end;
 };
