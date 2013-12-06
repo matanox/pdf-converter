@@ -9,5 +9,10 @@ To run the app in development, with auto-restart upon source code change: `./sta
 
 To run all its [mocha](http://visionmedia.github.io/mocha/) tests (served from `/tests`): `./test.sh`
 
+To install: clone this repo and `./install.sh` (and install mocha for testing, if not already installed)
+
 ## Guidelines
 Each significant step is built as its own http directive, so that it can be invoked on its own during development.
+
+## License
+There is no license permitting reuse of this code for now. 
