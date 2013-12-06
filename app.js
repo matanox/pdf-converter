@@ -15,20 +15,14 @@ host = nconf.get("host");
 
 console.log("Host is " + nconf.get("host"));
 
-express = require("express");
+require("appRequires")
 
 routes = require("./routes");
-
 user = require("./routes/user");
 
-convert = require("./routes/convert");
-
-extract = require("./routes/extract");
-
 http = require("http");
-
 path = require("path");
-
+express = require("express");
 app = express();
 
 app.set("port", process.env.PORT || 80);

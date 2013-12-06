@@ -1,3 +1,5 @@
+// This test only confirms Mocha is ok.
+
 var assert = require("assert")
 describe('Array', function(){
   describe('#indexOf()', function(){
