@@ -7,7 +7,7 @@ to a same-named javascript (`.js`) file.
 
 To run the app in development, with auto-restart upon source code change: `./start.sh`
 
-To run all its [Mocha](http://visionmedia.github.io/mocha/) tests (served from `/tests`): `./test.sh`
+To run all its [mocha](http://visionmedia.github.io/mocha/) tests (served from `/tests`): `./test.sh`
 
 ## Guidelines
 Each significant step is built as its own http directive, so that it can be invoked on its own during development.
