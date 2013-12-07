@@ -30,10 +30,13 @@ exports.simpleGetDivContent = (xmlNode) ->
   # console.log(content)
   # console.log(content.match('>'))
   content = content.slice(content.indexOf(">") + 1) # remove opening div tag
-  console.log xmlNode
-  console.log content + "\n" + "\n"
+  # console.log xmlNode
+  # console.log content + "\n" + "\n"
   content
 
+#
+# Strip a string from a given header and trailer, if they indeed are.
+#
 strip = (string, prefix, suffix) ->
   if !startsWith(string, prefix)
     throw("Cannot strip string of the supplied prefix")
@@ -42,19 +45,46 @@ strip = (string, prefix, suffix) ->
 
   string.slice(string.indexOf(prefix)+prefix.length, string.indexOf(suffix))      
 
+#
+# Get the css sheet specified in a link element.
+# Of course it may be only a relative path.
+#
 extractCssFileNames = (string) ->
   prefix = '<link rel="stylesheet" href="'
   suffix = '"/>'
-  regex = new RegExp(prefix + '.*' + suffix, 'g') # g indicates to yield all, not just first match
+  # Regex match: All strings (not including new lines and) starting with the prefix and ending with the suffix
+  regex = new RegExp(prefix + '.*' + suffix, 'g') 
   linkStripper = (string) -> strip(string, prefix, suffix)
 
   cssFiles = (linkStripper stylesheetElem for stylesheetElem in string.match(regex)) # a small for comprehension
   cssFiles
   # console.log cssLinks
 
+extractCssProperties = (string) -> 
+  # Strip off any new line characters 
+  regex = new RegExp('[\\n|\\r]', 'g') # first back-slash escapes the string, not the regex
+  string = string.replace(regex, "")
+  
+  # Regex replace: remove all CSS comments (of the form /* anything */) 
+  # First back-slash escapes the string, not the regex
+  regex = new RegExp('/\\*.*?\\*/', 'g')
+  string = string.replace(regex, "")
+  # console.log(string)  
+
+  # Regex match: Any content followed by a block of braces, unless the block of braces includes 
+  #              a block of braces itself. Admittedly this regex is a bit hard to come up with...
+  #              This should get all pairs of (CSS selector, CSS styles in braces clause).
+  regex = new RegExp('[^\\{]*?\\{[^\\{]*?\\}', 'g') # first back-slash escapes the string, not the regex
+  selectors = string.match(regex)   
+  pos = -1
+  console.log(selectors)
+
 exports.simpleGetCssFiles = (rawHtml, path) ->
   cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
-  console.log cssFilePaths
+  # console.log cssFilePaths
   cssContents = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
-  console.log cssContents
+  # console.log cssContents
+  extractCssProperties(cssContents[1])
+
+
   
