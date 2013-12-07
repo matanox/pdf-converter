@@ -12,7 +12,7 @@ exports.go = (req, res) ->
   divsContent = (util.simpleGetDivContent div for div in divs) 
   res.write "read raw html of length " + rawHtml.length + " bytes"
 
-  util.simpleGetCssFiles(rawHtml ,path + name + '/') # send along the path to the folder
+  util.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
   res.end
 

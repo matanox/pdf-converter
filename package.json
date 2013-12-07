@@ -16,6 +16,7 @@
     "waterline": "~0.9.9",
     "nconf": "~0.6.8",
     "request": "~2.27.0",
-    "xmldom": "~0.1.16"
+    "xmldom": "~0.1.16",
+    "css-parse": "~1.6.0"
   }
 }

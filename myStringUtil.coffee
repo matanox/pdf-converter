@@ -1,3 +1,5 @@
+cssParser = require('css-parse');
+
 endsWith = (string, match) ->
   string.indexOf(match) is string.length - match.length
 
@@ -71,20 +73,43 @@ extractCssProperties = (string) ->
   string = string.replace(regex, "")
   # console.log(string)  
 
-  # Regex match: Any content followed by a block of braces, unless the block of braces includes 
-  #              a block of braces itself. Admittedly this regex is a bit hard to come up with...
-  #              This should get all pairs of (CSS selector, CSS styles in braces clause).
-  regex = new RegExp('[^\\{]*?\\{[^\\{]*?\\}', 'g') # first back-slash escapes the string, not the regex
-  selectors = string.match(regex)   
-  pos = -1
-  console.log(selectors)
+  css = cssParser string
 
-exports.simpleGetCssFiles = (rawHtml, path) ->
+  console.log(JSON.stringify(css, null ,2))
+
+  # Assuming there is only one media screen element -
+  # We deconstruct the media screen element into an array of its sub-elements
+  # Alas, ES5 does not provide a 'find' function to use here...  
+  mediaScreenElements = css.stylesheet.rules.filter((element) ->
+    element.type == 'media' and element.media.indexOf('screen') != -1)[0].rules 
+
+  # todo: for readability - replace nots with new 'filterOut' named function,
+  #       that adds the not to the regular filter function
+
+  # Filter out any media 
+  stylesArray = css.stylesheet.rules.filter((element) -> 
+    not (element.type == 'media'))
+
+  # Filter out some more irrelevant entity types
+  stylesArray = stylesArray.filter((element) -> 
+    not (element.type == 'keyframes' or element.type == 'font-face'))
+
+  # Add the media screen sub-elements
+  stylesArray = stylesArray.concat(mediaScreenElements)
+
+  #console.log(JSON.stringify stylesArray, null, 2)
+
+  # Filter out all rules from styles that we don't care about 
+
+
+
+exports.simpleGetStyles = (rawHtml, path) ->
   cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
-  # console.log cssFilePaths
-  cssContents = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
-  # console.log cssContents
-  extractCssProperties(cssContents[1])
+  
+  rawCsss = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
+    
+  styles = (extractCssProperties rawCss for rawCss in rawCsss)
+  # console.log(JSON.stringify styles, null, 2)
 
 
   
