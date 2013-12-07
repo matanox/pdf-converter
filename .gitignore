@@ -1,6 +1,6 @@
 
 ########################
-# node.js / npm
+    node.js / npm
 ########################
 lib-cov
 *.seed
@@ -21,7 +21,7 @@ npm-debug.log
 
 
 ########################
-# misc / editors
+    misc / editors
 ########################
 *~
 *#
@@ -31,4 +31,10 @@ nbproject
 .idea
 hadasino-server
 recycle-bin
+
+#######
+ Plato
+#######
+plato-out
+
 
