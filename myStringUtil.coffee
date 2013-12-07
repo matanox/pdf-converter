@@ -1,4 +1,5 @@
-cssParser = require('css-parse');
+# crepl = require 'coffee-script/lib/coffee-script/repl'
+cssParser = require('css-parse')
 
 endsWith = (string, match) ->
   string.indexOf(match) is string.length - match.length
@@ -97,6 +98,20 @@ extractCssProperties = (string) ->
   # Add the media screen sub-elements
   stylesArray = stylesArray.concat(mediaScreenElements)
 
+  # Deconstruct from the structure distilled from css-parse, 
+  # to a more favorable data structure
+  deconstruct = (element) -> 
+    #console.log(JSON.stringify element, null, 2)
+    if element.declarations[0]? 
+      {selectors: [name], declarations: propertyPairsArray} = element
+
+      console.log(propertyPairsArray)
+
+      #propertyArray = {property, value}
+      #{name, propertyArray}
+
+  ourStylesArray = (deconstruct element for element in stylesArray)
+
   #console.log(JSON.stringify stylesArray, null, 2)
 
   # Filter out all rules from styles that we don't care about 
@@ -109,8 +124,7 @@ exports.simpleGetStyles = (rawHtml, path) ->
   rawCsss = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
     
   styles = (extractCssProperties rawCss for rawCss in rawCsss)
-  console.log(JSON.stringify styles, null, 2)
+  #console.log(JSON.stringify styles[0], null, 2)
 
-  crepl = require 'coffee-script/lib/coffee-script/repl'
   debugger
   

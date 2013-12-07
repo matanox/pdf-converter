@@ -60,7 +60,7 @@ extractCssFileNames = function(string) {
 };
 
 extractCssProperties = function(string) {
-  var css, mediaScreenElements, regex, stylesArray;
+  var css, deconstruct, element, mediaScreenElements, ourStylesArray, regex, stylesArray;
   regex = new RegExp('[\\n|\\r]', 'g');
   string = string.replace(regex, "");
   regex = new RegExp('/\\*.*?\\*/', 'g');
@@ -75,11 +75,27 @@ extractCssProperties = function(string) {
   stylesArray = stylesArray.filter(function(element) {
     return !(element.type === 'keyframes' || element.type === 'font-face');
   });
-  return stylesArray = stylesArray.concat(mediaScreenElements);
+  stylesArray = stylesArray.concat(mediaScreenElements);
+  deconstruct = function(element) {
+    var name, propertyPairsArray, _ref;
+    if (element.declarations[0] != null) {
+      (_ref = element.selectors, name = _ref[0]), propertyPairsArray = element.declarations;
+      return console.log(propertyPairsArray);
+    }
+  };
+  return ourStylesArray = (function() {
+    var _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = stylesArray.length; _i < _len; _i++) {
+      element = stylesArray[_i];
+      _results.push(deconstruct(element));
+    }
+    return _results;
+  })();
 };
 
 exports.simpleGetStyles = function(rawHtml, path) {
-  var crepl, cssFilePaths, file, name, rawCss, rawCsss, styles;
+  var cssFilePaths, file, name, rawCss, rawCsss, styles;
   cssFilePaths = (function() {
     var _i, _len, _ref, _results;
     _ref = extractCssFileNames(rawHtml);
@@ -112,7 +128,5 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
-  console.log(JSON.stringify(styles, null, 2));
-  crepl = require('coffee-script/lib/coffee-script/repl');
   debugger;
 };
