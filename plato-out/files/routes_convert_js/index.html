@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome-ie7.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/jsoverson/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>routes/convert.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
+      <p class="stat">72.41</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
+      <p class="stat">90</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
+      <p class="stat">15.32</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
+      <p class="stat">0.55</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*
+ * Handles the conversion from pdf to html, and forwards to next stage.
+ */
+
+getFromUrl = require(&quot;request&quot;)
+exec = require(&#039;child_process&#039;).exec
+fs = require(&#039;fs&#039;)
+require(&#039;stream&#039;)
+executable = &#039;pdf2htmlEX&#039;
+executalbeParams = &#039;--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0&#039;
+
+/*
+ * Fetches the upload from Ink File Picker (writing it into local file).
+ * If it works - invoke the passed along callback function.
+ */
+function fetch(inkUrl, callOnSuccess)
+{
+	//outFile = inkUrl + &#039;.pdf&#039;;
+	outFile = &#039;../local-copies/&#039; + &#039;pdf/&#039; + inkUrl.replace(&quot;https://www.filepicker.io/api/file/&quot;,&quot;&quot;) + &#039;.pdf&#039;
+	download = getFromUrl(inkUrl, function(error, response, body){
+		if (!error &amp;&amp; response.statusCode == 200) 
+			callOnSuccess(outFile);
+		else
+		{
+			console.log(&#039;fetching from InkFilepicker returned http status &#039; + response.statusCode);
+			if (error)
+			{
+				console.log(&#039;fetching from InkFilepicker returned error &#039; + error);			
+			}
+		}		
+	}).pipe(fs.createWriteStream(outFile))
+}
+
+exports.go = function(req, res){
+
+	function redirectToShowHtml(redirectString)
+	{
+		
+		console.log(&quot;Passing html result to next level handler, by redirecting to: &quot; + redirectString)
+
+		res.writeHead(301, {&#039;Location&#039;: redirectString})
+    	res.end();
+	}
+
+	function redirectToExtract(redirectString)
+	{
+		
+		console.log(&quot;Passing html result to next level handler, by redirecting to: &quot; + redirectString)
+
+		res.writeHead(301, {&#039;Location&#039;: redirectString})
+    	res.end();
+	}
+
+	function convert(localCopy)
+	{
+		/* 
+		 * html2pdfEX doesn&#039;t have an option to pipe the output, so passing its output around
+		 * is just a bit clumsier than it could have been. We use a directory structure one level up
+		 * of this project, to store originals and conversion artifacts, as a way to share them with
+		 * another web server running on the same server.
+		 *
+		 * For the output of html2pdfEX for a given input PDF document, we create a folder using its 
+		 * randomly generated file name generated by html2pdfEX, and in it we store all the conversion 
+		 * outputs for that file - the html, and accompanying files such as css, fonts, images, 
+		 * and javascript that the html2pdfEX output needs to have. 
+		 */
+
+		console.log(&#039;Starting the conversion from pdf to html&#039;)
+
+		//res.send(&#039;Please wait...&#039;&#039;);
+
+		execCommand = executable + &#039; &#039;
+		name = localCopy.replace(&#039;../local-copies/pdf/&#039;, &#039;&#039;).replace(&#039;.pdf&#039;, &#039;&#039;) // extract the file name
+		//outFileName = name + &#039;.html&#039;
+		outFolder = &#039;../local-copies/&#039; + &#039;html-converted/&#039;
+		execCommand += localCopy + &#039; &#039; + executalbeParams + &#039; &#039; + &#039;--dest-dir=&#039; + outFolder + &quot;/&quot; + name
+		console.log(execCommand)
+
+	  	exec(execCommand, function (error, stdout, stderr) {
+	    	console.log(executable + &#039;\&#039;s stdout: &#039; + stdout)
+	    	console.log(executable + &#039;\&#039;s stderr: &#039; + stderr)
+	    	if (error !== null) {
+	      		console.log(executable + &#039;\&#039;sexec error: &#039; + error)
+		    }
+		    else {
+			  // KEEP THIS FOR LATER: redirectToShowHtml(&#039;http://localhost:8080/&#039; + &#039;serve-original-as-html/&#039; + name + &quot;/&quot; + outFileName)
+			  // redirectToShowRaw(&#039;http://localhost/&#039; + &#039;extract&#039; +&#039;?file=&#039; + name + &quot;/&quot; + outFileName)
+			  redirectToExtract(&#039;http://localhost/&#039; + &#039;extract&#039; +&#039;?name=&#039; + name)			  
+		    }
+		});
+	}
+
+	fetch(req.query.tempLocation, convert); // fetch the upload and pass control to the convert function
+};</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
