@@ -66,7 +66,6 @@ extractCssProperties = function(string) {
   regex = new RegExp('/\\*.*?\\*/', 'g');
   string = string.replace(regex, "");
   css = cssParser(string);
-  console.log(JSON.stringify(css, null, 2));
   mediaScreenElements = css.stylesheet.rules.filter(function(element) {
     return element.type === 'media' && element.media.indexOf('screen') !== -1;
   })[0].rules;
@@ -80,7 +79,7 @@ extractCssProperties = function(string) {
 };
 
 exports.simpleGetStyles = function(rawHtml, path) {
-  var cssFilePaths, file, name, rawCss, rawCsss, styles;
+  var crepl, cssFilePaths, file, name, rawCss, rawCsss, styles;
   cssFilePaths = (function() {
     var _i, _len, _ref, _results;
     _ref = extractCssFileNames(rawHtml);
@@ -104,7 +103,7 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
-  return styles = (function() {
+  styles = (function() {
     var _i, _len, _results;
     _results = [];
     for (_i = 0, _len = rawCsss.length; _i < _len; _i++) {
@@ -113,4 +112,7 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
+  console.log(JSON.stringify(styles, null, 2));
+  crepl = require('coffee-script/lib/coffee-script/repl');
+  debugger;
 };

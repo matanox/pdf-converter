@@ -75,7 +75,7 @@ extractCssProperties = (string) ->
 
   css = cssParser string
 
-  console.log(JSON.stringify(css, null ,2))
+  # console.log(JSON.stringify(css, null ,2))
 
   # Assuming there is only one media screen element -
   # We deconstruct the media screen element into an array of its sub-elements
@@ -109,7 +109,8 @@ exports.simpleGetStyles = (rawHtml, path) ->
   rawCsss = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
     
   styles = (extractCssProperties rawCss for rawCss in rawCsss)
-  # console.log(JSON.stringify styles, null, 2)
+  console.log(JSON.stringify styles, null, 2)
 
-
+  crepl = require 'coffee-script/lib/coffee-script/repl'
+  debugger
   
