@@ -1,5 +1,6 @@
 require "fs"
-util = require "../myStringUtil"
+util = require "../util"
+css = require "../css"
 
 #
 # Extract text content and styles from html
@@ -12,7 +13,7 @@ exports.go = (req, res) ->
   divsContent = (util.simpleGetDivContent div for div in divs) 
   res.write "read raw html of length " + rawHtml.length + " bytes"
 
-  util.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
+  css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
   res.end
 
