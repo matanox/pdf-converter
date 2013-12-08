@@ -2,7 +2,7 @@
 var contains, endsWith, startsWith;
 
 endsWith = function(string, match) {
-  return string.indexOf(match) === string.length - match.length;
+  return string.lastIndexOf(match) === string.length - match.length;
 };
 
 startsWith = function(string, match) {
@@ -20,7 +20,7 @@ exports.strip = function(string, prefix, suffix) {
   if (!endsWith(string, suffix)) {
     throw "Cannot strip string of the supplied suffix";
   }
-  return string.slice(string.indexOf(prefix) + prefix.length, string.indexOf(suffix));
+  return string.slice(string.indexOf(prefix) + prefix.length, string.lastIndexOf(suffix));
 };
 
 exports.isAnyOf = function(searchString, stringArray) {
@@ -29,13 +29,7 @@ exports.isAnyOf = function(searchString, stringArray) {
   });
 };
 
-exports.removeOuterDivs = function(string) {
-  var regex;
-  regex = new RegExp('<div((?!div).)*</div>', 'g');
-  return string.match(regex);
-};
-
-exports.simpleGetDivContent = function(xmlNode) {
+exports.parseElementText = function(xmlNode) {
   var content;
   content = xmlNode.substr(0, xmlNode.length - "</div>".length);
   content = content.slice(content.indexOf(">") + 1);

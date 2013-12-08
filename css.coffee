@@ -2,7 +2,7 @@ cssParser = require('css-parse')
 util = require('./util')
 
 #
-# Get the css sheet specified in a link element.
+# Get the css sheet specified in a link html element.
 # Of course it may be only a relative path.
 #
 extractCssFileNames = (string) ->
