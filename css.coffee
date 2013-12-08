@@ -14,7 +14,6 @@ extractCssFileNames = (string) ->
 
   cssFiles = (linkStripper stylesheetElem for stylesheetElem in string.match(regex)) # a small for comprehension
   cssFiles
-  # console.log cssLinks
 
 extractCssProperties = (string) -> 
   # Strip off any new line characters 
@@ -25,11 +24,8 @@ extractCssProperties = (string) ->
   # First back-slash escapes the string, not the regex
   regex = new RegExp('/\\*.*?\\*/', 'g')
   string = string.replace(regex, "")
-  # console.log(string)  
 
   css = cssParser string
-
-  # console.log(JSON.stringify(css, null ,2))
 
   # Assuming there is only one media screen element -
   # We deconstruct the media screen element into an array of its sub-elements
@@ -51,7 +47,6 @@ extractCssProperties = (string) ->
 
   # Add the media screen sub-elements
   stylesArray = stylesArray.concat(mediaScreenElements)
-  # console.log(JSON.stringify stylesArray, null, 2)
 
   # After all that vanilla filtering above, proceed to more aggressive
   # filtering while deconstructing to a more favorable data structure
@@ -73,7 +68,6 @@ extractCssProperties = (string) ->
     # Some guards for further filtering out irrelevant output
     return null if not element.declarations[0]? 
       
-    # console.log(JSON.stringify element, null, 2)  
     {selectors: [name], declarations: propertyObjectsArray} = element # extracting via a destructuring
     propertyObjectsArray = filterProperties(propertyObjectsArray)
     return null if propertyObjectsArray.length == 0
@@ -87,13 +81,7 @@ extractCssProperties = (string) ->
       
   (deconstruct element for element in stylesArray).filter((elem) -> elem?) 
 
-  # console.log(JSON.stringify ourStylesArray, null, 2)
-
-
-
 exports.simpleGetStyles = (rawHtml, path) ->
   cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
   rawCsss = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
   styles = (extractCssProperties rawCss for rawCss in rawCsss)
-  console.log(JSON.stringify styles, null, 2)
-

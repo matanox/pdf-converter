@@ -51,3 +51,5 @@ exports.simpleGetDivContent = (xmlNode) ->
   # console.log xmlNode
   # console.log content + "\n" + "\n"
   content
+
+exports.logObject = (obj) -> console.log(JSON.stringify obj, null, 2)

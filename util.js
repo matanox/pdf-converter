@@ -41,3 +41,7 @@ exports.simpleGetDivContent = function(xmlNode) {
   content = content.slice(content.indexOf(">") + 1);
   return content;
 };
+
+exports.logObject = function(obj) {
+  return console.log(JSON.stringify(obj, null, 2));
+};

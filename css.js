@@ -111,7 +111,7 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
-  styles = (function() {
+  return styles = (function() {
     var _i, _len, _results;
     _results = [];
     for (_i = 0, _len = rawCsss.length; _i < _len; _i++) {
@@ -120,5 +120,4 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
-  return console.log(JSON.stringify(styles, null, 2));
 };

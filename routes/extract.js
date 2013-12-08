@@ -23,6 +23,7 @@ exports.go = function(req, res) {
     return _results;
   })();
   res.write("read raw html of length " + rawHtml.length + " bytes");
+  util.logObject(divs);
   css.simpleGetStyles(rawHtml, path + name + '/');
   return res.end;
 };
