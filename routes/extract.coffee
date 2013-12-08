@@ -16,7 +16,3 @@ exports.go = (req, res) ->
   css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
   res.end
-
-
-
-

@@ -4,4 +4,4 @@
 
 convert = require("./routes/convert");
 extract = require("./routes/extract");
-util = require("./myStringUtil")
+util = require("./util")
