@@ -87,7 +87,7 @@ extractCssProperties = function(string) {
 };
 
 exports.simpleGetStyles = function(rawHtml, path) {
-  var cssFilePaths, file, name, rawCss, rawCsss, styles;
+  var array, cssFilePaths, file, name, rawCss, rawCsss, style, styles, stylesMap, stylesPerFile, _i, _j, _len, _len1;
   cssFilePaths = (function() {
     var _i, _len, _ref, _results;
     _ref = extractCssFileNames(rawHtml);
@@ -105,13 +105,11 @@ exports.simpleGetStyles = function(rawHtml, path) {
     _results = [];
     for (_i = 0, _len = cssFilePaths.length; _i < _len; _i++) {
       file = cssFilePaths[_i];
-      _results.push((function(file) {
-        return fs.readFileSync(file).toString();
-      })(file));
+      _results.push(fs.readFileSync(file).toString());
     }
     return _results;
   })();
-  return styles = (function() {
+  stylesPerFile = (function() {
     var _i, _len, _results;
     _results = [];
     for (_i = 0, _len = rawCsss.length; _i < _len; _i++) {
@@ -120,4 +118,15 @@ exports.simpleGetStyles = function(rawHtml, path) {
     }
     return _results;
   })();
+  styles = [];
+  for (_i = 0, _len = stylesPerFile.length; _i < _len; _i++) {
+    array = stylesPerFile[_i];
+    styles = styles.concat(array);
+  }
+  stylesMap = {};
+  for (_j = 0, _len1 = styles.length; _j < _len1; _j++) {
+    style = styles[_j];
+    stylesMap[style.name] = style.propertyObjectsArray;
+  }
+  return stylesMap;
 };

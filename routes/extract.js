@@ -10,7 +10,7 @@ css = require("../css");
 html = require("../html");
 
 exports.go = function(req, res) {
-  var div, divs, name, path, rawHtml, styledText;
+  var div, divs, name, path, rawHtml, styledText, styles;
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -24,8 +24,8 @@ exports.go = function(req, res) {
     }
     return _results;
   })();
-  css.simpleGetStyles(rawHtml, path + name + '/');
-  util.logObject(styledText);
+  styles = css.simpleGetStyles(rawHtml, path + name + '/');
+  util.logObject(styles);
   res.write("read raw html of length " + rawHtml.length + " bytes");
   return res.end;
 };

@@ -30,5 +30,8 @@ exports.parseElementText = (xmlNode) ->
   content = content.slice(content.indexOf(">") + 1)             # remove opening div tag
   content
 
+#exports.arrayToMap = (array) ->
+  #map[obj[key]] = element for element in array 
+
 exports.logObject = (obj) -> console.log(JSON.stringify obj, null, 2)
 

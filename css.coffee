@@ -83,5 +83,18 @@ extractCssProperties = (string) ->
 
 exports.simpleGetStyles = (rawHtml, path) ->
   cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
-  rawCsss = (((file) -> fs.readFileSync(file).toString()) file for file in cssFilePaths)
-  styles = (extractCssProperties rawCss for rawCss in rawCsss)
+  rawCsss = (fs.readFileSync(file).toString() for file in cssFilePaths)
+  stylesPerFile = (extractCssProperties rawCss for rawCss in rawCsss)
+  
+  # Flatten the array of styles per file, into a one level flatter array -
+  # thus joining the css declarations from each css file, into one long array.
+  # This may be made a utility function named flattenArray or something
+  styles = []
+  styles = styles.concat(array) for array in stylesPerFile
+
+  # Now turn the array into an object, so it can be searched as a hash/map.
+  # this may be made into a utility function.
+  stylesMap = {}
+  stylesMap[style.name] = style.propertyObjectsArray for style in styles
+  stylesMap
+

@@ -13,10 +13,11 @@ exports.go = (req, res) ->
 
   divs = html.removeOuterDivs(rawHtml)
   styledText = (html.deconstructDiv div for div in divs) 
-  css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
+  styles = css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
-  util.logObject(styledText)
-
+  #util.logObject(styledText)
+  util.logObject(styles)
+  
   res.write "read raw html of length " + rawHtml.length + " bytes"
 
   res.end
