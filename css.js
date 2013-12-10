@@ -86,7 +86,7 @@ extractCssProperties = function(string) {
   });
 };
 
-exports.simpleGetStyles = function(rawHtml, path) {
+exports.simpleFetchStyles = function(rawHtml, path) {
   var array, cssFilePaths, file, name, rawCss, rawCsss, style, styles, stylesMap, stylesPerFile, _i, _j, _len, _len1;
   cssFilePaths = (function() {
     var _i, _len, _ref, _results;
@@ -129,4 +129,18 @@ exports.simpleGetStyles = function(rawHtml, path) {
     stylesMap[style.name] = style.propertyObjectsArray;
   }
   return stylesMap;
+};
+
+exports.getRealStyle = function(styleClass, realStyles) {
+  if (realStyles[styleClass] != null) {
+    return realStyles[styleClass];
+  } else {
+    return void 0;
+  }
+};
+
+exports.serializeStyle = function(style) {
+  var styleString;
+  styleString = style.property + ':' + style.value + ';';
+  return styleString;
 };

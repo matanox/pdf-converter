@@ -87,7 +87,3 @@ passport.use(new GoogleStrategy({
 app.get("/auth/google", passport.authenticate("google"));
 
 app.get("/auth/google/return", routes.index);
-
-http.get('http://localhost/extract?name=q3DRztlQhutYapOO0zuw', function(res) {
-  return console.log("server response is: " + res.statusCode);
-});

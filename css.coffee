@@ -81,7 +81,7 @@ extractCssProperties = (string) ->
       
   (deconstruct element for element in stylesArray).filter((elem) -> elem?) 
 
-exports.simpleGetStyles = (rawHtml, path) ->
+exports.simpleFetchStyles = (rawHtml, path) ->
   cssFilePaths = (((name) -> path + name) name for name in extractCssFileNames(rawHtml))
   rawCsss = (fs.readFileSync(file).toString() for file in cssFilePaths)
   stylesPerFile = (extractCssProperties rawCss for rawCss in rawCsss)
@@ -98,3 +98,14 @@ exports.simpleGetStyles = (rawHtml, path) ->
   stylesMap[style.name] = style.propertyObjectsArray for style in styles
   stylesMap
 
+# get the css styles for a css class
+exports.getRealStyle = (styleClass, realStyles) ->
+  if realStyles[styleClass]? 
+  	return realStyles[styleClass]
+  else 
+  	return undefined 
+
+# return the native css string form of a style. e.g. "font-size:96px;
+exports.serializeStyle = (style) ->
+  styleString = style.property + ':' + style.value + ';'
+  styleString

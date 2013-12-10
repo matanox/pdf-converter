@@ -1,7 +1,8 @@
 require "fs"
-util = require "../util"
-css  = require "../css"
-html = require "../html"
+util   = require "../util"
+css    = require "../css"
+html   = require "../html"
+output = require "../output"
 
 #
 # Extract text content and styles from html
@@ -14,11 +15,15 @@ exports.go = (req, res) ->
   divs = html.removeOuterDivs(rawHtml)
   ourDivRepresentation = (html.representDiv div for div in divs) 
   html.stripSpanWrappers(div) for div in ourDivRepresentation
-  realStyles = css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
+  realStyles = css.simpleFetchStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
-  #util.logObject()
-  util.logObject(ourDivRepresentation)
+  util.logObject(realStyles)
+  #util.logObject(ourDivRepresentation)
 
-  res.write "read raw html of length " + rawHtml.length + " bytes"
+  outputHtml = ourDivRepresentation
+  output.create(outputHtml, name, res)
 
-  res.end
+  # res.sendfile('../local-copies/' + 'output/' + name + ".html")
+
+  # res.send("read raw html of length " + rawHtml.length + " bytes")
+  
