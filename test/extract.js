@@ -11,18 +11,18 @@ divContent = "makers <span class=\"_ _7\"> </span>and <span class=\"_ _7\"> </sp
 
 describe('removeOuterDivs', function() {
   return it('should only return divs that do not wrap around other divs', function() {
-    return assert.equal(util.removeOuterDivs("<div><div>something</div></div>"), "<div>something</div>");
+    return assert.equal(html.removeOuterDivs("<div><div>something</div></div>"), "<div>something</div>");
   });
 });
 
 describe('simpleGetDivContent', function() {
   it('should correctly extract the inner text of a div', function() {
-    return assert.equal(util.simpleGetDivContent(div), divContent);
+    return assert.equal(html.deconstructDiv(div), divContent);
   });
   it('should extract an empty string when there is no content', function() {
-    return assert.equal(util.simpleGetDivContent("<div class=\"something\"></div>"), "");
+    return assert.equal(html.deconstructDiv("<div class=\"something\"></div>"), "");
   });
   return it('should extract a space when content is a space', function() {
-    return assert.equal(util.simpleGetDivContent("<div class=\"something\"> </div>"), " ");
+    return assert.equal(html.deconstructDiv("<div class=\"something\"> </div>"), " ");
   });
 });

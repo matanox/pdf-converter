@@ -12,12 +12,13 @@ exports.go = (req, res) ->
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
 
   divs = html.removeOuterDivs(rawHtml)
-  styledText = (html.deconstructDiv div for div in divs) 
-  styles = css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
+  ourDivRepresentation = (html.representDiv div for div in divs) 
+  html.stripSpanWrappers(div) for div in ourDivRepresentation
+  realStyles = css.simpleGetStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
-  #util.logObject(styledText)
-  util.logObject(styles)
-  
+  #util.logObject()
+  util.logObject(ourDivRepresentation)
+
   res.write "read raw html of length " + rawHtml.length + " bytes"
 
   res.end

@@ -6,15 +6,15 @@ divContent = """makers <span class="_ _7"> </span>and <span class="_ _7"> </span
 
 describe 'removeOuterDivs', -> 
   it 'should only return divs that do not wrap around other divs', -> 
-    assert.equal(util.removeOuterDivs("<div><div>something</div></div>"), "<div>something</div>")
+    assert.equal(html.removeOuterDivs("<div><div>something</div></div>"), "<div>something</div>")
 
 describe 'simpleGetDivContent', -> 
   it 'should correctly extract the inner text of a div', -> 
-    assert.equal(util.simpleGetDivContent(div), divContent)
+    assert.equal(html.deconstructDiv(div), divContent)
   it 'should extract an empty string when there is no content', ->
-    assert.equal(util.simpleGetDivContent("""<div class="something"></div>"""),"")
+    assert.equal(html.deconstructDiv("""<div class="something"></div>"""),"")
   it 'should extract a space when content is a space', ->
-    assert.equal(util.simpleGetDivContent("""<div class="something"> </div>""")," ")    	
+    assert.equal(html.deconstructDiv("""<div class="something"> </div>""")," ")    	
     
 #TODO: Add test for simpleGetDivContent, that compares input and output of whole html file
 #      Requires reading from files, maybe Mocha has something for it

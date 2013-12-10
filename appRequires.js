@@ -5,3 +5,4 @@
 convert = require("./routes/convert");
 extract = require("./routes/extract");
 util = require("./util")
+html = require("./html")

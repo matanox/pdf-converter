@@ -10,22 +10,26 @@ css = require("../css");
 html = require("../html");
 
 exports.go = function(req, res) {
-  var div, divs, name, path, rawHtml, styledText, styles;
+  var div, divs, name, ourDivRepresentation, path, rawHtml, realStyles, _i, _len;
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   divs = html.removeOuterDivs(rawHtml);
-  styledText = (function() {
+  ourDivRepresentation = (function() {
     var _i, _len, _results;
     _results = [];
     for (_i = 0, _len = divs.length; _i < _len; _i++) {
       div = divs[_i];
-      _results.push(html.deconstructDiv(div));
+      _results.push(html.representDiv(div));
     }
     return _results;
   })();
-  styles = css.simpleGetStyles(rawHtml, path + name + '/');
-  util.logObject(styles);
+  for (_i = 0, _len = ourDivRepresentation.length; _i < _len; _i++) {
+    div = ourDivRepresentation[_i];
+    html.stripSpanWrappers(div);
+  }
+  realStyles = css.simpleGetStyles(rawHtml, path + name + '/');
+  util.logObject(ourDivRepresentation);
   res.write("read raw html of length " + rawHtml.length + " bytes");
   return res.end;
 };

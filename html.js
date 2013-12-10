@@ -19,7 +19,7 @@ parseCssClasses = function(xmlNode) {
   return cssClasses;
 };
 
-exports.deconstructDiv = function(xmlNode) {
+exports.representDiv = function(xmlNode) {
   var styles, text;
   text = util.parseElementText(xmlNode);
   styles = parseCssClasses(xmlNode);
@@ -27,4 +27,12 @@ exports.deconstructDiv = function(xmlNode) {
     text: text,
     styles: styles
   };
+};
+
+exports.stripSpanWrappers = function(div) {
+  var spanBegin, spanEnd;
+  spanBegin = new RegExp('<span.*?>', 'g');
+  spanEnd = new RegExp('</span>', 'g');
+  div.text = div.text.replace(spanBegin, '');
+  return div.text = div.text.replace(spanEnd, '');
 };
