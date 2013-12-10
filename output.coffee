@@ -4,8 +4,9 @@ require "jsdom"
 #textHookPoint = getElementByID(window.hookPoint)
 #textHookPoint.innerHTML = "aaaaa" 
 
-exports.create = (text, name, res) ->
-  outputFile = '../local-copies/' + 'output/' + name + '.html'
+exports.serveOutput = (text, name, res) ->
+  outputFile = './local-copies/' + 'output/' + name + '.html'
+  
   fs.writeFile(outputFile, "aaa", (err) -> 
   	
   	if err?
@@ -14,5 +15,5 @@ exports.create = (text, name, res) ->
 
   	console.log('Output saved')
   	console.log('Sending response....')
-  	res.sendfile(outputFile)
+  	res.sendfile(outputFile) # variable use by closure here...
   	)

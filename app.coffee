@@ -42,40 +42,43 @@ app.get "/users", user.list
 app.get "/convert", convert.go
 app.get "/extract", extract.go
 
+# Need to be installed out on the Internet (e.g. Heroku) for Google 
+# being able to complete the authnetication flow, that culminates
+# in getting back to our web server via public dns.
+googleAuthSetup = () ->
+  passport = require("passport")
+  GoogleStrategy = require("passport-google").Strategy
+  passport.use new GoogleStrategy(
+    #returnURL: "http://localhost:3000/auth/google/return"
+    returnURL: "http://" + host + "/auth/google/return"
+    realm: "http://" + host + "/auth/google",
+    (identifier, profile, done) ->
+      console.log "authorized user " + identifier + "\n" + JSON.stringify(profile)
+      #User.findOrCreate
+      #  openId: identifier,
+      #  (err, user) ->
+      #  done err, user
+
+  )
+
+  # Redirect the user to Google for authentication.  When complete, Google
+  # will redirect the user back to the application at /auth/google/return
+  app.get "/auth/google", passport.authenticate("google")
+
+  # Google will redirect the user to this URL after authentication.  Finish
+  # the process by verifying the assertion.  If valid, the user will be
+  # logged in.  Otherwise, authentication has failed.
+  app.get "/auth/google/return", routes.index
+
+  #app.get "/auth/google/return", passport.authenticate("google",
+  #  successRedirect: "/"
+  #  failureRedirect: "/"
+  #)
+  #http.get('http://localhost/extract?name=q3DRztlQhutYapOO0zuw', (res) ->
+  #  console.log("server response is: " + res.statusCode))
+  true
+
+googleAuthSetup
 
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
-
-passport = require("passport")
-GoogleStrategy = require("passport-google").Strategy
-passport.use new GoogleStrategy(
-  #returnURL: "http://localhost:3000/auth/google/return"
-  returnURL: "http://" + host + "/auth/google/return"
-  realm: "http://" + host + "/auth/google",
-  (identifier, profile, done) ->
-    console.log "authorized user " + identifier + "\n" + JSON.stringify(profile)
-    #User.findOrCreate
-    #  openId: identifier,
-    #  (err, user) ->
-    #  done err, user
-
-)
-
-# Redirect the user to Google for authentication.  When complete, Google
-# will redirect the user back to the application at
-#     /auth/google/return
-app.get "/auth/google", passport.authenticate("google")
-
-# Google will redirect the user to this URL after authentication.  Finish
-# the process by verifying the assertion.  If valid, the user will be
-# logged in.  Otherwise, authentication has failed.
-
-app.get "/auth/google/return", routes.index
-
-#app.get "/auth/google/return", passport.authenticate("google",
-#  successRedirect: "/"
-#  failureRedirect: "/"
-#)
-
-#http.get('http://localhost/extract?name=q3DRztlQhutYapOO0zuw', (res) ->
-#  console.log("server response is: " + res.statusCode))

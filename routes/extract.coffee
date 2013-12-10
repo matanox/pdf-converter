@@ -21,7 +21,7 @@ exports.go = (req, res) ->
   #util.logObject(ourDivRepresentation)
 
   outputHtml = ourDivRepresentation
-  output.create(outputHtml, name, res)
+  output.serveOutput(outputHtml, name, res)
 
   # res.sendfile('../local-copies/' + 'output/' + name + ".html")
 

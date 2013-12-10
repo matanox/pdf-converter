@@ -4,9 +4,9 @@ require("fs");
 
 require("jsdom");
 
-exports.create = function(text, name, res) {
+exports.serveOutput = function(text, name, res) {
   var outputFile;
-  outputFile = '../local-copies/' + 'output/' + name + '.html';
+  outputFile = './local-copies/' + 'output/' + name + '.html';
   return fs.writeFile(outputFile, "aaa", function(err) {
     if (err != null) {
       res.send(500);

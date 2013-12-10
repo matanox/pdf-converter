@@ -33,5 +33,5 @@ exports.go = function(req, res) {
   realStyles = css.simpleFetchStyles(rawHtml, path + name + '/');
   util.logObject(realStyles);
   outputHtml = ourDivRepresentation;
-  return output.create(outputHtml, name, res);
+  return output.serveOutput(outputHtml, name, res);
 };
