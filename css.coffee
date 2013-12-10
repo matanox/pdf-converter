@@ -62,7 +62,12 @@ extractCssProperties = (string) ->
         'font-style',
         'font-weight',
         'color' ]
-      propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> util.isAnyOf(propertyPair.property, relevantStyles))
+      positionData = [
+      	'left',
+      	'bottom']
+
+      propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> 
+      	util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData)))
       return propertyObjectsArray
 
     # Some guards for further filtering out irrelevant output

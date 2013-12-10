@@ -46,10 +46,11 @@ extractCssProperties = function(string) {
   deconstruct = function(element) {
     var filterProperties, name, obj, propertyObjectsArray, _i, _len, _ref;
     filterProperties = function(propertyObjectsArray) {
-      var relevantStyles;
+      var positionData, relevantStyles;
       relevantStyles = ['font-family', 'font-size', 'font-style', 'font-weight', 'color'];
+      positionData = ['left', 'bottom'];
       propertyObjectsArray = propertyObjectsArray.filter(function(propertyPair) {
-        return util.isAnyOf(propertyPair.property, relevantStyles);
+        return util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData));
       });
       return propertyObjectsArray;
     };

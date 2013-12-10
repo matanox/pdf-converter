@@ -16,6 +16,7 @@ require(['filePicker'], function() {
 });
 
 // TODO: move this under the auspices of require if it gets buggy
+// TODO: (possibly) get rid of jquery
 require(['jquery'], function() {
 	$.getScript("./hadasino/socket.io.js").done(function( data, textStatus, jqxhr ) {
   		/* console.log( data ); // Data returned
