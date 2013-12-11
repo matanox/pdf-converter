@@ -63,11 +63,11 @@ extractCssProperties = (string) ->
         'font-weight',
         'color' ]
       positionData = [
-      	'left',
-      	'bottom']
+        'left',
+        'bottom']
 
       propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> 
-      	util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData)))
+        util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData)))
       return propertyObjectsArray
 
     # Some guards for further filtering out irrelevant output
@@ -106,11 +106,11 @@ exports.simpleFetchStyles = (rawHtml, path) ->
 # get the css styles for a css class
 exports.getRealStyle = (styleClass, realStyles) ->
   if realStyles[styleClass]? 
-  	return realStyles[styleClass]
+    return realStyles[styleClass]
   else 
-  	return undefined 
+    return undefined 
 
-# return the native css string form of a style. e.g. "font-size:96px;
+# return the native css string form of a style. e.g. "font-size:96px;"
 exports.serializeStyle = (style) ->
   styleString = style.property + ':' + style.value + ';'
   styleString

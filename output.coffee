@@ -23,10 +23,10 @@ exports.serveOutput = (text, name, res) ->
   console.log(outputHtml)
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
-  	if err?
-  	  res.send(500)
-  	  throw err
+    if err?
+      res.send(500)
+      throw err
 
-  	console.log('Output saved')
-  	console.log('Sending response....')
-  	res.sendfile(outputFile)) # variable use by closure here...
+    console.log('Output saved')
+    console.log('Sending response....')
+    res.sendfile(outputFile)) # variable use by closure here...

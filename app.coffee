@@ -85,5 +85,5 @@ http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
 http.get('http://localhost/extract?name=q3DRztlQhutYapOO0zuw', (res) ->
-    console.log("server response is: " + res.statusCode))
+  console.log("server response is: " + res.statusCode))
   
