@@ -55,10 +55,6 @@ app.use(app.router);
 
 app.use(express["static"](path.join(__dirname, "public")));
 
-app.use(express.directory(__dirname + '/outputTemplate'));
-
-app.use(express["static"](path.join(__dirname, "outputTemplate")));
-
 if ("development" === app.get("env")) {
   app.use(express.errorHandler());
 }

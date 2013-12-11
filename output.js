@@ -12,7 +12,7 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span i
 exports.serveOutput = function(text, name, res) {
   var dummyText, outputFile, outputHtml;
   dummyText = "aaaa";
-  outputFile = './local-copies/' + 'output/' + name + '.html';
+  outputFile = '../local-copies/' + 'output/' + name + '.html';
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos));
   console.log(outputHtml);
   return fs.writeFile(outputFile, outputHtml, function(err) {
@@ -22,6 +22,8 @@ exports.serveOutput = function(text, name, res) {
     }
     console.log('Output saved');
     console.log('Sending response....');
-    return res.sendfile(outputFile);
+    return res.sendfile(name + '.html', {
+      root: '../local-copies/' + 'output/'
+    });
   });
 };

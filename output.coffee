@@ -17,7 +17,7 @@ exports.serveOutput = (text, name, res) ->
  
   dummyText = "aaaa"
 
-  outputFile = './local-copies/' + 'output/' + name + '.html'
+  outputFile = '../local-copies/' + 'output/' + name + '.html'
 
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos))
   console.log(outputHtml)
@@ -29,4 +29,4 @@ exports.serveOutput = (text, name, res) ->
 
     console.log('Output saved')
     console.log('Sending response....')
-    res.sendfile(outputFile)) # variable use by closure here...
+    res.sendfile(name + '.html', {root: '../local-copies/' + 'output/'})) # variable use by closure here...
