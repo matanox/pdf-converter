@@ -14,7 +14,6 @@ exports.serveOutput = function(text, name, res) {
   dummyText = "aaaa";
   outputFile = '../local-copies/' + 'output/' + name + '.html';
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos));
-  console.log(outputHtml);
   return fs.writeFile(outputFile, outputHtml, function(err) {
     if (err != null) {
       res.send(500);

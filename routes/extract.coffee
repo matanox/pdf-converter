@@ -3,11 +3,14 @@ util   = require "../util"
 css    = require "../css"
 html   = require "../html"
 output = require "../output"
+timer  = require "../timer"
 
 #
 # Extract text content and styles from html
 #
 exports.go = (req, res) ->
+  timer.start('Extraction from html')
+
   path = '../local-copies/' + 'html-converted/' 
   name = req.query.name
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
@@ -17,7 +20,9 @@ exports.go = (req, res) ->
   html.stripSpanWrappers(div) for div in ourDivRepresentation
   realStyles = css.simpleFetchStyles(rawHtml ,path + name + '/') # send along the path to the folder
 
-  util.logObject(realStyles)
+  timer.end('Extraction from html')
+
+  #util.logObject(realStyles)
   #util.logObject(ourDivRepresentation)
 
   outputHtml = ourDivRepresentation

@@ -20,7 +20,7 @@ exports.serveOutput = (text, name, res) ->
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos))
-  console.log(outputHtml)
+  # console.log(outputHtml)
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
     if err?
