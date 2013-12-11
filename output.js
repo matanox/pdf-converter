@@ -3,17 +3,16 @@ var hookElementTextPos, hookId, outputTemplate;
 
 require("fs");
 
-outputTemplate = fs.readFileSync('./outputTemplate/index.html').toString();
+outputTemplate = fs.readFileSync('outputTemplate/index.html').toString();
 
 hookId = 'hookPoint';
 
-hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf("<span id=\"" + hookId + "\"")) + 1;
+hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span id="' + hookId + '"')) + 1;
 
 exports.serveOutput = function(text, name, res) {
   var dummyText, outputFile, outputHtml;
   dummyText = "aaaa";
   outputFile = './local-copies/' + 'output/' + name + '.html';
-  console.log(hookElementTextPos);
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos));
   console.log(outputHtml);
   return fs.writeFile(outputFile, outputHtml, function(err) {
