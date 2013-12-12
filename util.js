@@ -39,3 +39,10 @@ exports.parseElementText = function(xmlNode) {
 exports.logObject = function(obj) {
   return console.log(JSON.stringify(obj, null, 2));
 };
+
+exports.objectViolation = function(errorMessage) {
+  var error;
+  error = new Error(errorMessage);
+  console.log(error.stack);
+  throw error;
+};

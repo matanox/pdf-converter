@@ -34,3 +34,8 @@ exports.parseElementText = (xmlNode) ->
   #map[obj[key]] = element for element in array 
 
 exports.logObject = (obj) -> console.log(JSON.stringify obj, null, 2) 
+
+exports.objectViolation = (errorMessage) ->
+  error = new Error(errorMessage)
+  console.log(error.stack)
+  throw error   
