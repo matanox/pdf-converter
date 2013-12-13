@@ -13,3 +13,4 @@ echo -e ${color}
 git commit -am \"1\"
 git status
 echo -e ${NC}
+echo
