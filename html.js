@@ -38,7 +38,7 @@ exports.stripSpanWrappers = function(div) {
 };
 
 exports.tokenize = function(styledText) {
-  var spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle;
+  var filterEmptyString, spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle;
   splitBySuffixChar = function(spaceDelimitedTokens) {
     var endsWithPunctuation, punctuation, token, tokens, _i, _len;
     punctuation = [',', ':', ';', '.', ')'];
@@ -71,7 +71,34 @@ exports.tokenize = function(styledText) {
     }
     return tokens;
   };
+  filterEmptyString = function(tokens) {
+    var filtered, token, _i, _len;
+    filtered = [];
+    for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+      token = tokens[_i];
+      if (token.length > 0) {
+        filtered.push(token);
+      }
+    }
+    return filtered;
+  };
   spaceDelimitedTokens = styledText.text.split(/\s/);
+  spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens);
+  /*
+    for token in spaceDelimitedTokens
+    	console.log(token.length)
+    	console.log("empty string") if (token.length == 0)
+    	#console.log("undefined object") if (not token?)
+    	#console.log("space") if token.charAt(0) == " "
+  */
+
+  /*
+    for token in spaceDelimitedTokens
+      if util.anySpaceChar.test(token.charAt(token.length-1).toString())
+        console.log("slicing")
+        token.slice(1)
+  */
+
   tokens = splitBySuffixChar(spaceDelimitedTokens);
   tokens = splitByPrefixChar(tokens);
   tokensWithStyle = (function() {

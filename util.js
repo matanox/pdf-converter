@@ -70,3 +70,5 @@ exports.objectViolation = function(errorMessage) {
   console.log(error.stack);
   throw error;
 };
+
+exports.anySpaceChar = RegExp(/\s/);

@@ -53,17 +53,16 @@ exports.stripSpanWrappers = (div) ->
 # while also conserving the association to the style attached to the input.
 exports.tokenize = (styledText) ->
 
+    # Splits punctuation that is the last character of a token
+    # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
 	splitBySuffixChar = (spaceDelimitedTokens) ->
 
-	  # Split punctuation that is the last character of a token
 	  punctuation = [',',
 	                 ':',
 	                 ';',
 	                 '.',
 	                 ')']
 
-	  # split punctuation that is the last character of a token
-	  # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
 	  tokens = []
 	  for token in spaceDelimitedTokens 
 	    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
@@ -75,10 +74,10 @@ exports.tokenize = (styledText) ->
 
 	  tokens
 
+    # Splits punctuation that is the first character of a token
+	# E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
 	splitByPrefixChar = (spaceDelimitedTokens) ->
 
-	  # split punctuation that is the first character of a token
-	  # E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
 	  punctuation = ['(']
 	  
 	  #util.logObject(tokens)	
@@ -93,8 +92,42 @@ exports.tokenize = (styledText) ->
 	      tokens.push(token.slice(1))   # all but first char
 	  
 	  tokens
+  
+  filterEmptyString = (tokens) ->
+    filtered = []
+    filtered.push(token) for token in tokens when token.length > 0
+    filtered
 
+  # First off, tokenizing by space characters
+  #
+  # In the process, double spaces (or more generally, sequences of spaces),  
+  # are automatically suppressed here for now. That's good as:
+  # at least pdf2htmlEX may provide double spaces where the 
+  # original line of text is very sparse (typically due to 
+  # accomodating all lines ending at the same pixel location).
+  
   spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
+  spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
+
+  ###
+  for token in spaceDelimitedTokens
+  	console.log(token.length)
+  	console.log("empty string") if (token.length == 0)
+  	#console.log("undefined object") if (not token?)
+  	#console.log("space") if token.charAt(0) == " " 
+  ###
+	
+    #console.log("after")
+  	#console.log(token)
+  	#console.log(token.charAt(0).toString())
+
+  ###
+  for token in spaceDelimitedTokens
+    if util.anySpaceChar.test(token.charAt(token.length-1).toString())
+      console.log("slicing")
+      token.slice(1)
+
+  ###
   tokens = splitBySuffixChar(spaceDelimitedTokens)
   tokens = splitByPrefixChar(tokens)
 

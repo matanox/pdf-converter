@@ -55,3 +55,5 @@ exports.objectViolation = (errorMessage) ->
   error = new Error(errorMessage)
   console.log(error.stack)
   throw error   
+
+exports.anySpaceChar = RegExp(/\s/)
