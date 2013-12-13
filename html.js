@@ -38,32 +38,47 @@ exports.stripSpanWrappers = function(div) {
 };
 
 exports.tokenize = function(styledText) {
-  var endsWithPunctuation, i, punctuation, spaceDelimitedTokens, startsWithPunctuation, token, tokens, tokensWithStyle, _i, _j, _len, _ref;
-  punctuation = [',', ':', ';', '.', ')'];
+  var spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle;
+  splitBySuffixChar = function(spaceDelimitedTokens) {
+    var endsWithPunctuation, punctuation, token, tokens, _i, _len;
+    punctuation = [',', ':', ';', '.', ')'];
+    tokens = [];
+    for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
+      token = spaceDelimitedTokens[_i];
+      endsWithPunctuation = util.endsWithAnyOf(token, punctuation);
+      if (!endsWithPunctuation) {
+        tokens.push(token);
+      } else {
+        tokens.push(token.slice(0, token.length - 1));
+        tokens.push(token.slice(token.length - 1));
+      }
+    }
+    return tokens;
+  };
+  splitByPrefixChar = function(spaceDelimitedTokens) {
+    var punctuation, startsWithPunctuation, token, tokens, _i, _len;
+    punctuation = ['('];
+    tokens = [];
+    for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
+      token = spaceDelimitedTokens[_i];
+      startsWithPunctuation = util.startsWithAnyOf(token, punctuation);
+      if (!startsWithPunctuation) {
+        tokens.push(token);
+      } else {
+        tokens.push(token.slice(0, 1));
+        tokens.push(token.slice(1));
+      }
+    }
+    return tokens;
+  };
   spaceDelimitedTokens = styledText.text.split(/\s/);
-  tokens = [];
-  for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
-    token = spaceDelimitedTokens[_i];
-    endsWithPunctuation = util.endsWithAnyOf(token, punctuation);
-    if (!endsWithPunctuation) {
-      tokens.push(token);
-    } else {
-      tokens.push(token.slice(0, token.length - 2));
-      tokens.push(token.slice(token.length - 1));
-    }
-  }
-  punctuation = ['('];
-  for (i = _j = 0, _ref = tokens.length - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
-    startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation);
-    if (startsWithPunctuation) {
-      tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1)));
-    }
-  }
+  tokens = splitBySuffixChar(spaceDelimitedTokens);
+  tokens = splitByPrefixChar(tokens);
   tokensWithStyle = (function() {
-    var _k, _len1, _results;
+    var _i, _len, _results;
     _results = [];
-    for (_k = 0, _len1 = tokens.length; _k < _len1; _k++) {
-      token = tokens[_k];
+    for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+      token = tokens[_i];
       _results.push({
         'text': token,
         'styles': styledText.styles

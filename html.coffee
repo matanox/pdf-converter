@@ -53,51 +53,54 @@ exports.stripSpanWrappers = (div) ->
 # while also conserving the association to the style attached to the input.
 exports.tokenize = (styledText) ->
 
-  #util.logObject(styledText)
-  # Split punctuation that is the last character of a token
-  punctuation = [',',
-                 ':',
-                 ';',
-                 '.',
-                 ')']
+	splitBySuffixChar = (spaceDelimitedTokens) ->
+
+	  # Split punctuation that is the last character of a token
+	  punctuation = [',',
+	                 ':',
+	                 ';',
+	                 '.',
+	                 ')']
+
+	  # split punctuation that is the last character of a token
+	  # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
+	  tokens = []
+	  for token in spaceDelimitedTokens 
+	    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
+	    unless endsWithPunctuation
+	      tokens.push(token)
+	    else 
+	      tokens.push(token.slice(0, token.length - 1)) # all but last char
+	      tokens.push(token.slice(token.length - 1))        # only last char
+
+	  tokens
+
+	splitByPrefixChar = (spaceDelimitedTokens) ->
+
+	  # split punctuation that is the first character of a token
+	  # E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
+	  punctuation = ['(']
+	  
+	  #util.logObject(tokens)	
+
+	  tokens = []
+	  for token in spaceDelimitedTokens 
+	    startsWithPunctuation = util.startsWithAnyOf(token, punctuation)
+	    unless startsWithPunctuation
+	      tokens.push(token)
+	    else 
+	      tokens.push(token.slice(0, 1)) # only first char
+	      tokens.push(token.slice(1))   # all but first char
+	  
+	  tokens
+
   spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
-  #unless spaceDelimitedTokens?                       # if none, if we have just one word - grab it
-  #  spaceDelimitedTokens = [styledText.text] 
-  #  console.log("only one word")  
+  tokens = splitBySuffixChar(spaceDelimitedTokens)
+  tokens = splitByPrefixChar(tokens)
 
-  #util.logObject(spaceDelimitedTokens)
-  #console.log(spaceDelimitedTokens)
-  
-  #
-  # Now splice punctuation
-  #
-
-  # split punctuation that is the last character of a token
-  # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
-  tokens = []
-  for token in spaceDelimitedTokens 
-    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
-    unless endsWithPunctuation
-      tokens.push(token)
-    else 
-      tokens.push(token.slice(0, token.length - 2)) # all but last char
-      tokens.push(token.slice(token.length - 1))    # only last char
-  
-  # split punctuation that is the first character of a token
-  # E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
-  punctuation = ['(']
-  
-  #util.logObject(tokens)	
-
-  for i in [0..tokens.length-1]
-    #console.log(tokens[i])
-
-    startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation)
-    if startsWithPunctuation
-      tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1)))    
-  
   #util.logObject(tokens)
 
-  # Now, build objects of text AND style, while assigning the style of the div to each token.
+  # Now, build token objects comprising the text tokens AND their style, 
+  # assigning the style of the div to each of them.
   tokensWithStyle = ({'text': token, 'styles': styledText.styles} for token in tokens)
   tokensWithStyle

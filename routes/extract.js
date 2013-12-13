@@ -46,7 +46,7 @@ filterNoText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var div, divsAndStyles, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, tokensAndStyles, _i, _len;
+  var div, divsAndStyles, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokenizedDivs, tokens, _i, _j, _k, _len, _len1, _len2;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -68,7 +68,7 @@ exports.go = function(req, res) {
     html.stripSpanWrappers(div);
   }
   divsAndStyles = filterNoText(divsAndStyles);
-  tokensAndStyles = (function() {
+  tokenizedDivs = (function() {
     var _j, _len1, _results;
     _results = [];
     for (_j = 0, _len1 = divsAndStyles.length; _j < _len1; _j++) {
@@ -77,10 +77,35 @@ exports.go = function(req, res) {
     }
     return _results;
   })();
+  tokens = [];
+  for (_j = 0, _len1 = tokenizedDivs.length; _j < _len1; _j++) {
+    div = tokenizedDivs[_j];
+    for (_k = 0, _len2 = div.length; _k < _len2; _k++) {
+      token = div[_k];
+      tokens.push(token);
+    }
+  }
+  /*
+    # Unite words that break across divs
+    normalizedTokens = tokens.reduce(x, y) -> 
+      if JSON.stringify(x.styles) !=== JSON.stringify(y.styles)
+        console.log("In normalizing tokens: styles defer so token couple will not be normalized")
+      else
+        if not x.text[charAt(x.text.length-1)].test(/\s/) # if token text does *not* end with a space character
+        	if y.text[charAt(0).test(/\s/)]                # and the next token text *does* end with a space char
+        	  s
+  */
+
+  plainText = tokens.map(function(x) {
+    return x.text;
+  });
+  plainText = plainText.reduce(function(x, y) {
+    return x + ' ' + y;
+  });
+  console.log(plainText);
   timer.end('Extraction from html stage A');
   timer.start('Extraction from html stage B');
-  soup.build(divsAndStyles);
+  outputHtml = soup.build("aaa");
   timer.end('Extraction from html stage B');
-  outputHtml = "aaa";
   return output.serveOutput(outputHtml, name, res);
 };
