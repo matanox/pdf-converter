@@ -10,6 +10,9 @@ git add -u
 git status
 echo -e ${color}
 echo "Trying to commit with comment \"$1\""
+echo -e ${detail_color}
 echo
 git commit -am \"1\"
+echo -e ${color}
+git status
 echo -e ${NC}
