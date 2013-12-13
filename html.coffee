@@ -28,6 +28,7 @@ exports.representDiv = (xmlNode) ->
   # assumes there are no nested divs inside xmlNode
   text = util.parseElementText(xmlNode)
   styles = parseCssClasses(xmlNode)
+  #console.log("empty object") unless text
   return {text, styles}
 
 #
@@ -47,16 +48,25 @@ exports.stripSpanWrappers = (div) ->
   div.text = div.text.replace(spanBegin, '') 
   div.text = div.text.replace(spanEnd, '')
  
-exports.tokenizeWithStyle = (styledText) ->
 
+# Tokenize strings to words and punctuation,
+# while also conserving the association to the style attached to the input.
+exports.tokenize = (styledText) ->
+
+  #util.logObject(styledText)
   # Split punctuation that is the last character of a token
   punctuation = [',',
-				 ':',
-				 ';',
-				 '.',
-				 ')']
-  regex = new RegExp("\\b\\S+?\\b", 'g') # Regex match: tokenize by space delimiters
-  spaceDelimitedTokens = styledText.text.match(regex)
+                 ':',
+                 ';',
+                 '.',
+                 ')']
+  spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
+  #unless spaceDelimitedTokens?                       # if none, if we have just one word - grab it
+  #  spaceDelimitedTokens = [styledText.text] 
+  #  console.log("only one word")  
+
+  #util.logObject(spaceDelimitedTokens)
+  #console.log(spaceDelimitedTokens)
   
   #
   # Now splice punctuation
@@ -73,12 +83,21 @@ exports.tokenizeWithStyle = (styledText) ->
       tokens.push(token.slice(0, token.length - 2)) # all but last char
       tokens.push(token.slice(token.length - 1))    # only last char
   
-  # Now split punctuation that is the first character of a token
+  # split punctuation that is the first character of a token
   # E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
   punctuation = ['(']
   
+  #util.logObject(tokens)	
+
   for i in [0..tokens.length-1]
+    #console.log(tokens[i])
+
     startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation)
     if startsWithPunctuation
       tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1)))    
   
+  #util.logObject(tokens)
+
+  # Now, build objects of text AND style, while assigning the style of the div to each token.
+  tokensWithStyle = ({'text': token, 'styles': styledText.styles} for token in tokens)
+  tokensWithStyle

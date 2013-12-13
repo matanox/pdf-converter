@@ -37,11 +37,10 @@ exports.stripSpanWrappers = function(div) {
   return div.text = div.text.replace(spanEnd, '');
 };
 
-exports.tokenizeWithStyle = function(styledText) {
-  var endsWithPunctuation, i, punctuation, regex, spaceDelimitedTokens, startsWithPunctuation, token, tokens, _i, _j, _len, _ref, _results;
+exports.tokenize = function(styledText) {
+  var endsWithPunctuation, i, punctuation, spaceDelimitedTokens, startsWithPunctuation, token, tokens, tokensWithStyle, _i, _j, _len, _ref;
   punctuation = [',', ':', ';', '.', ')'];
-  regex = new RegExp("\\b\\S+?\\b", 'g');
-  spaceDelimitedTokens = styledText.text.match(regex);
+  spaceDelimitedTokens = styledText.text.split(/\s/);
   tokens = [];
   for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
     token = spaceDelimitedTokens[_i];
@@ -54,14 +53,23 @@ exports.tokenizeWithStyle = function(styledText) {
     }
   }
   punctuation = ['('];
-  _results = [];
   for (i = _j = 0, _ref = tokens.length - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
     startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation);
     if (startsWithPunctuation) {
-      _results.push(tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1))));
-    } else {
-      _results.push(void 0);
+      tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1)));
     }
   }
-  return _results;
+  tokensWithStyle = (function() {
+    var _k, _len1, _results;
+    _results = [];
+    for (_k = 0, _len1 = tokens.length; _k < _len1; _k++) {
+      token = tokens[_k];
+      _results.push({
+        'text': token,
+        'styles': styledText.styles
+      });
+    }
+    return _results;
+  })();
+  return tokensWithStyle;
 };

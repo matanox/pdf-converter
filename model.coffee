@@ -22,7 +22,7 @@ class TokenGroup
   # TODO: add avoiding a group including itself
   # Allowed types definition. Not making each type a separate class for now.
   types = ['section',
-  	       'heading',
+           'heading',
            'sentence',
            'paragraph',
            'list',
@@ -38,14 +38,14 @@ class TokenGroup
     @has.push(token)
 
   getAll: ->
-  	@has
+    @has
 
   setType: (type) ->
-  	util.objectViolation('cannot assign invalid TokenGroup type to TokenGroup') unless util.isAnyOf(type, types) 
-  	@type = type 
+    util.objectViolation('cannot assign invalid TokenGroup type to TokenGroup') unless util.isAnyOf(type, types) 
+    @type = type 
 
   getType: () ->
-  	@type
+    @type
 
 ###
 
