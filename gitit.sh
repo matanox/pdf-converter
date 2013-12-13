@@ -2,4 +2,5 @@ git status
 git add .
 git add -u
 git status
-git commit -am ""$1""
+echo "trying to commit with comment\"$1\""
+git commit -am \"1\"
