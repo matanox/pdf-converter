@@ -9,3 +9,4 @@ git status
 echo -e ${color}
 echo "trying to commit with comment \"$1\""
 git commit -am \"1\"
+echo -e ${NC}
