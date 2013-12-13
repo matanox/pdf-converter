@@ -13,13 +13,11 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span i
 
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
-exports.serveOutput = (text, name, res) ->
+exports.serveOutput = (html, name, res) ->
  
-  dummyText = "aaaa"
-
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
-  outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos))
+  outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
   # console.log(outputHtml)
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	

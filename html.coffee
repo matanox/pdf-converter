@@ -47,3 +47,38 @@ exports.stripSpanWrappers = (div) ->
   div.text = div.text.replace(spanBegin, '') 
   div.text = div.text.replace(spanEnd, '')
  
+exports.tokenizeWithStyle = (styledText) ->
+
+  # Split punctuation that is the last character of a token
+  punctuation = [',',
+				 ':',
+				 ';',
+				 '.',
+				 ')']
+  regex = new RegExp("\\b\\S+?\\b", 'g') # Regex match: tokenize by space delimiters
+  spaceDelimitedTokens = styledText.text.match(regex)
+  
+  #
+  # Now splice punctuation
+  #
+
+  # split punctuation that is the last character of a token
+  # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
+  tokens = []
+  for token in spaceDelimitedTokens 
+    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
+    unless endsWithPunctuation
+      tokens.push(token)
+    else 
+      tokens.push(token.slice(0, token.length - 2)) # all but last char
+      tokens.push(token.slice(token.length - 1))    # only last char
+  
+  # Now split punctuation that is the first character of a token
+  # E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
+  punctuation = ['(']
+  
+  for i in [0..tokens.length-1]
+    startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation)
+    if startsWithPunctuation
+      tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1)))    
+  

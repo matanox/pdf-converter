@@ -36,3 +36,32 @@ exports.stripSpanWrappers = function(div) {
   div.text = div.text.replace(spanBegin, '');
   return div.text = div.text.replace(spanEnd, '');
 };
+
+exports.tokenizeWithStyle = function(styledText) {
+  var endsWithPunctuation, i, punctuation, regex, spaceDelimitedTokens, startsWithPunctuation, token, tokens, _i, _j, _len, _ref, _results;
+  punctuation = [',', ':', ';', '.', ')'];
+  regex = new RegExp("\\b\\S+?\\b", 'g');
+  spaceDelimitedTokens = styledText.text.match(regex);
+  tokens = [];
+  for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
+    token = spaceDelimitedTokens[_i];
+    endsWithPunctuation = util.endsWithAnyOf(token, punctuation);
+    if (!endsWithPunctuation) {
+      tokens.push(token);
+    } else {
+      tokens.push(token.slice(0, token.length - 2));
+      tokens.push(token.slice(token.length - 1));
+    }
+  }
+  punctuation = ['('];
+  _results = [];
+  for (i = _j = 0, _ref = tokens.length - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
+    startsWithPunctuation = util.startsWithAnyOf(tokens[i], punctuation);
+    if (startsWithPunctuation) {
+      _results.push(tokens.splice(i, 1, token.charAt(0), token.slice(token.slice(1))));
+    } else {
+      _results.push(void 0);
+    }
+  }
+  return _results;
+};

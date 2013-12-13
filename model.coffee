@@ -10,10 +10,11 @@ class Token
            'superscriptComment']
 
   constructor: (type, content) ->
+    unless util.isAnyOf(type, types)
+      util.objectViolation('invalid token type encountered on token creation')
     @type    = type
     @content = content
-    unless util.isAnyOf(@type, types)
-      util.objectViolation('invalid token type encountered on token creation')
+    @partOf  = [] # links to TokenGroups that it will belong to
       
 # Class Description:
 # This is a group of tokens, or a group of groups of tokens.
@@ -28,15 +29,16 @@ class TokenGroup
            'title']
 
   constructor: () ->
-    @tokens = []
+    @has    = [] # Tokens or TokenGroups that is will have
+    @partOf = [] # links to TokenGroups that it will belong to
 
   add: (token) ->
     unless token instanceof Token or token instanceof TokenGroup
       util.objectViolation('TokenGroup can only include Token or TokenGroup objects')
-    @tokens.push(token)
+    @has.push(token)
 
   getAll: ->
-  	@tokens
+  	@has
 
   setType: (type) ->
   	util.objectViolation('cannot assign invalid TokenGroup type to TokenGroup') unless util.isAnyOf(type, types) 
@@ -44,6 +46,10 @@ class TokenGroup
 
   getType: () ->
   	@type
+
+###
+
+Move to unit tests stuff like this:
 
 t = new Token('word')
 g = new TokenGroup
@@ -54,3 +60,4 @@ g.setType("sentence")
 console.log(g.getType())
 console.log(g.getAll())
 console.log('done')
+###

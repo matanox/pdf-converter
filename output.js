@@ -9,11 +9,10 @@ hookId = 'hookPoint';
 
 hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span id="' + hookId + '"')) + 1;
 
-exports.serveOutput = function(text, name, res) {
-  var dummyText, outputFile, outputHtml;
-  dummyText = "aaaa";
+exports.serveOutput = function(html, name, res) {
+  var outputFile, outputHtml;
   outputFile = '../local-copies/' + 'output/' + name + '.html';
-  outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(dummyText, outputTemplate.slice(hookElementTextPos));
+  outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos));
   return fs.writeFile(outputFile, outputHtml, function(err) {
     if (err != null) {
       res.send(500);

@@ -3,8 +3,12 @@
 endsWith = (string, match) ->
   string.lastIndexOf(match) is string.length - match.length
 
+exports.endWith = endsWith
+
 startsWith = (string, match) ->
   string.indexOf(match) is 0
+
+exports.startsWith = startsWith
 
 contains = (string, match) ->
   string.indexOf(match) isnt -1
@@ -22,8 +26,20 @@ exports.strip = (string, prefix, suffix) ->
 
 # Utilty function for checking if a string matches any of a given set of strings.
 # Regex building could be an alternative implementation...
-exports.isAnyOf = (searchString, stringArray) ->
-  stringArray.some((elem) -> elem.localeCompare(searchString, 'en-US') == 0)
+isAnyOf = (string, matches) ->
+  matches.some((elem) -> elem.localeCompare(string, 'en-US') == 0)
+
+exports.isAnyOf = isAnyOf
+
+exports.endsWithAnyOf = (string, matches) ->
+  trailingChar = string.charAt(string.length - 1)
+  return false unless isAnyOf(trailingChar, matches)
+  return trailingChar
+
+exports.startsWithAnyOf = (string, matches) ->
+  char = string.charAt(0)
+  return false unless isAnyOf(char, matches)
+  return char
 
 exports.parseElementText = (xmlNode) ->
   content = xmlNode.substr(0, xmlNode.length - "</div>".length) # remove closing div tag
