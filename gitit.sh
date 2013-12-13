@@ -11,7 +11,5 @@ git status
 echo "Trying to commit with comment \"$1\""
 echo -e ${color}
 git commit -am \"1\"
-echo -e ${detail_color}
-echo -e ${color}
 git status
 echo -e ${NC}
