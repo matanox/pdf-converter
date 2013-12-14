@@ -97,22 +97,21 @@ exports.go = function(req, res) {
       }
     }
   }
-  console.dir(tokens);
   if (tokens.length === 0) {
     console.log("No text was extracted from input");
     throw "No text was extracted from input";
   }
-  /*
-    collapsedTokens = []
-    tokens.reduce (x, y) ->
-    	if util.endsWith(x.text, '-')
-    	  collapsedTokens.push(html.mergeTokens(x, y))
-    	else
-    	  collapsedTokens.push(x)
-    	return y
-  */
-
-  console.log("plaintext");
+  tokens.reduce(function(x, y, index) {
+    if (x.metaType === 'regular' && y.metaType === 'regular') {
+      if (util.endsWith(x.text, '-')) {
+        x.text = x.text.slice(0, -1);
+        x.text = x.text.concat(y.text);
+        tokens.splice(index, 1);
+        return x;
+      }
+    }
+    return y;
+  });
   plainText = '';
   for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
     token = tokens[_o];
@@ -124,8 +123,6 @@ exports.go = function(req, res) {
   }
   console.log(plainText);
   timer.end('Extraction from html stage A');
-  timer.start('Extraction from html stage B');
   outputHtml = soup.build(plainText);
-  timer.end('Extraction from html stage B');
   return output.serveOutput(outputHtml, name, res);
 };

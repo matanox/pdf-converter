@@ -10,7 +10,9 @@ output = require "../output"
 isImage = (text) -> util.startsWith(text, "<img ")
 
 # Utility function for filtering out images
-# Can be rewriteen with a filter statement -- http://arcturo.github.io/library/coffeescript/04_idioms.html
+# Can be rewriteen with a filter statement -- 
+# http://coffeescriptcookbook.com/chapters/arrays/filtering-arrays
+# http://arcturo.github.io/library/coffeescript/04_idioms.html
 filterImages = (ourDivRepresentation) ->
   filtered = []
   filtered.push(div) for div in ourDivRepresentation when not isImage(div.text)
@@ -63,8 +65,6 @@ exports.go = (req, res) ->
         when 'regular' then token.styles = div.styles
     divTokens.push(tokens)
 
-  #console.log(divTokens)
-
   # Flatten to one-dimensional array of tokens... farewell divs.
   tokens = []
   for div in divTokens
@@ -76,24 +76,37 @@ exports.go = (req, res) ->
     if token.text.length == 0
       throw "Error - zero length text in data"
 
-  console.dir(tokens)
-
   if tokens.length == 0
-  	console.log("No text was extracted from input")
-  	throw("No text was extracted from input")
-  
-  ###
-  collapsedTokens = []
-  tokens.reduce (x, y) ->
-  	if util.endsWith(x.text, '-')
-  	  collapsedTokens.push(html.mergeTokens(x, y))
-  	else
-  	  collapsedTokens.push(x)
-  	return y
-  ###
-  
-  #console.log(token.text) for token in tokens
-  console.log("plaintext")
+    console.log("No text was extracted from input")
+    throw("No text was extracted from input")
+
+  #
+  # Unite token couples that have no delimiter in between them,
+  # the first of which ending with '-' (while applying the
+  # styles of the first one to both).
+  #
+  # E.g. 'associa-', 'ted' -> 'associated'
+  # 
+  # This has two effects:
+  # (1) fuses words cut at the end of a line using the notorious hyphen notation
+  # (2) treat any couple that is united by a hyphen as one token, which will prevent
+  #     them being separated on an end of a line in final output
+  #
+  # Note: this should also unite triples and so on, not just couples
+  #
+  # Note: the use of reduce is a bit hackish, a simpler iterator function that 
+  #       iterates from the second element and provides access to a 'previous' element  
+  #       and a 'current' element would be a good refactoring.
+  #
+  tokens.reduce (x, y, index) -> 
+    if x.metaType is 'regular' and y.metaType is 'regular'
+      if util.endsWith(x.text, '-')
+        x.text = x.text.slice(0, -1)   # discard the hyphen
+        x.text = x.text.concat(y.text) # concatenate text of second element into first
+        tokens.splice(index, 1)        # remove second element
+        return x
+    return y
+ 
   plainText = ''
   for token in tokens
     if token.metaType is 'regular' 
@@ -102,16 +115,10 @@ exports.go = (req, res) ->
       plainText = plainText.concat(' ')
 
   console.log(plainText)
-  #	x.concat()
 
   timer.end('Extraction from html stage A')
 
-  timer.start('Extraction from html stage B')
   outputHtml = soup.build(plainText)
-  timer.end('Extraction from html stage B')
-
   output.serveOutput(outputHtml, name, res)
 
-  # res.sendfile('../local-copies/' + 'output/' + name + ".html")
-  # res.send("read raw html of length " + rawHtml.length + " bytes")
   

@@ -133,7 +133,6 @@ exports.tokenize = function(string) {
   };
   tokenize = function(string) {
     var char, i, insideDelimiter, insideWord, tokens, word, _i, _ref;
-    console.log(string);
     insideWord = false;
     insideDelimiter = false;
     tokens = [];
@@ -188,29 +187,4 @@ exports.tokenize = function(string) {
     }
   }
   return tokens;
-  /*
-    styledTokens = []
-    for token in tokens
-      switch token.metaType
-  
-        when 'delimiter'
-          styledTokens.push( {'metaType': 'regular', 'text':token.text, 'styles': inpu )
-        when 'regular' 
-            text = token.text
-            startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
-            if startsWithPunctuation and (text.length > 1)
-              # Split it into two
-              tokens.push( {'metaType': 'regular', 'text': token.slice(0, 1)} ) # only first char
-              tokens.push( {'metaType': 'regular', 'text': token.slice(1)} )    # all but first char
-            else 
-              # Push as is
-              tokens.push(token) 
-          
-        else 
-          throw "Invalid token meta-type encountered"
-          util.logObject(token)  
-  
-    tokensWithStyle = ({'text': token, 'styles': string.styles} for token in tokens)
-  */
-
 };
