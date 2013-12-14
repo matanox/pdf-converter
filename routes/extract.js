@@ -85,27 +85,19 @@ exports.go = function(req, res) {
       tokens.push(token);
     }
   }
-  /*
-    # Unite words that break across divs
-    normalizedTokens = tokens.reduce(x, y) -> 
-      if JSON.stringify(x.styles) !=== JSON.stringify(y.styles)
-        console.log("In normalizing tokens: styles defer so token couple will not be normalized")
-      else
-        if not x.text[charAt(x.text.length-1)].test(/\s/) # if token text does *not* end with a space character
-        	if y.text[charAt(0).test(/\s/)]                # and the next token text *does* end with a space char
-        	  s
-  */
-
+  if (tokens.length === 0) {
+    console.log("No text was extracted from input");
+    throw "No text was extracted from input";
+  }
   plainText = tokens.map(function(x) {
     return x.text;
   });
   plainText = plainText.reduce(function(x, y) {
     return x + ' ' + y;
   });
-  console.log(plainText);
   timer.end('Extraction from html stage A');
   timer.start('Extraction from html stage B');
-  outputHtml = soup.build("aaa");
+  outputHtml = soup.build(plainText);
   timer.end('Extraction from html stage B');
   return output.serveOutput(outputHtml, name, res);
 };
