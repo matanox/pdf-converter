@@ -84,21 +84,6 @@ exports.tokenize = function(styledText) {
   };
   spaceDelimitedTokens = styledText.text.split(/\s/);
   spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens);
-  /*
-    for token in spaceDelimitedTokens
-    	console.log(token.length)
-    	console.log("empty string") if (token.length == 0)
-    	#console.log("undefined object") if (not token?)
-    	#console.log("space") if token.charAt(0) == " "
-  */
-
-  /*
-    for token in spaceDelimitedTokens
-      if util.anySpaceChar.test(token.charAt(token.length-1).toString())
-        console.log("slicing")
-        token.slice(1)
-  */
-
   tokens = splitBySuffixChar(spaceDelimitedTokens);
   tokens = splitByPrefixChar(tokens);
   tokensWithStyle = (function() {

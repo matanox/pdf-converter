@@ -82,6 +82,5 @@ exports.go = (req, res) ->
   output.serveOutput(outputHtml, name, res)
 
   # res.sendfile('../local-copies/' + 'output/' + name + ".html")
-
   # res.send("read raw html of length " + rawHtml.length + " bytes")
   

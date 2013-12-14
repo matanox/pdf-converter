@@ -109,25 +109,6 @@ exports.tokenize = (styledText) ->
   spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
   spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
 
-  ###
-  for token in spaceDelimitedTokens
-  	console.log(token.length)
-  	console.log("empty string") if (token.length == 0)
-  	#console.log("undefined object") if (not token?)
-  	#console.log("space") if token.charAt(0) == " " 
-  ###
-	
-    #console.log("after")
-  	#console.log(token)
-  	#console.log(token.charAt(0).toString())
-
-  ###
-  for token in spaceDelimitedTokens
-    if util.anySpaceChar.test(token.charAt(token.length-1).toString())
-      console.log("slicing")
-      token.slice(1)
-
-  ###
   tokens = splitBySuffixChar(spaceDelimitedTokens)
   tokens = splitByPrefixChar(tokens)
 

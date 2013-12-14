@@ -263,13 +263,13 @@
     width: 48.717948717948715%;
     *width: 48.664757228587014%;
   }
-  .row-fluid .span5 {
-    width: 40.17094017094017%;
-    *width: 40.11774868157847%;
-  }
   .row-fluid .span4 {
-    width: 31.623931623931625%;
-    *width: 31.570740134569924%;
+    width: 50%;
+    *width: 50%;
+  }
+  .row-fluid .span5 {
+    width: 25%;
+    *width: 25%;
   }
   .row-fluid .span3 {
     width: 23.076923076923077%;

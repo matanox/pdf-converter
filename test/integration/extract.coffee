@@ -18,14 +18,14 @@ directory = '../local-copies/html-converted/'
 for filename in fs.readdirSync(directory)
   if filename != '.gitignore'
 
-    httpCallBacks = ((filename) -> 
+    httpCallBack = ((filename) -> 
       (res) ->
         timer.end 'server response for ' + filename
         console.log 'server response for ' + filename + ' is:   ' + res.statusCode)(filename)
 
     console.log "requesting " + directory + filename
     timer.start 'server response for ' + filename
-    http.get 'http://' + host + '/extract?name=' + filename, httpCallBacks
+    http.get 'http://' + host + '/extract?name=' + filename, httpCallBack
 
   else
     console.log 'skipping .gitignore' 
