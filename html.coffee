@@ -64,44 +64,70 @@ exports.mergeTokens = (x, y) ->
 
 # Tokenize strings to words and punctuation,
 # while also conserving the association to the style attached to the input.
-exports.tokenize = (styledText) ->
+exports.tokenize = (string) ->
 
   # Splits punctuation that is the last character of a token
   # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
-	splitBySuffixChar = (spaceDelimitedTokens) ->
+	splitBySuffixChar = (inputTokens) ->
 
-	  punctuation = [',',
-	                 ':',
-	                 ';',
-	                 '.',
-	                 ')']
+    punctuation = [',',
+                   ':',
+                   ';',
+                   '.',
+                   ')']
 
-	  tokens = []
-	  for token in spaceDelimitedTokens 
-	    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
-	    if endsWithPunctuation and token.length > 1
-        tokens.push(token.slice(0, token.length - 1)) # all but last char
-        tokens.push(token.slice(token.length - 1))    # only last char	      
-	    else 
-        tokens.push(token)	      
+    tokens = []
+    for token in inputTokens 
+      switch token.metaType
 
-	  tokens
+        when 'delimiter' then tokens.push(token)
+
+        when 'regular' 
+          text = token.text
+          endsWithPunctuation = util.endsWithAnyOf(text, punctuation)
+          if endsWithPunctuation and (text.length > 1)
+            # Split it into two
+            tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1)} ) # all but last char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1)} )    # only last char	      
+          else 
+            # Push as is
+            tokens.push(token)	
+
+        else 
+          throw 'Invalid token meta-type encountered'
+          util.logObject(token)
+
+    tokens
 
   # Splits punctuation that is the first character of a token
 	# E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
-	splitByPrefixChar = (spaceDelimitedTokens) ->
+	splitByPrefixChar = (inputTokens) ->
 
 	  punctuation = ['(']
 	  
 	  tokens = []
-	  for token in spaceDelimitedTokens 
-	    startsWithPunctuation = util.startsWithAnyOf(token, punctuation)
-	    if startsWithPunctuation and token.length > 1
-        tokens.push(token.slice(0, 1)) # only first char
-        tokens.push(token.slice(1))    # all but first char
-	    else 
-        tokens.push(token)
-	  
+
+	  for token in inputTokens 
+
+      switch token.metaType
+
+        when 'delimiter' then tokens.push(token)
+
+        when 'regular' 
+          text = token.text
+          startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
+          if startsWithPunctuation and (text.length > 1)
+            # Split it into two
+            tokens.push( {'metaType': 'regular', 'text': text.slice(0, 1)} ) # only first char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(1)} )    # all but first char
+          else 
+            # Push as is
+            tokens.push(token) 
+        
+        else 
+          throw "Invalid token meta-type encountered"
+          util.logObject(token)
+
 	  tokens
   
   filterEmptyString = (tokens) ->
@@ -120,28 +146,92 @@ exports.tokenize = (styledText) ->
   # Record whether the string ends with a space character or not.
   # This indicates whether the last token to be detected on it
   # is itself post-delimited by a space or not - which matters.
-  if util.anySpaceChar.test(styledText.text.slice(-1)) 
-    postDelimited = true
-  else
-    postDelimited = false
   
+  isAnySpaceChar = (char) -> util.anySpaceChar.test(char) 
+    
   # Split into tokens
-  spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
-  spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
+  tokenize = (string) ->
+    console.log(string)
+    insideWord      = false
+    insideDelimiter = false
+    tokens = []
+
+    if string.length == 0 then return []
+
+    for i in [0..string.length-1] 
+      # console.log i
+      char = string.charAt(i)
+      if isAnySpaceChar(char) 
+        # Push a delimiter token if encountered,
+        # while supressing multiple consequtive spaces into a single delimiter token
+        
+        # Push the last accumulated word if any
+        if insideWord
+          tokens.push( {'metaType': 'regular', 'text': word} )
+          insideWord = false
+
+        unless insideDelimiter
+          tokens.push( {'metaType': 'delimiter'} )
+          insideDelimiter = true
+
+      else 
+        if insideDelimiter then insideDelimiter = false
+        if insideWord 
+          word = word.concat(char)
+        else 
+          word = char
+          insideWord = true
+
+    tokens.push( {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
+
+    tokens
+
+  tokens = tokenize(string)
+
+  #spaceDelimitedTokens = string.text.split(/\s/) # split by any space character
+  #spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
 
   # Split more to tokenize select punctuation marks as tokens
-  tokens = splitBySuffixChar(spaceDelimitedTokens)
+  tokens = splitBySuffixChar(tokens)
   tokens = splitByPrefixChar(tokens)
+  #console.dir(tokens)  
 
   # TODO: duplicate this into unit test for prior functions
-  for token in tokens
-    if token.length == 0
+  for token in tokens when token.metaType == 'regular'
+    if token.text.length == 0
       throw "error in tokenize"
   
+  #console.dir(tokens)  
+  tokens
+
   # Now, build token objects comprising the text tokens AND their style, 
   # assigning the style of the div to each of them.
-  tokensWithStyle = ({'text': token, 'postDelimited': true, 'styles': styledText.styles} for token in tokens)
+
+  ###
+  styledTokens = []
+  for token in tokens
+    switch token.metaType
+
+      when 'delimiter'
+        styledTokens.push( {'metaType': 'regular', 'text':token.text, 'styles': inpu )
+      when 'regular' 
+          text = token.text
+          startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
+          if startsWithPunctuation and (text.length > 1)
+            # Split it into two
+            tokens.push( {'metaType': 'regular', 'text': token.slice(0, 1)} ) # only first char
+            tokens.push( {'metaType': 'regular', 'text': token.slice(1)} )    # all but first char
+          else 
+            # Push as is
+            tokens.push(token) 
+        
+      else 
+        throw "Invalid token meta-type encountered"
+        util.logObject(token)  
+
+  tokensWithStyle = ({'text': token, 'styles': string.styles} for token in tokens)
+  ###
+
   #console.log tokensWithStyle.length
-  #console.dir styledText
+  #console.dir string
   #tokensWithStyle[tokensWithStyle.length-1].postDelimited = postDelimited # Mark last token's state
-  tokensWithStyle

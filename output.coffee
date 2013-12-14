@@ -14,11 +14,12 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span i
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
 exports.serveOutput = (html, name, res) ->
+  #console.log(html)
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
-  # console.log(outputHtml)
+ 
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
     if err?

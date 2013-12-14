@@ -39,34 +39,44 @@ exports.go = (req, res) ->
   rawRelevantDivs = html.removeOuterDivs(rawHtml)
 
   # Create array of objects holding the text and style of each div
-  divsAndStyles = (html.representDiv div for div in rawRelevantDivs)
+  divsWithStyles = (html.representDiv div for div in rawRelevantDivs)
 
   # For now, remove any images, brute force. This code will not persist
   # And is not sufficient for also removing their text overlay
-  divsAndStyles = filterImages(divsAndStyles)
+  divsWithStyles = filterImages(divsWithStyles)
 
   # For now, extract all text inside each div, indifferently to 
   # what's directly included v.s. what's nested in spans - 
   # all text is equally concatenated.
-  html.stripSpanWrappers(div) for div in divsAndStyles
+  html.stripSpanWrappers(div) for div in divsWithStyles
 
   # Discard any divs that contain zero-length text
-  divsAndStyles = filterZeroLengthText(divsAndStyles)
+  divsWithStyles = filterZeroLengthText(divsWithStyles)
 
-  # Now tokenize (from text into words, punctuation, etc.)
-  tokenizedDivs = (html.tokenize(div) for div in divsAndStyles)
+  # Now tokenize (from text into words, punctuation, etc.),
+  # while inheriting the style of the div to each resulting token
+  divTokens = []
+  for div in divsWithStyles
+    tokens = html.tokenize(div.text)
+    for token in tokens # inherit the styles to all tokens
+      switch token.metaType
+        when 'regular' then token.styles = div.styles
+    divTokens.push(tokens)
 
+  #console.log(divTokens)
+
+  # Flatten to one-dimensional array of tokens... farewell divs.
   tokens = []
-  for div in tokenizedDivs
+  for div in divTokens
   	for token in div
   	  tokens.push(token)
 
   # TODO: duplicate to unit test
-  for token in tokens
+  for token in tokens when token.metaType == 'regular'
     if token.text.length == 0
       throw "Error - zero length text in data"
 
-  #console.dir(tokens)
+  console.dir(tokens)
 
   if tokens.length == 0
   	console.log("No text was extracted from input")
@@ -83,9 +93,15 @@ exports.go = (req, res) ->
   ###
   
   #console.log(token.text) for token in tokens
-  plainText = tokens.map (x) -> x.text
-  plainText = plainText.reduce (x, y) -> x + ' ' + y
-  # console.log(plainText)
+  console.log("plaintext")
+  plainText = ''
+  for token in tokens
+    if token.metaType is 'regular' 
+      plainText = plainText.concat(token.text)
+    else 
+      plainText = plainText.concat(' ')
+
+  console.log(plainText)
   #	x.concat()
 
   timer.end('Extraction from html stage A')

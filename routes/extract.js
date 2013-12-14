@@ -46,14 +46,14 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var div, divsAndStyles, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokenizedDivs, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+  var div, divTokens, divsWithStyles, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   realStyles = css.simpleFetchStyles(rawHtml, path + name + '/');
   rawRelevantDivs = html.removeOuterDivs(rawHtml);
-  divsAndStyles = (function() {
+  divsWithStyles = (function() {
     var _i, _len, _results;
     _results = [];
     for (_i = 0, _len = rawRelevantDivs.length; _i < _len; _i++) {
@@ -62,35 +62,42 @@ exports.go = function(req, res) {
     }
     return _results;
   })();
-  divsAndStyles = filterImages(divsAndStyles);
-  for (_i = 0, _len = divsAndStyles.length; _i < _len; _i++) {
-    div = divsAndStyles[_i];
+  divsWithStyles = filterImages(divsWithStyles);
+  for (_i = 0, _len = divsWithStyles.length; _i < _len; _i++) {
+    div = divsWithStyles[_i];
     html.stripSpanWrappers(div);
   }
-  divsAndStyles = filterZeroLengthText(divsAndStyles);
-  tokenizedDivs = (function() {
-    var _j, _len1, _results;
-    _results = [];
-    for (_j = 0, _len1 = divsAndStyles.length; _j < _len1; _j++) {
-      div = divsAndStyles[_j];
-      _results.push(html.tokenize(div));
+  divsWithStyles = filterZeroLengthText(divsWithStyles);
+  divTokens = [];
+  for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
+    div = divsWithStyles[_j];
+    tokens = html.tokenize(div.text);
+    for (_k = 0, _len2 = tokens.length; _k < _len2; _k++) {
+      token = tokens[_k];
+      switch (token.metaType) {
+        case 'regular':
+          token.styles = div.styles;
+      }
     }
-    return _results;
-  })();
+    divTokens.push(tokens);
+  }
   tokens = [];
-  for (_j = 0, _len1 = tokenizedDivs.length; _j < _len1; _j++) {
-    div = tokenizedDivs[_j];
-    for (_k = 0, _len2 = div.length; _k < _len2; _k++) {
-      token = div[_k];
+  for (_l = 0, _len3 = divTokens.length; _l < _len3; _l++) {
+    div = divTokens[_l];
+    for (_m = 0, _len4 = div.length; _m < _len4; _m++) {
+      token = div[_m];
       tokens.push(token);
     }
   }
-  for (_l = 0, _len3 = tokens.length; _l < _len3; _l++) {
-    token = tokens[_l];
-    if (token.text.length === 0) {
-      throw "Error - zero length text in data";
+  for (_n = 0, _len5 = tokens.length; _n < _len5; _n++) {
+    token = tokens[_n];
+    if (token.metaType === 'regular') {
+      if (token.text.length === 0) {
+        throw "Error - zero length text in data";
+      }
     }
   }
+  console.dir(tokens);
   if (tokens.length === 0) {
     console.log("No text was extracted from input");
     throw "No text was extracted from input";
@@ -105,12 +112,17 @@ exports.go = function(req, res) {
     	return y
   */
 
-  plainText = tokens.map(function(x) {
-    return x.text;
-  });
-  plainText = plainText.reduce(function(x, y) {
-    return x + ' ' + y;
-  });
+  console.log("plaintext");
+  plainText = '';
+  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
+    token = tokens[_o];
+    if (token.metaType === 'regular') {
+      plainText = plainText.concat(token.text);
+    } else {
+      plainText = plainText.concat(' ');
+    }
+  }
+  console.log(plainText);
   timer.end('Extraction from html stage A');
   timer.start('Extraction from html stage B');
   outputHtml = soup.build(plainText);

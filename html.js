@@ -49,36 +49,70 @@ exports.mergeTokens = function(x, y) {
   return merged;
 };
 
-exports.tokenize = function(styledText) {
-  var filterEmptyString, postDelimited, spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle, _i, _len;
-  splitBySuffixChar = function(spaceDelimitedTokens) {
-    var endsWithPunctuation, punctuation, token, tokens, _i, _len;
+exports.tokenize = function(string) {
+  var filterEmptyString, isAnySpaceChar, splitByPrefixChar, splitBySuffixChar, token, tokenize, tokens, _i, _len;
+  splitBySuffixChar = function(inputTokens) {
+    var endsWithPunctuation, punctuation, text, token, tokens, _i, _len;
     punctuation = [',', ':', ';', '.', ')'];
     tokens = [];
-    for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
-      token = spaceDelimitedTokens[_i];
-      endsWithPunctuation = util.endsWithAnyOf(token, punctuation);
-      if (endsWithPunctuation && token.length > 1) {
-        tokens.push(token.slice(0, token.length - 1));
-        tokens.push(token.slice(token.length - 1));
-      } else {
-        tokens.push(token);
+    for (_i = 0, _len = inputTokens.length; _i < _len; _i++) {
+      token = inputTokens[_i];
+      switch (token.metaType) {
+        case 'delimiter':
+          tokens.push(token);
+          break;
+        case 'regular':
+          text = token.text;
+          endsWithPunctuation = util.endsWithAnyOf(text, punctuation);
+          if (endsWithPunctuation && (text.length > 1)) {
+            tokens.push({
+              'metaType': 'regular',
+              'text': text.slice(0, text.length - 1)
+            });
+            tokens.push({
+              'metaType': 'regular',
+              'text': text.slice(text.length - 1)
+            });
+          } else {
+            tokens.push(token);
+          }
+          break;
+        default:
+          throw 'Invalid token meta-type encountered';
+          util.logObject(token);
       }
     }
     return tokens;
   };
-  splitByPrefixChar = function(spaceDelimitedTokens) {
-    var punctuation, startsWithPunctuation, token, tokens, _i, _len;
+  splitByPrefixChar = function(inputTokens) {
+    var punctuation, startsWithPunctuation, text, token, tokens, _i, _len;
     punctuation = ['('];
     tokens = [];
-    for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
-      token = spaceDelimitedTokens[_i];
-      startsWithPunctuation = util.startsWithAnyOf(token, punctuation);
-      if (startsWithPunctuation && token.length > 1) {
-        tokens.push(token.slice(0, 1));
-        tokens.push(token.slice(1));
-      } else {
-        tokens.push(token);
+    for (_i = 0, _len = inputTokens.length; _i < _len; _i++) {
+      token = inputTokens[_i];
+      switch (token.metaType) {
+        case 'delimiter':
+          tokens.push(token);
+          break;
+        case 'regular':
+          text = token.text;
+          startsWithPunctuation = util.startsWithAnyOf(text, punctuation);
+          if (startsWithPunctuation && (text.length > 1)) {
+            tokens.push({
+              'metaType': 'regular',
+              'text': text.slice(0, 1)
+            });
+            tokens.push({
+              'metaType': 'regular',
+              'text': text.slice(1)
+            });
+          } else {
+            tokens.push(token);
+          }
+          break;
+        default:
+          throw "Invalid token meta-type encountered";
+          util.logObject(token);
       }
     }
     return tokens;
@@ -94,33 +128,89 @@ exports.tokenize = function(styledText) {
     }
     return filtered;
   };
-  if (util.anySpaceChar.test(styledText.text.slice(-1))) {
-    postDelimited = true;
-  } else {
-    postDelimited = false;
-  }
-  spaceDelimitedTokens = styledText.text.split(/\s/);
-  spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens);
-  tokens = splitBySuffixChar(spaceDelimitedTokens);
+  isAnySpaceChar = function(char) {
+    return util.anySpaceChar.test(char);
+  };
+  tokenize = function(string) {
+    var char, i, insideDelimiter, insideWord, tokens, word, _i, _ref;
+    console.log(string);
+    insideWord = false;
+    insideDelimiter = false;
+    tokens = [];
+    if (string.length === 0) {
+      return [];
+    }
+    for (i = _i = 0, _ref = string.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      char = string.charAt(i);
+      if (isAnySpaceChar(char)) {
+        if (insideWord) {
+          tokens.push({
+            'metaType': 'regular',
+            'text': word
+          });
+          insideWord = false;
+        }
+        if (!insideDelimiter) {
+          tokens.push({
+            'metaType': 'delimiter'
+          });
+          insideDelimiter = true;
+        }
+      } else {
+        if (insideDelimiter) {
+          insideDelimiter = false;
+        }
+        if (insideWord) {
+          word = word.concat(char);
+        } else {
+          word = char;
+          insideWord = true;
+        }
+      }
+    }
+    if (insideWord) {
+      tokens.push({
+        'metaType': 'regular',
+        'text': word
+      });
+    }
+    return tokens;
+  };
+  tokens = tokenize(string);
+  tokens = splitBySuffixChar(tokens);
   tokens = splitByPrefixChar(tokens);
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     token = tokens[_i];
-    if (token.length === 0) {
-      throw "error in tokenize";
+    if (token.metaType === 'regular') {
+      if (token.text.length === 0) {
+        throw "error in tokenize";
+      }
     }
   }
-  tokensWithStyle = (function() {
-    var _j, _len1, _results;
-    _results = [];
-    for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
-      token = tokens[_j];
-      _results.push({
-        'text': token,
-        'postDelimited': true,
-        'styles': styledText.styles
-      });
-    }
-    return _results;
-  })();
-  return tokensWithStyle;
+  return tokens;
+  /*
+    styledTokens = []
+    for token in tokens
+      switch token.metaType
+  
+        when 'delimiter'
+          styledTokens.push( {'metaType': 'regular', 'text':token.text, 'styles': inpu )
+        when 'regular' 
+            text = token.text
+            startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
+            if startsWithPunctuation and (text.length > 1)
+              # Split it into two
+              tokens.push( {'metaType': 'regular', 'text': token.slice(0, 1)} ) # only first char
+              tokens.push( {'metaType': 'regular', 'text': token.slice(1)} )    # all but first char
+            else 
+              # Push as is
+              tokens.push(token) 
+          
+        else 
+          throw "Invalid token meta-type encountered"
+          util.logObject(token)  
+  
+    tokensWithStyle = ({'text': token, 'styles': string.styles} for token in tokens)
+  */
+
 };

@@ -5,4 +5,5 @@ exports.guessParagraphLeft = (input) ->
   30
 
 exports.build = (input) ->
+  #console.log input
   input
