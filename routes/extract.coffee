@@ -16,7 +16,7 @@ filterImages = (ourDivRepresentation) ->
   filtered.push(div) for div in ourDivRepresentation when not isImage(div.text)
   filtered
 
-filterNoText = (ourDivRepresentation) ->
+filterZeroLengthText = (ourDivRepresentation) ->
   filtered = []
   filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
   filtered
@@ -50,9 +50,8 @@ exports.go = (req, res) ->
   # all text is equally concatenated.
   html.stripSpanWrappers(div) for div in divsAndStyles
 
-  # Discard any divs that contain no text at all
-  divsAndStyles = filterNoText(divsAndStyles)
-  #console.dir(divsAndStyles)
+  # Discard any divs that contain zero-length text
+  divsAndStyles = filterZeroLengthText(divsAndStyles)
 
   # Now tokenize (from text into words, punctuation, etc.)
   tokenizedDivs = (html.tokenize(div) for div in divsAndStyles)
@@ -62,16 +61,32 @@ exports.go = (req, res) ->
   	for token in div
   	  tokens.push(token)
 
+  # TODO: duplicate to unit test
+  for token in tokens
+    if token.text.length == 0
+      throw "Error - zero length text in data"
+
+  #console.dir(tokens)
+
   if tokens.length == 0
   	console.log("No text was extracted from input")
   	throw("No text was extracted from input")
-
+  
+  ###
+  collapsedTokens = []
+  tokens.reduce (x, y) ->
+  	if util.endsWith(x.text, '-')
+  	  collapsedTokens.push(html.mergeTokens(x, y))
+  	else
+  	  collapsedTokens.push(x)
+  	return y
+  ###
+  
   #console.log(token.text) for token in tokens
   plainText = tokens.map (x) -> x.text
   plainText = plainText.reduce (x, y) -> x + ' ' + y
   # console.log(plainText)
   #	x.concat()
-    
 
   timer.end('Extraction from html stage A')
 

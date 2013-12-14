@@ -37,8 +37,20 @@ exports.stripSpanWrappers = function(div) {
   return div.text = div.text.replace(spanEnd, '');
 };
 
+exports.mergeTokens = function(x, y) {
+  var merged;
+  console.log("Merging");
+  merged = util.clone(x);
+  merged.text = x.text + y.text;
+  console.dir(x);
+  console.dir(y);
+  console.dir(merged);
+  console.log("end merge");
+  return merged;
+};
+
 exports.tokenize = function(styledText) {
-  var filterEmptyString, spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle;
+  var filterEmptyString, postDelimited, spaceDelimitedTokens, splitByPrefixChar, splitBySuffixChar, token, tokens, tokensWithStyle, _i, _len;
   splitBySuffixChar = function(spaceDelimitedTokens) {
     var endsWithPunctuation, punctuation, token, tokens, _i, _len;
     punctuation = [',', ':', ';', '.', ')'];
@@ -46,11 +58,11 @@ exports.tokenize = function(styledText) {
     for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
       token = spaceDelimitedTokens[_i];
       endsWithPunctuation = util.endsWithAnyOf(token, punctuation);
-      if (!endsWithPunctuation) {
-        tokens.push(token);
-      } else {
+      if (endsWithPunctuation && token.length > 1) {
         tokens.push(token.slice(0, token.length - 1));
         tokens.push(token.slice(token.length - 1));
+      } else {
+        tokens.push(token);
       }
     }
     return tokens;
@@ -62,11 +74,11 @@ exports.tokenize = function(styledText) {
     for (_i = 0, _len = spaceDelimitedTokens.length; _i < _len; _i++) {
       token = spaceDelimitedTokens[_i];
       startsWithPunctuation = util.startsWithAnyOf(token, punctuation);
-      if (!startsWithPunctuation) {
-        tokens.push(token);
-      } else {
+      if (startsWithPunctuation && token.length > 1) {
         tokens.push(token.slice(0, 1));
         tokens.push(token.slice(1));
+      } else {
+        tokens.push(token);
       }
     }
     return tokens;
@@ -82,17 +94,29 @@ exports.tokenize = function(styledText) {
     }
     return filtered;
   };
+  if (util.anySpaceChar.test(styledText.text.slice(-1))) {
+    postDelimited = true;
+  } else {
+    postDelimited = false;
+  }
   spaceDelimitedTokens = styledText.text.split(/\s/);
   spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens);
   tokens = splitBySuffixChar(spaceDelimitedTokens);
   tokens = splitByPrefixChar(tokens);
+  for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+    token = tokens[_i];
+    if (token.length === 0) {
+      throw "error in tokenize";
+    }
+  }
   tokensWithStyle = (function() {
-    var _i, _len, _results;
+    var _j, _len1, _results;
     _results = [];
-    for (_i = 0, _len = tokens.length; _i < _len; _i++) {
-      token = tokens[_i];
+    for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
+      token = tokens[_j];
       _results.push({
         'text': token,
+        'postDelimited': true,
         'styles': styledText.styles
       });
     }

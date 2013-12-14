@@ -48,13 +48,26 @@ exports.stripSpanWrappers = (div) ->
   div.text = div.text.replace(spanBegin, '') 
   div.text = div.text.replace(spanEnd, '')
  
+exports.mergeTokens = (x, y) ->
+  console.log("Merging")
+
+  merged = util.clone(x)
+  merged.text = x.text + y.text
+
+  console.dir(x)
+  console.dir(y)  
+  console.dir(merged)
+
+  console.log("end merge")
+
+  merged
 
 # Tokenize strings to words and punctuation,
 # while also conserving the association to the style attached to the input.
 exports.tokenize = (styledText) ->
 
-    # Splits punctuation that is the last character of a token
-    # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
+  # Splits punctuation that is the last character of a token
+  # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
 	splitBySuffixChar = (spaceDelimitedTokens) ->
 
 	  punctuation = [',',
@@ -66,30 +79,28 @@ exports.tokenize = (styledText) ->
 	  tokens = []
 	  for token in spaceDelimitedTokens 
 	    endsWithPunctuation = util.endsWithAnyOf(token, punctuation)
-	    unless endsWithPunctuation
-	      tokens.push(token)
+	    if endsWithPunctuation and token.length > 1
+        tokens.push(token.slice(0, token.length - 1)) # all but last char
+        tokens.push(token.slice(token.length - 1))    # only last char	      
 	    else 
-	      tokens.push(token.slice(0, token.length - 1)) # all but last char
-	      tokens.push(token.slice(token.length - 1))        # only last char
+        tokens.push(token)	      
 
 	  tokens
 
-    # Splits punctuation that is the first character of a token
+  # Splits punctuation that is the first character of a token
 	# E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
 	splitByPrefixChar = (spaceDelimitedTokens) ->
 
 	  punctuation = ['(']
 	  
-	  #util.logObject(tokens)	
-
 	  tokens = []
 	  for token in spaceDelimitedTokens 
 	    startsWithPunctuation = util.startsWithAnyOf(token, punctuation)
-	    unless startsWithPunctuation
-	      tokens.push(token)
+	    if startsWithPunctuation and token.length > 1
+        tokens.push(token.slice(0, 1)) # only first char
+        tokens.push(token.slice(1))    # all but first char
 	    else 
-	      tokens.push(token.slice(0, 1)) # only first char
-	      tokens.push(token.slice(1))   # all but first char
+        tokens.push(token)
 	  
 	  tokens
   
@@ -105,16 +116,32 @@ exports.tokenize = (styledText) ->
   # at least pdf2htmlEX may provide double spaces where the 
   # original line of text is very sparse (typically due to 
   # accomodating all lines ending at the same pixel location).
+
+  # Record whether the string ends with a space character or not.
+  # This indicates whether the last token to be detected on it
+  # is itself post-delimited by a space or not - which matters.
+  if util.anySpaceChar.test(styledText.text.slice(-1)) 
+    postDelimited = true
+  else
+    postDelimited = false
   
+  # Split into tokens
   spaceDelimitedTokens = styledText.text.split(/\s/) # split by any space character
   spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
 
+  # Split more to tokenize select punctuation marks as tokens
   tokens = splitBySuffixChar(spaceDelimitedTokens)
   tokens = splitByPrefixChar(tokens)
 
-  #util.logObject(tokens)
-
+  # TODO: duplicate this into unit test for prior functions
+  for token in tokens
+    if token.length == 0
+      throw "error in tokenize"
+  
   # Now, build token objects comprising the text tokens AND their style, 
   # assigning the style of the div to each of them.
-  tokensWithStyle = ({'text': token, 'styles': styledText.styles} for token in tokens)
+  tokensWithStyle = ({'text': token, 'postDelimited': true, 'styles': styledText.styles} for token in tokens)
+  #console.log tokensWithStyle.length
+  #console.dir styledText
+  #tokensWithStyle[tokensWithStyle.length-1].postDelimited = postDelimited # Mark last token's state
   tokensWithStyle

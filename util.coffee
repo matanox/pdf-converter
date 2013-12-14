@@ -3,7 +3,7 @@
 endsWith = (string, match) ->
   string.lastIndexOf(match) is string.length - match.length
 
-exports.endWith = endsWith
+exports.endsWith = endsWith
 
 startsWith = (string, match) ->
   string.indexOf(match) is 0
@@ -57,3 +57,22 @@ exports.objectViolation = (errorMessage) ->
   throw error   
 
 exports.anySpaceChar = RegExp(/\s/)
+
+#
+# Deep object copy
+#
+clone = (obj) ->
+
+  # If it's a primitive type, return as is
+  if not obj? or typeof obj isnt 'object' 
+    return obj
+
+  newInstance = {}
+
+  # Iterate and recurse for a full clone
+  for key of obj
+    newInstance[key] = clone obj[key] 
+
+  newInstance
+
+exports.clone = clone
