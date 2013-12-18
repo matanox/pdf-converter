@@ -68,7 +68,7 @@ exports.tokenize = (string) ->
 
   # Splits punctuation that is the last character of a token
   # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
-	splitBySuffixChar = (inputTokens) ->
+  splitBySuffixChar = (inputTokens) ->
 
     punctuation = [',',
                    ':',
@@ -101,13 +101,13 @@ exports.tokenize = (string) ->
 
   # Splits punctuation that is the first character of a token
 	# E.g. ['aaa', '(bbb', 'ccc'] => ['aaa', '(', bbb', 'ccc']
-	splitByPrefixChar = (inputTokens) ->
+  splitByPrefixChar = (inputTokens) ->
 
-	  punctuation = ['(']
+    punctuation = ['(']
 	  
-	  tokens = []
+    tokens = []
 
-	  for token in inputTokens 
+    for token in inputTokens 
 
       switch token.metaType
 
@@ -128,7 +128,7 @@ exports.tokenize = (string) ->
           throw "Invalid token meta-type encountered"
           util.logObject(token)
 
-	  tokens
+    tokens
   
   # This can be shortened to a one-liner a la 
   # http://coffeescriptcookbook.com/chapters/arrays/filtering-arrays

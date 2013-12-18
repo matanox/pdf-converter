@@ -92,8 +92,8 @@ exports.go = (req, res) ->
   # Flatten to one-dimensional array of tokens... farewell divs.
   tokens = []
   for div in divTokens
-  	for token in div
-  	  tokens.push(token)
+    for token in div
+      tokens.push(token)
 
   # TODO: duplicate to unit test
   for token in tokens when token.metaType == 'regular'
