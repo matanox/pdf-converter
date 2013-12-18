@@ -149,8 +149,6 @@ exports.tokenize = (string) ->
   # This indicates whether the last token to be detected on it
   # is itself post-delimited by a space or not - which matters.
   
-  isAnySpaceChar = (char) -> util.anySpaceChar.test(char) 
-    
   # Split into tokens
   tokenize = (string) ->
 
@@ -163,7 +161,7 @@ exports.tokenize = (string) ->
     for i in [0..string.length-1] 
       # console.log i
       char = string.charAt(i)
-      if isAnySpaceChar(char) 
+      if util.isAnySpaceChar(char) 
         # Push a delimiter token if encountered,
         # while supressing multiple consequtive spaces into a single delimiter token
         
@@ -186,6 +184,8 @@ exports.tokenize = (string) ->
 
     tokens.push( {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
 
+    #console.log(tokens)
+
     tokens
 
   tokens = tokenize(string)
@@ -205,3 +205,5 @@ exports.tokenize = (string) ->
   
   #console.dir(tokens)  
   tokens
+
+

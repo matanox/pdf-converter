@@ -55,6 +55,27 @@ exports.go = (req, res) ->
   # Discard any divs that contain zero-length text
   divsWithStyles = filterZeroLengthText(divsWithStyles)
 
+  #
+
+  # Discern whether to imply a delimiter at the end of each div, or 
+  # a delimiter is *already* explicitly included at the end of each div.
+  divs = divsWithStyles.length
+  endDelimited = 0
+  for div in divsWithStyles
+    #console.log(div.text)
+    #console.log(div.text.charAt(div.text.length - 1))
+    #console.log(util.anySpaceChar.test(div.text.charAt(div.text.length - 1)))
+    #console.log()
+    if util.isAnySpaceChar(util.lastChar(div.text)) then endDelimited += 1
+  #console.log(endDelimited / divs)
+  #console.log(divs)
+  console.log(endDelimited)
+  
+  # If most divs end with a delimiting space character, then we don't need
+  # to infer a delimiter at the end of each div, as we will pick it up anyway when we tokenize it.
+  if (endDelimited / divs) > 0.9 then augmentEachDiv = true else augmentEachDiv = false
+  #
+
   # Now tokenize (from text into words, punctuation, etc.),
   # while inheriting the style of the div to each resulting token
   divTokens = []
@@ -63,6 +84,7 @@ exports.go = (req, res) ->
     for token in tokens # inherit the styles to all tokens
       switch token.metaType
         when 'regular' then token.styles = div.styles
+    # if augmentEachDiv then tokens.push( {'metaType': 'delimiter'} )        
     divTokens.push(tokens)
 
   # Flatten to one-dimensional array of tokens... farewell divs.

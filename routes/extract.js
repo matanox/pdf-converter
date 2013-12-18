@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var div, divTokens, divsWithStyles, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o;
+  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -68,12 +68,26 @@ exports.go = function(req, res) {
     html.stripSpanWrappers(div);
   }
   divsWithStyles = filterZeroLengthText(divsWithStyles);
-  divTokens = [];
+  divs = divsWithStyles.length;
+  endDelimited = 0;
   for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
     div = divsWithStyles[_j];
+    if (util.isAnySpaceChar(util.lastChar(div.text))) {
+      endDelimited += 1;
+    }
+  }
+  console.log(endDelimited);
+  if ((endDelimited / divs) > 0.9) {
+    augmentEachDiv = true;
+  } else {
+    augmentEachDiv = false;
+  }
+  divTokens = [];
+  for (_k = 0, _len2 = divsWithStyles.length; _k < _len2; _k++) {
+    div = divsWithStyles[_k];
     tokens = html.tokenize(div.text);
-    for (_k = 0, _len2 = tokens.length; _k < _len2; _k++) {
-      token = tokens[_k];
+    for (_l = 0, _len3 = tokens.length; _l < _len3; _l++) {
+      token = tokens[_l];
       switch (token.metaType) {
         case 'regular':
           token.styles = div.styles;
@@ -82,15 +96,15 @@ exports.go = function(req, res) {
     divTokens.push(tokens);
   }
   tokens = [];
-  for (_l = 0, _len3 = divTokens.length; _l < _len3; _l++) {
-    div = divTokens[_l];
-    for (_m = 0, _len4 = div.length; _m < _len4; _m++) {
-      token = div[_m];
+  for (_m = 0, _len4 = divTokens.length; _m < _len4; _m++) {
+    div = divTokens[_m];
+    for (_n = 0, _len5 = div.length; _n < _len5; _n++) {
+      token = div[_n];
       tokens.push(token);
     }
   }
-  for (_n = 0, _len5 = tokens.length; _n < _len5; _n++) {
-    token = tokens[_n];
+  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
+    token = tokens[_o];
     if (token.metaType === 'regular') {
       if (token.text.length === 0) {
         throw "Error - zero length text in data";
@@ -113,8 +127,8 @@ exports.go = function(req, res) {
     return y;
   });
   plainText = '';
-  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
-    token = tokens[_o];
+  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
+    token = tokens[_p];
     if (token.metaType === 'regular') {
       plainText = plainText.concat(token.text);
     } else {

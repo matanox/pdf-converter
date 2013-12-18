@@ -50,7 +50,7 @@ exports.mergeTokens = function(x, y) {
 };
 
 exports.tokenize = function(string) {
-  var filterEmptyString, isAnySpaceChar, splitByPrefixChar, splitBySuffixChar, token, tokenize, tokens, _i, _len;
+  var filterEmptyString, splitByPrefixChar, splitBySuffixChar, token, tokenize, tokens, _i, _len;
   splitBySuffixChar = function(inputTokens) {
     var endsWithPunctuation, punctuation, text, token, tokens, _i, _len;
     punctuation = [',', ':', ';', '.', ')'];
@@ -128,9 +128,6 @@ exports.tokenize = function(string) {
     }
     return filtered;
   };
-  isAnySpaceChar = function(char) {
-    return util.anySpaceChar.test(char);
-  };
   tokenize = function(string) {
     var char, i, insideDelimiter, insideWord, tokens, word, _i, _ref;
     insideWord = false;
@@ -141,7 +138,7 @@ exports.tokenize = function(string) {
     }
     for (i = _i = 0, _ref = string.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
       char = string.charAt(i);
-      if (isAnySpaceChar(char)) {
+      if (util.isAnySpaceChar(char)) {
         if (insideWord) {
           tokens.push({
             'metaType': 'regular',

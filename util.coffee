@@ -1,5 +1,9 @@
 # crepl = require 'coffee-script/lib/coffee-script/repl'
 
+anySpaceChar = RegExp(/\s/)
+
+exports.anySpaceChar = anySpaceChar
+
 endsWith = (string, match) ->
   string.lastIndexOf(match) is string.length - match.length
 
@@ -41,6 +45,10 @@ exports.startsWithAnyOf = (string, matches) ->
   return false unless isAnyOf(char, matches)
   return char
 
+exports.isAnySpaceChar = (char) -> anySpaceChar.test(char) 
+
+exports.lastChar = (string) -> string.charAt(string.length - 1)
+
 exports.parseElementText = (xmlNode) ->
   content = xmlNode.substr(0, xmlNode.length - "</div>".length) # remove closing div tag
   content = content.slice(content.indexOf(">") + 1)             # remove opening div tag
@@ -55,8 +63,6 @@ exports.objectViolation = (errorMessage) ->
   error = new Error(errorMessage)
   console.log(error.stack)
   throw error   
-
-exports.anySpaceChar = RegExp(/\s/)
 
 #
 # Deep object copy
