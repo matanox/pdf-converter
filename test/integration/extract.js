@@ -19,6 +19,8 @@ host = nconf.get("host");
 
 console.log("host to test: " + nconf.get("host"));
 
+http.globalAgent.maxSockets = 1000;
+
 directory = '../local-copies/html-converted/';
 
 _ref = fs.readdirSync(directory);

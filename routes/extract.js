@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endsDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -69,15 +69,17 @@ exports.go = function(req, res) {
   }
   divsWithStyles = filterZeroLengthText(divsWithStyles);
   divs = divsWithStyles.length;
-  endDelimited = 0;
+  endsDelimited = 0;
   for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
     div = divsWithStyles[_j];
     if (util.isAnySpaceChar(util.lastChar(div.text))) {
-      endDelimited += 1;
+      endsDelimited += 1;
     }
   }
-  console.log(endDelimited);
-  if ((endDelimited / divs) > 0.9) {
+  console.log(divs);
+  console.log(endsDelimited);
+  console.log(endsDelimited / divs);
+  if ((endsDelimited / divs) < 0.1) {
     augmentEachDiv = true;
   } else {
     augmentEachDiv = false;
@@ -92,6 +94,11 @@ exports.go = function(req, res) {
         case 'regular':
           token.styles = div.styles;
       }
+    }
+    if (augmentEachDiv) {
+      tokens.push({
+        'metaType': 'delimiter'
+      });
     }
     divTokens.push(tokens);
   }

@@ -8,6 +8,7 @@ nconf.defaults host: "localhost"
 host = nconf.get "host"
 console.log "host to test: " + nconf.get("host")
 
+http.globalAgent.maxSockets = 1000
 
 # createCallBack = (callback, paramToFix) ->
 # httpCallBack()
