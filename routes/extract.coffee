@@ -60,22 +60,20 @@ exports.go = (req, res) ->
   # Discern whether to imply a delimiter at the end of each div, or 
   # a delimiter is *already* explicitly included at the end of each div.
   divs = divsWithStyles.length
-  endsDelimited = 0
+  endsSpaceDelimited = 0
   
   for div in divsWithStyles
     #console.log(div.text)
-    #console.log(div.text.charAt(div.text.length - 1))
-    #console.log(util.anySpaceChar.test(div.text.charAt(div.text.length - 1)))
+    #console.log(util.lastChar(div.text))
+    #console.log(util.isAnySpaceChar(util.lastChar(div.text)))
     #console.log()
-    if util.isAnySpaceChar(util.lastChar(div.text)) then endsDelimited += 1
-  
-  console.log(divs)
-  console.log(endsDelimited)
-  console.log(endsDelimited / divs)
+    if util.isAnySpaceChar(util.lastChar(div.text)) then endsSpaceDelimited += 1
   
   # If most divs end with a delimiting space character, then we don't need
   # to infer a delimiter at the end of each div, as we will pick it up anyway when we tokenize it.
-  if (endsDelimited / divs) < 0.1 then augmentEachDiv = true else augmentEachDiv = false
+  console.log(endsSpaceDelimited)
+  console.log(endsSpaceDelimited / divs)
+  if (endsSpaceDelimited / divs) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
   #
 
   # Now tokenize (from text into words, punctuation, etc.),
@@ -86,7 +84,7 @@ exports.go = (req, res) ->
     for token in tokens # inherit the styles to all tokens
       switch token.metaType
         when 'regular' then token.styles = div.styles
-    if augmentEachDiv then tokens.push( {'metaType': 'delimiter'} )        
+    if augmentEachDiv then tokens.push( {'metaType': 'delimiter'} ) # add a delimiter in this case
     divTokens.push(tokens)
 
   # Flatten to one-dimensional array of tokens... farewell divs.
@@ -130,6 +128,8 @@ exports.go = (req, res) ->
         tokens.splice(index, 1)        # remove second element
         return x
     return y
+
+  #console.dir(tokens)
  
   plainText = ''
   for token in tokens
@@ -138,7 +138,7 @@ exports.go = (req, res) ->
     else 
       plainText = plainText.concat(' ')
 
-  console.log(plainText)
+  #console.log(plainText)
 
   timer.end('Extraction from html stage A')
 

@@ -84,5 +84,5 @@ googleAuthSetup
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
-http.get('http://localhost/extract?name=q3DRztlQhutYapOO0zuw', (res) ->
+http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
   console.log("server response is: " + res.statusCode))

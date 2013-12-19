@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endsDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -69,17 +69,16 @@ exports.go = function(req, res) {
   }
   divsWithStyles = filterZeroLengthText(divsWithStyles);
   divs = divsWithStyles.length;
-  endsDelimited = 0;
+  endsSpaceDelimited = 0;
   for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
     div = divsWithStyles[_j];
     if (util.isAnySpaceChar(util.lastChar(div.text))) {
-      endsDelimited += 1;
+      endsSpaceDelimited += 1;
     }
   }
-  console.log(divs);
-  console.log(endsDelimited);
-  console.log(endsDelimited / divs);
-  if ((endsDelimited / divs) < 0.1) {
+  console.log(endsSpaceDelimited);
+  console.log(endsSpaceDelimited / divs);
+  if ((endsSpaceDelimited / divs) < 0.3) {
     augmentEachDiv = true;
   } else {
     augmentEachDiv = false;
@@ -142,7 +141,6 @@ exports.go = function(req, res) {
       plainText = plainText.concat(' ');
     }
   }
-  console.log(plainText);
   timer.end('Extraction from html stage A');
   outputHtml = soup.build(plainText);
   return output.serveOutput(outputHtml, name, res);
