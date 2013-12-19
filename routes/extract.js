@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divs, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -68,7 +68,7 @@ exports.go = function(req, res) {
     html.stripSpanWrappers(div);
   }
   divsWithStyles = filterZeroLengthText(divsWithStyles);
-  divs = divsWithStyles.length;
+  divsNum = divsWithStyles.length;
   endsSpaceDelimited = 0;
   for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
     div = divsWithStyles[_j];
@@ -77,8 +77,8 @@ exports.go = function(req, res) {
     }
   }
   console.log(endsSpaceDelimited);
-  console.log(endsSpaceDelimited / divs);
-  if ((endsSpaceDelimited / divs) < 0.3) {
+  console.log(endsSpaceDelimited / divsNum);
+  if ((endsSpaceDelimited / divsNum) < 0.3) {
     augmentEachDiv = true;
   } else {
     augmentEachDiv = false;
@@ -127,6 +127,17 @@ exports.go = function(req, res) {
         x.text = x.text.slice(0, -1);
         x.text = x.text.concat(y.text);
         tokens.splice(index, 1);
+        return x;
+      }
+    }
+    return y;
+  });
+  tokens.reduce(function(x, y, index) {
+    if (x.metaType === 'regular' && y.metaType === 'delimiter' && index < (tokens.length - 1)) {
+      if (util.endsWith(x.text, '-')) {
+        x.text = x.text.slice(0, -1);
+        x.text = x.text.concat(tokens[index + 1].text);
+        tokens.splice(index, 2);
         return x;
       }
     }

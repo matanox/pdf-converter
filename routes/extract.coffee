@@ -59,7 +59,7 @@ exports.go = (req, res) ->
 
   # Discern whether to imply a delimiter at the end of each div, or 
   # a delimiter is *already* explicitly included at the end of each div.
-  divs = divsWithStyles.length
+  divsNum = divsWithStyles.length
   endsSpaceDelimited = 0
   
   for div in divsWithStyles
@@ -70,11 +70,12 @@ exports.go = (req, res) ->
     if util.isAnySpaceChar(util.lastChar(div.text)) then endsSpaceDelimited += 1
   
   # If most divs end with a delimiting space character, then we don't need
-  # to infer a delimiter at the end of each div, as we will pick it up anyway when we tokenize it.
+  # to implicitly infer a delimiter at the end of each div, otherwise we do.
+  # The use of a constant ratio test is extremely coarse and temporary,
+  # and a refined solution should replace it.
   console.log(endsSpaceDelimited)
-  console.log(endsSpaceDelimited / divs)
-  if (endsSpaceDelimited / divs) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
-  #
+  console.log(endsSpaceDelimited / divsNum)
+  if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
   # Now tokenize (from text into words, punctuation, etc.),
   # while inheriting the style of the div to each resulting token
@@ -122,6 +123,7 @@ exports.go = (req, res) ->
   #
   tokens.reduce (x, y, index) -> 
     if x.metaType is 'regular' and y.metaType is 'regular'
+
       if util.endsWith(x.text, '-')
         x.text = x.text.slice(0, -1)   # discard the hyphen
         x.text = x.text.concat(y.text) # concatenate text of second element into first
@@ -129,6 +131,20 @@ exports.go = (req, res) ->
         return x
     return y
 
+  # Now repeat with variation, for the case that end-of-lines are appended with a delimiter.
+  # This means verifying there's a next token after the delimiter, hance the array length check.
+  tokens.reduce (x, y, index) -> 
+    if x.metaType is 'regular' and y.metaType is 'delimiter' and index < (tokens.length - 1)
+
+      if util.endsWith(x.text, '-')
+        x.text = x.text.slice(0, -1)                   # discard the hyphen
+        x.text = x.text.concat(tokens[index + 1].text) # concatenate text of second element 
+                                                       # (the one after the delimiter) into first
+        tokens.splice(index, 2)                        # remove second element (the one after the delimiter) 
+                                                       # and the delimiter
+        return x
+    return y
+  
   #console.dir(tokens)
  
   plainText = ''
