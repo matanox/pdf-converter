@@ -132,7 +132,7 @@ exports.go = (req, res) ->
     return y
 
   # Now repeat with variation, for the case that end-of-lines are appended with a delimiter.
-  # This means verifying there's a next token after the delimiter, hance the array length check.
+  # This means verifying there's a next token after the delimiter, hence the array length check.
   tokens.reduce (x, y, index) -> 
     if x.metaType is 'regular' and y.metaType is 'delimiter' and index < (tokens.length - 1)
 
@@ -147,12 +147,37 @@ exports.go = (req, res) ->
   
   #console.dir(tokens)
  
+  wrapWithSpan = (string) -> '<span>' + string + '</span>'
+
+  wrapWithStyle = (token) ->
+    
+    stylesString = ''
+    for style in token.styles
+      #console.log(style)
+      #console.log(css.getRealStyle(style, realStyles))
+      styles = css.getRealStyle(style, realStyles)
+      if styles?
+        #console.log()
+        #console.log(styles)
+        serialized = css.serializeStylesArray(styles)
+        #console.log(serialized)
+        stylesString = stylesString + serialized
+
+    #console.log(stylesString)
+    if stylesString.length > 0
+      stylesString = 'style=\"' + stylesString + '\"'
+      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
+    else 
+      return '<span>' + token.text + '</span>'
+
+  #util.logObject(realStyles)
+
   plainText = ''
   for token in tokens
     if token.metaType is 'regular' 
-      plainText = plainText.concat(token.text)
+      plainText = plainText + wrapWithStyle(token)
     else 
-      plainText = plainText.concat(' ')
+      plainText = plainText + ' '
 
   #console.log(plainText)
 

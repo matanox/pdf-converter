@@ -56,15 +56,27 @@ extractCssProperties = (string) ->
     #                          comparison early rather than scanning the whole array 
     #                          also see http://jsperf.com/looking-at-localcompare
     filterProperties = (propertyObjectsArray) ->
+      
       relevantStyles = [
-        'font-family',
+        #'font-family',
         'font-size',
         'font-style',
         'font-weight',
-        'color' ]
+        'word-spacing',
+        'line-height',
+        'color',
+        'transform',
+        '-ms-transform',
+        '-webkit-transform',
+        'transform-origin',
+        '-ms-transform-origin',
+        '-webkit-transform-origin'
+      ]
+
       positionData = [
-        'left',
-        'bottom']
+        #'left',
+        #'bottom'
+      ]
 
       propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> 
         util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData)))
@@ -105,12 +117,19 @@ exports.simpleFetchStyles = (rawHtml, path) ->
 
 # get the css styles for a css class
 exports.getRealStyle = (styleClass, realStyles) ->
+  styleClass = '.' + styleClass # as we are dealing with css classes
   if realStyles[styleClass]? 
     return realStyles[styleClass]
   else 
     return undefined 
 
 # return the native css string form of a style. e.g. "font-size:96px;"
-exports.serializeStyle = (style) ->
+serializeStyle = (style) ->
   styleString = style.property + ':' + style.value + ';'
   styleString
+
+exports.serializeStylesArray = (stylesArray) ->
+  stylesString = ''
+  for style in stylesArray
+    stylesString = stylesString + serializeStyle(style)
+  stylesString

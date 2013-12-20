@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, plainText, rawHtml, rawRelevantDivs, realStyles, token, tokens, wrapWithSpan, wrapWithStyle, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -143,13 +143,35 @@ exports.go = function(req, res) {
     }
     return y;
   });
+  wrapWithSpan = function(string) {
+    return '<span>' + string + '</span>';
+  };
+  wrapWithStyle = function(token) {
+    var serialized, style, styles, stylesString, _len7, _p, _ref;
+    stylesString = '';
+    _ref = token.styles;
+    for (_p = 0, _len7 = _ref.length; _p < _len7; _p++) {
+      style = _ref[_p];
+      styles = css.getRealStyle(style, realStyles);
+      if (styles != null) {
+        serialized = css.serializeStylesArray(styles);
+        stylesString = stylesString + serialized;
+      }
+    }
+    if (stylesString.length > 0) {
+      stylesString = 'style=\"' + stylesString + '\"';
+      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' + '\n';
+    } else {
+      return '<span>' + token.text + '</span>';
+    }
+  };
   plainText = '';
   for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
     token = tokens[_p];
     if (token.metaType === 'regular') {
-      plainText = plainText.concat(token.text);
+      plainText = plainText + wrapWithStyle(token);
     } else {
-      plainText = plainText.concat(' ');
+      plainText = plainText + ' ';
     }
   }
   timer.end('Extraction from html stage A');
