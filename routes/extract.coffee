@@ -147,43 +147,11 @@ exports.go = (req, res) ->
   
   #console.dir(tokens)
  
-  wrapWithSpan = (string) -> '<span>' + string + '</span>'
-
-  wrapWithStyle = (token) ->
-    
-    stylesString = ''
-    for style in token.styles
-      #console.log(style)
-      #console.log(css.getRealStyle(style, realStyles))
-      styles = css.getRealStyle(style, realStyles)
-      if styles?
-        #console.log()
-        #console.log(styles)
-        serialized = css.serializeStylesArray(styles)
-        #console.log(serialized)
-        stylesString = stylesString + serialized
-
-    #console.log(stylesString)
-    if stylesString.length > 0
-      stylesString = 'style=\"' + stylesString + '\"'
-      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
-    else 
-      return '<span>' + token.text + '</span>'
-
   #util.logObject(realStyles)
-
-  plainText = ''
-  for token in tokens
-    if token.metaType is 'regular' 
-      plainText = plainText + wrapWithStyle(token)
-    else 
-      plainText = plainText + ' '
-
-  #console.log(plainText)
 
   timer.end('Extraction from html stage A')
 
-  outputHtml = soup.build(plainText)
+  outputHtml = html.buildOutputHtml(tokens, realStyles)
   output.serveOutput(outputHtml, name, res)
 
   

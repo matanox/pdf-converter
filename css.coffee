@@ -65,12 +65,6 @@ extractCssProperties = (string) ->
         'word-spacing',
         'line-height',
         'color',
-        'transform',
-        '-ms-transform',
-        '-webkit-transform',
-        'transform-origin',
-        '-ms-transform-origin',
-        '-webkit-transform-origin'
       ]
 
       positionData = [

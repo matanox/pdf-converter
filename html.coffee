@@ -1,4 +1,5 @@
 util = require('./util')
+css  = require('./css')
 
 #
 # Filter the raw html for only divs that do not contain an inner div
@@ -61,6 +62,12 @@ exports.mergeTokens = (x, y) ->
   console.log("end merge")
 
   merged
+
+punctuation = [',',
+               ':',
+               ';',
+               '.',
+                ')']
 
 # Tokenize strings to words and punctuation,
 # while also conserving the association to the style attached to the input.
@@ -207,3 +214,42 @@ exports.tokenize = (string) ->
   tokens
 
 
+wrapWithSpan = (string) -> '<span>' + string + '</span>'
+
+exports.buildOutputHtml = (tokens, realStyles) ->
+
+  wrapWithStyle = (token) ->
+
+    stylesString = ''
+    for style in token.styles
+      #console.log(style)
+      #console.log(css.getRealStyle(style, realStyles))
+      styles = css.getRealStyle(style, realStyles)
+      if styles?
+        #console.log()
+        #console.log(styles)
+        serialized = css.serializeStylesArray(styles)
+        #console.log(serialized)
+        stylesString = stylesString + serialized
+
+    #console.log(stylesString)
+    if stylesString.length > 0
+      stylesString = 'style=\"' + stylesString + '\"'
+      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
+    else 
+      return '<span>' + token.text + '</span>'
+
+  timer.start('Serialization to output')  
+  plainText = ''
+
+  tokens.reduce (x, y) -> 
+    if x.metaType is 'regular' and y.metaType is 'delimiter' then x.text = x.text + ' '
+    return y
+
+  for x in tokens 
+    if x.metaType is 'regular'
+      plainText = plainText + wrapWithStyle(x)
+  timer.end('Serialization to output')      
+
+  #console.log(plainText)
+  plainText
