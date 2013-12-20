@@ -1,3 +1,5 @@
+'use strict'
+
 # Get own config
 fs = require("fs")
 nconf = require("nconf")
@@ -18,6 +20,8 @@ extract = require("./routes/extract")
 http = require("http")
 path = require("path")
 app = express()
+
+Primus = require('primus')
 
 # all environments
 app.set "port", process.env.PORT or 80
@@ -81,8 +85,12 @@ googleAuthSetup = () ->
 
 googleAuthSetup
 
-http.createServer(app).listen app.get("port"), ->
+server = http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
+
+primus = new Primus(server, { transformer: 'websockets' })
+primus.on('connection', (spark) -> # sparks are just the primus connection handles...
+  console.log('New Primus connection established ' + 'from ' + spark.address + ' and given the id ' + spark.id))
 
 http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
   console.log("server response is: " + res.statusCode))

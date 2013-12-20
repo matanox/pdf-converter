@@ -254,7 +254,5 @@ exports.buildOutputHtml = (tokens, realStyles) ->
       plainText = plainText + wrapWithStyle(x)
   timer.end('Serialization to output') 
 
-
-
   #console.log(plainText)
   plainText
