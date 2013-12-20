@@ -237,7 +237,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
     #console.log(stylesString)
     if stylesString.length > 0
-      stylesString = 'style=\"' + stylesString + '\"'
+      stylesString = 'style=\"' + stylesString + '\" id=\"aa\"'
       return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
     else 
       return '<span>' + token.text + '</span>'
@@ -252,7 +252,9 @@ exports.buildOutputHtml = (tokens, realStyles) ->
   for x in tokens 
     if x.metaType is 'regular'
       plainText = plainText + wrapWithStyle(x)
-  timer.end('Serialization to output')      
+  timer.end('Serialization to output') 
+
+
 
   #console.log(plainText)
   plainText

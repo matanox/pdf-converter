@@ -208,7 +208,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
       }
     }
     if (stylesString.length > 0) {
-      stylesString = 'style=\"' + stylesString + '\"';
+      stylesString = 'style=\"' + stylesString + '\" id=\"aa\"';
       return '<span' + ' ' + stylesString + '>' + token.text + '</span>' + '\n';
     } else {
       return '<span>' + token.text + '</span>';

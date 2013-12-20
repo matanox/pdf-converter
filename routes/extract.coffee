@@ -130,8 +130,9 @@ exports.go = (req, res) ->
         return x
     return y
 
-  # Now repeat with variation, for the case that end-of-lines are appended with a delimiter.
-  # This means verifying there's a next token after the delimiter, hence the array length check.
+  # Now repeat with variation, for the case that end-of-lines 
+  # are appended with a delimiter. That case would not get caught above.
+  # Can probably collapse this when the code is more mature
   tokens.reduce (x, y, index) -> 
     if x.metaType is 'regular' and y.metaType is 'delimiter' and index < (tokens.length - 1)
 
@@ -144,10 +145,6 @@ exports.go = (req, res) ->
         return x
     return y
   
-  #console.dir(tokens)
- 
-  #util.logObject(realStyles)
-
   timer.end('Extraction from html stage A')
 
   outputHtml = html.buildOutputHtml(tokens, realStyles)

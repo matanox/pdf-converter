@@ -1,0 +1,6 @@
+# See https://npmjs.org/package/nodemon for options for this file and nodemon in general
+
+/test/*
+/recycle-bin/*
+/hadasino-server/*
+
