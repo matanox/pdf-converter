@@ -4,7 +4,6 @@ timer  = require "../timer"
 css    = require "../css"
 html   = require "../html"
 model  = require "../model"
-soup   = require "../soup"
 output = require "../output"
 
 isImage = (text) -> util.startsWith(text, "<img ")

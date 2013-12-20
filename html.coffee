@@ -214,9 +214,12 @@ exports.tokenize = (string) ->
   tokens
 
 
-wrapWithSpan = (string) -> '<span>' + string + '</span>'
-
+#
+# Build html output
+#
 exports.buildOutputHtml = (tokens, realStyles) ->
+
+  wrapWithSpan = (string) -> '<span>' + string + '</span>'
 
   wrapWithStyle = (token) ->
 
