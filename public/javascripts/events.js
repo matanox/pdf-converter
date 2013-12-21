@@ -28,7 +28,8 @@ window.onload = function()
     console.log('right-click event captured')
     console.log(event.target)
 
-    remove(event.target)
+    if (event.target != event.currentTarget)
+      remove(event.target)
 
     return false
   }
