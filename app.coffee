@@ -19,11 +19,10 @@ convert = require("./routes/convert")
 extract = require("./routes/extract")
 http = require("http")
 path = require("path")
-app = express()
 
 Primus = require('primus')
 
-# all environments
+app = express()
 app.set "port", process.env.PORT or 80
 console.log("Port is " + app.get("port"))
 
@@ -42,7 +41,6 @@ app.use express.static(path.join(__dirname, "public"))
 #app.use express.directory(__dirname + '/outputTemplate')
 #app.use express.static(path.join(__dirname, "outputTemplate"))
 
-# development only
 app.use express.errorHandler() if "development" is app.get("env")
 app.get "/", routes.index
 app.get "/users", user.list
@@ -85,12 +83,27 @@ googleAuthSetup = () ->
 
 googleAuthSetup
 
-server = http.createServer(app).listen app.get("port"), ->
-  console.log "Express server listening on port " + app.get("port")
+server = http.createServer(app)
 
 primus = new Primus(server, { transformer: 'websockets' })
-primus.on('connection', (spark) -> # sparks are just the primus connection handles...
-  console.log('New Primus connection established ' + 'from ' + spark.address + ' and given the id ' + spark.id))
 
+server.listen app.get("port"), ->
+  console.log "Server listening on port " + app.get("port")
+
+sparks = 0
+logSparks = () -> console.log('Primus: ' + sparks + ' ' + 'active sparks')
+logConnection = (spark, message) -> 'Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message
+
+primus.on('connection', (spark) -> # sparks are just the primus connection handles...
+  sparks += 1
+  console.log(logConnection(spark, 'connected on port ' + spark.address.port))
+  logSparks())
+
+primus.on('disconnection', (spark) ->
+  sparks -= 1
+  console.log(logConnection(spark, 'disconnected'))
+  logSparks())
+
+###
 http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
   console.log("server response is: " + res.statusCode))

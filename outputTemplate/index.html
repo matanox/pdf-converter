@@ -14,6 +14,7 @@
     <!-- Typekit fonts require an account and a kit containing the fonts used. see https://typekit.com/plans for details. <script type="text/javascript" src="//use.typekit.net/YOUR_KIT_ID.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 -->
+    <script type="text/javascript" src="javascripts/primusClientLib.js"></script> 
     <title>Empty</title>
   </head>
   
@@ -38,5 +39,14 @@
       </div>
     </div>
   </body>
+  <script>
+	window.onload = connect;
+        function connect() {
+	  console.log('Initiating connection as Primus client...');
+	  var primus = Primus.connect('http://localhost/');
+	  var Socket = primus.Socket;
+	  console.log('Primus connection initiated');
+	}	
+</script>
 </html>
 

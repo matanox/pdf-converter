@@ -15,13 +15,14 @@ require(['filePicker'], function() {
     filepicker.setKey('A98TZEfEaSi6e7ru2EZnxz');   
 });
 
+/*
 // TODO: move this under the auspices of require if it gets buggy
 // TODO: (possibly) get rid of jquery
 require(['jquery'], function() {
 	$.getScript("./hadasino/socket.io.js").done(function( data, textStatus, jqxhr ) {
   		/* console.log( data ); // Data returned
   		console.log( textStatus ); // Success
-  		console.log( jqxhr.status ); // 200 */
+  		console.log( jqxhr.status ); // 200 
 		console.log("hadasino loaded")
 
 		// connect to Hadas server and listen for reload events
@@ -40,4 +41,5 @@ require(['jquery'], function() {
 		console.log( exception ); 
 	});
 });
+*/
 
