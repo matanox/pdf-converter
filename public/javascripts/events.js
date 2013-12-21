@@ -28,7 +28,11 @@ window.onload = function()
     console.log('right-click event captured')
     console.log(event.target)
 
-    if (event.target != event.currentTarget)
+    // We avoid taking action on the top element where the listener was registered.
+    // target is the element invoked on, currentTarget is the element where the 
+    // event listener was registered. In a DOM hierarcy of objects, they are 
+    // (typically) not the same element.
+    if (event.target != event.currentTarget) 
       remove(event.target)
 
     return false

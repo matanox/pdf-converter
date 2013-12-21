@@ -95,7 +95,7 @@ server.listen(app.get("port"), function() {
   return console.log("Server listening on port " + app.get("port"));
 });
 
-http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', function(res) {
+http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', function(res) {
   return console.log("server response is: " + res.statusCode);
 });
 

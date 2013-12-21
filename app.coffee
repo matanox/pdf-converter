@@ -88,7 +88,7 @@ server = http.createServer(app)
 server.listen app.get("port"), ->
   console.log "Server listening on port " + app.get("port")
 
-http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
+http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', (res) -> # xt7duLM0Q3Ow2gIBOvED
   console.log("server response is: " + res.statusCode))
 
 unless app.get("env") is "production" then primus.start(server)
