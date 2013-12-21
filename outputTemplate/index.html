@@ -46,6 +46,11 @@
 	  var primus = Primus.connect('http://localhost/');
 	  var Socket = primus.Socket;
 	  console.log('Primus connection initiated');
+
+ 	  primus.on('data', function message(data) {
+            console.log("Trying to reload following server restart message from Primus")
+	    location.reload(true);
+	  });
 	}	
 </script>
 </html>

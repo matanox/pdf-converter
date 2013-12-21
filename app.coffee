@@ -91,19 +91,22 @@ server.listen app.get("port"), ->
   console.log "Server listening on port " + app.get("port")
 
 sparks = 0
-logSparks = () -> console.log('Primus: ' + sparks + ' ' + 'active sparks')
-logConnection = (spark, message) -> 'Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message
+logSpark = (spark, message) -> 
+  sparksCount = sparks + ' ' + 'active sparks'
+  console.log('Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message + ' ' + '[' + sparksCount + ']')
+
+setTimeout((() -> 
+  console.log('Primus: broadcasting \'up\' message to all connected clients')
+  primus.write("ServerRestarted")), 
+  1000)
 
 primus.on('connection', (spark) -> # sparks are just the primus connection handles...
   sparks += 1
-  console.log(logConnection(spark, 'connected on port ' + spark.address.port))
-  logSparks())
+  logSpark(spark, 'connected on port ' + spark.address.port))
 
 primus.on('disconnection', (spark) ->
   sparks -= 1
-  console.log(logConnection(spark, 'disconnected'))
-  logSparks())
+  logSpark(spark, 'disconnected'))
 
-###
 http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
   console.log("server response is: " + res.statusCode))
