@@ -20,7 +20,7 @@ extract = require("./routes/extract")
 http = require("http")
 path = require("path")
 
-Primus = require('primus')
+primus = require('./primus')
 
 app = express()
 app.set "port", process.env.PORT or 80
@@ -41,7 +41,7 @@ app.use express.static(path.join(__dirname, "public"))
 #app.use express.directory(__dirname + '/outputTemplate')
 #app.use express.static(path.join(__dirname, "outputTemplate"))
 
-app.use express.errorHandler() if "development" is app.get("env")
+app.use express.errorHandler() unless app.get("env") is "production"
 app.get "/", routes.index
 app.get "/users", user.list
 app.get "/convert", convert.go
@@ -85,28 +85,11 @@ googleAuthSetup
 
 server = http.createServer(app)
 
-primus = new Primus(server, { transformer: 'websockets' })
-
 server.listen app.get("port"), ->
   console.log "Server listening on port " + app.get("port")
 
-sparks = 0
-logSpark = (spark, message) -> 
-  sparksCount = sparks + ' ' + 'active sparks'
-  console.log('Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message + ' ' + '[' + sparksCount + ']')
-
-setTimeout((() -> 
-  console.log('Primus: broadcasting \'up\' message to all connected clients')
-  primus.write("ServerRestarted")), 
-  1000)
-
-primus.on('connection', (spark) -> # sparks are just the primus connection handles...
-  sparks += 1
-  logSpark(spark, 'connected on port ' + spark.address.port))
-
-primus.on('disconnection', (spark) ->
-  sparks -= 1
-  logSpark(spark, 'disconnected'))
-
 http.get('http://localhost/extract?name=xt7duLM0Q3Ow2gIBOvED', (res) ->
   console.log("server response is: " + res.statusCode))
+
+unless app.get("env") is "production" then primus.start(server)
+
