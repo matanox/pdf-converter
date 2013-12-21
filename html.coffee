@@ -221,7 +221,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
   wrapWithSpan = (string) -> '<span>' + string + '</span>'
 
-  wrapWithStyle = (token) ->
+  wrapWithAttributes = (token) ->
 
     stylesString = ''
     for style in token.styles
@@ -232,9 +232,9 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
     if stylesString.length > 0
       stylesString = 'style=\"' + stylesString + '\"'
-      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
+      return """<span #{stylesString} id="#{x.id}">#{token.text}</span>\n"""
     else 
-      return '<span>' + token.text + '</span>'
+      return '<span>#{token.text}</span>'
 
   timer.start('Serialization to output')  
   plainText = ''
@@ -247,9 +247,14 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
   for x in tokens 
     if x.metaType is 'regular'
-      plainText = plainText + wrapWithStyle(x)
-      
+      plainText = plainText + wrapWithAttributes(x)
     else 
+      # Adding a space character.
+      #
+      # Note: the font size of a space character should likely
+      # be the same as that of the character preceding it -
+      # this should wait for refactoring of how styles actually
+      # get down to the output... at a later stage
       fontSize = "40px"
       plainText = plainText + """<span id="#{x.id}" style="white-space:pre; font-size:#{fontSize};"> </span>"""
   timer.end('Serialization to output') 

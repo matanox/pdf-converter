@@ -2,7 +2,6 @@
 // Attaches event handlers to the page called for
 //
 
-
 //
 // Optional TODO: 
 // The event window.onload is a bit late - text can be manipulated before it fires, 
@@ -17,50 +16,72 @@ window.onload = function()
 
   var hookPoint = document.getElementById('hookPoint')
 
-  hookPoint.oncontextmenu = function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-    evt.stopImmediatePropagation()
+/*
+  eventCapture = function(event) 
+  {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+    console.log(event.type + ' event captured for element ' + JSON.stringify(event.target));
+    return false
+  }
+
+  hookPoint.oncontextmenu = eventCapture
+*/
+
+  remove = function (node)
+  {
+    node.parentNode.removeChild(node)
+  }
+
+  hookPoint.oncontextmenu = function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
     console.log('right-click event captured')
-    console.log(evt.srcElement)
+    console.log(event.target)
+
+    remove(event.target)
+
     return false
   }
 
-  hookPoint.onclick = function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-    evt.stopImmediatePropagation()
+
+  hookPoint.onclick = function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
     console.log('click event captured')
-    console.log(evt.srcElement)
+    console.log(event.target)
     return false
   }
 
-  hookPoint.ondblclick = function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-    evt.stopImmediatePropagation()
+  hookPoint.ondblclick = function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
     console.log('double-click event captured')
-    console.log(evt.srcElement)
+    console.log(event.target)
     return false
   }
 
   // disable word selection on double click
   // see http://javascript.info/tutorial/mouse-events#preventing-selection
-  hookPoint.onselectstart= function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-    evt.stopImmediatePropagation()
+  hookPoint.onselectstart= function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
     console.log('select-start event captured')
-    console.log(evt.srcElement)
+    console.log(event.target)
     return false
   } // for IE
 
-  hookPoint.onmousedown=function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-    evt.stopImmediatePropagation()
+  hookPoint.onmousedown=function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
     console.log('mouse-down event captured')
-    console.log(evt.srcElement)
+    console.log(event.target)
     return false
   } // for non-IE
 }

@@ -13,12 +13,13 @@ exports.serveOutput = function(html, name, res) {
   var outputFile, outputHtml;
   outputFile = '../local-copies/' + 'output/' + name + '.html';
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos));
+  timer.start('Saving serialized output to file');
   return fs.writeFile(outputFile, outputHtml, function(err) {
     if (err != null) {
       res.send(500);
       throw err;
     }
-    console.log('Output saved');
+    timer.end('Saving serialized output to file');
     console.log('Sending response....');
     return res.sendfile(name + '.html', {
       root: '../local-copies/' + 'output/'

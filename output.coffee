@@ -20,12 +20,16 @@ exports.serveOutput = (html, name, res) ->
 
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
  
+  timer.start('Saving serialized output to file')  
+
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
     if err?
       res.send(500)
       throw err
 
-    console.log('Output saved')
+    timer.end('Saving serialized output to file')  
+    #console.log('Output saved')
+
     console.log('Sending response....')
     res.sendfile(name + '.html', {root: '../local-copies/' + 'output/'})) # variable use by closure here...

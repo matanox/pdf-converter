@@ -191,11 +191,11 @@ exports.tokenize = function(string) {
 };
 
 exports.buildOutputHtml = function(tokens, realStyles) {
-  var fontSize, plainText, wrapWithSpan, wrapWithStyle, x, _i, _len;
+  var fontSize, plainText, wrapWithAttributes, wrapWithSpan, x, _i, _len;
   wrapWithSpan = function(string) {
     return '<span>' + string + '</span>';
   };
-  wrapWithStyle = function(token) {
+  wrapWithAttributes = function(token) {
     var serialized, style, styles, stylesString, _i, _len, _ref;
     stylesString = '';
     _ref = token.styles;
@@ -209,9 +209,9 @@ exports.buildOutputHtml = function(tokens, realStyles) {
     }
     if (stylesString.length > 0) {
       stylesString = 'style=\"' + stylesString + '\"';
-      return '<span' + ' ' + stylesString + '>' + token.text + '</span>' + '\n';
+      return "<span " + stylesString + " id=\"" + x.id + "\">" + token.text + "</span>\n";
     } else {
-      return '<span>' + token.text + '</span>';
+      return '<span>#{token.text}</span>';
     }
   };
   timer.start('Serialization to output');
@@ -225,7 +225,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
     if (x.metaType === 'regular') {
-      plainText = plainText + wrapWithStyle(x);
+      plainText = plainText + wrapWithAttributes(x);
     } else {
       fontSize = "40px";
       plainText = plainText + ("<span id=\"" + x.id + "\" style=\"white-space:pre; font-size:" + fontSize + ";\"> </span>");
