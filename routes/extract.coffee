@@ -26,7 +26,7 @@ filterZeroLengthText = (ourDivRepresentation) ->
 # Extract text content and styles from html
 #
 exports.go = (req, res) ->
-  timer.start('Extraction from html stage A')
+  util.timelog('Extraction from html stage A')
 
   # Read the input html 
   path = '../local-copies/' + 'html-converted/' 
@@ -145,7 +145,7 @@ exports.go = (req, res) ->
         return x
     return y
   
-  timer.end('Extraction from html stage A')
+  util.timelog('Extraction from html stage A')
 
   # Add unique ids to tokens
   id = 0

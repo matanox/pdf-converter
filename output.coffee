@@ -20,7 +20,7 @@ exports.serveOutput = (html, name, res) ->
 
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
  
-  timer.start('Saving serialized output to file')  
+  util.timelog('Saving serialized output to file')  
 
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
@@ -28,7 +28,7 @@ exports.serveOutput = (html, name, res) ->
       res.send(500)
       throw err
 
-    timer.end('Saving serialized output to file')  
+    util.timelog('Saving serialized output to file')  
     #console.log('Output saved')
 
     console.log('Sending response....')

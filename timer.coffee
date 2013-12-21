@@ -1,3 +1,7 @@
+#
+# Obsolete by util.coffee's equivalent
+#
+
 # Till something better comes along, ride the crude node.js timer logging feature
 # TODO: this needs to be replaced with a browser-compatible implementation
 

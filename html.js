@@ -191,7 +191,7 @@ exports.tokenize = function(string) {
 };
 
 exports.buildOutputHtml = function(tokens, realStyles) {
-  var fontSize, plainText, wrapWithAttributes, wrapWithSpan, x, _i, _len;
+  var fontSize, plainText, tokenCount, wrapWithAttributes, wrapWithSpan, x, _i, _len;
   wrapWithSpan = function(string) {
     return '<span>' + string + '</span>';
   };
@@ -214,7 +214,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
       return '<span>#{token.text}</span>';
     }
   };
-  timer.start('Serialization to output');
+  util.timelog('Serialization to output');
   plainText = '';
   /*
     tokens.reduce (x, y) -> 
@@ -222,15 +222,22 @@ exports.buildOutputHtml = function(tokens, realStyles) {
       return y
   */
 
+  tokenCount = {};
+  tokenCount.all = tokens.length;
+  tokenCount.regular = 0;
+  tokenCount.delimiter = 0;
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
     if (x.metaType === 'regular') {
       plainText = plainText + wrapWithAttributes(x);
+      tokenCount.regular += 1;
     } else {
       fontSize = "40px";
       plainText = plainText + ("<span id=\"" + x.id + "\" style=\"white-space:pre; font-size:" + fontSize + ";\"> </span>");
+      tokenCount.delimiter += 1;
     }
   }
-  timer.end('Serialization to output');
+  console.dir(tokenCount);
+  util.timelog('Serialization to output');
   return plainText;
 };

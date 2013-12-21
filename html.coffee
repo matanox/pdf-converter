@@ -236,7 +236,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
     else 
       return '<span>#{token.text}</span>'
 
-  timer.start('Serialization to output')  
+  util.timelog('Serialization to output')  
   plainText = ''
 
   ###
@@ -245,9 +245,15 @@ exports.buildOutputHtml = (tokens, realStyles) ->
     return y
   ###
 
+  tokenCount = {}
+  tokenCount.all       = tokens.length
+  tokenCount.regular   = 0
+  tokenCount.delimiter = 0
+
   for x in tokens 
     if x.metaType is 'regular'
       plainText = plainText + wrapWithAttributes(x)
+      tokenCount.regular += 1
     else 
       # Adding a space character.
       #
@@ -257,7 +263,10 @@ exports.buildOutputHtml = (tokens, realStyles) ->
       # get down to the output... at a later stage
       fontSize = "40px"
       plainText = plainText + """<span id="#{x.id}" style="white-space:pre; font-size:#{fontSize};"> </span>"""
-  timer.end('Serialization to output') 
+      tokenCount.delimiter += 1
+
+  console.dir(tokenCount)
+  util.timelog('Serialization to output') 
 
   #console.log(plainText)
   plainText

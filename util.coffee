@@ -59,6 +59,26 @@ exports.parseElementText = (xmlNode) ->
 
 exports.logObject = (obj) -> console.log(JSON.stringify obj, null, 2) 
 
+#
+# Nice elapsed time logging utility function.
+# Usage: Call it once to start a timer, and once to end it. The call is the same
+#        for both starting and ending a timer - just supply the timer description to both.
+#        The second call will log the time elapsed between the two. 
+#
+timelog = (timer) ->
+  timer = timer + ' took'                                     # the timer string is also the message 
+                                                              # it will log to the console when it ends.
+                                                              # this just makes the logging nicer to look at.
+  unless timelog.timersLookup? then timelog.timersLookup = {} # init lookup array only once
+  if timelog.timersLookup[timer]?                             # is this timer already started?
+    console.timeEnd(timer)
+    delete timelog.timersLookup[timer]
+  else                                                        # or is it starting now?
+    timelog.timersLookup[timer] = 'started'
+    console.time(timer)
+  
+exports.timelog = timelog
+
 exports.objectViolation = (errorMessage) ->
   error = new Error(errorMessage)
   console.log(error.stack)

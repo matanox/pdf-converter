@@ -2,7 +2,7 @@
  * Handles the conversion from pdf to html, and forwards to next stage.
  */
 
-timer = require("../timer")
+util = require("../util")
 getFromUrl = require("request")
 exec = require('child_process').exec
 fs = require('fs')
@@ -67,7 +67,7 @@ exports.go = function(req, res){
 		 */
 
 		console.log('Starting the conversion from pdf to html')
-		timer.start('Conversion to html')
+		util.timelog('Conversion to html')
 
 		//res.send('Please wait...'');
 
@@ -87,7 +87,7 @@ exports.go = function(req, res){
 		    else {
 			  // KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
 			  // redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
-			  timer.end('Conversion to html')
+			  util.timelog('Conversion to html')
 			  redirectToExtract('http://localhost/' + 'extract' +'?name=' + name)			  
 		    }
 		});

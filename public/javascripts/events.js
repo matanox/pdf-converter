@@ -16,19 +16,6 @@ window.onload = function()
 
   var hookPoint = document.getElementById('hookPoint')
 
-/*
-  eventCapture = function(event) 
-  {
-    event.preventDefault()
-    event.stopPropagation()
-    event.stopImmediatePropagation()
-    console.log(event.type + ' event captured for element ' + JSON.stringify(event.target));
-    return false
-  }
-
-  hookPoint.oncontextmenu = eventCapture
-*/
-
   remove = function (node)
   {
     node.parentNode.removeChild(node)
@@ -65,6 +52,15 @@ window.onload = function()
     return false
   }
 
+  hookPoint.onmousedown=function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+    console.log('(mouse-down event captured. skipping listing the target object)')
+    // console.log(event.target)
+    return false
+  } // for non-IE
+
   // disable word selection on double click
   // see http://javascript.info/tutorial/mouse-events#preventing-selection
   hookPoint.onselectstart= function (event) {
@@ -75,13 +71,17 @@ window.onload = function()
     console.log(event.target)
     return false
   } // for IE
+}
 
-  hookPoint.onmousedown=function (event) {
+/*
+  eventCapture = function(event) 
+  {
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
-    console.log('mouse-down event captured')
-    console.log(event.target)
+    console.log(event.type + ' event captured for element ' + JSON.stringify(event.target));
     return false
-  } // for non-IE
-}
+  }
+
+  hookPoint.oncontextmenu = eventCapture
+*/
