@@ -191,7 +191,7 @@ exports.tokenize = function(string) {
 };
 
 exports.buildOutputHtml = function(tokens, realStyles) {
-  var plainText, wrapWithSpan, wrapWithStyle, x, _i, _len;
+  var fontSize, plainText, wrapWithSpan, wrapWithStyle, x, _i, _len;
   wrapWithSpan = function(string) {
     return '<span>' + string + '</span>';
   };
@@ -208,7 +208,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
       }
     }
     if (stylesString.length > 0) {
-      stylesString = 'style=\"' + stylesString + '\" id=\"aa\"';
+      stylesString = 'style=\"' + stylesString + '\"';
       return '<span' + ' ' + stylesString + '>' + token.text + '</span>' + '\n';
     } else {
       return '<span>' + token.text + '</span>';
@@ -216,16 +216,19 @@ exports.buildOutputHtml = function(tokens, realStyles) {
   };
   timer.start('Serialization to output');
   plainText = '';
-  tokens.reduce(function(x, y) {
-    if (x.metaType === 'regular' && y.metaType === 'delimiter') {
-      x.text = x.text + ' ';
-    }
-    return y;
-  });
+  /*
+    tokens.reduce (x, y) -> 
+      if x.metaType is 'regular' and y.metaType is 'delimiter' then x.text = x.text + ' '
+      return y
+  */
+
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
     if (x.metaType === 'regular') {
       plainText = plainText + wrapWithStyle(x);
+    } else {
+      fontSize = "40px";
+      plainText = plainText + ("<span id=\"" + x.id + "\" style=\"white-space:pre; font-size:" + fontSize + ";\"> </span>");
     }
   }
   timer.end('Serialization to output');

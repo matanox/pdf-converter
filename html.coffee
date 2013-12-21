@@ -225,19 +225,13 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
     stylesString = ''
     for style in token.styles
-      #console.log(style)
-      #console.log(css.getRealStyle(style, realStyles))
       styles = css.getRealStyle(style, realStyles)
       if styles?
-        #console.log()
-        #console.log(styles)
         serialized = css.serializeStylesArray(styles)
-        #console.log(serialized)
         stylesString = stylesString + serialized
 
-    #console.log(stylesString)
     if stylesString.length > 0
-      stylesString = 'style=\"' + stylesString + '\" id=\"aa\"'
+      stylesString = 'style=\"' + stylesString + '\"'
       return '<span' + ' ' + stylesString + '>' + token.text + '</span>' +'\n'
     else 
       return '<span>' + token.text + '</span>'
@@ -245,13 +239,19 @@ exports.buildOutputHtml = (tokens, realStyles) ->
   timer.start('Serialization to output')  
   plainText = ''
 
+  ###
   tokens.reduce (x, y) -> 
     if x.metaType is 'regular' and y.metaType is 'delimiter' then x.text = x.text + ' '
     return y
+  ###
 
   for x in tokens 
     if x.metaType is 'regular'
       plainText = plainText + wrapWithStyle(x)
+      
+    else 
+      fontSize = "40px"
+      plainText = plainText + """<span id="#{x.id}" style="white-space:pre; font-size:#{fontSize};"> </span>"""
   timer.end('Serialization to output') 
 
   #console.log(plainText)

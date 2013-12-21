@@ -44,7 +44,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, endsSpaceDelimited, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o;
+  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, endsSpaceDelimited, id, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
   timer.start('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -142,6 +142,12 @@ exports.go = function(req, res) {
     return y;
   });
   timer.end('Extraction from html stage A');
+  id = 0;
+  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
+    token = tokens[_p];
+    token.id = id;
+    id += 1;
+  }
   outputHtml = html.buildOutputHtml(tokens, realStyles);
   return output.serveOutput(outputHtml, name, res);
 };

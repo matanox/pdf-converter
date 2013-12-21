@@ -79,7 +79,7 @@ extractCssProperties = (string) ->
     # Some guards for further filtering out irrelevant output
     return null if not element.declarations[0]? 
       
-    {selectors: [name], declarations: propertyObjectsArray} = element # extracting via a destructuring
+    {selectors: [name], declarations: propertyObjectsArray} = element # extracting by destructuring
     propertyObjectsArray = filterProperties(propertyObjectsArray)
     return null if propertyObjectsArray.length == 0
 

@@ -147,6 +147,12 @@ exports.go = (req, res) ->
   
   timer.end('Extraction from html stage A')
 
+  # Add unique ids to tokens
+  id = 0
+  for token in tokens
+    token.id = id
+    id += 1
+
   outputHtml = html.buildOutputHtml(tokens, realStyles)
   output.serveOutput(outputHtml, name, res)
 
