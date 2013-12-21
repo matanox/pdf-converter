@@ -1,20 +1,17 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  
   <head>
-    <!-- meta charset="utf-8" / -->
-    <!-- meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" -->
-    <!-- link href="https://fonts.googleapis.com/css?family=Limelight|Flamenco|Federo|Yesteryear|Josefin Sans|Spinnaker|Sansita One|Handlee|Droid Sans|Oswald:400,300,700" media="screen" rel="stylesheet" type="text/css" / -->
-    <!-- link href="output/stylesheets/bootstrap.css" media="screen" rel="stylesheet" type="text/css" / -->
-    <!-- link href="output/stylesheets/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css" / -->
-    <!-- link href="output/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="output/stylesheets/fontawesome.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="output/stylesheets/project.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="output/stylesheets/empty.css" media="screen" rel="stylesheet" type="text/css" / -->
-    <!-- Typekit fonts require an account and a kit containing the fonts used. see https://typekit.com/plans for details. <script type="text/javascript" src="//use.typekit.net/YOUR_KIT_ID.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
--->
-    <script type="text/javascript" src="javascripts/primusClientLib.js"></script> 
+    <script type="text/javascript" src="javascripts/primusClientLib.js" onload="
+	    console.log('Initiating connection as Primus client...');
+	    var primus = Primus.connect('http://localhost/');
+  	  var Socket = primus.Socket;
+  	  console.log('Primus connection initiated');
+
+   	  primus.on('data', function message(data) {
+              console.log('Trying to reload following server restart message from Primus')
+  	    location.reload(true);
+  	  });">
+    </script> 
     <title>Empty</title>
   </head>
   
@@ -27,19 +24,20 @@
           </div>
         </span>
       </div>
-      <div style="-webkit-touch-callout: none;
+      <!--div style="-webkit-touch-callout: none;
                   -webkit-user-select: none;
                   -khtml-user-select: none;
                   -moz-user-select: none;
                   -ms-user-select: none;
-                  user-select: none;">
+                  user-select: none;"-->
+      <div>
         <span style="display: inline-block; width: 30%;"></span>
         <span id="hookPoint" style="display: inline-block; width: 40%; font-size: 0; "></span>
         <span style="display: inline-block; width: 30%;"></span>
       </div>
     </div>
   </body>
-  <script>
+  <!--script>
 	window.onload = connect;
         function connect() {
 	  console.log('Initiating connection as Primus client...');
@@ -52,6 +50,6 @@
 	    location.reload(true);
 	  });
 	}	
-</script>
+</script-->
 </html>
 
