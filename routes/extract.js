@@ -44,7 +44,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var augmentEachDiv, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequency, group, groups, id, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r;
+  var abbreviations, augmentEachDiv, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequency, group, groups, id, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -154,6 +154,8 @@ exports.go = function(req, res) {
     }
     return y;
   });
+  util.timelog('Sentence tokenizing');
+  abbreviations = 0;
   groups = [];
   group = [];
   for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
@@ -161,18 +163,22 @@ exports.go = function(req, res) {
     if (token.type = 'regular') {
       group.push(token);
       if (token.text === '.') {
-        console.dir(group);
-        console.log();
-        groups.push(group);
-        group = [];
+        if (!(group.length > (1 + 1))) {
+          abbreviations += 1;
+        } else {
+          groups.push(group);
+          group = [];
+        }
       }
     }
   }
   if (group.length !== 0) {
     groups.push(group);
   }
+  util.timelog('Sentence tokenizing');
   documentQuantifiers = {};
   documentQuantifiers['sentences'] = groups.length;
+  documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
   util.timelog('Calculating word frequencies');
   wordFrequencies = {};

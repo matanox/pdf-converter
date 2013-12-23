@@ -160,26 +160,27 @@ exports.go = (req, res) ->
     if y.metaType is 'delimiter' then y.styles = x.styles
     return y
 
+  util.timelog('Sentence tokenizing')
+  abbreviations = 0
   groups = [] # sequence of all groups
   group = []  
   for token in tokens
     if token.type = 'regular' 
       group.push(token)      
-      if token.text is '.'
-        console.dir(group)
-        console.log()
-        groups.push(group) # close off a 'sentence' group
-        group = []
-  unless group.length is 0
-    groups.push(group) # Close off trailing bits of text if any, 
-                       # as a group, whatever they are. For now.
-
+      if token.text is '.'             # Is this a sentence splitter?
+        unless group.length > (1 + 1)  # One word and then a period are not a 'sentence', 
+          abbreviations += 1           # likely it is an abbreviation. Not a sentence split..
+        else
+          groups.push(group) # close off a 'sentence' group
+          group = []
+  unless group.length is 0  # Close off trailing bits of text if any, 
+    groups.push(group)      # as a group, whatever they are. For now.
+  util.timelog('Sentence tokenizing')                       
+  
   documentQuantifiers = {}
-  documentQuantifiers['sentences'] = groups.length
-
+  documentQuantifiers['sentences']                    = groups.length
+  documentQuantifiers['period-trailed-abbreviations'] = abbreviations
   console.dir(documentQuantifiers)
-  #console.dir(groups)
-
 
 
 
