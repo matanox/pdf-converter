@@ -52,13 +52,18 @@ extractCssProperties = (string) ->
   # filtering while deconstructing to a more favorable data structure
   deconstruct = (element) -> 
 
+    #
+    # Filter out css properties that exist in the input, yet require no 
+    # consideration while handling the text. This just reduces the amount 
+    # of data being carried forward.
+    #
     # Performance opportunity: sort the array, turn it global, and quit the
     #                          comparison early rather than scanning the whole array 
     #                          also see http://jsperf.com/looking-at-localcompare
     filterProperties = (propertyObjectsArray) ->
       
       relevantStyles = [
-        #'font-family',
+        'font-family',
         'font-size',
         'font-style',
         'font-weight',
@@ -68,8 +73,8 @@ extractCssProperties = (string) ->
       ]
 
       positionData = [
-        #'left',
-        #'bottom'
+        'left',
+        'bottom'
       ]
 
       propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> 

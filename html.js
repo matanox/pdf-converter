@@ -223,7 +223,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
   */
 
   tokenCount = {};
-  tokenCount.all = tokens.length;
+  tokenCount.tokens = tokens.length;
   tokenCount.regular = 0;
   tokenCount.delimiter = 0;
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {

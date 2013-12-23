@@ -76,6 +76,9 @@ timelog = (timer) ->
   else                                                        # or is it starting now?
     timelog.timersLookup[timer] = 'started'
     console.time(timer)
+
+  # We should later also send this data to an analytics engine or depo. 
+  # or Apache Kafka or equivalents could be good for grabbing from the logs and/or queueing/transport
   
 exports.timelog = timelog
 

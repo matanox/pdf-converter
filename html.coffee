@@ -246,7 +246,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
   ###
 
   tokenCount = {}
-  tokenCount.all       = tokens.length
+  tokenCount.tokens    = tokens.length
   tokenCount.regular   = 0
   tokenCount.delimiter = 0
 

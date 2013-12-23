@@ -71,7 +71,7 @@ exports.go = (req, res) ->
   # If most divs end with a delimiting space character, then we don't need
   # to implicitly infer a delimiter at the end of each div, otherwise we do.
   # The use of a constant ratio test is extremely coarse and temporary,
-  # and a refined solution should replace it.
+  # a refined solution should replace it.
   console.log(endsSpaceDelimited)
   console.log(endsSpaceDelimited / divsNum)
   if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
@@ -132,7 +132,7 @@ exports.go = (req, res) ->
 
   # Now repeat with variation, for the case that end-of-lines 
   # are appended with a delimiter. That case would not get caught above.
-  # Can probably collapse this when the code is more mature
+  # Can probably collapse this when the code is more mature.
   tokens.reduce (x, y, index) -> 
     if x.metaType is 'regular' and y.metaType is 'delimiter' and index < (tokens.length - 1)
 
@@ -153,6 +153,70 @@ exports.go = (req, res) ->
     token.id = id
     id += 1
 
+  # Smooth out styles such that each delimiter 
+  # inherits the style of its preceding token. 
+  # May belong either here or inside the core tokenization...
+  tokens.reduce (x, y) -> 
+    if y.metaType is 'delimiter' then y.styles = x.styles
+    return y
+
+  groups = [] # sequence of all groups
+  group = []  
+  for token in tokens
+    if token.type = 'regular' 
+      group.push(token)      
+      if token.text is '.'
+        console.dir(group)
+        console.log()
+        groups.push(group) # close off a 'sentence' group
+        group = []
+  unless group.length is 0
+    groups.push(group) # Close off trailing bits of text if any, 
+                       # as a group, whatever they are. For now.
+
+  documentQuantifiers = {}
+  documentQuantifiers['sentences'] = groups.length
+
+  console.dir(documentQuantifiers)
+  #console.dir(groups)
+
+
+
+
+  #
+  # Some word frequency analytics.
+  # Should incorporate (or build from our own inputs!) a corpus of 'stop-words',
+  # to filter out common English (or any detected language) terms, 
+  # when this analytic is really going to be used..
+  #
+  # In addition, should check for frequency of sequences too, in order to
+  # at a somewhat higher level catch frequent two-word concepts
+  #
+  # A stemmer may also be incorporated after giving it some thought
+  # concerning what can be done in real-time and what can be only
+  # left for longer-range analytics
+  # 
+  util.timelog('Calculating word frequencies')
+  wordFrequencies = {}
+  for token in tokens when token.metaType is 'regular'
+    # won't hurt filtering out punctuation as well
+    word = token.text 
+    if wordFrequencies[word]? 
+      wordFrequencies[word] += 1
+    else 
+      wordFrequencies[word] = 0
+  util.timelog('Calculating word frequencies')   
+
+  util.timelog('Sorting frequencies took')
+  wordFrequenciesArray = []
+  for word, frequency of wordFrequencies
+    wordFrequenciesArray.push({word, frequency})
+  wordFrequenciesArray.sort( (a, b) -> return parseInt(b.frequency) - parseInt(a.frequency) )
+  util.timelog('Sorting frequencies took')
+  # do not delete --> console.dir wordFrequenciesArray[i] for i in [1..40]
+
+
+  # Send back the outcome
   outputHtml = html.buildOutputHtml(tokens, realStyles)
   output.serveOutput(outputHtml, name, res)
 

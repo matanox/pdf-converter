@@ -47,8 +47,8 @@ extractCssProperties = function(string) {
     var filterProperties, name, obj, propertyObjectsArray, _i, _len, _ref;
     filterProperties = function(propertyObjectsArray) {
       var positionData, relevantStyles;
-      relevantStyles = ['font-size', 'font-style', 'font-weight', 'word-spacing', 'line-height', 'color'];
-      positionData = [];
+      relevantStyles = ['font-family', 'font-size', 'font-style', 'font-weight', 'word-spacing', 'line-height', 'color'];
+      positionData = ['left', 'bottom'];
       propertyObjectsArray = propertyObjectsArray.filter(function(propertyPair) {
         return util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData));
       });
