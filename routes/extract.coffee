@@ -161,12 +161,17 @@ exports.go = (req, res) ->
     return y
 
   util.timelog('Sentence tokenizing')
+
+  connect_token_group = ({group, token}) ->   # using named arguments here..
+    group.push(token)
+    token.partOf = group      
+
   abbreviations = 0
   groups = [] # sequence of all groups
   group = []  
   for token in tokens
     if token.type = 'regular' 
-      group.push(token)      
+      connect_token_group({group:group, token:token})
       if token.text is '.'             # Is this a sentence splitter?
         unless group.length > (1 + 1)  # One word and then a period are not a 'sentence', 
           abbreviations += 1           # likely it is an abbreviation. Not a sentence split..
@@ -176,7 +181,7 @@ exports.go = (req, res) ->
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
   util.timelog('Sentence tokenizing')                       
-  
+
   documentQuantifiers = {}
   documentQuantifiers['sentences']                    = groups.length
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations

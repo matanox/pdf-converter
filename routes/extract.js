@@ -44,7 +44,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, augmentEachDiv, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequency, group, groups, id, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r;
+  var abbreviations, augmentEachDiv, connect_token_group, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequency, group, groups, id, name, outputHtml, path, rawHtml, rawRelevantDivs, realStyles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -155,13 +155,22 @@ exports.go = function(req, res) {
     return y;
   });
   util.timelog('Sentence tokenizing');
+  connect_token_group = function(_arg) {
+    var group, token;
+    group = _arg.group, token = _arg.token;
+    group.push(token);
+    return token.partOf = group;
+  };
   abbreviations = 0;
   groups = [];
   group = [];
   for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
     token = tokens[_q];
     if (token.type = 'regular') {
-      group.push(token);
+      connect_token_group({
+        group: group,
+        token: token
+      });
       if (token.text === '.') {
         if (!(group.length > (1 + 1))) {
           abbreviations += 1;
