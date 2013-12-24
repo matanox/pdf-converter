@@ -40,11 +40,21 @@ console.log 'using hostname ' + nconf.get('host')
 app.set 'port', process.env.PORT or 80
 console.log('using port ' + app.get('port'))
 
-# Now down to business
+#
+# Configure express middlewares. Order DOES matter.
+#
 app.set 'views', __dirname + '/views'
 app.set 'view engine', 'ejs'
 app.use express.favicon()
-app.use express.logger('dev')
+
+# Setup the connect.js logger used by express.js
+# See http://www.senchalabs.org/connect/logger.html for configuration options.
+# (specific logging info and colors can be configured if custom settings are not enough)
+if env is 'production'
+  app.use express.logger('default')    # This would be verbose enough for production
+else 
+  app.use express.logger('dev')        # dev is colorful (for a terminal) and not overly verbose
+
 app.use express.bodyParser()
 app.use express.methodOverride()
 app.use express.cookieParser('93AAAE3G205OI33')
@@ -52,26 +62,35 @@ app.use express.session()
 app.use app.router
 #app.use require('stylus').middleware(__dirname + '/public')
 app.use express.static(path.join(__dirname, 'public'))
+
 app.use errorHandling.errorHandler
+#app.use express.errorHandler() if env is 'production' # TODO: test if this is better than my own.
 
-#app.use express.directory(__dirname + '/outputTemplate')
-#app.use express.static(path.join(__dirname, 'outputTemplate'))
-
-app.use express.errorHandler() unless app.get('env') is 'production'
+#
+# Setup some routing
+#
 app.get '/', routes.index
 app.get '/users', user.list
 app.get '/convert', convert.go
 app.get '/extract', extract.go
 
+#
+# Authorization
+#
 authorization.googleAuthSetup(app, host, routes)
 
+#
+# Start the server
+#
 server = http.createServer(app)
 
 server.listen app.get('port'), ->
   console.log 'Server listening on port ' + app.get('port')
 
-http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', (res) -> # xt7duLM0Q3Ow2gIBOvED
-  console.log('server response is: ' + res.statusCode))
+# In dev mode, self-test on startup
+unless env is 'production' 
+  http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', (res) -> # xt7duLM0Q3Ow2gIBOvED
+    console.log('server response is: ' + res.statusCode))
 
 # Attach primus for development iterating, as long as it's convenient 
 unless env is 'production' then primus.start(server)

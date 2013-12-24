@@ -242,7 +242,7 @@ exports.go = function(req, res) {
     }
   }
   util.timelog('Calculating word frequencies');
-  util.timelog('Sorting frequencies took');
+  util.timelog('Sorting frequencies');
   wordFrequenciesArray = [];
   for (word in wordFrequencies) {
     frequency = wordFrequencies[word];
@@ -254,7 +254,7 @@ exports.go = function(req, res) {
   wordFrequenciesArray.sort(function(a, b) {
     return parseInt(b.frequency) - parseInt(a.frequency);
   });
-  util.timelog('Sorting frequencies took');
+  util.timelog('Sorting frequencies');
   outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
   return output.serveOutput(outputHtml, name, res);
 };

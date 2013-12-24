@@ -252,12 +252,12 @@ exports.go = (req, res) ->
       wordFrequencies[word] = 0
   util.timelog('Calculating word frequencies')   
 
-  util.timelog('Sorting frequencies took')
+  util.timelog('Sorting frequencies')
   wordFrequenciesArray = []
   for word, frequency of wordFrequencies
     wordFrequenciesArray.push({word, frequency})
   wordFrequenciesArray.sort( (a, b) -> return parseInt(b.frequency) - parseInt(a.frequency) )
-  util.timelog('Sorting frequencies took')
+  util.timelog('Sorting frequencies')
   # do not delete --> console.dir wordFrequenciesArray[i] for i in [1..40]
 
 
