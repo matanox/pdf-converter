@@ -21,5 +21,8 @@
     "jsdom": "~0.8.9",
     "primus": "~1.5.0",
     "ws": "~0.4.31"
+  },
+  "devDependencies": {
+    "coffee-trace": "~1.4.0"
   }
 }

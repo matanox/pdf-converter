@@ -105,3 +105,7 @@ clone = (obj) ->
   newInstance
 
 exports.clone = clone
+
+# For sizing map objects. 
+# Returns object's number of properties
+exports.objectPropertiesCount = (object) -> Object.keys(object).length

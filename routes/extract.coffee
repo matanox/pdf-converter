@@ -5,6 +5,10 @@ css    = require "../css"
 html   = require "../html"
 model  = require "../model"
 output = require "../output"
+ctype  = require "../ctype"
+
+require 'coffee-trace'
+a
 
 isImage = (text) -> util.startsWith(text, "<img ")
 
@@ -34,7 +38,7 @@ exports.go = (req, res) ->
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
 
   # Extract all style info 
-  realStyles = css.simpleFetchStyles(rawHtml ,path + name + '/') 
+  inputStylesMap = css.simpleFetchStyles(rawHtml ,path + name + '/') 
 
   # Keep divs without their wrapping div if any.
   rawRelevantDivs = html.removeOuterDivs(rawHtml)
@@ -160,8 +164,45 @@ exports.go = (req, res) ->
     if y.metaType is 'delimiter' then y.styles = x.styles
     return y
 
-  util.timelog('Sentence tokenizing')
+  #
+  # Add final styles to each token.
+  # This assumes the input had only
+  # css classes and not inline styles,
+  # defined for each element
+  #
 
+  pushIfTrue = (array, functionResult) ->
+    if functionResult
+      array.push(functionResult)
+      return true
+    return false
+
+    return pushed
+  
+  for token in tokens
+    if token.metaType is 'regular'
+      token.calculatedProperties = []
+      if pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
+        console.log('pushed one computed style')
+
+  for token in tokens 
+
+    token.finalStyles = {}
+
+    for cssClass in token.styles  # iterate over each css class indicated for the token,
+                                  # adding its final style definitions to the token
+      styles = css.getFinalStyles(cssClass, inputStylesMap)
+      if styles? 
+        for style in styles 
+          token.finalStyles[style.property] = style.value
+    
+      if util.objectPropertiesCount(token.finalStyles) is 0
+        console.warn('No final styles applied to token')
+
+  #
+  # Create sentences sequence
+  #
+  util.timelog('Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
     group.push(token)
     token.partOf = group      
@@ -223,7 +264,7 @@ exports.go = (req, res) ->
 
 
   # Send back the outcome
-  outputHtml = html.buildOutputHtml(tokens, realStyles)
+  outputHtml = html.buildOutputHtml(tokens, inputStylesMap)
   output.serveOutput(outputHtml, name, res)
 
   

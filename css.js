@@ -132,10 +132,10 @@ exports.simpleFetchStyles = function(rawHtml, path) {
   return stylesMap;
 };
 
-exports.getRealStyle = function(styleClass, realStyles) {
+exports.getFinalStyles = function(styleClass, finalStyles) {
   styleClass = '.' + styleClass;
-  if (realStyles[styleClass] != null) {
-    return realStyles[styleClass];
+  if (finalStyles[styleClass] != null) {
+    return finalStyles[styleClass];
   } else {
     return void 0;
   }

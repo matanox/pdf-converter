@@ -217,7 +217,7 @@ exports.tokenize = (string) ->
 #
 # Build html output
 #
-exports.buildOutputHtml = (tokens, realStyles) ->
+exports.buildOutputHtml = (tokens, finalStyles) ->
 
   wrapWithSpan = (string) -> '<span>' + string + '</span>'
 
@@ -225,7 +225,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
 
     stylesString = ''
     for style in token.styles
-      styles = css.getRealStyle(style, realStyles)
+      styles = css.getFinalStyles(style, finalStyles)
       if styles?
         serialized = css.serializeStylesArray(styles)
         stylesString = stylesString + serialized
@@ -255,7 +255,7 @@ exports.buildOutputHtml = (tokens, realStyles) ->
       plainText = plainText + wrapWithAttributes(x)
       tokenCount.regular += 1
     else 
-      # Adding a space character.
+      # Inserting a space character.
       #
       # Note: the font size of a space character should likely
       # be the same as that of the character preceding it -

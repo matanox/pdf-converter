@@ -190,7 +190,7 @@ exports.tokenize = function(string) {
   return tokens;
 };
 
-exports.buildOutputHtml = function(tokens, realStyles) {
+exports.buildOutputHtml = function(tokens, finalStyles) {
   var fontSize, plainText, tokenCount, wrapWithAttributes, wrapWithSpan, x, _i, _len;
   wrapWithSpan = function(string) {
     return '<span>' + string + '</span>';
@@ -201,7 +201,7 @@ exports.buildOutputHtml = function(tokens, realStyles) {
     _ref = token.styles;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       style = _ref[_i];
-      styles = css.getRealStyle(style, realStyles);
+      styles = css.getFinalStyles(style, finalStyles);
       if (styles != null) {
         serialized = css.serializeStylesArray(styles);
         stylesString = stylesString + serialized;

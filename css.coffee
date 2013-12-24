@@ -115,10 +115,10 @@ exports.simpleFetchStyles = (rawHtml, path) ->
   stylesMap
 
 # get the css styles for a css class
-exports.getRealStyle = (styleClass, realStyles) ->
+exports.getFinalStyles = (styleClass, finalStyles) ->
   styleClass = '.' + styleClass # as we are dealing with css classes
-  if realStyles[styleClass]? 
-    return realStyles[styleClass]
+  if finalStyles[styleClass]? 
+    return finalStyles[styleClass]
   else 
     return undefined 
 

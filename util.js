@@ -112,3 +112,7 @@ clone = function(obj) {
 };
 
 exports.clone = clone;
+
+exports.objectPropertiesCount = function(object) {
+  return Object.keys(object).length;
+};
