@@ -7,9 +7,6 @@ model  = require "../model"
 output = require "../output"
 ctype  = require "../ctype"
 
-require 'coffee-trace'
-a
-
 isImage = (text) -> util.startsWith(text, "<img ")
 
 # Utility function for filtering out images
@@ -198,6 +195,7 @@ exports.go = (req, res) ->
     
       if util.objectPropertiesCount(token.finalStyles) is 0
         console.warn('No final styles applied to token')
+        console.dir(token)
 
   #
   # Create sentences sequence

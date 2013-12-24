@@ -7,32 +7,34 @@ nconf.argv().env()
 nconf.defaults host: 'localhost'
 
 #
-# Express Module dependencies.
+# Express module dependencies.
 #
 express = require 'express'
 routes  = require './routes'
-user    = require './routes/user'
-convert = require './routes/convert'
-extract = require './routes/extract'
 http    = require 'http'
 path    = require 'path'
+user    = require './routes/user'
+
+# Regular module dependencies
+convert       = require './routes/convert'
+extract       = require './routes/extract'
+errorHandling = require './errorHandling'
+authorization = require './authorization'
 
 #
 # Configure and start express
 #
-
 app = express()
 env = app.get('env')
 console.log('starting in mode ' + env)
 
+#
+# Dev-environment-only stuff
+#
 unless env is 'production'
-  #
-  # Dev environment stuff
-  #
-  require 'coffee-trace'
   primus = require './primus' 
 
-# Handle basic networkign config
+# Get-or-default basic networking config
 host = nconf.get 'host'
 console.log 'using hostname ' + nconf.get('host')
 app.set 'port', process.env.PORT or 80
@@ -50,6 +52,7 @@ app.use express.session()
 app.use app.router
 #app.use require('stylus').middleware(__dirname + '/public')
 app.use express.static(path.join(__dirname, 'public'))
+app.use errorHandling.errorHandler
 
 #app.use express.directory(__dirname + '/outputTemplate')
 #app.use express.static(path.join(__dirname, 'outputTemplate'))
@@ -60,44 +63,7 @@ app.get '/users', user.list
 app.get '/convert', convert.go
 app.get '/extract', extract.go
 
-# 
-# This won't work on a non public DNS server, 
-# such as a local dev server, as:
-#
-# a server needs to be installed out on the Internet (e.g. Heroku) 
-# in order for Google to be able to complete the authnetication flow, 
-# as the later finishes off in getting back to our web server via public DNS!
-#
-googleAuthSetup = () ->
-  passport = require('passport')
-  GoogleStrategy = require('passport-google').Strategy
-  passport.use new GoogleStrategy(
-    #returnURL: 'http://localhost:3000/auth/google/return'
-    returnURL: 'http://' + host + '/auth/google/return'
-    realm: 'http://' + host + '/auth/google',
-    (identifier, profile, done) ->
-      console.log 'authorized user ' + identifier + '\n' + JSON.stringify(profile))
-      #User.findOrCreate
-      #  openId: identifier,
-      #  (err, user) ->
-      #  done err, user
-
-  # Redirect the user to Google for authentication.  When complete, Google
-  # will redirect the user back to the application at /auth/google/return
-  app.get '/auth/google', passport.authenticate('google')
-
-  # Google will redirect the user to this URL after authentication.  Finish
-  # the process by verifying the assertion.  If valid, the user will be
-  # logged in.  Otherwise, authentication has failed.
-  app.get '/auth/google/return', routes.index
-
-  #app.get '/auth/google/return', passport.authenticate('google',
-  #  successRedirect: '/'
-  #  failureRedirect: '/'
-  #)
-  true
-
-googleAuthSetup
+authorization.googleAuthSetup(app, host, routes)
 
 server = http.createServer(app)
 

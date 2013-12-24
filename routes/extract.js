@@ -17,11 +17,6 @@ output = require("../output");
 
 ctype = require("../ctype");
 
-require('coffee-trace');
-
-a;
-
-
 isImage = function(text) {
   return util.startsWith(text, "<img ");
 };
@@ -193,6 +188,7 @@ exports.go = function(req, res) {
       }
       if (util.objectPropertiesCount(token.finalStyles) === 0) {
         console.warn('No final styles applied to token');
+        console.dir(token);
       }
     }
   }
