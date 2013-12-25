@@ -20,13 +20,15 @@ convert       = require './routes/convert'
 extract       = require './routes/extract'
 errorHandling = require './errorHandling'
 authorization = require './authorization'
+logging       = require './logging' 
 
 #
 # Configure and start express
 #
 app = express()
 env = app.get('env')
-console.log('starting in mode ' + env)
+
+logging.logGreen 'Starting in mode #{env}'
 
 #
 # Dev-environment-only stuff
@@ -36,9 +38,9 @@ unless env is 'production'
 
 # Get-or-default basic networking config
 host = nconf.get 'host'
-console.log 'using hostname ' + nconf.get('host')
+logging.logGreen 'Using hostname ' + nconf.get('host')
 app.set 'port', process.env.PORT or 80
-console.log('using port ' + app.get('port'))
+logging.logGreen 'Using port ' + app.get('port')
 
 #
 # Configure express middlewares. Order DOES matter.
@@ -85,12 +87,12 @@ authorization.googleAuthSetup(app, host, routes)
 server = http.createServer(app)
 
 server.listen app.get('port'), ->
-  console.log 'Server listening on port ' + app.get('port')
+  logging.logGreen 'Server listening on port ' + app.get('port') + '....'
 
 # In dev mode, self-test on startup
 unless env is 'production' 
   http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', (res) -> # xt7duLM0Q3Ow2gIBOvED
-    console.log('server response is: ' + res.statusCode))
+    logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
 
 # Attach primus for development iterating, as long as it's convenient 
 unless env is 'production' then primus.start(server)
