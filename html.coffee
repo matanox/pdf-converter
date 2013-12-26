@@ -220,65 +220,9 @@ exports.tokenize = (string) ->
 #
 exports.buildOutputHtmlOld = (tokens, finalStyles) ->
 
-  wrapWithSpan = (string) -> '<span>' + string + '</span>'
-
-  wrapWithAttributes = (token) ->
-
-    stylesString = ''
-    for style in token.styles
-      styles = css.getFinalStyles(style, finalStyles)
-      if styles?
-        serialized = css.serializeStylesArray(styles)
-        stylesString = stylesString + serialized
-
-    if stylesString.length > 0
-      stylesString = 'style=\"' + stylesString + '\"'
-      return """<span #{stylesString} id="#{x.id}">#{token.text}</span>\n"""
-    else 
-      return '<span>#{token.text}</span>'
-
-  util.timelog('Serialization to output')  
-
-  ###
-  tokens.reduce (x, y) -> 
-    if x.metaType is 'regular' and y.metaType is 'delimiter' then x.text = x.text + ' '
-    return y
-  ###
-
-  plainText = ''
-  tokenCount = {}
-  tokenCount.tokens    = tokens.length
-  tokenCount.regular   = 0
-  tokenCount.delimiter = 0
-
-  for x in tokens 
-    if x.metaType is 'regular'
-      plainText = plainText + wrapWithAttributes(x)
-      tokenCount.regular += 1
-    else 
-      # Inserting a space character.
-      #
-      # Note: the font size of a space character should likely
-      # be the same as that of the character preceding it -
-      # this should wait for refactoring of how styles actually
-      # get down to the output... at a later stage
-      fontSize = "40px"
-      plainText = plainText + """<span id="#{x.id}" style="white-space:pre; font-size:#{fontSize};"> </span>"""
-      tokenCount.delimiter += 1
-
-  console.dir(tokenCount)
-  util.timelog('Serialization to output') 
-
-  #console.log(plainText)
-  plainText
-
-#
-# Build html output
-#
-exports.buildOutputHtml = (tokens, finalStyles) ->
-
-  #wrapWithSpan = (string) -> '<span>' + string + '</span>'
-
+  #
+  # Building the output for a single token....
+  #
   wrapWithAttributes = (token, moreStyle) ->
 
     stylesString = ''
@@ -299,7 +243,8 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
     else 
       console.warn('token had no styles attached to it when building output')
-      return '<span>#{token.text}</span>'
+      return "<span>#{token.text}</span>"
+
 
   util.timelog('Serialization to output')  
 
@@ -308,6 +253,48 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       plainText = plainText + wrapWithAttributes(x)
     else 
       plainText = plainText + wrapWithAttributes(x, 'white-space:pre;')
+
+  util.timelog('Serialization to output') 
+
+  #console.log(plainText)
+  plainText
+
+
+#
+# Build html output
+#
+exports.buildOutputHtml = (tokens, finalStyles) ->
+
+  #
+  # Building the output for a single token....
+  #
+  wrapWithAttributes = (token, moreStyle) ->
+
+    stylesString = ''
+    for style, val of token.finalStyles
+      stylesString = stylesString + style + ':' + val + '; '
+
+    if moreStyle? then stylesString = stylesString + ' ' + moreStyle
+
+    if stylesString.length > 0
+      stylesString = 'style=\"' + stylesString + '\"'
+      if token.metaType is 'regular' 
+        text = token.text
+      else 
+        text = ' '
+      return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
+    else 
+      console.warn('token had no styles attached to it when building output')
+      return "<span>#{token.text}</span>"
+
+
+  util.timelog('Serialization to output')  
+
+  for x in tokens 
+    if x.metaType is 'regular'
+      plainText = plainText + wrapWithAttributes(x)
+    else 
+      plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
 
   util.timelog('Serialization to output') 
 

@@ -191,58 +191,6 @@ exports.tokenize = function(string) {
 };
 
 exports.buildOutputHtmlOld = function(tokens, finalStyles) {
-  var fontSize, plainText, tokenCount, wrapWithAttributes, wrapWithSpan, x, _i, _len;
-  wrapWithSpan = function(string) {
-    return '<span>' + string + '</span>';
-  };
-  wrapWithAttributes = function(token) {
-    var serialized, style, styles, stylesString, _i, _len, _ref;
-    stylesString = '';
-    _ref = token.styles;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      style = _ref[_i];
-      styles = css.getFinalStyles(style, finalStyles);
-      if (styles != null) {
-        serialized = css.serializeStylesArray(styles);
-        stylesString = stylesString + serialized;
-      }
-    }
-    if (stylesString.length > 0) {
-      stylesString = 'style=\"' + stylesString + '\"';
-      return "<span " + stylesString + " id=\"" + x.id + "\">" + token.text + "</span>\n";
-    } else {
-      return '<span>#{token.text}</span>';
-    }
-  };
-  util.timelog('Serialization to output');
-  /*
-  tokens.reduce (x, y) -> 
-    if x.metaType is 'regular' and y.metaType is 'delimiter' then x.text = x.text + ' '
-    return y
-  */
-
-  plainText = '';
-  tokenCount = {};
-  tokenCount.tokens = tokens.length;
-  tokenCount.regular = 0;
-  tokenCount.delimiter = 0;
-  for (_i = 0, _len = tokens.length; _i < _len; _i++) {
-    x = tokens[_i];
-    if (x.metaType === 'regular') {
-      plainText = plainText + wrapWithAttributes(x);
-      tokenCount.regular += 1;
-    } else {
-      fontSize = "40px";
-      plainText = plainText + ("<span id=\"" + x.id + "\" style=\"white-space:pre; font-size:" + fontSize + ";\"> </span>");
-      tokenCount.delimiter += 1;
-    }
-  }
-  console.dir(tokenCount);
-  util.timelog('Serialization to output');
-  return plainText;
-};
-
-exports.buildOutputHtml = function(tokens, finalStyles) {
   var plainText, wrapWithAttributes, x, _i, _len;
   wrapWithAttributes = function(token, moreStyle) {
     var serialized, style, styles, stylesString, text, _i, _len, _ref;
@@ -269,7 +217,46 @@ exports.buildOutputHtml = function(tokens, finalStyles) {
       return "<span " + stylesString + " id=\"" + x.id + "\">" + text + "</span>\n";
     } else {
       console.warn('token had no styles attached to it when building output');
-      return '<span>#{token.text}</span>';
+      return "<span>" + token.text + "</span>";
+    }
+  };
+  util.timelog('Serialization to output');
+  for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+    x = tokens[_i];
+    if (x.metaType === 'regular') {
+      plainText = plainText + wrapWithAttributes(x);
+    } else {
+      plainText = plainText + wrapWithAttributes(x, 'white-space:pre;');
+    }
+  }
+  util.timelog('Serialization to output');
+  return plainText;
+};
+
+exports.buildOutputHtml = function(tokens, finalStyles) {
+  var plainText, wrapWithAttributes, x, _i, _len;
+  wrapWithAttributes = function(token, moreStyle) {
+    var style, stylesString, text, val, _ref;
+    stylesString = '';
+    _ref = token.finalStyles;
+    for (style in _ref) {
+      val = _ref[style];
+      stylesString = stylesString + style + ':' + val + '; ';
+    }
+    if (moreStyle != null) {
+      stylesString = stylesString + ' ' + moreStyle;
+    }
+    if (stylesString.length > 0) {
+      stylesString = 'style=\"' + stylesString + '\"';
+      if (token.metaType === 'regular') {
+        text = token.text;
+      } else {
+        text = ' ';
+      }
+      return "<span " + stylesString + " id=\"" + x.id + "\">" + text + "</span>\n";
+    } else {
+      console.warn('token had no styles attached to it when building output');
+      return "<span>" + token.text + "</span>";
     }
   };
   util.timelog('Serialization to output');
