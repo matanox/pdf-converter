@@ -28,7 +28,7 @@ logging       = require './logging'
 app = express()
 env = app.get('env')
 
-logging.logGreen 'Starting in mode #{env}'
+logging.logGreen "Starting in mode #{env}"
 
 #
 # Dev-environment-only stuff

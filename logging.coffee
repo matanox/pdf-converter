@@ -1,7 +1,10 @@
 # This coloring is terminal color based. 
 # It doesn't work for the browser console. For browser console solutions (which are all based on css) 
 # see http://stackoverflow.com/questions/7505623/colors-in-javascript-console/13017382.
-# It's easy to create a function that provides the same API for both....
+#
+# It's easy to create a function that provides the same API for both.... similar to 
+# stuff in https://github.com/visionmedia/node-term-css.
+#
 
 tty = {
   green:    '\x1b[32m'

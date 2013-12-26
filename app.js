@@ -36,7 +36,7 @@ app = express();
 
 env = app.get('env');
 
-logging.logGreen('Starting in mode #{env}');
+logging.logGreen("Starting in mode " + env);
 
 if (env !== 'production') {
   primus = require('./primus');

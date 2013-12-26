@@ -213,11 +213,12 @@ exports.tokenize = (string) ->
   #console.dir(tokens)  
   tokens
 
-
 #
-# Build html output
+# Build html output -
+# This old version builds the output based only on the original styles of each token
+# Not the computed styles later attached to it, or more advanced features.
 #
-exports.buildOutputHtml = (tokens, finalStyles) ->
+exports.buildOutputHtmlOld = (tokens, finalStyles) ->
 
   wrapWithSpan = (string) -> '<span>' + string + '</span>'
 
@@ -237,7 +238,6 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       return '<span>#{token.text}</span>'
 
   util.timelog('Serialization to output')  
-  plainText = ''
 
   ###
   tokens.reduce (x, y) -> 
@@ -245,6 +245,7 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
     return y
   ###
 
+  plainText = ''
   tokenCount = {}
   tokenCount.tokens    = tokens.length
   tokenCount.regular   = 0
@@ -266,6 +267,48 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       tokenCount.delimiter += 1
 
   console.dir(tokenCount)
+  util.timelog('Serialization to output') 
+
+  #console.log(plainText)
+  plainText
+
+#
+# Build html output
+#
+exports.buildOutputHtml = (tokens, finalStyles) ->
+
+  #wrapWithSpan = (string) -> '<span>' + string + '</span>'
+
+  wrapWithAttributes = (token, moreStyle) ->
+
+    stylesString = ''
+    for style in token.styles
+      styles = css.getFinalStyles(style, finalStyles)
+      if styles?
+        serialized = css.serializeStylesArray(styles)
+        stylesString = stylesString + serialized
+
+    if moreStyle? then stylesString = stylesString + ' ' + moreStyle
+
+    if stylesString.length > 0
+      stylesString = 'style=\"' + stylesString + '\"'
+      if token.metaType is 'regular' 
+        text = token.text
+      else 
+        text = ' '
+      return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
+    else 
+      console.warn('token had no styles attached to it when building output')
+      return '<span>#{token.text}</span>'
+
+  util.timelog('Serialization to output')  
+
+  for x in tokens 
+    if x.metaType is 'regular'
+      plainText = plainText + wrapWithAttributes(x)
+    else 
+      plainText = plainText + wrapWithAttributes(x, 'white-space:pre;')
+
   util.timelog('Serialization to output') 
 
   #console.log(plainText)
