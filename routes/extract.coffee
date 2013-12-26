@@ -164,34 +164,44 @@ exports.go = (req, res) ->
   #
   # Add final styles to each token.
   # This assumes the input had only
-  # css classes and not inline styles,
-  # defined for each element
+  # css classes defined for each element,
+  # and not inline styles,
   #
-
   pushIfTrue = (array, functionResult) ->
     if functionResult
       array.push(functionResult)
       return true
     return false
 
-    return pushed
-  
+  #
+  # Enrich with computes styles.
+  # E.g. whether the word is all uppercase.
+  #
   for token in tokens
     if token.metaType is 'regular'
       token.calculatedProperties = []
       if pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
         console.log('pushed one computed style')
 
+  #
+  # Augment each token with its final calculated styles as well as position information.
+  # E.g. read the css style definitions, of the css classes assigned to a token, 
+  # and add them to the token.
+  #
   for token in tokens 
 
     token.finalStyles = {}
+    token.positionInfo = {}
 
     for cssClass in token.styles  # iterate over each css class indicated for the token,
                                   # adding its final style definitions to the token
       styles = css.getFinalStyles(cssClass, inputStylesMap)
       if styles? 
         for style in styles 
-          token.finalStyles[style.property] = style.value
+          if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
+            token.positionInfo[style.property] = style.value
+          else
+            token.finalStyles[style.property] = style.value
     
       if util.objectPropertiesCount(token.finalStyles) is 0
         console.warn('No final styles applied to token')
@@ -226,8 +236,28 @@ exports.go = (req, res) ->
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations
   console.dir(documentQuantifiers)
 
+  #
+  # Some location analytics
+  #
+  leftPositions = {}
+  for token in tokens when token.metaType is 'regular'
+    for positionProperty, value of token.positionInfo 
+      if util.isAnyOf(positionProperty, ['left']) 
+        value = parseInt(value)
+        if leftPositions[value]?
+          leftPositions[value] += 1
+        else
+          leftPositions[value] = 1
 
+  #console.log(Object.keys(leftPositions).length)
 
+  leftPosArray = []
+  for position, frequency of leftPositions
+    leftPosArray.push({position, frequency})
+  leftPosArray.sort( (a, b) -> return parseFloat(b.frequency) - parseFloat(a.frequency) )
+  console.dir leftPosArray[i] for i in [0..39]
+  
+  
   #
   # Some word frequency analytics.
   # Should incorporate (or build from our own inputs!) a corpus of 'stop-words',
@@ -249,7 +279,7 @@ exports.go = (req, res) ->
     if wordFrequencies[word]? 
       wordFrequencies[word] += 1
     else 
-      wordFrequencies[word] = 0
+      wordFrequencies[word] = 1
   util.timelog('Calculating word frequencies')   
 
   util.timelog('Sorting frequencies')
@@ -258,7 +288,7 @@ exports.go = (req, res) ->
     wordFrequenciesArray.push({word, frequency})
   wordFrequenciesArray.sort( (a, b) -> return parseInt(b.frequency) - parseInt(a.frequency) )
   util.timelog('Sorting frequencies')
-  # do not delete --> console.dir wordFrequenciesArray[i] for i in [1..40]
+  # do not delete --> console.dir wordFrequenciesArray[i] for i in [0..39]
 
 
   # Send back the outcome

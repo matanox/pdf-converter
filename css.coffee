@@ -1,6 +1,25 @@
 cssParser = require('css-parse')
 util = require('./util')
 
+relevantStyles = [
+  'font-family',
+  'font-size',
+  'font-style',
+  'font-weight',
+  'word-spacing',
+  'line-height',
+  'color',
+]
+
+positionData = [
+  'left',
+  'bottom',
+  'right',
+  'top'
+]
+
+exports.positionData = positionData
+
 #
 # Get the css sheet specified in a link html element.
 # Of course it may be only a relative path.
@@ -17,12 +36,11 @@ extractCssFileNames = (string) ->
 
 extractCssProperties = (string) -> 
   # Strip off any new line characters 
-  regex = new RegExp('[\\n|\\r]', 'g') # first back-slash escapes the string, not the regex
+  regex = new RegExp('[\\n|\\r]', 'g')  # first back-slash escapes the string, not the regex
   string = string.replace(regex, "")
   
   # Regex replace: remove all CSS comments (of the form /* anything */) 
-  # First back-slash escapes the string, not the regex
-  regex = new RegExp('/\\*.*?\\*/', 'g')
+  regex = new RegExp('/\\*.*?\\*/', 'g')  # First back-slash escapes the string, not the regex
   string = string.replace(regex, "")
 
   css = cssParser string
@@ -62,21 +80,6 @@ extractCssProperties = (string) ->
     #                          also see http://jsperf.com/looking-at-localcompare
     filterProperties = (propertyObjectsArray) ->
       
-      relevantStyles = [
-        'font-family',
-        'font-size',
-        'font-style',
-        'font-weight',
-        'word-spacing',
-        'line-height',
-        'color',
-      ]
-
-      positionData = [
-        'left',
-        'bottom'
-      ]
-
       propertyObjectsArray = propertyObjectsArray.filter((propertyPair) -> 
         util.isAnyOf(propertyPair.property, relevantStyles.concat(positionData)))
       return propertyObjectsArray
