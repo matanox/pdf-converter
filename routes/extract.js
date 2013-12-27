@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, augmentEachDiv, connect_token_group, cssClass, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequency, group, groups, i, id, inputStylesMap, leftPosArray, leftPositions, name, outputHtml, path, position, positionProperty, pushIfTrue, rawHtml, rawRelevantDivs, style, styles, token, tokens, value, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _s, _t, _u, _v, _w, _x;
+  var abbreviations, augmentEachDiv, connect_token_group, cssClass, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequencies, frequency, group, groups, id, inputStylesMap, name, outputHtml, path, pushIfTrue, rawHtml, rawRelevantDivs, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u, _v;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -196,6 +196,16 @@ exports.go = function(req, res) {
       }
     }
   }
+  tokens[0].lineLocation = 'opener';
+  tokens.reduce(function(a, b) {
+    if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
+      if (parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)) {
+        b.lineLocation = 'opener';
+        console.log(b.text);
+      }
+    }
+    return b;
+  });
   util.timelog('Sentence tokenizing');
   connect_token_group = function(_arg) {
     var group, token;
@@ -231,42 +241,73 @@ exports.go = function(req, res) {
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
-  leftPositions = {};
-  for (_v = 0, _len13 = tokens.length; _v < _len13; _v++) {
-    token = tokens[_v];
-    if (token.metaType === 'regular') {
-      _ref1 = token.positionInfo;
-      for (positionProperty in _ref1) {
-        value = _ref1[positionProperty];
-        if (util.isAnyOf(positionProperty, ['left'])) {
-          value = parseInt(value);
-          if (leftPositions[value] != null) {
-            leftPositions[value] += 1;
-          } else {
-            leftPositions[value] = 1;
+  frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {
+    var array, i, key, map, object, val, value, _len13, _ref1, _results, _v, _w;
+    map = {};
+    for (_v = 0, _len13 = objectsArray.length; _v < _len13; _v++) {
+      object = objectsArray[_v];
+      if (object[filterKey] === filterBy) {
+        _ref1 = object[parentProperty];
+        for (key in _ref1) {
+          value = _ref1[key];
+          if (key === property) {
+            value = parseFloat(value);
+            if (map[value] != null) {
+              map[value] += 1;
+            } else {
+              map[value] = 1;
+            }
           }
         }
       }
     }
-  }
-  leftPosArray = [];
-  for (position in leftPositions) {
-    frequency = leftPositions[position];
-    leftPosArray.push({
-      position: position,
-      frequency: frequency
+    array = [];
+    for (key in map) {
+      val = map[key];
+      array.push({
+        key: key,
+        val: val
+      });
+    }
+    array.sort(function(a, b) {
+      return parseFloat(b.val) - parseFloat(a.val);
     });
-  }
-  leftPosArray.sort(function(a, b) {
-    return parseFloat(b.frequency) - parseFloat(a.frequency);
-  });
-  for (i = _w = 0; _w <= 39; i = ++_w) {
-    console.dir(leftPosArray[i]);
-  }
+    _results = [];
+    for (i = _w = 0; _w <= 39; i = ++_w) {
+      if (array[i] != null) {
+        _results.push(console.dir(array[i]));
+      }
+    }
+    return _results;
+  };
+  /*
+  util.timelog('location analysis')                       
+  #
+  # Some location analytics - prior to generalizing it
+  #
+  leftPositions = {}
+  for token in tokens when token.metaType is 'regular'
+    for positionProperty, value of token.positionInfo 
+      if util.isAnyOf(positionProperty, ['left']) 
+        value = parseInt(value)
+        if leftPositions[value]?
+          leftPositions[value] += 1
+        else
+          leftPositions[value] = 1
+  
+  leftPosArray = []
+  for position, frequency of leftPositions
+    leftPosArray.push({position, frequency})
+  leftPosArray.sort( (a, b) -> return parseFloat(b.frequency) - parseFloat(a.frequency) )
+  util.timelog('location analysis')                                 
+  
+  console.dir leftPosArray[i] for i in [0..39]
+  */
+
   util.timelog('Calculating word frequencies');
   wordFrequencies = {};
-  for (_x = 0, _len14 = tokens.length; _x < _len14; _x++) {
-    token = tokens[_x];
+  for (_v = 0, _len13 = tokens.length; _v < _len13; _v++) {
+    token = tokens[_v];
     if (!(token.metaType === 'regular')) {
       continue;
     }

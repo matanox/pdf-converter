@@ -208,6 +208,18 @@ exports.go = (req, res) ->
         console.dir(token)
 
   #
+  # Mark tokens that are a beginning of a line
+  # TODO: parameterize direction to support RTL languages
+  #
+  tokens[0].lineLocation = 'opener'
+  tokens.reduce (a, b) ->                             
+    if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
+      if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
+        b.lineLocation = 'opener'                     # assume its a line opener word
+        console.log(b.text)
+    return b
+
+  #
   # Create sentences sequence
   #
   util.timelog('Sentence tokenizing')
@@ -237,7 +249,44 @@ exports.go = (req, res) ->
   console.dir(documentQuantifiers)
 
   #
-  # Some location analytics
+  # Utility function for logging frequencies  
+  # of values appearing in a certain named property 
+  # appearing under a certain object included in a token.
+  #
+  # E.g. for calculating frequencies of styles.
+  #
+  # Parameters:
+  #
+  # objectsArray        - the array of tokens
+  # filterKey, filterBy - condition to filter from the array by
+  # property            - which property to get the frequency of its values
+  # parentProperty      - the parent of that property in the token object
+  #
+  frequencies = (objectsArray, filterKey, filterBy, property, parentProperty) ->
+    map = {}
+    for object in objectsArray when object[filterKey] is filterBy
+      for key, value of object[parentProperty] 
+        if key is property 
+          value = parseFloat(value)
+          if map[value]?
+            map[value] += 1
+          else
+            map[value] = 1
+
+    array = []
+    for key, val of map
+      array.push({key, val})
+    array.sort( (a, b) -> return parseFloat(b.val) - parseFloat(a.val) )
+
+    console.dir array[i] for i in [0..39] when array[i]?
+
+  #frequencies(tokens, 'metaType', 'regular', 'left', 'positionInfo')
+  #frequencies(tokens, 'metaType', 'regular', 'font-size', 'finalStyles')  
+
+  ###
+  util.timelog('location analysis')                       
+  #
+  # Some location analytics - prior to generalizing it
   #
   leftPositions = {}
   for token in tokens when token.metaType is 'regular'
@@ -249,14 +298,14 @@ exports.go = (req, res) ->
         else
           leftPositions[value] = 1
 
-  #console.log(Object.keys(leftPositions).length)
-
   leftPosArray = []
   for position, frequency of leftPositions
     leftPosArray.push({position, frequency})
   leftPosArray.sort( (a, b) -> return parseFloat(b.frequency) - parseFloat(a.frequency) )
+  util.timelog('location analysis')                                 
+
   console.dir leftPosArray[i] for i in [0..39]
-  
+  ###
   
   #
   # Some word frequency analytics.
@@ -288,7 +337,7 @@ exports.go = (req, res) ->
     wordFrequenciesArray.push({word, frequency})
   wordFrequenciesArray.sort( (a, b) -> return parseInt(b.frequency) - parseInt(a.frequency) )
   util.timelog('Sorting frequencies')
-  # do not delete --> console.dir wordFrequenciesArray[i] for i in [0..39]
+  #console.dir wordFrequenciesArray[i] for i in [0..39]
 
 
   # Send back the outcome
