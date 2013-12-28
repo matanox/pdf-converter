@@ -92,11 +92,14 @@ server.listen(app.get('port'), function() {
   return logging.logGreen('Server listening on port ' + app.get('port') + '....');
 });
 
-if (env !== 'production') {
-  http.get('http://localhost/extract?name=leZrsgpZQOSCCtS98bsu', function(res) {
-    return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
-  });
-}
+/*
+# In dev mode, self-test on startup
+unless env is 'production' 
+  testFile = 'leZrsgpZQOSCCtS98bsu'
+  http.get('http://localhost/extract?name=' + testFile, (res) -> # xt7duLM0Q3Ow2gIBOvED
+    logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
+*/
+
 
 if (env !== 'production') {
   primus.start(server);

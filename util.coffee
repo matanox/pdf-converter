@@ -35,6 +35,10 @@ isAnyOf = (string, matches) ->
 
 exports.isAnyOf = isAnyOf
 
+# For sizing map objects. 
+# Returns object's number of properties
+exports.objectPropertiesCount = (object) -> Object.keys(object).length
+
 exports.endsWithAnyOf = (string, matches) ->
   trailingChar = string.charAt(string.length - 1)
   return false unless isAnyOf(trailingChar, matches)
@@ -48,6 +52,10 @@ exports.startsWithAnyOf = (string, matches) ->
 exports.isAnySpaceChar = (char) -> anySpaceChar.test(char) 
 
 exports.lastChar = (string) -> string.charAt(string.length - 1)
+
+exports.last = (array) -> array[array.length - 1]
+
+exports.first = (array) -> array[0]
 
 exports.parseElementText = (xmlNode) ->
   content = xmlNode.substr(0, xmlNode.length - "</div>".length) # remove closing div tag
@@ -106,6 +114,8 @@ clone = (obj) ->
 
 exports.clone = clone
 
-# For sizing map objects. 
-# Returns object's number of properties
-exports.objectPropertiesCount = (object) -> Object.keys(object).length
+exports.pushIfTrue = (array, functionResult) ->
+    if functionResult
+      array.push(functionResult)
+      return true
+    return false

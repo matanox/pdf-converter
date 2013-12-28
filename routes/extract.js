@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, augmentEachDiv, connect_token_group, cssClass, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequencies, frequency, group, groups, id, inputStylesMap, name, outputHtml, path, pushIfTrue, rawHtml, rawRelevantDivs, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u, _v;
+  var abbreviations, augmentEachDiv, connect_token_group, cssClass, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequencies, frequency, group, groups, id, inputStylesMap, iterator, name, outputHtml, path, rawHtml, rawRelevantDivs, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -70,12 +70,6 @@ exports.go = function(req, res) {
   divsWithStyles = filterZeroLengthText(divsWithStyles);
   divsNum = divsWithStyles.length;
   endsSpaceDelimited = 0;
-  for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
-    div = divsWithStyles[_j];
-    if (util.isAnySpaceChar(util.lastChar(div.text))) {
-      endsSpaceDelimited += 1;
-    }
-  }
   console.log(endsSpaceDelimited);
   console.log(endsSpaceDelimited / divsNum);
   if ((endsSpaceDelimited / divsNum) < 0.3) {
@@ -84,33 +78,34 @@ exports.go = function(req, res) {
     augmentEachDiv = false;
   }
   divTokens = [];
-  for (_k = 0, _len2 = divsWithStyles.length; _k < _len2; _k++) {
-    div = divsWithStyles[_k];
+  for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
+    div = divsWithStyles[_j];
     tokens = html.tokenize(div.text);
-    for (_l = 0, _len3 = tokens.length; _l < _len3; _l++) {
-      token = tokens[_l];
+    for (_k = 0, _len2 = tokens.length; _k < _len2; _k++) {
+      token = tokens[_k];
       switch (token.metaType) {
         case 'regular':
           token.styles = div.styles;
       }
     }
-    if (augmentEachDiv) {
-      tokens.push({
-        'metaType': 'delimiter'
-      });
-    }
     divTokens.push(tokens);
   }
   tokens = [];
-  for (_m = 0, _len4 = divTokens.length; _m < _len4; _m++) {
-    div = divTokens[_m];
-    for (_n = 0, _len5 = div.length; _n < _len5; _n++) {
-      token = div[_n];
+  for (_l = 0, _len3 = divTokens.length; _l < _len3; _l++) {
+    div = divTokens[_l];
+    for (_m = 0, _len4 = div.length; _m < _len4; _m++) {
+      token = div[_m];
       tokens.push(token);
     }
   }
-  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
-    token = tokens[_o];
+  tokens.reduce(function(x, y) {
+    if (y.metaType === 'delimiter') {
+      y.styles = x.styles;
+    }
+    return y;
+  });
+  for (_n = 0, _len5 = tokens.length; _n < _len5; _n++) {
+    token = tokens[_n];
     if (token.metaType === 'regular') {
       if (token.text.length === 0) {
         throw "Error - zero length text in data";
@@ -121,68 +116,17 @@ exports.go = function(req, res) {
     console.log("No text was extracted from input");
     throw "No text was extracted from input";
   }
-  tokens.reduce(function(x, y, index) {
-    if (x.metaType === 'regular' && y.metaType === 'regular') {
-      if (util.endsWith(x.text, '-')) {
-        x.text = x.text.slice(0, -1);
-        x.text = x.text.concat(y.text);
-        tokens.splice(index, 1);
-        return x;
-      }
-    }
-    return y;
-  });
-  tokens.reduce(function(x, y, index) {
-    if (x.metaType === 'regular' && y.metaType === 'delimiter' && index < (tokens.length - 1)) {
-      if (util.endsWith(x.text, '-')) {
-        x.text = x.text.slice(0, -1);
-        x.text = x.text.concat(tokens[index + 1].text);
-        tokens.splice(index, 2);
-        return x;
-      }
-    }
-    return y;
-  });
-  util.timelog('Extraction from html stage A');
-  id = 0;
-  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
-    token = tokens[_p];
-    token.id = id;
-    id += 1;
-  }
-  tokens.reduce(function(x, y) {
-    if (y.metaType === 'delimiter') {
-      y.styles = x.styles;
-    }
-    return y;
-  });
-  pushIfTrue = function(array, functionResult) {
-    if (functionResult) {
-      array.push(functionResult);
-      return true;
-    }
-    return false;
-  };
-  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
-    token = tokens[_q];
-    if (token.metaType === 'regular') {
-      token.calculatedProperties = [];
-      if (pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
-        console.log('pushed one computed style');
-      }
-    }
-  }
-  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
-    token = tokens[_r];
+  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
+    token = tokens[_o];
     token.finalStyles = {};
     token.positionInfo = {};
     _ref = token.styles;
-    for (_s = 0, _len10 = _ref.length; _s < _len10; _s++) {
-      cssClass = _ref[_s];
+    for (_p = 0, _len7 = _ref.length; _p < _len7; _p++) {
+      cssClass = _ref[_p];
       styles = css.getFinalStyles(cssClass, inputStylesMap);
       if (styles != null) {
-        for (_t = 0, _len11 = styles.length; _t < _len11; _t++) {
-          style = styles[_t];
+        for (_q = 0, _len8 = styles.length; _q < _len8; _q++) {
+          style = styles[_q];
           if (util.isAnyOf(style.property, css.positionData)) {
             token.positionInfo[style.property] = style.value;
           } else {
@@ -196,16 +140,83 @@ exports.go = function(req, res) {
       }
     }
   }
-  tokens[0].lineLocation = 'opener';
+  util.first(tokens).lineLocation = 'opener';
   tokens.reduce(function(a, b) {
     if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
       if (parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)) {
         b.lineLocation = 'opener';
-        console.log(b.text);
+        a.lineLocation = 'closer';
       }
     }
     return b;
   });
+  util.last(tokens).lineLocation = 'closer';
+  iterator = function(tokens, iterationFunc) {
+    var a, b, i, _results;
+    i = 1;
+    _results = [];
+    while (i < tokens.length) {
+      a = tokens[i - 1];
+      b = tokens[i];
+      _results.push(i = i + iterationFunc(a, b, i, tokens));
+    }
+    return _results;
+  };
+  console.log(tokens.length);
+  iterator(tokens, function(a, b, i, tokens) {
+    var newDelimiter;
+    if (b.lineLocation === 'opener') {
+      if (a.lineLocation === 'closer') {
+        if (a.metaType === 'regular') {
+          if (util.endsWith(a.text, '-')) {
+            a.text = a.text.slice(0, -1);
+            a.text = a.text.concat(b.text);
+            tokens.splice(i, 1);
+            return 0;
+          } else {
+            if (a.text === 'approach' && b.text === 'to') {
+              console.log('found at ' + i);
+            }
+            newDelimiter = {
+              'metaType': 'delimiter'
+            };
+            newDelimiter.styles = a.styles;
+            newDelimiter.finalStyles = a.finalStyles;
+            tokens.splice(i, 0, newDelimiter);
+            return 2;
+          }
+        }
+      }
+    }
+    return 1;
+  });
+  tokens.reduce(function(a, b, index) {
+    if (a.metaType === 'regular' && b.metaType === 'regular') {
+      if (util.endsWith(a.text, '-')) {
+        a.text = a.text.slice(0, -1);
+        a.text = a.text.concat(b.text);
+        tokens.splice(index, 1);
+        return a;
+      }
+    }
+    return b;
+  });
+  util.timelog('Extraction from html stage A');
+  id = 0;
+  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
+    token = tokens[_r];
+    token.id = id;
+    id += 1;
+  }
+  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
+    token = tokens[_s];
+    if (token.metaType === 'regular') {
+      token.calculatedProperties = [];
+      if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
+        console.log('pushed one computed style');
+      }
+    }
+  }
   util.timelog('Sentence tokenizing');
   connect_token_group = function(_arg) {
     var group, token;
@@ -216,8 +227,8 @@ exports.go = function(req, res) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_u = 0, _len12 = tokens.length; _u < _len12; _u++) {
-    token = tokens[_u];
+  for (_t = 0, _len11 = tokens.length; _t < _len11; _t++) {
+    token = tokens[_t];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -242,10 +253,10 @@ exports.go = function(req, res) {
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
   frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {
-    var array, i, key, map, object, val, value, _len13, _ref1, _results, _v, _w;
+    var array, key, map, object, val, value, _len12, _ref1, _u;
     map = {};
-    for (_v = 0, _len13 = objectsArray.length; _v < _len13; _v++) {
-      object = objectsArray[_v];
+    for (_u = 0, _len12 = objectsArray.length; _u < _len12; _u++) {
+      object = objectsArray[_u];
       if (object[filterKey] === filterBy) {
         _ref1 = object[parentProperty];
         for (key in _ref1) {
@@ -269,45 +280,16 @@ exports.go = function(req, res) {
         val: val
       });
     }
-    array.sort(function(a, b) {
+    return array.sort(function(a, b) {
       return parseFloat(b.val) - parseFloat(a.val);
     });
-    _results = [];
-    for (i = _w = 0; _w <= 39; i = ++_w) {
-      if (array[i] != null) {
-        _results.push(console.dir(array[i]));
-      }
-    }
-    return _results;
   };
-  /*
-  util.timelog('location analysis')                       
-  #
-  # Some location analytics - prior to generalizing it
-  #
-  leftPositions = {}
-  for token in tokens when token.metaType is 'regular'
-    for positionProperty, value of token.positionInfo 
-      if util.isAnyOf(positionProperty, ['left']) 
-        value = parseInt(value)
-        if leftPositions[value]?
-          leftPositions[value] += 1
-        else
-          leftPositions[value] = 1
-  
-  leftPosArray = []
-  for position, frequency of leftPositions
-    leftPosArray.push({position, frequency})
-  leftPosArray.sort( (a, b) -> return parseFloat(b.frequency) - parseFloat(a.frequency) )
-  util.timelog('location analysis')                                 
-  
-  console.dir leftPosArray[i] for i in [0..39]
-  */
-
+  frequencies(tokens, 'metaType', 'regular', 'left', 'positionInfo');
+  frequencies(tokens, 'metaType', 'regular', 'font-size', 'finalStyles');
   util.timelog('Calculating word frequencies');
   wordFrequencies = {};
-  for (_v = 0, _len13 = tokens.length; _v < _len13; _v++) {
-    token = tokens[_v];
+  for (_u = 0, _len12 = tokens.length; _u < _len12; _u++) {
+    token = tokens[_u];
     if (!(token.metaType === 'regular')) {
       continue;
     }
