@@ -91,7 +91,7 @@ extractCssProperties = (string) ->
     propertyObjectsArray = filterProperties(propertyObjectsArray)
     return null if propertyObjectsArray.length == 0
 
-    # Filter out # selectors and @ definitions.
+    # Consume only class definitions (thus filtering out # selectors and @ definitions)
     # This is quite pdf2htmlEX output specific....
     return null if name.charAt(0)!='.' 
 
