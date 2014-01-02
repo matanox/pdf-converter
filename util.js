@@ -77,7 +77,7 @@ exports.first = function(array) {
   return array[0];
 };
 
-exports.parseElementText = function(xmlNode) {
+exports.parseElementTextOld = function(xmlNode) {
   var content;
   content = xmlNode.substr(0, xmlNode.length - "</div>".length);
   content = content.slice(content.indexOf(">") + 1);

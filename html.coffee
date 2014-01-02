@@ -10,7 +10,7 @@ exports.removeOuterDivs = (string) ->
   regex = new RegExp('<div((?!div).)*</div>', 'g') # g indicates to yield all, not just first match
   return string.match(regex) 
 
-parseCssClasses = (xmlNode) ->
+parseCssClassesOld = (xmlNode) ->
   # Build an array of the classes included by the div's "class=" statement.
   # Admittedly this is quite pdf2htmlEX specific parsing....
   
@@ -23,12 +23,23 @@ parseCssClasses = (xmlNode) ->
   cssClasses = cssClassesString.match(regex)
   cssClasses
 
-# Takes a raw Div, and creates a representation holding
+# Takes a raw node, and creates a representation holding
 # its content and style such that it can be worked with
-exports.representDiv = (xmlNode) ->
+exports.representNodeOld = (xmlNode) ->
   # assumes there are no nested divs inside xmlNode
-  text = util.parseElementText(xmlNode)
-  styles = parseCssClasses(xmlNode)
+  text = util.parseElementTextOld(xmlNode)
+  styles = parseCssClassesOld(xmlNode)
+  #console.log("empty object") unless text
+  return {text, styles}
+
+# Takes a raw node, and creates a representation holding
+# its content and style such that it can be worked with
+exports.representNode = (xmlNode) ->
+  text = xmlNode.data
+  
+  attributes = xmlNode.attribs
+  if attributes[class]?
+    styles = attributes[class]
   #console.log("empty object") unless text
   return {text, styles}
 

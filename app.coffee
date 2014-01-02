@@ -89,13 +89,12 @@ server = http.createServer(app)
 server.listen app.get('port'), ->
   logging.logGreen 'Server listening on port ' + app.get('port') + '....'
 
-###
 # In dev mode, self-test on startup
 unless env is 'production' 
-  testFile = 'leZrsgpZQOSCCtS98bsu'
+  testFile = 'AzPP5D8IS0GDeeC1hFxs'
+  #testFile = 'leZrsgpZQOSCCtS98bsu'
   http.get('http://localhost/extract?name=' + testFile, (res) -> # xt7duLM0Q3Ow2gIBOvED
     logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
-###
 
 # Attach primus for development iterating, as long as it's convenient 
 unless env is 'production' then primus.start(server)

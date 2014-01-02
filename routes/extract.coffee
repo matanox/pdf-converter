@@ -37,11 +37,75 @@ exports.go = (req, res) ->
   # Extract all style info 
   inputStylesMap = css.simpleFetchStyles(rawHtml ,path + name + '/') 
 
+  sampletext = 
+    '<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf8"/>
+        <title>Page Title</title>
+      </head>
+      <body>
+        <a href="https://github.com/ForbesLindesay">
+          <img src="/static/forkme.png" alt="Fork me on GitHub">
+        </a>
+        <div class="row">
+          <div class="large-12 columns">
+            <h1 id="page-title">Page Title</h1>
+            <p>This is a demo page</p>
+          </div>
+        </div>
+        <script src="/static/client.js"></script>
+      </body>
+    </html>'
+
+  htmlparser = require("htmlparser2");
+  util.timelog('htmlparser2') 
+  handler = new htmlparser.DomHandler((error, dom) ->
+    if (error)
+      console.log('htmlparser2 failed loading document')
+    else
+      console.log('htmlparser2 loaded document')
+  )
+  parser = new htmlparser.Parser(handler)
+  parser.parseComplete(rawHtml)
+  dom = handler.dom
+  console.log(dom)
+  util.timelog('htmlparser2') 
+
+  relevantElements = []
+
+  for domElement in dom
+    #console.log(domElement.type)
+    if domElement.type is 'tag' 
+      relevantElements.push(html.representNode(domElement))
+
+  ###
+  # jsdom is excruciatingly slow to load
+  # maybe it pays off in quicker processing after the loading or less memory?...
+  jsdom = require("jsdom").jsdom
+  util.timelog('jsdom')
+  doc = jsdom(rawHtml)
+  util.timelog('jsdom')
+
+  util.timelog('jsdom')
+  doc2 = jsdom(rawHtml)
+  util.timelog('jsdom')
+
+  # Alternative method of it that never worked for me
+  jsdom.env(rawHtml, [], [], (errors, window) ->
+    console.log('inside')
+    console.log(errors)    
+    console.log(window.body)
+  )
+  ###  
+
+  #process.exit(0)
+
   # Keep divs without their wrapping div if any.
   rawRelevantDivs = html.removeOuterDivs(rawHtml)
 
   # Create array of objects holding the text and style of each div
-  divsWithStyles = (html.representDiv div for div in rawRelevantDivs)
+  divsWithStyles = (html.representNodeOld div for div in rawRelevantDivs)
 
   # For now, remove any images, brute force. This code will not persist
   # And is not sufficient for also removing their text overlay
@@ -50,21 +114,20 @@ exports.go = (req, res) ->
   # For now, extract all text inside each div, indifferently to 
   # what's directly included v.s. what's nested in spans - 
   # all text is equally concatenated.
-  html.stripSpanWrappers(div) for div in divsWithStyles
+  #html.stripSpanWrappers(div) for div in divsWithStyles
 
   # Discard any divs that contain zero-length text
   divsWithStyles = filterZeroLengthText(divsWithStyles)
 
-  divsNum = divsWithStyles.length
-  endsSpaceDelimited = 0
-  
+  #divsNum = divsWithStyles.length
+  # endsSpaceDelimited = 0
   # If most divs end with a delimiting space character, then we don't need
   # to implicitly infer a delimiter at the end of each div, otherwise we do.
   # The use of a constant ratio test is extremely coarse and temporary,
   # a refined solution should replace it.
-  console.log(endsSpaceDelimited)
-  console.log(endsSpaceDelimited / divsNum)
-  if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
+  #console.log(endsSpaceDelimited)
+  #console.log(endsSpaceDelimited / divsNum)
+  #if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
   # Now tokenize (from text into words, punctuation, etc.),
   # while inheriting the style of the div to each resulting token

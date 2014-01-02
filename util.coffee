@@ -57,7 +57,7 @@ exports.last = (array) -> array[array.length - 1]
 
 exports.first = (array) -> array[0]
 
-exports.parseElementText = (xmlNode) ->
+exports.parseElementTextOld = (xmlNode) ->
   content = xmlNode.substr(0, xmlNode.length - "</div>".length) # remove closing div tag
   content = content.slice(content.indexOf(">") + 1)             # remove opening div tag
   content

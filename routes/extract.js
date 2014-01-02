@@ -46,37 +46,84 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, augmentEachDiv, connect_token_group, cssClass, div, divTokens, divsNum, divsWithStyles, documentQuantifiers, endsSpaceDelimited, frequencies, frequency, group, groups, id, inputStylesMap, iterator, name, outputHtml, path, rawHtml, rawRelevantDivs, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u;
+  var abbreviations, connect_token_group, cssClass, div, divTokens, divsWithStyles, documentQuantifiers, dom, domElement, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, outputHtml, parser, path, rawHtml, rawRelevantDivs, relevantElements, sampletext, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, path + name + '/');
+  sampletext = '<!DOCTYPE html>\
+    <html>\
+      <head>\
+        <meta charset="utf8"/>\
+        <title>Page Title</title>\
+      </head>\
+      <body>\
+        <a href="https://github.com/ForbesLindesay">\
+          <img src="/static/forkme.png" alt="Fork me on GitHub">\
+        </a>\
+        <div class="row">\
+          <div class="large-12 columns">\
+            <h1 id="page-title">Page Title</h1>\
+            <p>This is a demo page</p>\
+          </div>\
+        </div>\
+        <script src="/static/client.js"></script>\
+      </body>\
+    </html>';
+  htmlparser = require("htmlparser2");
+  util.timelog('htmlparser2');
+  handler = new htmlparser.DomHandler(function(error, dom) {
+    if (error) {
+      return console.log('htmlparser2 failed loading document');
+    } else {
+      return console.log('htmlparser2 loaded document');
+    }
+  });
+  parser = new htmlparser.Parser(handler);
+  parser.parseComplete(rawHtml);
+  dom = handler.dom;
+  console.log(dom);
+  util.timelog('htmlparser2');
+  relevantElements = [];
+  for (_i = 0, _len = dom.length; _i < _len; _i++) {
+    domElement = dom[_i];
+    if (domElement.type === 'tag') {
+      relevantElements.push(html.representNode(domElement));
+    }
+  }
+  /*
+  # jsdom is excruciatingly slow to load
+  # maybe it pays off in quicker processing after the loading or less memory?...
+  jsdom = require("jsdom").jsdom
+  util.timelog('jsdom')
+  doc = jsdom(rawHtml)
+  util.timelog('jsdom')
+  
+  util.timelog('jsdom')
+  doc2 = jsdom(rawHtml)
+  util.timelog('jsdom')
+  
+  # Alternative method of it that never worked for me
+  jsdom.env(rawHtml, [], [], (errors, window) ->
+    console.log('inside')
+    console.log(errors)    
+    console.log(window.body)
+  )
+  */
+
   rawRelevantDivs = html.removeOuterDivs(rawHtml);
   divsWithStyles = (function() {
-    var _i, _len, _results;
+    var _j, _len1, _results;
     _results = [];
-    for (_i = 0, _len = rawRelevantDivs.length; _i < _len; _i++) {
-      div = rawRelevantDivs[_i];
-      _results.push(html.representDiv(div));
+    for (_j = 0, _len1 = rawRelevantDivs.length; _j < _len1; _j++) {
+      div = rawRelevantDivs[_j];
+      _results.push(html.representNodeOld(div));
     }
     return _results;
   })();
   divsWithStyles = filterImages(divsWithStyles);
-  for (_i = 0, _len = divsWithStyles.length; _i < _len; _i++) {
-    div = divsWithStyles[_i];
-    html.stripSpanWrappers(div);
-  }
   divsWithStyles = filterZeroLengthText(divsWithStyles);
-  divsNum = divsWithStyles.length;
-  endsSpaceDelimited = 0;
-  console.log(endsSpaceDelimited);
-  console.log(endsSpaceDelimited / divsNum);
-  if ((endsSpaceDelimited / divsNum) < 0.3) {
-    augmentEachDiv = true;
-  } else {
-    augmentEachDiv = false;
-  }
   divTokens = [];
   for (_j = 0, _len1 = divsWithStyles.length; _j < _len1; _j++) {
     div = divsWithStyles[_j];

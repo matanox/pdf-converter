@@ -16,11 +16,12 @@
     "waterline": "~0.9.9",
     "nconf": "~0.6.8",
     "request": "~2.27.0",
-    "xmldom": "~0.1.16",
     "css-parse": "~1.6.0",
-    "jsdom": "~0.8.9",
     "primus": "~1.5.0",
-    "ws": "~0.4.31"
+    "ws": "~0.4.31",
+    "htmlparser2": "~3.4.0",
+    "xmldom": "~0.1.17",
+    "jsdom": "~0.8.10"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"
