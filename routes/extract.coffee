@@ -69,15 +69,10 @@ exports.go = (req, res) ->
   parser = new htmlparser.Parser(handler)
   parser.parseComplete(rawHtml)
   dom = handler.dom
-  console.log(dom)
+  #console.log(dom)
   util.timelog('htmlparser2') 
 
-  relevantElements = []
-
-  for domElement in dom
-    #console.log(domElement.type)
-    if domElement.type is 'tag' 
-      relevantElements.push(html.representNode(domElement))
+  relevantNodes = html.representNodes(dom)
 
   ###
   # jsdom is excruciatingly slow to load

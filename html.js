@@ -31,27 +31,38 @@ exports.representNodeOld = function(xmlNode) {
   };
 };
 
-exports.representNode = function(xmlNode) {
-  var attributes, styles, text;
-  text = xmlNode.data;
-  attributes = xmlNode.attribs;
-  if (attributes[(function() {
-    function _Class() {}
-
-    return _Class;
-
-  })()] != null) {
-    styles = attributes[(function() {
-      function _Class() {}
-
-      return _Class;
-
-    })()];
-  }
-  return {
-    text: text,
-    styles: styles
+exports.representNodes = function(domObject) {
+  var handleNode, myObjects;
+  myObjects = [];
+  handleNode = function(domObject, styles) {
+    var object, text, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = domObject.length; _i < _len; _i++) {
+      object = domObject[_i];
+      switch (object.type) {
+        case 'tag':
+          if (object.children != null) {
+            _results.push(handleNode(object.children, object.attribs['class']));
+          } else {
+            _results.push(void 0);
+          }
+          break;
+        case 'text':
+          text = object.data;
+          _results.push(myObjects.push({
+            styles: styles,
+            text: text
+          }));
+          break;
+        default:
+          _results.push(void 0);
+      }
+    }
+    return _results;
   };
+  handleNode(domObject);
+  console.log(myObjects);
+  return myObjects;
 };
 
 exports.stripSpanWrappers = function(div) {

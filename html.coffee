@@ -32,16 +32,37 @@ exports.representNodeOld = (xmlNode) ->
   #console.log("empty object") unless text
   return {text, styles}
 
-# Takes a raw node, and creates a representation holding
-# its content and style such that it can be worked with
-exports.representNode = (xmlNode) ->
-  text = xmlNode.data
-  
-  attributes = xmlNode.attribs
-  if attributes[class]?
-    styles = attributes[class]
-  #console.log("empty object") unless text
-  return {text, styles}
+#
+# Serializes html hierarchy into a sequence of 
+# tokens composed of text and style each.
+#
+# Basically it recursively walks the object model having been composed
+# by htmlparser2 from raw html, and spits out one token for each piece of text. 
+#
+# The htmlparser2 object model can be seen and explored here - 
+# http://demos.forbeslindesay.co.uk/htmlparser2/
+#
+exports.representNodes = (domObject) ->
+
+  myObjects = []
+
+  handleNode = (domObject, styles) ->
+    for object in domObject
+      switch object.type 
+        when 'tag'
+
+          if object.children?
+            handleNode(object.children, object.attribs['class'])            
+            
+        when 'text' 
+          # flush a new object
+          text = object.data
+          myObjects.push({styles: styles, text: text})
+
+  handleNode(domObject)
+
+  console.log myObjects
+  return myObjects
 
 #
 # Collapses a div into its cummulative text content by stripping

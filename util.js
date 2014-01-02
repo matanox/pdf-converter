@@ -65,6 +65,16 @@ exports.isAnySpaceChar = function(char) {
   return anySpaceChar.test(char);
 };
 
+exports.isSpaceCharsOnly = function(string) {
+  var i, _i, _ref;
+  for (i = _i = 0, _ref = string.length() - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+    if (!isAnySpaceChar(string.charAt[i])) {
+      return false;
+    }
+  }
+  return true;
+};
+
 exports.lastChar = function(string) {
   return string.charAt(string.length - 1);
 };

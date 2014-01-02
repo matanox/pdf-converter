@@ -51,6 +51,11 @@ exports.startsWithAnyOf = (string, matches) ->
 
 exports.isAnySpaceChar = (char) -> anySpaceChar.test(char) 
 
+exports.isSpaceCharsOnly = (string) -> 
+  for i in [0..string.length()-1]
+    unless isAnySpaceChar(string.charAt[i]) then return false
+  return true  
+
 exports.lastChar = (string) -> string.charAt(string.length - 1)
 
 exports.last = (array) -> array[array.length - 1]
