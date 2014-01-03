@@ -335,7 +335,8 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
         text = token.text
       else 
         text = ' '
-      return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
+      #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
+      return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
     else 
       console.warn('token had no styles attached to it when building output')
       return "<span>#{token.text}</span>"
@@ -347,7 +348,8 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
     if x.metaType is 'regular'
       plainText = plainText + wrapWithAttributes(x)
     else 
-      plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
+      #plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
+      plainText = plainText + wrapWithAttributes(x)
 
   util.timelog('Serialization to output') 
 
