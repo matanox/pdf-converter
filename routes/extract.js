@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, documentQuantifiers, dom, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sampletext, style, styles, token, tokenArray, tokenArrays, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
+  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sampletext, style, styles, token, tokenArray, tokenArrays, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -136,7 +136,7 @@ exports.go = function(req, res) {
   }
   tokens.reduce(function(x, y) {
     if (y.metaType === 'delimiter') {
-      y.styles = x.styles;
+      y.stylesArray = x.stylesArray;
     }
     return y;
   });
@@ -156,24 +156,27 @@ exports.go = function(req, res) {
     token = tokens[_l];
     token.finalStyles = {};
     token.positionInfo = {};
-    _ref = token.styles;
+    _ref = token.stylesArray;
     for (_m = 0, _len4 = _ref.length; _m < _len4; _m++) {
-      cssClass = _ref[_m];
-      styles = css.getFinalStyles(cssClass, inputStylesMap);
-      if (styles != null) {
-        for (_n = 0, _len5 = styles.length; _n < _len5; _n++) {
-          style = styles[_n];
-          if (util.isAnyOf(style.property, css.positionData)) {
-            token.positionInfo[style.property] = style.value;
-          } else {
-            token.finalStyles[style.property] = style.value;
+      cssClasses = _ref[_m];
+      for (_n = 0, _len5 = cssClasses.length; _n < _len5; _n++) {
+        cssClass = cssClasses[_n];
+        styles = css.getFinalStyles(cssClass, inputStylesMap);
+        if (styles != null) {
+          for (_o = 0, _len6 = styles.length; _o < _len6; _o++) {
+            style = styles[_o];
+            if (util.isAnyOf(style.property, css.positionData)) {
+              token.positionInfo[style.property] = style.value;
+            } else {
+              token.finalStyles[style.property] = style.value;
+            }
           }
         }
       }
-      if (util.objectPropertiesCount(token.finalStyles) === 0) {
-        console.warn('No final styles applied to token');
-        console.dir(token);
-      }
+    }
+    if (util.objectPropertiesCount(token.finalStyles) === 0) {
+      console.warn('No final styles applied to token');
+      console.dir(token);
     }
   }
   util.first(tokens).lineLocation = 'opener';
@@ -237,13 +240,13 @@ exports.go = function(req, res) {
   });
   util.timelog('Extraction from html stage A');
   id = 0;
-  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
-    token = tokens[_o];
+  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
+    token = tokens[_p];
     token.id = id;
     id += 1;
   }
-  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
-    token = tokens[_p];
+  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
+    token = tokens[_q];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -261,8 +264,8 @@ exports.go = function(req, res) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
-    token = tokens[_q];
+  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
+    token = tokens[_r];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -287,10 +290,10 @@ exports.go = function(req, res) {
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
   frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {
-    var array, key, map, object, val, value, _len9, _r, _ref1;
+    var array, key, map, object, val, value, _len10, _ref1, _s;
     map = {};
-    for (_r = 0, _len9 = objectsArray.length; _r < _len9; _r++) {
-      object = objectsArray[_r];
+    for (_s = 0, _len10 = objectsArray.length; _s < _len10; _s++) {
+      object = objectsArray[_s];
       if (object[filterKey] === filterBy) {
         _ref1 = object[parentProperty];
         for (key in _ref1) {
@@ -322,8 +325,8 @@ exports.go = function(req, res) {
   frequencies(tokens, 'metaType', 'regular', 'font-size', 'finalStyles');
   util.timelog('Calculating word frequencies');
   wordFrequencies = {};
-  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
-    token = tokens[_r];
+  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
+    token = tokens[_s];
     if (!(token.metaType === 'regular')) {
       continue;
     }

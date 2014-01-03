@@ -41,15 +41,32 @@ exports.representNodeOld = function(xmlNode) {
 exports.representNodes = function(domObject) {
   var handleNode, myObjects;
   myObjects = [];
-  handleNode = function(domObject, styles) {
-    var object, text, _i, _len, _results;
+  handleNode = function(domObject, stylesArray) {
+    var inheritingStylesArray, object, styleString, styles, text, _i, _len, _results;
     _results = [];
     for (_i = 0, _len = domObject.length; _i < _len; _i++) {
       object = domObject[_i];
       switch (object.type) {
         case 'tag':
           if (object.children != null) {
-            _results.push(handleNode(object.children, object.attribs['class']));
+            if (stylesArray == null) {
+              stylesArray = [];
+            }
+            inheritingStylesArray = (function() {
+              var _j, _len1, _results1;
+              _results1 = [];
+              for (_j = 0, _len1 = stylesArray.length; _j < _len1; _j++) {
+                styles = stylesArray[_j];
+                _results1.push(styles);
+              }
+              return _results1;
+            })();
+            styleString = object.attribs['class'];
+            if (styleString != null) {
+              styles = parseCssClasses(styleString.toString());
+              inheritingStylesArray.push(styles);
+            }
+            _results.push(handleNode(object.children, inheritingStylesArray));
           } else {
             _results.push(void 0);
           }
@@ -57,10 +74,9 @@ exports.representNodes = function(domObject) {
         case 'text':
           if (object.data !== '\n') {
             text = object.data;
-            styles = parseCssClasses(styles.toString());
             _results.push(myObjects.push({
               text: text,
-              styles: styles
+              stylesArray: stylesArray
             }));
           } else {
             _results.push(void 0);
@@ -117,12 +133,12 @@ exports.tokenize = function(nodeWithStyles) {
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(0, text.length - 1),
-              'styles': token.styles
+              'stylesArray': token.stylesArray
             });
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(text.length - 1),
-              'styles': token.styles
+              'stylesArray': token.stylesArray
             });
           } else {
             tokens.push(token);
@@ -152,12 +168,12 @@ exports.tokenize = function(nodeWithStyles) {
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(0, 1),
-              'styles': token.styles
+              'stylesArray': token.stylesArray
             });
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(1),
-              'styles': token.styles
+              'stylesArray': token.stylesArray
             });
           } else {
             tokens.push(token);
@@ -184,7 +200,7 @@ exports.tokenize = function(nodeWithStyles) {
   tokenize = function(nodeWithStyles) {
     var char, i, insideDelimiter, insideWord, string, tokens, withStyles, word, _i, _ref;
     withStyles = function(token) {
-      token.styles = nodeWithStyles.styles;
+      token.stylesArray = nodeWithStyles.stylesArray;
       return token;
     };
     string = nodeWithStyles.text;

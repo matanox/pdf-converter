@@ -150,7 +150,7 @@ exports.go = (req, res) ->
   # inherits the style of its preceding token. 
   # May belong either here or inside the core tokenization...
   tokens.reduce (x, y) -> 
-    if y.metaType is 'delimiter' then y.styles = x.styles
+    if y.metaType is 'delimiter' then y.stylesArray = x.stylesArray
     return y
 
   # TODO: duplicate to unit test
@@ -169,23 +169,27 @@ exports.go = (req, res) ->
   #
   #console.log(tokens)  
   for token in tokens 
-    #console.log(token)
+    #console.dir(token)
     token.finalStyles = {}
     token.positionInfo = {}
 
-    for cssClass in token.styles  # iterate over each css class indicated for the token,
-                                  # adding its final style definitions to the token
-      styles = css.getFinalStyles(cssClass, inputStylesMap)
-      if styles? 
-        for style in styles 
-          if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
-            token.positionInfo[style.property] = style.value
-          else
-            token.finalStyles[style.property] = style.value
-    
-      if util.objectPropertiesCount(token.finalStyles) is 0
-        console.warn('No final styles applied to token')
-        console.dir(token)
+    for cssClasses in token.stylesArray  # cascade the styles from each parent node 
+      #console.log cssClasses
+      for cssClass in cssClasses         # iterate over each css class indicated for the token,
+                                         # adding its final style definitions to the token
+        #console.log cssClass                                         
+        styles = css.getFinalStyles(cssClass, inputStylesMap)
+        if styles? 
+          #console.log(styles)
+          for style in styles 
+            if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
+              token.positionInfo[style.property] = style.value
+            else
+              token.finalStyles[style.property] = style.value
+      
+    if util.objectPropertiesCount(token.finalStyles) is 0
+      console.warn('No final styles applied to token')
+      console.dir(token)
 
   #
   # Mark tokens that begin or end their line

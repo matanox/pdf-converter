@@ -55,24 +55,42 @@ exports.representNodes = (domObject) ->
 
   myObjects = []
 
-  handleNode = (domObject, styles) ->
+  handleNode = (domObject, stylesArray) ->
     for object in domObject
       switch object.type 
         when 'tag' 
           # recurse for all children
           if object.children?
-            handleNode(object.children, object.attribs['class'])  # recurse with the style of this object
+
+            if not stylesArray? then stylesArray = []           # initialize when styles parameter is not supplied
+            
+            inheritingStylesArray = (styles for styles in stylesArray)
+
+            styleString = object.attribs['class']               # the styles string (style="...) of the html node
+            if styleString?
+              styles = parseCssClasses(styleString.toString())  # an array of the class names parsed from it
+                                                                #
+                                                                #    this two-dim array mimics the node hierarchy
+                                                                #    every item on it is an array from the current
+                                                                #    or a parent html node
+            
+              inheritingStylesArray.push(styles) 
+              #console.log inheritingStylesArray
+
+            handleNode(object.children, inheritingStylesArray)    # recurse with the style of this object
             
         when 'text' 
           unless object.data is '\n'   # ingore bare newlines in between html elements
             # flush a new object
             text = object.data
-            styles = parseCssClasses(styles.toString())
-            myObjects.push({text, styles})
+            myObjects.push({text, stylesArray})
+            #console.log 'adding text'
+            #console.log text 
+            #console.log stylesArray
 
   handleNode(domObject)
 
-  #console.log myObjects
+  #util.logObject myObjects
   return myObjects
 
 #
@@ -137,8 +155,8 @@ exports.tokenize = (nodeWithStyles) ->
           endsWithPunctuation = util.endsWithAnyOf(text, punctuation)
           if endsWithPunctuation and (text.length > 1)
             # Split it into two
-            tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'styles': token.styles} ) # all but last char
-            tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'styles': token.styles} )    # only last char	      
+            tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'stylesArray': token.stylesArray} ) # all but last char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'stylesArray': token.stylesArray} )    # only last char	      
           else 
             # Push as is
             tokens.push(token)	
@@ -168,8 +186,8 @@ exports.tokenize = (nodeWithStyles) ->
           startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
           if startsWithPunctuation and (text.length > 1)
             # Split it into two
-            tokens.push( {'metaType': 'regular', 'text': text.slice(0, 1), 'styles': token.styles} ) # only first char
-            tokens.push( {'metaType': 'regular', 'text': text.slice(1), 'styles': token.styles} )    # all but first char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(0, 1), 'stylesArray': token.stylesArray} ) # only first char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(1), 'stylesArray': token.stylesArray} )    # all but first char
           else 
             # Push as is
             tokens.push(token) 
@@ -207,7 +225,7 @@ exports.tokenize = (nodeWithStyles) ->
     # The style of each token being created is that of the node 
     # from which it is being parsed herein. 
     withStyles = (token) -> 
-      token.styles = nodeWithStyles.styles
+      token.stylesArray = nodeWithStyles.stylesArray
       token
 
     string = nodeWithStyles.text
