@@ -72,8 +72,6 @@ exports.go = (req, res) ->
   #console.log(dom)
   util.timelog('htmlparser2') 
 
-  relevantNodes = html.representNodes(dom)
-
   ###
   # jsdom is excruciatingly slow to load
   # maybe it pays off in quicker processing after the loading or less memory?...
@@ -97,14 +95,14 @@ exports.go = (req, res) ->
   #process.exit(0)
 
   # Keep divs without their wrapping div if any.
-  rawRelevantDivs = html.removeOuterDivs(rawHtml)
+  #rawRelevantDivs = html.removeOuterDivs(rawHtml)
 
   # Create array of objects holding the text and style of each div
-  divsWithStyles = (html.representNodeOld div for div in rawRelevantDivs)
+  #divsWithStyles = (html.representNodeOld div for div in rawRelevantDivs)
 
   # For now, remove any images, brute force. This code will not persist
   # And is not sufficient for also removing their text overlay
-  divsWithStyles = filterImages(divsWithStyles)
+  #divsWithStyles = filterImages(divsWithStyles)
 
   # For now, extract all text inside each div, indifferently to 
   # what's directly included v.s. what's nested in spans - 
@@ -112,7 +110,7 @@ exports.go = (req, res) ->
   #html.stripSpanWrappers(div) for div in divsWithStyles
 
   # Discard any divs that contain zero-length text
-  divsWithStyles = filterZeroLengthText(divsWithStyles)
+  #nodesWithStyles = filterZeroLengthText(divsWithStyles)
 
   #divsNum = divsWithStyles.length
   # endsSpaceDelimited = 0
@@ -124,20 +122,28 @@ exports.go = (req, res) ->
   #console.log(endsSpaceDelimited / divsNum)
   #if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
+  nodesWithStyles = html.representNodes(dom)
+
+  ###
   # Now tokenize (from text into words, punctuation, etc.),
   # while inheriting the style of the div to each resulting token
-  divTokens = []
-  for div in divsWithStyles
-    tokens = html.tokenize(div.text)
-    for token in tokens # inherit the styles to all tokens
-      switch token.metaType
-        when 'regular' then token.styles = div.styles
-    divTokens.push(tokens)
-
-  # Flatten to one-dimensional array of tokens... farewell divs.
   tokens = []
-  for div in divTokens
-    for token in div
+  for node in nodesWithStyles
+    tokens = html.tokenize(node.text)
+    for subToken in tokens 
+      switch subToken.metaType
+        when 'regular' then subToken.styles = node.styles
+    tokens.push(nodeTokens)
+  ###
+
+  tokenArrays = (html.tokenize node for node in nodesWithStyles)
+
+  #console.log(node)
+
+  # Flatten to one-dimensional array of tokens...
+  tokens = []
+  for tokenArray in tokenArrays
+    for token in tokenArray
       tokens.push(token)
 
   # Smooth out styles such that each delimiter 
@@ -161,8 +167,9 @@ exports.go = (req, res) ->
   # E.g. read the css style definitions, of the css classes assigned to a token, 
   # and add them to the token.
   #
+  #console.log(tokens)  
   for token in tokens 
-
+    #console.log(token)
     token.finalStyles = {}
     token.positionInfo = {}
 
@@ -187,12 +194,12 @@ exports.go = (req, res) ->
   util.first(tokens).lineLocation = 'opener'
   tokens.reduce (a, b) ->                             
     if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
-      if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
-         b.lineLocation = 'opener'       # a line opener                   
-         a.lineLocation = 'closer'       # a line closer       
-         
-         #console.log('closer: ' + a.text)
-         #console.log('opener: ' + b.text)
+      #if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
+      b.lineLocation = 'opener'       # a line opener                   
+      a.lineLocation = 'closer'       # a line closer       
+     
+      #console.log('closer: ' + a.text)
+      #console.log('opener: ' + b.text)
 
     return b
   util.last(tokens).lineLocation = 'closer'

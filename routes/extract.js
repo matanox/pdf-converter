@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, div, divTokens, divsWithStyles, documentQuantifiers, dom, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, outputHtml, parser, path, rawHtml, rawRelevantDivs, relevantNodes, sampletext, style, styles, token, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t;
+  var abbreviations, connect_token_group, cssClass, documentQuantifiers, dom, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sampletext, style, styles, token, tokenArray, tokenArrays, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -84,7 +84,6 @@ exports.go = function(req, res) {
   parser.parseComplete(rawHtml);
   dom = handler.dom;
   util.timelog('htmlparser2');
-  relevantNodes = html.representNodes(dom);
   /*
   # jsdom is excruciatingly slow to load
   # maybe it pays off in quicker processing after the loading or less memory?...
@@ -105,36 +104,33 @@ exports.go = function(req, res) {
   )
   */
 
-  rawRelevantDivs = html.removeOuterDivs(rawHtml);
-  divsWithStyles = (function() {
+  nodesWithStyles = html.representNodes(dom);
+  /*
+  # Now tokenize (from text into words, punctuation, etc.),
+  # while inheriting the style of the div to each resulting token
+  tokens = []
+  for node in nodesWithStyles
+    tokens = html.tokenize(node.text)
+    for subToken in tokens 
+      switch subToken.metaType
+        when 'regular' then subToken.styles = node.styles
+    tokens.push(nodeTokens)
+  */
+
+  tokenArrays = (function() {
     var _i, _len, _results;
     _results = [];
-    for (_i = 0, _len = rawRelevantDivs.length; _i < _len; _i++) {
-      div = rawRelevantDivs[_i];
-      _results.push(html.representNodeOld(div));
+    for (_i = 0, _len = nodesWithStyles.length; _i < _len; _i++) {
+      node = nodesWithStyles[_i];
+      _results.push(html.tokenize(node));
     }
     return _results;
   })();
-  divsWithStyles = filterImages(divsWithStyles);
-  divsWithStyles = filterZeroLengthText(divsWithStyles);
-  divTokens = [];
-  for (_i = 0, _len = divsWithStyles.length; _i < _len; _i++) {
-    div = divsWithStyles[_i];
-    tokens = html.tokenize(div.text);
-    for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
-      token = tokens[_j];
-      switch (token.metaType) {
-        case 'regular':
-          token.styles = div.styles;
-      }
-    }
-    divTokens.push(tokens);
-  }
   tokens = [];
-  for (_k = 0, _len2 = divTokens.length; _k < _len2; _k++) {
-    div = divTokens[_k];
-    for (_l = 0, _len3 = div.length; _l < _len3; _l++) {
-      token = div[_l];
+  for (_i = 0, _len = tokenArrays.length; _i < _len; _i++) {
+    tokenArray = tokenArrays[_i];
+    for (_j = 0, _len1 = tokenArray.length; _j < _len1; _j++) {
+      token = tokenArray[_j];
       tokens.push(token);
     }
   }
@@ -144,8 +140,8 @@ exports.go = function(req, res) {
     }
     return y;
   });
-  for (_m = 0, _len4 = tokens.length; _m < _len4; _m++) {
-    token = tokens[_m];
+  for (_k = 0, _len2 = tokens.length; _k < _len2; _k++) {
+    token = tokens[_k];
     if (token.metaType === 'regular') {
       if (token.text.length === 0) {
         throw "Error - zero length text in data";
@@ -156,17 +152,17 @@ exports.go = function(req, res) {
     console.log("No text was extracted from input");
     throw "No text was extracted from input";
   }
-  for (_n = 0, _len5 = tokens.length; _n < _len5; _n++) {
-    token = tokens[_n];
+  for (_l = 0, _len3 = tokens.length; _l < _len3; _l++) {
+    token = tokens[_l];
     token.finalStyles = {};
     token.positionInfo = {};
     _ref = token.styles;
-    for (_o = 0, _len6 = _ref.length; _o < _len6; _o++) {
-      cssClass = _ref[_o];
+    for (_m = 0, _len4 = _ref.length; _m < _len4; _m++) {
+      cssClass = _ref[_m];
       styles = css.getFinalStyles(cssClass, inputStylesMap);
       if (styles != null) {
-        for (_p = 0, _len7 = styles.length; _p < _len7; _p++) {
-          style = styles[_p];
+        for (_n = 0, _len5 = styles.length; _n < _len5; _n++) {
+          style = styles[_n];
           if (util.isAnyOf(style.property, css.positionData)) {
             token.positionInfo[style.property] = style.value;
           } else {
@@ -183,10 +179,8 @@ exports.go = function(req, res) {
   util.first(tokens).lineLocation = 'opener';
   tokens.reduce(function(a, b) {
     if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
-      if (parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)) {
-        b.lineLocation = 'opener';
-        a.lineLocation = 'closer';
-      }
+      b.lineLocation = 'opener';
+      a.lineLocation = 'closer';
     }
     return b;
   });
@@ -243,13 +237,13 @@ exports.go = function(req, res) {
   });
   util.timelog('Extraction from html stage A');
   id = 0;
-  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
-    token = tokens[_q];
+  for (_o = 0, _len6 = tokens.length; _o < _len6; _o++) {
+    token = tokens[_o];
     token.id = id;
     id += 1;
   }
-  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
-    token = tokens[_r];
+  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
+    token = tokens[_p];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -267,8 +261,8 @@ exports.go = function(req, res) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
-    token = tokens[_s];
+  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
+    token = tokens[_q];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -293,10 +287,10 @@ exports.go = function(req, res) {
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
   frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {
-    var array, key, map, object, val, value, _len11, _ref1, _t;
+    var array, key, map, object, val, value, _len9, _r, _ref1;
     map = {};
-    for (_t = 0, _len11 = objectsArray.length; _t < _len11; _t++) {
-      object = objectsArray[_t];
+    for (_r = 0, _len9 = objectsArray.length; _r < _len9; _r++) {
+      object = objectsArray[_r];
       if (object[filterKey] === filterBy) {
         _ref1 = object[parentProperty];
         for (key in _ref1) {
@@ -328,8 +322,8 @@ exports.go = function(req, res) {
   frequencies(tokens, 'metaType', 'regular', 'font-size', 'finalStyles');
   util.timelog('Calculating word frequencies');
   wordFrequencies = {};
-  for (_t = 0, _len11 = tokens.length; _t < _len11; _t++) {
-    token = tokens[_t];
+  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
+    token = tokens[_r];
     if (!(token.metaType === 'regular')) {
       continue;
     }
