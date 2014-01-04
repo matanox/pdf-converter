@@ -128,12 +128,14 @@ exports.go = (req, res) ->
   util.first(tokens).lineLocation = 'opener'
   tokens.reduce (a, b) ->                             
     if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
-      #if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
       b.lineLocation = 'opener'       # a line opener                   
       a.lineLocation = 'closer'       # a line closer       
      
       #console.log('closer: ' + a.text)
       #console.log('opener: ' + b.text)
+
+      if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
+        b.paragraph = 'opener'
 
     return b
   util.last(tokens).lineLocation = 'closer'
@@ -166,8 +168,8 @@ exports.go = (req, res) ->
           # add a delimiter at the end of the line, unless a hyphen-split 
           # was just united, in which case it's not necessary
           else
-            if a.text is 'approach' and b.text is 'to'         
-              console.log('found at ' + i)
+            #if a.text is 'approach' and b.text is 'to'         
+              #console.log('found at ' + i)
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles    
@@ -215,7 +217,10 @@ exports.go = (req, res) ->
     if token.metaType is 'regular'
       token.calculatedProperties = []
       if util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
-        console.log('pushed one computed style')
+        console.log('All Caps Style detected for word: ' + token.text);
+      if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
+        console.log('Interspaced Title Word detected for word: ' + token.text)
+
 
   #
   # Create sentences sequence

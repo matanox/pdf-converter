@@ -133,6 +133,9 @@ exports.go = function(req, res) {
     if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
       b.lineLocation = 'opener';
       a.lineLocation = 'closer';
+      if (parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)) {
+        b.paragraph = 'opener';
+      }
     }
     return b;
   });
@@ -160,9 +163,6 @@ exports.go = function(req, res) {
             tokens.splice(i, 1);
             return 0;
           } else {
-            if (a.text === 'approach' && b.text === 'to') {
-              console.log('found at ' + i);
-            }
             newDelimiter = {
               'metaType': 'delimiter'
             };
@@ -199,7 +199,10 @@ exports.go = function(req, res) {
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
-        console.log('pushed one computed style');
+        console.log('All Caps Style detected for word: ' + token.text);
+      }
+      if (util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))) {
+        console.log('Interspaced Title Word detected for word: ' + token.text);
       }
     }
   }
