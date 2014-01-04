@@ -2,6 +2,9 @@
 
 anySpaceChar = RegExp(/\s/)
 
+# Regexes for any html character reference. E.g. &amp &lt, etc.
+exports.htmlCharacterEntity = RegExp(/&.*\b;$/) # delimited with any non-word character (html 4)
+
 exports.anySpaceChar = anySpaceChar
 
 endsWith = (string, match) ->

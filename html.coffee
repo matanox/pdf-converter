@@ -154,9 +154,18 @@ exports.tokenize = (nodeWithStyles) ->
           text = token.text
           endsWithPunctuation = util.endsWithAnyOf(text, punctuation)
           if endsWithPunctuation and (text.length > 1)
-            # Split it into two
-            tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'stylesArray': token.stylesArray} ) # all but last char
-            tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'stylesArray': token.stylesArray} )    # only last char	      
+            unless (util.lastChar(text) is ';' and /.?&.*\b;$/.test(text)) # avoid splitting something like &amp; into &amp and ;
+                                                                           # Regex description: 
+                                                                           #    any string, including the & character
+                                                                           #    where & is followed by word chars,
+                                                                           #    and then a first non-word delimiter which is ;
+                                                                           #    which is the last character of the string              
+              # Split it into two
+              tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'stylesArray': token.stylesArray} ) # all but last char
+              tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'stylesArray': token.stylesArray} )    # only last char	      
+            else
+               # Push as is
+               tokens.push(token)  
           else 
             # Push as is
             tokens.push(token)	
@@ -313,7 +322,7 @@ exports.buildOutputHtmlOld = (tokens, finalStyles) ->
         text = ' '
       return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
     else 
-      console.warn('token had no styles attached to it when building output')
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text)
       return "<span>#{token.text}</span>"
 
 
@@ -356,7 +365,7 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
       return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
     else 
-      console.warn('token had no styles attached to it when building output')
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text)
       return "<span>#{token.text}</span>"
 
 

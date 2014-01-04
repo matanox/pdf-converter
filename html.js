@@ -130,16 +130,20 @@ exports.tokenize = function(nodeWithStyles) {
           text = token.text;
           endsWithPunctuation = util.endsWithAnyOf(text, punctuation);
           if (endsWithPunctuation && (text.length > 1)) {
-            tokens.push({
-              'metaType': 'regular',
-              'text': text.slice(0, text.length - 1),
-              'stylesArray': token.stylesArray
-            });
-            tokens.push({
-              'metaType': 'regular',
-              'text': text.slice(text.length - 1),
-              'stylesArray': token.stylesArray
-            });
+            if (!(util.lastChar(text) === ';' && /.?&.*\b;$/.test(text))) {
+              tokens.push({
+                'metaType': 'regular',
+                'text': text.slice(0, text.length - 1),
+                'stylesArray': token.stylesArray
+              });
+              tokens.push({
+                'metaType': 'regular',
+                'text': text.slice(text.length - 1),
+                'stylesArray': token.stylesArray
+              });
+            } else {
+              tokens.push(token);
+            }
           } else {
             tokens.push(token);
           }
@@ -286,7 +290,7 @@ exports.buildOutputHtmlOld = function(tokens, finalStyles) {
       }
       return "<span " + stylesString + " id=\"" + x.id + "\">" + text + "</span>\n";
     } else {
-      console.warn('token had no styles attached to it when building output');
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text);
       return "<span>" + token.text + "</span>";
     }
   };
@@ -325,7 +329,7 @@ exports.buildOutputHtml = function(tokens, finalStyles) {
       }
       return "<span " + stylesString + " id=\"" + x.id + "\">" + text + "</span>";
     } else {
-      console.warn('token had no styles attached to it when building output');
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text);
       return "<span>" + token.text + "</span>";
     }
   };

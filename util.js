@@ -3,6 +3,8 @@ var anySpaceChar, clone, contains, endsWith, isAnyOf, startsWith, timelog;
 
 anySpaceChar = RegExp(/\s/);
 
+exports.htmlCharacterEntity = RegExp(/&.*\b;$/);
+
 exports.anySpaceChar = anySpaceChar;
 
 endsWith = function(string, match) {
