@@ -1,28 +1,6 @@
 util = require('./util')
 css  = require('./css')
 
-#
-# Filter the raw html for only divs that do not contain an inner div
-# that's because we don't care about wrapper divs that don't contain text content,
-# at least with html2pdfEX as the original source.
-#
-exports.removeOuterDivs = (string) ->
-  regex = new RegExp('<div((?!div).)*</div>', 'g') # g indicates to yield all, not just first match
-  return string.match(regex) 
-
-parseCssClassesOld = (xmlNode) ->
-  # Build an array of the classes included by the div's "class=" statement.
-  # Admittedly this is quite pdf2htmlEX specific parsing....
-  
-  regex = new RegExp("<div class=\".*?\"", 'g') # Regex match: Extract up to the end of
-  cssClassesString = xmlNode.match(regex)		# 			   the classes string of a div 	
-  cssClassesString = util.strip(cssClassesString[0], "<div class=\"", "\"") # Now strip the string
-  
-  # Regex match: Extract the class names
-  regex = new RegExp("\\b\\S+?\\b", 'g') # first slash is for the string, not the regex
-  cssClasses = cssClassesString.match(regex)
-  cssClasses
-
 parseCssClasses = (styleString) ->
   # Build an array of the classes included by the div's "class=" statement.
   # Admittedly this is quite pdf2htmlEX specific parsing....
@@ -31,15 +9,6 @@ parseCssClasses = (styleString) ->
   regex = new RegExp("\\b\\S+?\\b", 'g') # first slash is for the string, not the regex
   cssClasses = styleString.match(regex)
   cssClasses
-
-# Takes a raw node, and creates a representation holding
-# its content and style such that it can be worked with
-exports.representNodeOld = (xmlNode) ->
-  # assumes there are no nested divs inside xmlNode
-  text = util.parseElementTextOld(xmlNode)
-  styles = parseCssClassesOld(xmlNode)
-  #console.log("empty object") unless text
-  return {text, styles}
 
 #
 # Serializes html hierarchy into a sequence of 
@@ -92,37 +61,6 @@ exports.representNodes = (domObject) ->
 
   #util.logObject myObjects
   return myObjects
-
-#
-# Collapses a div into its cummulative text content by stripping
-# each span's header and trailer tags. This is somewhat pdf2htlmEX
-# specific in assuming divs only contain spans (if at all), and only 
-# contain spans that don't specify styles we need to bother with.
-#
-# This is ugly as this function accepts the whole div and not just
-# its text, but otherwise the function couldn't change the div's text 
-# given Javascript's argument passing realities - 
-# http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value
-#
-exports.stripSpanWrappers = (div) ->
-  spanBegin = new RegExp('<span.*?>', 'g')
-  spanEnd 	= new RegExp('</span>', 'g')
-  div.text = div.text.replace(spanBegin, '') 
-  div.text = div.text.replace(spanEnd, '')
- 
-exports.mergeTokens = (x, y) ->
-  console.log("Merging")
-
-  merged = util.clone(x)
-  merged.text = x.text + y.text
-
-  console.dir(x)
-  console.dir(y)  
-  console.dir(merged)
-
-  console.log("end merge")
-
-  merged
 
 punctuation = [',',
                ':',
@@ -292,52 +230,6 @@ exports.tokenize = (nodeWithStyles) ->
   
   #console.dir(tokens)  
   tokens
-
-#
-# Build html output -
-# This old version builds the output based only on the original styles of each token
-# Not the computed styles later attached to it, or more advanced features.
-#
-exports.buildOutputHtmlOld = (tokens, finalStyles) ->
-
-  #
-  # Building the output for a single token....
-  #
-  wrapWithAttributes = (token, moreStyle) ->
-
-    stylesString = ''
-    for style in token.styles
-      styles = css.getFinalStyles(style, finalStyles)
-      if styles?
-        serialized = css.serializeStylesArray(styles)
-        stylesString = stylesString + serialized
-
-    if moreStyle? then stylesString = stylesString + ' ' + moreStyle
-
-    if stylesString.length > 0
-      stylesString = 'style=\"' + stylesString + '\"'
-      if token.metaType is 'regular' 
-        text = token.text
-      else 
-        text = ' '
-      return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
-    else 
-      console.warn('token had no styles attached to it when building output. token text: ' + token.text)
-      return "<span>#{token.text}</span>"
-
-
-  util.timelog('Serialization to output')  
-
-  for x in tokens 
-    if x.metaType is 'regular'
-      plainText = plainText + wrapWithAttributes(x)
-    else 
-      plainText = plainText + wrapWithAttributes(x, 'white-space:pre;')
-
-  util.timelog('Serialization to output') 
-
-  #console.log(plainText)
-  plainText
 
 
 #

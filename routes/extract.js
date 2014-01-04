@@ -46,31 +46,12 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, frequencies, frequency, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sampletext, style, styles, token, tokenArray, tokenArrays, tokens, word, wordFrequencies, wordFrequenciesArray, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
+  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, path + name + '/');
-  sampletext = '<!DOCTYPE html>\
-    <html>\
-      <head>\
-        <meta charset="utf8"/>\
-        <title>Page Title</title>\
-      </head>\
-      <body>\
-        <a href="https://github.com/ForbesLindesay">\
-          <img src="/static/forkme.png" alt="Fork me on GitHub">\
-        </a>\
-        <div class="row">\
-          <div class="large-12 columns">\
-            <h1 id="page-title">Page Title</h1>\
-            <p>This is a demo page</p>\
-          </div>\
-        </div>\
-        <script src="/static/client.js"></script>\
-      </body>\
-    </html>';
   htmlparser = require("htmlparser2");
   util.timelog('htmlparser2');
   handler = new htmlparser.DomHandler(function(error, dom) {
@@ -84,39 +65,7 @@ exports.go = function(req, res) {
   parser.parseComplete(rawHtml);
   dom = handler.dom;
   util.timelog('htmlparser2');
-  /*
-  # jsdom is excruciatingly slow to load
-  # maybe it pays off in quicker processing after the loading or less memory?...
-  jsdom = require("jsdom").jsdom
-  util.timelog('jsdom')
-  doc = jsdom(rawHtml)
-  util.timelog('jsdom')
-  
-  util.timelog('jsdom')
-  doc2 = jsdom(rawHtml)
-  util.timelog('jsdom')
-  
-  # Alternative method of it that never worked for me
-  jsdom.env(rawHtml, [], [], (errors, window) ->
-    console.log('inside')
-    console.log(errors)    
-    console.log(window.body)
-  )
-  */
-
   nodesWithStyles = html.representNodes(dom);
-  /*
-  # Now tokenize (from text into words, punctuation, etc.),
-  # while inheriting the style of the div to each resulting token
-  tokens = []
-  for node in nodesWithStyles
-    tokens = html.tokenize(node.text)
-    for subToken in tokens 
-      switch subToken.metaType
-        when 'regular' then subToken.styles = node.styles
-    tokens.push(nodeTokens)
-  */
-
   tokenArrays = (function() {
     var _i, _len, _results;
     _results = [];
@@ -289,68 +238,6 @@ exports.go = function(req, res) {
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
-  frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {
-    var array, key, map, object, val, value, _len10, _ref1, _s;
-    map = {};
-    for (_s = 0, _len10 = objectsArray.length; _s < _len10; _s++) {
-      object = objectsArray[_s];
-      if (object[filterKey] === filterBy) {
-        _ref1 = object[parentProperty];
-        for (key in _ref1) {
-          value = _ref1[key];
-          if (key === property) {
-            value = parseFloat(value);
-            if (map[value] != null) {
-              map[value] += 1;
-            } else {
-              map[value] = 1;
-            }
-          }
-        }
-      }
-    }
-    array = [];
-    for (key in map) {
-      val = map[key];
-      array.push({
-        key: key,
-        val: val
-      });
-    }
-    return array.sort(function(a, b) {
-      return parseFloat(b.val) - parseFloat(a.val);
-    });
-  };
-  frequencies(tokens, 'metaType', 'regular', 'left', 'positionInfo');
-  frequencies(tokens, 'metaType', 'regular', 'font-size', 'finalStyles');
-  util.timelog('Calculating word frequencies');
-  wordFrequencies = {};
-  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
-    token = tokens[_s];
-    if (!(token.metaType === 'regular')) {
-      continue;
-    }
-    word = token.text;
-    if (wordFrequencies[word] != null) {
-      wordFrequencies[word] += 1;
-    } else {
-      wordFrequencies[word] = 1;
-    }
-  }
-  util.timelog('Calculating word frequencies');
-  util.timelog('Sorting frequencies');
-  wordFrequenciesArray = [];
-  for (word in wordFrequencies) {
-    frequency = wordFrequencies[word];
-    wordFrequenciesArray.push({
-      word: word,
-      frequency: frequency
-    });
-  }
-  wordFrequenciesArray.sort(function(a, b) {
-    return parseInt(b.frequency) - parseInt(a.frequency);
-  });
-  util.timelog('Sorting frequencies');
   outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
   return output.serveOutput(outputHtml, name, res);
 };
