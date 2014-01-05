@@ -122,20 +122,33 @@ exports.go = (req, res) ->
       console.dir(token)
 
   #
-  # Mark tokens that begin or end their line
+  # Mark tokens that begin or end their line 
+  # and generally handle implications of row beginnings.
+  #
+  # This function has few logical holes in it:
+  #
   # TODO: parameterize direction to support RTL languages
+  # TODO: this code assumes postions are given in .left and .bottom not .right and .top or other
+  # TODO: this code compares position on an integer rounding basis, this is only usually correct
+  # TODO: this code assumes the size unit is px 
   #
   util.first(tokens).lineLocation = 'opener'
+
+  lastRowPosLeft = null  # a closure
   tokens.reduce (a, b) ->                             
     if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
-      b.lineLocation = 'opener'       # a line opener                   
       a.lineLocation = 'closer'       # a line closer       
-     
+      b.lineLocation = 'opener'       # a line opener                         
       #console.log('closer: ' + a.text)
       #console.log('opener: ' + b.text)
-
-      if parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)    # later is leftwards to former (assumes LTR language)
-        b.paragraph = 'opener'
+      
+      if lastRowPosLeft?
+        console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
+        if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
+          console.log('opener')
+          a.paragraph = 'closer'
+          b.paragraph = 'opener'      
+      lastRowPosLeft = b.positionInfo.left
 
     return b
   util.last(tokens).lineLocation = 'closer'

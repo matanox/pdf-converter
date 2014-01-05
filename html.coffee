@@ -265,7 +265,14 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
 
   for x in tokens 
     if x.metaType is 'regular'
-      plainText = plainText + wrapWithAttributes(x)
+      switch x.paragraph
+        when 'closer'
+          x.text = x.text + '<br /><br />'
+          plainText = plainText + wrapWithAttributes(x)
+        when 'opener'
+          plainText = plainText + wrapWithAttributes(x, 'display: inline-block; text-indent: 2em;')
+        else
+          plainText = plainText + wrapWithAttributes(x)
     else 
       #plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
       plainText = plainText + wrapWithAttributes(x)

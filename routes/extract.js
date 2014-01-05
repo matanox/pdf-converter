@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
+  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -129,13 +129,20 @@ exports.go = function(req, res) {
     }
   }
   util.first(tokens).lineLocation = 'opener';
+  lastRowPosLeft = null;
   tokens.reduce(function(a, b) {
     if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
-      b.lineLocation = 'opener';
       a.lineLocation = 'closer';
-      if (parseInt(b.positionInfo.left) < parseInt(a.positionInfo.left)) {
-        b.paragraph = 'opener';
+      b.lineLocation = 'opener';
+      if (lastRowPosLeft != null) {
+        console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft));
+        if (parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)) {
+          console.log('opener');
+          a.paragraph = 'closer';
+          b.paragraph = 'opener';
+        }
       }
+      lastRowPosLeft = b.positionInfo.left;
     }
     return b;
   });

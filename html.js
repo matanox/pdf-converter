@@ -248,7 +248,17 @@ exports.buildOutputHtml = function(tokens, finalStyles) {
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
     if (x.metaType === 'regular') {
-      plainText = plainText + wrapWithAttributes(x);
+      switch (x.paragraph) {
+        case 'closer':
+          x.text = x.text + '<br /><br />';
+          plainText = plainText + wrapWithAttributes(x);
+          break;
+        case 'opener':
+          plainText = plainText + wrapWithAttributes(x, 'display: inline-block; text-indent: 2em;');
+          break;
+        default:
+          plainText = plainText + wrapWithAttributes(x);
+      }
     } else {
       plainText = plainText + wrapWithAttributes(x);
     }
