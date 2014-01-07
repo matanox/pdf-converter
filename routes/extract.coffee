@@ -143,9 +143,9 @@ exports.go = (req, res) ->
       #console.log('opener: ' + b.text)
       
       if lastRowPosLeft?
-        console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
+        #console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
         if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
-          console.log('opener')
+          #console.log('opener')
           a.paragraph = 'closer'
           b.paragraph = 'opener'      
       lastRowPosLeft = b.positionInfo.left
@@ -217,10 +217,25 @@ exports.go = (req, res) ->
   util.timelog('Extraction from html stage A')
 
   # Add unique ids to tokens - after all uniting of tokens already took place
+  util.timelog('ID seeding')        
   id = 0
   for token in tokens
     token.id = id
     id += 1
+  util.timelog('ID seeding')            
+
+  # Create a sorted index
+  textIndex = []
+  for token in tokens when token.metaType is 'regular'
+    textIndex.push({text: token.text, id: token.id})
+  util.timelog('Index creation')    
+  textIndex.sort((a, b) ->  # simple sort by lexicographic order obliviously of the case of equality
+    if a.text > b.text
+      return 1
+    else
+      return -1)
+  util.timelog('Index creation')      
+  #console.log textIndex
 
   #
   # Enrich with computes styles.

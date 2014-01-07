@@ -21,7 +21,8 @@
     "ws": "~0.4.31",
     "htmlparser2": "~3.4.0",
     "xmldom": "~0.1.17",
-    "jsdom": "~0.8.10"
+    "jsdom": "~0.8.10",
+    "csvtojson": "~0.1.5"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"

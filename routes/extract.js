@@ -46,7 +46,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref;
+  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -135,9 +135,7 @@ exports.go = function(req, res) {
       a.lineLocation = 'closer';
       b.lineLocation = 'opener';
       if (lastRowPosLeft != null) {
-        console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft));
         if (parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)) {
-          console.log('opener');
           a.paragraph = 'closer';
           b.paragraph = 'opener';
         }
@@ -195,14 +193,35 @@ exports.go = function(req, res) {
     return b;
   });
   util.timelog('Extraction from html stage A');
+  util.timelog('ID seeding');
   id = 0;
   for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
     token = tokens[_p];
     token.id = id;
     id += 1;
   }
+  util.timelog('ID seeding');
+  textIndex = [];
   for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
     token = tokens[_q];
+    if (token.metaType === 'regular') {
+      textIndex.push({
+        text: token.text,
+        id: token.id
+      });
+    }
+  }
+  util.timelog('Index creation');
+  textIndex.sort(function(a, b) {
+    if (a.text > b.text) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+  util.timelog('Index creation');
+  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
+    token = tokens[_r];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -223,8 +242,8 @@ exports.go = function(req, res) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
-    token = tokens[_r];
+  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
+    token = tokens[_s];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,

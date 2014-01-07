@@ -21,6 +21,7 @@ extract       = require './routes/extract'
 errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './logging' 
+markers       = require './markers'
 
 #
 # Configure and start express
@@ -80,6 +81,11 @@ app.get '/extract', extract.go
 # Authorization
 #
 authorization.googleAuthSetup(app, host, routes)
+
+#
+# Get data that can apply to any document
+#
+markers.load
 
 #
 # Start the server
