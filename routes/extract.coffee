@@ -1,11 +1,12 @@
 require "fs"
-util   = require "../util"
-timer  = require "../timer"
-css    = require "../css"
-html   = require "../html"
-model  = require "../model"
-output = require "../output"
-ctype  = require "../ctype"
+util    = require "../util"
+timer   = require "../timer"
+css     = require "../css"
+html    = require "../html"
+model   = require "../model"
+output  = require "../output"
+ctype   = require "../ctype"
+markers = require "../markers"
 
 isImage = (text) -> util.startsWith(text, "<img ")
 
@@ -236,6 +237,24 @@ exports.go = (req, res) ->
       return -1)
   util.timelog('Index creation')      
   #console.log textIndex
+
+  useMarkers = () ->
+    markerMatch = () -> false
+    addStyle = (textFromIndex) -> false
+
+    util.timelog('Markers visualization') 
+    tii = 0
+    mi  = 0
+    console.log textIndex.length
+    console.log markers.markers.array.length
+    while tii < textIndex.length and mi < markers.markers.array.length
+      textFromIndex = textIndex[tii]
+      marker        = markers.markers.array[mi]
+      if markerMatch(textFromIndex, marker)
+        addStyle(textFromIndex)
+    util.timelog('Markers visualization') 
+
+  markers.load(useMarkers)
 
   #
   # Enrich with computes styles.

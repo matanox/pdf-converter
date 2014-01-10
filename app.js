@@ -88,8 +88,6 @@ app.get('/extract', extract.go);
 
 authorization.googleAuthSetup(app, host, routes);
 
-markers.load;
-
 server = http.createServer(app);
 
 server.listen(app.get('port'), function() {

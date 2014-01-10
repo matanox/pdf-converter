@@ -85,7 +85,7 @@ authorization.googleAuthSetup(app, host, routes)
 #
 # Get data that can apply to any document
 #
-markers.load
+#markers.load() # add sync behavior here
 
 #
 # Start the server
