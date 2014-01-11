@@ -2,11 +2,14 @@ util = require './util'
 verbex = require 'verbal-expressions'
 
 inputLang = {}
-inputLang.anything = verbex()
-                     .then('..')
-                     .maybe('.')
-                     .maybe('.')
-                     .maybe('.')
+inputLang.oneOrMoreWords = verbex()
+                           .then('..')
+                           .maybe('.')
+                           .maybe('.')
+                           .maybe('.')
+
+internalLang = {}
+internalLang.oneOrMoreWords = '\\*'
 
 #
 # Get data that can apply to any document
@@ -24,10 +27,9 @@ exports.baseSieve = baseSieve
 tokenizeMarker = (marker) ->
 
   sanitizeMarker = (marker) ->
-    if inputLang.anything.test(marker.WordOrPattern)
-      console.log('Marker anything input indicator found in: ' + marker.WordOrPattern)
-      marker.WordOrPattern = marker.WordOrPattern.replace(inputLang.anything , '\\*')  
-      console.log('Replaced anything indicator to:           ' + marker.WordOrPattern)
+
+    if inputLang.oneOrMoreWords.test(marker.WordOrPattern)
+      marker.WordOrPattern = marker.WordOrPattern.replace(inputLang.oneOrMoreWords , internalLang.oneOrMoreWords)  
 
   sanitizeMarker(marker)
   string = marker.WordOrPattern
@@ -64,7 +66,20 @@ tokenizeMarker = (marker) ->
 
   tokens.push( {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
 
-  #console.log(tokens)
+  #
+  # Convert special token texts to their meaning.
+  # For now, only the wildcard.
+  #
+  for token in tokens
+    if token.metaType is 'regular' and token.text is internalLang.oneOrMoreWords
+      delete token.text
+      token.metaType = 'anyOneOrMore'
+
+  # Discard delimiters (for the time being)
+  #console.log('before ' + tokens.length)
+  tokens = tokens.filter((token) -> token.metaType isnt 'delimiter')
+  #console.log('after ' + tokens.length)
+  #util.logObject(tokens)
 
   tokens
 
