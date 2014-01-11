@@ -50,7 +50,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, useMarkers, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
+  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -224,52 +224,44 @@ exports.go = function(req, res) {
     }
   });
   util.timelog('Index creation');
-  useMarkers = function() {
-    var add;
-    return add = function(string, addition) {
-      return string + addition;
-    };
-    /*
-    util.timelog('Markers visualization') 
-    
-    markersRegex = ''
-    
-    for m in [0..markers.markers.array.length-1]
-      markerText = markers.markers.array[m].WordOrPattern
-      markerRegex = ''
-    
-      unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
-    
-      if markers.anything.test(markerText)
-        console.log('in split for: ' + markerText)
-        splitText = markerText.split(markers.anything)
-        for s in [0..splitText.length-1]
-          unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
-          if markers.anything.test(splitText[s])
-            markerRegex += '\s'                    # add logical 'and then anything' to regex
-            console.log('anything found')
-          else
-            markerRegex += splitText[s]            # add as-is text to the regex
-            console.log('no anything marker')
-      else
-        markerRegex += markerText
-    
-    
-      markersRegex += markerRegex
-      #console.log(markerText)
-      #console.log(markerRegex.source)
-      console.log(markersRegex)
-    
+  /*
+  markersRegex = ''
+  
+  for m in [0..markers.markers.array.length-1]
+    markerText = markers.markers.array[m].WordOrPattern
+    markerRegex = ''
+  
+    unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
+  
+    if markers.anything.test(markerText)
+      console.log('in split for: ' + markerText)
+      splitText = markerText.split(markers.anything)
+      for s in [0..splitText.length-1]
+        unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
+        if markers.anything.test(splitText[s])
+          markerRegex += '\s'                    # add logical 'and then anything' to regex
+          console.log('anything found')
+        else
+          markerRegex += splitText[s]            # add as-is text to the regex
+          console.log('no anything marker')
+    else
+      markerRegex += markerText
+  
+  
+    markersRegex += markerRegex
+    #console.log(markerText)
+    #console.log(markerRegex.source)
+    console.log(markersRegex)
+  
     
     util.timelog('Markers visualization') 
     #console.log('Marker regex length is ' + markersRegex.toString().length)
     #console.log(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
     #console.log(testverbex.toRegExp().source)
-    */
+  */
 
-  };
-  markers.load(useMarkers);
+  docSieve = markers.createDocumentSieve(markers.baseSieve);
   for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
     token = tokens[_r];
     if (token.metaType === 'regular') {

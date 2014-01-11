@@ -239,40 +239,34 @@ exports.go = (req, res) ->
   util.timelog('Index creation')      
   #console.log textIndex
 
-  useMarkers = () ->
+  ###
+  markersRegex = ''
+  
+  for m in [0..markers.markers.array.length-1]
+    markerText = markers.markers.array[m].WordOrPattern
+    markerRegex = ''
 
-    add = (string, addition) -> string + addition
+    unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
 
-    ###
-    util.timelog('Markers visualization') 
-
-    markersRegex = ''
-    
-    for m in [0..markers.markers.array.length-1]
-      markerText = markers.markers.array[m].WordOrPattern
-      markerRegex = ''
-
-      unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
-
-      if markers.anything.test(markerText)
-        console.log('in split for: ' + markerText)
-        splitText = markerText.split(markers.anything)
-        for s in [0..splitText.length-1]
-          unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
-          if markers.anything.test(splitText[s])
-            markerRegex += '\s'                    # add logical 'and then anything' to regex
-            console.log('anything found')
-          else
-            markerRegex += splitText[s]            # add as-is text to the regex
-            console.log('no anything marker')
-      else
-        markerRegex += markerText
+    if markers.anything.test(markerText)
+      console.log('in split for: ' + markerText)
+      splitText = markerText.split(markers.anything)
+      for s in [0..splitText.length-1]
+        unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
+        if markers.anything.test(splitText[s])
+          markerRegex += '\s'                    # add logical 'and then anything' to regex
+          console.log('anything found')
+        else
+          markerRegex += splitText[s]            # add as-is text to the regex
+          console.log('no anything marker')
+    else
+      markerRegex += markerText
 
 
-      markersRegex += markerRegex
-      #console.log(markerText)
-      #console.log(markerRegex.source)
-      console.log(markersRegex)
+    markersRegex += markerRegex
+    #console.log(markerText)
+    #console.log(markerRegex.source)
+    console.log(markersRegex)
 
     
     util.timelog('Markers visualization') 
@@ -282,7 +276,8 @@ exports.go = (req, res) ->
     #console.log(testverbex.toRegExp().source)
     ###
 
-  markers.load(useMarkers)
+  docSieve = markers.createDocumentSieve(markers.baseSieve)
+  #util.logObject(docSieve)
 
   #
   # Enrich with computes styles.
