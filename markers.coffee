@@ -1,12 +1,11 @@
 util = require './util'
 verbex = require 'verbal-expressions'
 
-markerLang = {}
-markerLang.anything = verbex()
-                      .then('...')
-                      .maybe('.')
-                      .maybe('.')
-                      .anything()
+exports.anything = verbex()
+                   .then('...')
+                   .maybe('.')
+                   .maybe('.')
+                   .anything()
 
 #
 # Get data that can apply to any document

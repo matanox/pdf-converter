@@ -7,6 +7,7 @@ model   = require "../model"
 output  = require "../output"
 ctype   = require "../ctype"
 markers = require "../markers"
+verbex  = require 'verbal-expressions'
 
 isImage = (text) -> util.startsWith(text, "<img ")
 
@@ -239,20 +240,47 @@ exports.go = (req, res) ->
   #console.log textIndex
 
   useMarkers = () ->
-    markerMatch = () -> false
-    addStyle = (textFromIndex) -> false
 
+    add = (string, addition) -> string + addition
+
+    ###
     util.timelog('Markers visualization') 
-    tii = 0
-    mi  = 0
-    console.log textIndex.length
-    console.log markers.markers.array.length
-    while tii < textIndex.length and mi < markers.markers.array.length
-      textFromIndex = textIndex[tii]
-      marker        = markers.markers.array[mi]
-      if markerMatch(textFromIndex, marker)
-        addStyle(textFromIndex)
+
+    markersRegex = ''
+    
+    for m in [0..markers.markers.array.length-1]
+      markerText = markers.markers.array[m].WordOrPattern
+      markerRegex = ''
+
+      unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
+
+      if markers.anything.test(markerText)
+        console.log('in split for: ' + markerText)
+        splitText = markerText.split(markers.anything)
+        for s in [0..splitText.length-1]
+          unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
+          if markers.anything.test(splitText[s])
+            markerRegex += '\s'                    # add logical 'and then anything' to regex
+            console.log('anything found')
+          else
+            markerRegex += splitText[s]            # add as-is text to the regex
+            console.log('no anything marker')
+      else
+        markerRegex += markerText
+
+
+      markersRegex += markerRegex
+      #console.log(markerText)
+      #console.log(markerRegex.source)
+      console.log(markersRegex)
+
+    
     util.timelog('Markers visualization') 
+    #console.log('Marker regex length is ' + markersRegex.toString().length)
+    #console.log(markersRegex.source)
+    #testverbex = verbex().then("verbex testing sentence").or().then("and more")
+    #console.log(testverbex.toRegExp().source)
+    ###
 
   markers.load(useMarkers)
 
