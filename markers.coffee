@@ -1,11 +1,12 @@
 util = require './util'
 verbex = require 'verbal-expressions'
 
-exports.anything = verbex()
-                   .then('...')
-                   .maybe('.')
-                   .maybe('.')
-                   .anything()
+inputLang = {}
+inputLang.anything = verbex()
+                     .then('..')
+                     .maybe('.')
+                     .maybe('.')
+                     .maybe('.')
 
 #
 # Get data that can apply to any document
@@ -14,7 +15,58 @@ markers = {}
 markers.array = []
 baseSieve = []
 exports.baseSieve = baseSieve
-#exports.markers = markers
+
+#
+# Tokenize a marker
+# Note: some nuances here may be superfluous as it was ported from the text tokenization function
+#       to refactor after basic functionality has been proven
+#
+tokenizeMarker = (marker) ->
+
+  sanitizeMarker = (marker) ->
+    if inputLang.anything.test(marker.WordOrPattern)
+      console.log('Marker anything input indicator found in: ' + marker.WordOrPattern)
+      marker.WordOrPattern = marker.WordOrPattern.replace(inputLang.anything , '\\*')  
+      console.log('Replaced anything indicator to:           ' + marker.WordOrPattern)
+
+  sanitizeMarker(marker)
+  string = marker.WordOrPattern
+
+  insideWord      = false
+  insideDelimiter = false
+  tokens = []
+
+  if string.length == 0 then return []
+
+  for i in [0..string.length-1] 
+    # console.log i
+    char = string.charAt(i)
+    if util.isAnySpaceChar(char) 
+      # Push a delimiter token if encountered,
+      # while supressing multiple consequtive spaces into a single delimiter token
+      
+      # Push the last accumulated word if any
+      if insideWord
+        tokens.push( {'metaType': 'regular', 'text': word} )
+        insideWord = false
+
+      unless insideDelimiter
+        tokens.push( {'metaType': 'delimiter'} )
+        insideDelimiter = true
+
+    else 
+      if insideDelimiter then insideDelimiter = false
+      if insideWord 
+        word = word.concat(char)
+      else 
+        word = char
+        insideWord = true
+
+  tokens.push( {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
+
+  #console.log(tokens)
+
+  tokens
 
 #
 # Derive a working copy sieve by deep copying the base sieve, and augment it
@@ -31,7 +83,7 @@ exports.createDocumentSieve = (baseSieve) ->
 
       sieve.push(sieveRow)
 
-  util.logObject(sieve)
+  #util.logObject(sieve)
   sieve
 
 
@@ -42,7 +94,6 @@ exports.createDocumentSieve = (baseSieve) ->
 createBaseSieve = (callback) ->
 
   add = (string, addition) -> string + addition
-  tokenizeMarker = (marker) -> []
 
   markerId = 0
   util.timelog('Markers visualization') 
@@ -55,7 +106,7 @@ createBaseSieve = (callback) ->
     baseSieve.push(seiveRow)   
     markerId += 1 
   util.timelog('Markers visualization') 
-  util.logObject(baseSieve)
+  #rsutil.logObject(baseSieve)
   callback()
 
 #
