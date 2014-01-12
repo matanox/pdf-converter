@@ -89,10 +89,11 @@ exports.createDocumentSieve = function(baseSieve) {
   for (_i = 0, _len = baseSieve.length; _i < _len; _i++) {
     baseSieveRow = baseSieve[_i];
     sieveRow = {};
+    sieveRow.nextExpected = 0;
     for (k in baseSieveRow) {
       sieveRow[k] = baseSieveRow[k];
-      sieve.push(sieveRow);
     }
+    sieve.push(sieveRow);
   }
   return sieve;
 };
@@ -103,7 +104,7 @@ createBaseSieve = function(callback) {
     return string + addition;
   };
   markerId = 0;
-  util.timelog('Markers visualization');
+  util.timelog('Markers base sieve creation');
   _ref = markers.array;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     marker = _ref[_i];
@@ -113,7 +114,7 @@ createBaseSieve = function(callback) {
     baseSieve.push(seiveRow);
     markerId += 1;
   }
-  util.timelog('Markers visualization');
+  util.timelog('Markers base sieve creation');
   return callback();
 };
 

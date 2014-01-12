@@ -294,6 +294,8 @@ exports.go = (req, res) ->
 
   #
   # Create sentences sequence
+  # Temporary note: For now, each sentence will be tokenized to have its tokens become an array
+  #                 inside the groups array. Later, there can be more types of groups etc..
   #
   util.timelog('Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
@@ -314,12 +316,63 @@ exports.go = (req, res) ->
           group = []
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
-  util.timelog('Sentence tokenizing')                       
+  util.timelog('Sentence tokenizing')  
 
+  # Log some statistics about sentences
   documentQuantifiers = {}
   documentQuantifiers['sentences']                    = groups.length
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations
   console.dir(documentQuantifiers)
+
+  #
+  # Adding marker highlighting
+  #
+  util.timelog('Markers visualization') 
+
+  for sentence in groups
+
+    matchedMarkers = []
+
+    for token in sentence when token.metaType isnt 'delimiter'  # for each text token of the sentence
+      for marker in docSieve
+        #console.log (marker.nextExpected.toString() + ' ' + token.text + 'v.s.'+ marker.markerTokens[marker.nextExpected].text)
+        switch marker.markerTokens[marker.nextExpected].metaType
+          when 'regular' 
+            
+            if token.text is marker.markerTokens[marker.nextExpected].text
+              if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
+                #console.log('whole marker matched: ' + console.dir(marker))
+                matchedMarkers.push(marker)
+                token.finalStyles['color'] = 'red'
+                marker.nextExpected = 0
+              else
+                #console.log('marker token matched ')
+                marker.nextExpected += 1
+            else 
+              unless marker.markerTokens[marker.nextExpected].metaType is 'anyOneOrMore'
+                marker.nextExpected = 0  # out of match for this marker
+
+          when 'anyOneOrMore'
+            if marker.nextExpected is (marker.markerTokens.length - 1)       # is it the last token of the marker?
+              marker.nextExpected = 0    # out of match for this marker
+            else 
+              if token.text is marker.markerTokens[marker.nextExpected + 1].text 
+                if (marker.nextExpected + 1) is (marker.markerTokens.length - 1)
+                  #console.log('whole marker matched after wildcard: ' + console.dir(marker))
+                  matchedMarkers.push(marker)
+                  token.finalStyles['color'] = 'red'
+                  marker.nextExpected = 0
+                else
+                  marker.nextExpected += 2
+    
+    #if matchedMarkers.length > 0
+      #util.logObject(matchedMarkers)
+      #util.logObject(sentence)
+      #console.log()
+      #for token in sentence
+        #token.finalStyles['color'] = 'red'  # overide the color
+  
+  util.timelog('Markers visualization') 
 
   # Send back the outcome
   outputHtml = html.buildOutputHtml(tokens, inputStylesMap)

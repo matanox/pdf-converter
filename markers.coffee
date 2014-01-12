@@ -22,7 +22,6 @@ exports.baseSieve = baseSieve
 #
 # Tokenize a marker
 # Note: some nuances here may be superfluous as it was ported from the text tokenization function
-#       to refactor after basic functionality has been proven
 #
 tokenizeMarker = (marker) ->
 
@@ -76,11 +75,9 @@ tokenizeMarker = (marker) ->
       token.metaType = 'anyOneOrMore'
 
   # Discard delimiters (for the time being)
-  #console.log('before ' + tokens.length)
   tokens = tokens.filter((token) -> token.metaType isnt 'delimiter')
-  #console.log('after ' + tokens.length)
+ 
   #util.logObject(tokens)
-
   tokens
 
 #
@@ -93,10 +90,12 @@ exports.createDocumentSieve = (baseSieve) ->
     # clone the original row
     #
     sieveRow = {}
+    sieveRow.nextExpected = 0
+
     for k of baseSieveRow 
       sieveRow[k] = baseSieveRow[k] 
 
-      sieve.push(sieveRow)
+    sieve.push(sieveRow)
 
   #util.logObject(sieve)
   sieve
@@ -111,7 +110,7 @@ createBaseSieve = (callback) ->
   add = (string, addition) -> string + addition
 
   markerId = 0
-  util.timelog('Markers visualization') 
+  util.timelog('Markers base sieve creation') 
   for marker in markers.array
 
     seiveRow = {}
@@ -120,8 +119,8 @@ createBaseSieve = (callback) ->
 
     baseSieve.push(seiveRow)   
     markerId += 1 
-  util.timelog('Markers visualization') 
-  #rsutil.logObject(baseSieve)
+  util.timelog('Markers base sieve creation') 
+  #util.logObject(baseSieve)
   callback()
 
 #

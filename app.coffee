@@ -93,8 +93,8 @@ startServer = () ->
 
   # In dev mode, self-test on startup
   unless env is 'production' 
-    testFile = 'AzPP5D8IS0GDeeC1hFxs'
-    #testFile = 'leZrsgpZQOSCCtS98bsu'
+    #testFile = 'AzPP5D8IS0GDeeC1hFxs'
+    testFile = 'leZrsgpZQOSCCtS98bsu'
     http.get('http://localhost/extract?name=' + testFile, (res) -> # xt7duLM0Q3Ow2gIBOvED
       logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
 

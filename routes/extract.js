@@ -50,7 +50,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
+  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, marker, matchedMarkers, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sentence, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u, _v;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -309,6 +309,51 @@ exports.go = function(req, res) {
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
+  util.timelog('Markers visualization');
+  for (_t = 0, _len11 = groups.length; _t < _len11; _t++) {
+    sentence = groups[_t];
+    matchedMarkers = [];
+    for (_u = 0, _len12 = sentence.length; _u < _len12; _u++) {
+      token = sentence[_u];
+      if (token.metaType !== 'delimiter') {
+        for (_v = 0, _len13 = docSieve.length; _v < _len13; _v++) {
+          marker = docSieve[_v];
+          switch (marker.markerTokens[marker.nextExpected].metaType) {
+            case 'regular':
+              if (token.text === marker.markerTokens[marker.nextExpected].text) {
+                if (marker.nextExpected === (marker.markerTokens.length - 1)) {
+                  matchedMarkers.push(marker);
+                  token.finalStyles['color'] = 'red';
+                  marker.nextExpected = 0;
+                } else {
+                  marker.nextExpected += 1;
+                }
+              } else {
+                if (marker.markerTokens[marker.nextExpected].metaType !== 'anyOneOrMore') {
+                  marker.nextExpected = 0;
+                }
+              }
+              break;
+            case 'anyOneOrMore':
+              if (marker.nextExpected === (marker.markerTokens.length - 1)) {
+                marker.nextExpected = 0;
+              } else {
+                if (token.text === marker.markerTokens[marker.nextExpected + 1].text) {
+                  if ((marker.nextExpected + 1) === (marker.markerTokens.length - 1)) {
+                    matchedMarkers.push(marker);
+                    token.finalStyles['color'] = 'red';
+                    marker.nextExpected = 0;
+                  } else {
+                    marker.nextExpected += 2;
+                  }
+                }
+              }
+          }
+        }
+      }
+    }
+  }
+  util.timelog('Markers visualization');
   outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
   return output.serveOutput(outputHtml, name, res);
 };

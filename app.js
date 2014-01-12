@@ -95,7 +95,7 @@ startServer = function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
   if (env !== 'production') {
-    testFile = 'AzPP5D8IS0GDeeC1hFxs';
+    testFile = 'leZrsgpZQOSCCtS98bsu';
     http.get('http://localhost/extract?name=' + testFile, function(res) {
       return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
     });
