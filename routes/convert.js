@@ -3,6 +3,8 @@
  */
 
 util = require("../util")
+docMeta = require("../docMeta")
+storage = require("../storage")
 getFromUrl = require("request")
 exec = require('child_process').exec
 fs = require('fs')
@@ -54,6 +56,12 @@ exports.go = function(req, res){
 
 	function convert(localCopy)
 	{
+		name = localCopy.replace('../local-copies/pdf/', '').replace('.pdf', '') // extract the file name
+		storage.store('pdf', name, localCopy)
+		docMeta.storePdfMetaData(localCopy)
+		
+		//docMeta.storePdfMetaData(name, localCopy)
+
 		/* 
 		 * html2pdfEX doesn't have an option to pipe the output, so passing its output around
 		 * is just a bit clumsier than it could have been. We use a directory structure one level up
@@ -72,7 +80,6 @@ exports.go = function(req, res){
 		//res.send('Please wait...'');
 
 		execCommand = executable + ' '
-		name = localCopy.replace('../local-copies/pdf/', '').replace('.pdf', '') // extract the file name
 		//outFileName = name + '.html'
 		outFolder = '../local-copies/' + 'html-converted/'
 		execCommand += localCopy + ' ' + executalbeParams + ' ' + '--dest-dir=' + outFolder + "/" + name

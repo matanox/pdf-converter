@@ -91,6 +91,7 @@ startServer = () ->
   server.listen app.get('port'), ->
     logging.logGreen 'Server listening on port ' + app.get('port') + '....'
 
+  ###
   # In dev mode, self-test on startup
   unless env is 'production' 
     #testFile = 'AzPP5D8IS0GDeeC1hFxs'
@@ -100,6 +101,7 @@ startServer = () ->
 
   # Attach primus for development iterating, as long as it's convenient 
   unless env is 'production' then primus.start(server)
+  ###
 
 #
 # Get data that can apply to any document

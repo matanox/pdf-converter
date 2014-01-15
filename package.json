@@ -23,7 +23,9 @@
     "xmldom": "~0.1.17",
     "jsdom": "~0.8.10",
     "csvtojson": "~0.1.5",
-    "verbal-expressions": "~0.1.2"
+    "verbal-expressions": "~0.1.2",
+    "rethinkdb": "~1.11.0-1",
+    "riak-js": "~0.10.2"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"
