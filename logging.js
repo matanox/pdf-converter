@@ -6,6 +6,7 @@ tty = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   blue: '\x1b[36m',
+  magenta: '\x1b[35m',
   endColor: '\x1b[0m'
 };
 
@@ -23,4 +24,8 @@ exports.logRed = function(text) {
 
 exports.logBlue = function(text) {
   return console.log(tty.blue + text + tty.endColor);
+};
+
+exports.logPerf = function(text) {
+  return console.log(tty.magenta + text + tty.endColor);
 };

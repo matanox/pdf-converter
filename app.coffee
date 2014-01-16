@@ -106,5 +106,7 @@ startServer = () ->
 #
 # Get data that can apply to any document
 #
+
 markers.load(startServer)
 
+selfMonitor = require('./selfMonitor').start()

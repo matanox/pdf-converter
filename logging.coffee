@@ -11,14 +11,17 @@ tty = {
   red  :    '\x1b[31m'  
   yellow:   '\x1b[33m'  
   blue:     '\x1b[36m'  
+  magenta:  '\x1b[35m'
   endColor: '\x1b[0m'
 }
 
 exports.logGreen  = (text) -> console.log(tty.green + text + tty.endColor)
 exports.logYellow = (text) -> console.log(tty.yellow + text + tty.endColor)
 exports.logRed    = (text) -> console.log(tty.red + text + tty.endColor)
-exports.logBlue  = (text) -> console.log(tty.blue + text + tty.endColor)
+exports.logBlue   = (text) -> console.log(tty.blue + text + tty.endColor)
+exports.logPerf   = (text) -> console.log(tty.magenta + text + tty.endColor)
 
+# Color codes at http://telepathy.freedesktop.org/doc/telepathy-glib/telepathy-glib-debug-ansi.html
 # See more terminal codes at if in need of more styles:
 # https://github.com/Marak/colors.js/blob/master/colors.js 
 # https://github.com/Marak/colors.js                       
