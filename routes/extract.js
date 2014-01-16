@@ -50,7 +50,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, marker, matchedMarkers, name, node, nodesWithStyles, outputHtml, parser, path, rawHtml, sentence, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s, _t, _u, _v;
+  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, markSentence, name, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   name = req.query.name;
@@ -310,14 +310,15 @@ exports.go = function(req, res) {
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
-  for (_t = 0, _len11 = groups.length; _t < _len11; _t++) {
-    sentence = groups[_t];
+  markSentence = function(sentenceIdx) {
+    var marker, matchedMarkers, outputHtml, sentence, _len11, _len12, _t, _u;
+    sentence = groups[sentenceIdx];
     matchedMarkers = [];
-    for (_u = 0, _len12 = sentence.length; _u < _len12; _u++) {
-      token = sentence[_u];
+    for (_t = 0, _len11 = sentence.length; _t < _len11; _t++) {
+      token = sentence[_t];
       if (token.metaType !== 'delimiter') {
-        for (_v = 0, _len13 = docSieve.length; _v < _len13; _v++) {
-          marker = docSieve[_v];
+        for (_u = 0, _len12 = docSieve.length; _u < _len12; _u++) {
+          marker = docSieve[_u];
           switch (marker.markerTokens[marker.nextExpected].metaType) {
             case 'regular':
               if (token.text === marker.markerTokens[marker.nextExpected].text) {
@@ -352,8 +353,16 @@ exports.go = function(req, res) {
         }
       }
     }
-  }
-  util.timelog('Markers visualization');
-  outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
-  return output.serveOutput(outputHtml, name, res);
+    sentenceIdx += 1;
+    if (sentenceIdx < groups.length) {
+      return process.nextTick(function() {
+        return markSentence(sentenceIdx + 1);
+      });
+    } else {
+      util.timelog('Markers visualization');
+      outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
+      return output.serveOutput(outputHtml, name, res);
+    }
+  };
+  return markSentence(0);
 };

@@ -328,9 +328,13 @@ exports.go = (req, res) ->
   # Adding marker highlighting
   #
   util.timelog('Markers visualization') 
-
-  for sentence in groups
-
+  
+  # Rather than a loop (formerly: for sentence in groups),
+  # iterate the sentences such that each sentence queues handling 
+  # of the next one on the call stack. So that this cpu intensive bit doesn't block the process
+  markSentence = (sentenceIdx) ->
+    #console.log(sentenceIdx)
+    sentence = groups[sentenceIdx]
     matchedMarkers = []
 
     for token in sentence when token.metaType isnt 'delimiter'  # for each text token of the sentence
@@ -364,7 +368,19 @@ exports.go = (req, res) ->
                   marker.nextExpected = 0
                 else
                   marker.nextExpected += 2
-    
+
+    sentenceIdx += 1
+    if sentenceIdx < groups.length
+      process.nextTick(() -> markSentence(sentenceIdx+1)) # queue handling of the next sentence
+    else 
+      util.timelog('Markers visualization') 
+
+      # Send back the outcome
+      outputHtml = html.buildOutputHtml(tokens, inputStylesMap)
+      output.serveOutput(outputHtml, name, res)
+
+  markSentence(0) # start the iteration over sentences. Each one queues the next.
+
     #if matchedMarkers.length > 0
       #util.logObject(matchedMarkers)
       #util.logObject(sentence)
@@ -372,10 +388,5 @@ exports.go = (req, res) ->
       #for token in sentence
         #token.finalStyles['color'] = 'red'  # overide the color
   
-  util.timelog('Markers visualization') 
-
-  # Send back the outcome
-  outputHtml = html.buildOutputHtml(tokens, inputStylesMap)
-  output.serveOutput(outputHtml, name, res)
 
   

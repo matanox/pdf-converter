@@ -7,8 +7,8 @@ logging = require './logging'
 
 former = null
 later  = null
-
 percentThreshold = 10
+interval = 1000 # milliseconds
 
 getMem = () ->
   mem = process.memoryUsage()  
@@ -46,4 +46,4 @@ exports.start = () ->
   logHeapSize(former, 'is')
   logUsage(former, 'is')
 
-  process.nextTick(() -> setInterval(logUsageIfChanged, 1000)) # next-ticking it so initial logging would finish first
+  process.nextTick(() -> setInterval(logUsageIfChanged, interval)) # next-ticking it so initial logging would finish first
