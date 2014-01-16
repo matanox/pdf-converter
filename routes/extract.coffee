@@ -371,7 +371,8 @@ exports.go = (req, res) ->
 
     sentenceIdx += 1
     if sentenceIdx < groups.length
-      process.nextTick(() -> markSentence(sentenceIdx+1)) # queue handling of the next sentence
+      setImmediate(() -> markSentence(sentenceIdx+1)) # queue handling of the next sentence while 
+                                                      # allowing IO to occur in between (http://nodejs.org/api/timers.html#timers_setimmediate_callback_arg)
     else 
       util.timelog('Markers visualization') 
 
@@ -379,7 +380,8 @@ exports.go = (req, res) ->
       outputHtml = html.buildOutputHtml(tokens, inputStylesMap)
       output.serveOutput(outputHtml, name, res)
 
-  markSentence(0) # start the iteration over sentences. Each one queues the next.
+  markSentence(0) # start the iteration over sentences. 
+                  # Each one queues the next. Last one passes over to the next phase.
 
     #if matchedMarkers.length > 0
       #util.logObject(matchedMarkers)

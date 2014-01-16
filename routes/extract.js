@@ -355,7 +355,7 @@ exports.go = function(req, res) {
     }
     sentenceIdx += 1;
     if (sentenceIdx < groups.length) {
-      return process.nextTick(function() {
+      return setImmediate(function() {
         return markSentence(sentenceIdx + 1);
       });
     } else {
