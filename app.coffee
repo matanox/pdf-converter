@@ -29,7 +29,11 @@ markers       = require './markers'
 app = express()
 env = app.get('env')
 
+logging.init()
+
 logging.logGreen "Starting in mode #{env}"
+
+logging.log('Starting in mode ' + env) 
 
 #
 # Dev-environment-only stuff
@@ -110,30 +114,3 @@ startServer = () ->
 markers.load(startServer)
 
 selfMonitor = require('./selfMonitor').start()
-
-winston = require 'winston'
-exports.winston = winston
-
-require('winston-logstash')
-winston.add(winston.transports.Logstash, {port: 28777, node_name: 'nodejs', host: '127.0.0.1'})
-
-
-
-sub = {sub: 'sub'}
-logSample = {a: '3', b: 'bbbb', sub}
-winston.log('warn', logSample)
-#winston.log('warn', 'Hello to logstash')
-
-testLogio = () ->
-  require 'winston-logio' 
-  winston.add(winston.transports.Logio, {
-      port: 28777,
-      node_name: 'nodejs',
-      host: '127.0.0.1'
-    });
- 
-  winston.log('info', 'Hello to logio')
-
-testGraylog2 = () ->
-  winston.add(require('winston-graylog2').Graylog2, {})
-  winston.log('info', 'Hello to graylog2')

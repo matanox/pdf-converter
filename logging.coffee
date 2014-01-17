@@ -1,3 +1,17 @@
+winston = require 'winston'
+log = (message) -> winston.log('info', message)
+exports.log = log
+
+exports.init = () ->
+  require('winston-logstash')
+  winston.remove(winston.transports.Console) # turn off winston's default console logging
+  winston.add(winston.transports.Logstash, {port: 28777, node_name: 'nodejs', host: '127.0.0.1'})
+  
+  #sub = {sub: 'sub'}
+  #logSample = {a: '3', b: 'bbbb', sub}
+  #winston.log('warn', 'New Hello to logstash')
+  #winston.log('warn', logSample)
+
 # This coloring is terminal color based. 
 # It doesn't work for the browser console. For browser console solutions (which are all based on css) 
 # see http://stackoverflow.com/questions/7505623/colors-in-javascript-console/13017382.
@@ -25,3 +39,23 @@ exports.logPerf   = (text) -> console.log(tty.magenta + text + tty.endColor)
 # See more terminal codes at if in need of more styles:
 # https://github.com/Marak/colors.js/blob/master/colors.js 
 # https://github.com/Marak/colors.js                       
+
+
+
+#
+# Logging facilities that were less suitable than winston at time of writing:
+#
+
+testLogio = () ->
+  require 'winston-logio' 
+  winston.add(winston.transports.Logio, {
+      port: 28777,
+      node_name: 'nodejs',
+      host: '127.0.0.1'
+    });
+ 
+  winston.log('info', 'Hello to logio')
+
+testGraylog2 = () ->
+  winston.add(require('winston-graylog2').Graylog2, {})
+  winston.log('info', 'Hello to graylog2')
