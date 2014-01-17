@@ -101,16 +101,17 @@ exports.logObject = function(obj) {
 };
 
 timelog = function(timer) {
-  timer = timer + ' took';
+  var end, start;
   if (timelog.timersLookup == null) {
     timelog.timersLookup = {};
   }
   if (timelog.timersLookup[timer] != null) {
-    console.timeEnd(timer);
+    end = new Date();
+    console.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
     return delete timelog.timersLookup[timer];
   } else {
-    timelog.timersLookup[timer] = 'started';
-    return console.time(timer);
+    start = new Date();
+    return timelog.timersLookup[timer] = start.getTime();
   }
 };
 

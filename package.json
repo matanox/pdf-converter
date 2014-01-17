@@ -25,7 +25,11 @@
     "csvtojson": "~0.1.5",
     "verbal-expressions": "~0.1.2",
     "rethinkdb": "~1.11.0-1",
-    "riak-js": "~0.10.2"
+    "riak-js": "~0.10.2",
+    "winston": "~0.7.2",
+    "winston-graylog2": "~0.1.10",
+    "winston-logio": "~0.2.0",
+    "winston-logstash": "~0.1.7"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"
