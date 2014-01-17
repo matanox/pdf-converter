@@ -1,4 +1,3 @@
-logging = require './logging' 
 require "fs"
 #require "jsdom"
 #textHookPoint = getElementByID(window.hookPoint)
@@ -15,7 +14,7 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span i
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
 exports.serveOutput = (html, name, res) ->
-  #logging.log(html)
+  #console.log(html)
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
@@ -30,7 +29,7 @@ exports.serveOutput = (html, name, res) ->
       throw err
 
     util.timelog('Saving serialized output to file')  
-    #logging.log('Output saved')
+    #console.log('Output saved')
 
-    logging.log('Sending response....')
+    console.log('Sending response....')
     res.sendfile(name + '.html', {root: '../local-copies/' + 'output/'})) # variable use by closure here...

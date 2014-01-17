@@ -1,6 +1,6 @@
 winston = require 'winston'
-exports.log  = (message) -> winston.log('info', message)
-exports.warn = (message) -> winston.log('warn', message)
+log = (message) -> winston.log('info', message)
+exports.log = log
 
 exports.init = () ->
   require('winston-logstash')

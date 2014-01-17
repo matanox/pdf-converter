@@ -1,5 +1,4 @@
 util = require './util'
-logging = require './logging' 
 verbex = require 'verbal-expressions'
 
 inputLang = {}
@@ -41,7 +40,7 @@ tokenizeMarker = (marker) ->
   if string.length == 0 then return []
 
   for i in [0..string.length-1] 
-    # logging.log i
+    # console.log i
     char = string.charAt(i)
     if util.isAnySpaceChar(char) 
       # Push a delimiter token if encountered,
@@ -132,9 +131,9 @@ exports.load = (callback) ->
   csvToJsonConverter = require('csvtojson').core.Converter
   csvConverter = new csvToJsonConverter()
   csvConverter.on("end_parsed",(jsonFromCss) ->
-    #logging.log(jsonFromCss)
+    #console.log(jsonFromCss)
     markers.array = jsonFromCss.csvRows
-    #logging.log(markers)
+    #console.log(markers)
     util.timelog('Sorting markers')            
     markers.array.sort((a, b) -> # simple sort by lexicographic order obliviously of the case of equality
       if a.WordOrPattern > b.WordOrPattern

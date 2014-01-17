@@ -1,4 +1,3 @@
-logging       = require './logging' 
 # crepl = require 'coffee-script/lib/coffee-script/repl'
 
 anySpaceChar = RegExp(/\s/)
@@ -74,7 +73,7 @@ exports.parseElementTextOld = (xmlNode) ->
 #exports.arrayToMap = (array) ->
   #map[obj[key]] = element for element in array 
 
-exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2) 
+exports.logObject = (obj) -> console.log(JSON.stringify obj, null, 2) 
 
 #
 # Nice elapsed time logging utility function.
@@ -91,7 +90,7 @@ timelog = (timer) ->
   if timelog.timersLookup[timer]?                             # is this timer already started?
     #console.timeEnd(timer)
     end = new Date()
-    logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
+    console.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
 
     delete timelog.timersLookup[timer]
 
@@ -107,7 +106,7 @@ exports.timelog = timelog
 
 exports.objectViolation = (errorMessage) ->
   error = new Error(errorMessage)
-  logging.log(error.stack)
+  console.log(error.stack)
   throw error   
 
 #

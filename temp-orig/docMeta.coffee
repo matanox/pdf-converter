@@ -1,19 +1,17 @@
-util = require './util'
-logging = require './logging' 
-
+util = require("./util")
 exports.storePdfMetaData = (localCopy) ->
   
-  logging.log "Getting pdf file metadata using pdfinfo"
+  console.log "Getting pdf file metadata using pdfinfo"
   util.timelog "Getting pdf file metadata using pdfinfo"
   
   execCommand = 'pdfinfo -meta' + ' '
   execCommand += localCopy
-  logging.log execCommand
+  console.log execCommand
   exec execCommand, (error, stdout, stderr) ->
-    logging.log executable + "'s stdout: " + stdout
-    logging.log executable + "'s stderr: " + stderr
+    console.log executable + "'s stdout: " + stdout
+    console.log executable + "'s stderr: " + stderr
     if error isnt null
-      logging.log executable + "'sexec error: " + error
+      console.log executable + "'sexec error: " + error
     else
       util.timelog "Getting pdf file metadata using pdfinfo"
       meta = {raw: stdout, stderr: stderr}

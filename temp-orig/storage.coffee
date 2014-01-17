@@ -1,5 +1,4 @@
-util = require './util'
-logging = require './logging' 
+util = require("./util")
 exports.store = (bucket, filename, file) ->
   #
   # TODO: handle case that file already exists
@@ -28,9 +27,9 @@ exports.store = (bucket, filename, file) ->
   ###
   riak.get('pdf', 'tXqIBGiBR5aMgxBQBOVY', (error, fileContent) ->
     if error
-      logging.log(error)
+      console.log(error)
     else
-      logging.log(fileContent)
+      console.log(fileContent)
     fs.writeFileSync('back-from-riak.pdf', fileContent))
   ###
 

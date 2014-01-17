@@ -1,5 +1,3 @@
-logging = require './logging' 
-
 #
 # Express request error handler, 
 # to include details of the request that the error was thrown for,
@@ -18,5 +16,5 @@ exports.errorHandler = (error, request, response, next) ->
 
   console.error(etext)
 
-  logging.log('Sending error message to client')
+  console.log('Sending error message to client')
   response.send(500, { error: error })  # no need to invoke 'next()', if we close off a response here.

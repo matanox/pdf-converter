@@ -1,4 +1,3 @@
-logging = require './logging' 
 #
 # Checks if a character is an alphabetic character
 # 'Alphabetic' means that it's a letter, not a number,

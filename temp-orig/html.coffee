@@ -1,6 +1,5 @@
-util    = require('./util')
-logging = require './logging' 
-css     = require('./css')
+util = require('./util')
+css  = require('./css')
 
 parseCssClasses = (styleString) ->
   # Build an array of the classes included by the div's "class=" statement.
@@ -45,7 +44,7 @@ exports.representNodes = (domObject) ->
                                                                 #    or a parent html node
             
               inheritingStylesArray.push(styles) 
-              #logging.log inheritingStylesArray
+              #console.log inheritingStylesArray
 
             handleNode(object.children, inheritingStylesArray)    # recurse with the style of this object
             
@@ -54,9 +53,9 @@ exports.representNodes = (domObject) ->
             # flush a new object
             text = object.data
             myObjects.push({text, stylesArray})
-            #logging.log 'adding text'
-            #logging.log text 
-            #logging.log stylesArray
+            #console.log 'adding text'
+            #console.log text 
+            #console.log stylesArray
 
   handleNode(domObject)
 
@@ -185,7 +184,7 @@ exports.tokenize = (nodeWithStyles) ->
     if string.length == 0 then return []
 
     for i in [0..string.length-1] 
-      # logging.log i
+      # console.log i
       char = string.charAt(i)
       if util.isAnySpaceChar(char) 
         # Push a delimiter token if encountered,
@@ -210,7 +209,7 @@ exports.tokenize = (nodeWithStyles) ->
 
     tokens.push( withStyles {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
 
-    #logging.log(tokens)
+    #console.log(tokens)
 
     tokens
 
@@ -258,7 +257,7 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
       return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
     else 
-      logging.warn('token had no styles attached to it when building output. token text: ' + token.text)
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text)
       return "<span>#{token.text}</span>"
 
 
@@ -280,5 +279,5 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
 
   util.timelog('Serialization to output') 
 
-  #logging.log(plainText)
+  #console.log(plainText)
   plainText

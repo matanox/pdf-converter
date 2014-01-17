@@ -1,5 +1,4 @@
 util = require('./util')
-logging = require './logging' 
 
 # Class Description: 
 # This can be a word, punctuation mark (or much more rarely) a superscript reference or note.
@@ -56,9 +55,9 @@ t = new Token('word')
 g = new TokenGroup
 g.add(t)
 g.add(g)
-logging.log(g.getType())
+console.log(g.getType())
 g.setType("sentence")
-logging.log(g.getType())
-logging.log(g.getAll())
-logging.log('done')
+console.log(g.getType())
+console.log(g.getAll())
+console.log('done')
 ###

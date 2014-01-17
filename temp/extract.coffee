@@ -1,6 +1,5 @@
 require "fs"
 util    = require "../util"
-logging = require '../logging' 
 timer   = require "../timer"
 css     = require "../css"
 html    = require "../html"
@@ -44,14 +43,14 @@ exports.go = (req, res) ->
   util.timelog('htmlparser2') 
   handler = new htmlparser.DomHandler((error, dom) ->
     if (error)
-      logging.log('htmlparser2 failed loading document')
+      console.log('htmlparser2 failed loading document')
     else
-      logging.log('htmlparser2 loaded document')
+      console.log('htmlparser2 loaded document')
   )
   parser = new htmlparser.Parser(handler)
   parser.parseComplete(rawHtml)
   dom = handler.dom
-  #logging.log(dom)
+  #console.log(dom)
   util.timelog('htmlparser2') 
  
   # Discard any divs that contain zero-length text
@@ -63,15 +62,15 @@ exports.go = (req, res) ->
   # to implicitly infer a delimiter at the end of each div, otherwise we do.
   # The use of a constant ratio test is extremely coarse and temporary,
   # a refined solution should replace it.
-  #logging.log(endsSpaceDelimited)
-  #logging.log(endsSpaceDelimited / divsNum)
+  #console.log(endsSpaceDelimited)
+  #console.log(endsSpaceDelimited / divsNum)
   #if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
   nodesWithStyles = html.representNodes(dom)
 
   tokenArrays = (html.tokenize node for node in nodesWithStyles)
 
-  #logging.log(node)
+  #console.log(node)
 
   # Flatten to one-dimensional array of tokens...
   tokens = []
@@ -92,7 +91,7 @@ exports.go = (req, res) ->
       throw "Error - zero length text in data"
 
   if tokens.length == 0
-    logging.log("No text was extracted from input")
+    console.log("No text was extracted from input")
     throw("No text was extracted from input")
 
   #
@@ -100,20 +99,20 @@ exports.go = (req, res) ->
   # E.g. read the css style definitions, of the css classes assigned to a token, 
   # and add them to the token.
   #
-  #logging.log(tokens)  
+  #console.log(tokens)  
   for token in tokens 
     #console.dir(token)
     token.finalStyles = {}
     token.positionInfo = {}
 
     for cssClasses in token.stylesArray  # cascade the styles from each parent node 
-      #logging.log cssClasses
+      #console.log cssClasses
       for cssClass in cssClasses         # iterate over each css class indicated for the token,
                                          # adding its final style definitions to the token
-        #logging.log cssClass                                         
+        #console.log cssClass                                         
         styles = css.getFinalStyles(cssClass, inputStylesMap)
         if styles? 
-          #logging.log(styles)
+          #console.log(styles)
           for style in styles 
             if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
               token.positionInfo[style.property] = style.value
@@ -121,7 +120,7 @@ exports.go = (req, res) ->
               token.finalStyles[style.property] = style.value
       
     if util.objectPropertiesCount(token.finalStyles) is 0
-      logging.warn('No final styles applied to token')
+      console.warn('No final styles applied to token')
       console.dir(token)
 
   #
@@ -142,13 +141,13 @@ exports.go = (req, res) ->
     if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener                         
-      #logging.log('closer: ' + a.text)
-      #logging.log('opener: ' + b.text)
+      #console.log('closer: ' + a.text)
+      #console.log('opener: ' + b.text)
       
       if lastRowPosLeft?
-        #logging.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
+        #console.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
         if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
-          #logging.log('opener')
+          #console.log('opener')
           a.paragraph = 'closer'
           b.paragraph = 'opener'      
       lastRowPosLeft = b.positionInfo.left
@@ -168,12 +167,12 @@ exports.go = (req, res) ->
   # 1. Delimitation augmentation
   # 2. Uniting hyphen-split words (E.g. 'associa-', 'ted' -> 'associated')
   #
-  logging.log(tokens.length)
+  console.log(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
     if b.lineLocation is 'opener'       
       if a.lineLocation is 'closer'       
         if a.metaType is 'regular' # line didn't include an ending delimiter 
-          #logging.log('undelimited end of line detected')
+          #console.log('undelimited end of line detected')
           # if detected, unite a line boundary 'hypen-split'
           if util.endsWith(a.text, '-')
             a.text = a.text.slice(0, -1)   # discard the hyphen
@@ -185,7 +184,7 @@ exports.go = (req, res) ->
           # was just united, in which case it's not necessary
           else
             #if a.text is 'approach' and b.text is 'to'         
-              #logging.log('found at ' + i)
+              #console.log('found at ' + i)
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles    
@@ -193,10 +192,10 @@ exports.go = (req, res) ->
             return 2
     return 1)
 
-  #logging.log(tokens.length)
+  #console.log(tokens.length)
   #util.logObject(tokens)
   #for token in tokens 
-  #  logging.log(token.metaType)
+  #  console.log(token.metaType)
 
   #
   # Unite token couples that have no delimiter in between them,
@@ -215,7 +214,7 @@ exports.go = (req, res) ->
         return a
     return b
   
-  #logging.log(tokens.length)
+  #console.log(tokens.length)
 
   util.timelog('Extraction from html stage A')
 
@@ -238,7 +237,7 @@ exports.go = (req, res) ->
     else
       return -1)
   util.timelog('Index creation')      
-  #logging.log textIndex
+  #console.log textIndex
 
   ###
   markersRegex = ''
@@ -250,31 +249,31 @@ exports.go = (req, res) ->
     unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
 
     if markers.anything.test(markerText)
-      logging.log('in split for: ' + markerText)
+      console.log('in split for: ' + markerText)
       splitText = markerText.split(markers.anything)
       for s in [0..splitText.length-1]
         unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
         if markers.anything.test(splitText[s])
           markerRegex += '\s'                    # add logical 'and then anything' to regex
-          logging.log('anything found')
+          console.log('anything found')
         else
           markerRegex += splitText[s]            # add as-is text to the regex
-          logging.log('no anything marker')
+          console.log('no anything marker')
     else
       markerRegex += markerText
 
 
     markersRegex += markerRegex
-    #logging.log(markerText)
-    #logging.log(markerRegex.source)
-    logging.log(markersRegex)
+    #console.log(markerText)
+    #console.log(markerRegex.source)
+    console.log(markersRegex)
 
     
     util.timelog('Markers visualization') 
-    #logging.log('Marker regex length is ' + markersRegex.toString().length)
-    #logging.log(markersRegex.source)
+    #console.log('Marker regex length is ' + markersRegex.toString().length)
+    #console.log(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
-    #logging.log(testverbex.toRegExp().source)
+    #console.log(testverbex.toRegExp().source)
     ###
 
   docSieve = markers.createDocumentSieve(markers.baseSieve)
@@ -288,9 +287,9 @@ exports.go = (req, res) ->
     if token.metaType is 'regular'
       token.calculatedProperties = []
       if util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
-        logging.log('All Caps Style detected for word: ' + token.text);
+        console.log('All Caps Style detected for word: ' + token.text);
       if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
-        logging.log('Interspaced Title Word detected for word: ' + token.text)
+        console.log('Interspaced Title Word detected for word: ' + token.text)
 
 
   #
@@ -334,24 +333,24 @@ exports.go = (req, res) ->
   # iterate the sentences such that each sentence queues handling 
   # of the next one on the call stack. So that this cpu intensive bit doesn't block the process
   markSentence = (sentenceIdx) ->
-    #logging.log(sentenceIdx)
+    #console.log(sentenceIdx)
     sentence = groups[sentenceIdx]
     matchedMarkers = []
 
     for token in sentence when token.metaType isnt 'delimiter'  # for each text token of the sentence
       for marker in docSieve
-        #logging.log (marker.nextExpected.toString() + ' ' + token.text + 'v.s.'+ marker.markerTokens[marker.nextExpected].text)
+        #console.log (marker.nextExpected.toString() + ' ' + token.text + 'v.s.'+ marker.markerTokens[marker.nextExpected].text)
         switch marker.markerTokens[marker.nextExpected].metaType
           when 'regular' 
             
             if token.text is marker.markerTokens[marker.nextExpected].text
               if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
-                #logging.log('whole marker matched: ' + console.dir(marker))
+                #console.log('whole marker matched: ' + console.dir(marker))
                 matchedMarkers.push(marker)
                 token.finalStyles['color'] = 'red'
                 marker.nextExpected = 0
               else
-                #logging.log('marker token matched ')
+                #console.log('marker token matched ')
                 marker.nextExpected += 1
             else 
               unless marker.markerTokens[marker.nextExpected].metaType is 'anyOneOrMore'
@@ -363,7 +362,7 @@ exports.go = (req, res) ->
             else 
               if token.text is marker.markerTokens[marker.nextExpected + 1].text 
                 if (marker.nextExpected + 1) is (marker.markerTokens.length - 1)
-                  #logging.log('whole marker matched after wildcard: ' + console.dir(marker))
+                  #console.log('whole marker matched after wildcard: ' + console.dir(marker))
                   matchedMarkers.push(marker)
                   token.finalStyles['color'] = 'red'
                   marker.nextExpected = 0
@@ -387,7 +386,7 @@ exports.go = (req, res) ->
     #if matchedMarkers.length > 0
       #util.logObject(matchedMarkers)
       #util.logObject(sentence)
-      #logging.log()
+      #console.log()
       #for token in sentence
         #token.finalStyles['color'] = 'red'  # overide the color
   

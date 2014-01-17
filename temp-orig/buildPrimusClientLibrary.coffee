@@ -1,4 +1,3 @@
-logging = require './logging' 
 #
 # This creates the client library that needs to be served
 # to the client for it to be able to use primus.
@@ -9,7 +8,7 @@ logging = require './logging'
 'use strict'
 
 out = __dirname + '/public/javascripts' + '/primusClientLib.js'
-logging.log('Building primus client library to be served to the client as ' + out)
+console.log('Building primus client library to be served to the client as ' + out)
 
 http = require("http")
 Primus = require('primus')

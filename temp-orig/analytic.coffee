@@ -1,4 +1,3 @@
-logging = require './logging' 
 exports.analytic = (tokens) ->
 
   #

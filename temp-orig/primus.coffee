@@ -1,5 +1,4 @@
 'use strict'
-logging = require './logging' 
 
 #
 # Primus is an abstraction layer on top all prominent websocket implementation libraries.
@@ -18,11 +17,11 @@ exports.start = (server) ->
   sparks = 0
   logSpark = (spark, message) -> 
     sparksCount = sparks + ' ' + 'active sparks'
-    logging.log('Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message + ' ' + '[' + sparksCount + ']')
+    console.log('Primus: ' + spark.address.ip + ' (id ' + spark.id + ') ' + message + ' ' + '[' + sparksCount + ']')
 
   setTimeout((() -> 
   	unless sparks is 0
-      logging.log('Primus: broadcasting \'up\' message to all quick to connect clients')
+      console.log('Primus: broadcasting \'up\' message to all quick to connect clients')
       primus.write("ServerRestarted")), 
     2000)
 

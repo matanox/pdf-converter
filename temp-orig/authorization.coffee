@@ -1,4 +1,3 @@
-logging = require './logging' 
 # 
 # This won't work on a non public DNS server, 
 # such as a local dev server, as:
@@ -15,7 +14,7 @@ exports.googleAuthSetup = (app, host, routes) ->
     returnURL: 'http://' + host + '/auth/google/return'
     realm: 'http://' + host + '/auth/google',
     (identifier, profile, done) ->
-      logging.log 'authorized user ' + identifier + '\n' + JSON.stringify(profile))
+      console.log 'authorized user ' + identifier + '\n' + JSON.stringify(profile))
       #User.findOrCreate
       #  openId: identifier,
       #  (err, user) ->
