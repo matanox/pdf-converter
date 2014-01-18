@@ -3,9 +3,11 @@ logging = require '../logging'
 docMeta = require '../docMeta'
 storage = require '../storage'
 getFromUrl = require 'request'
+fs = require 'fs'
+require 'stream'
+winston = require 'winston'
 exec = require("child_process").exec
-fs = require("fs")
-require "stream"
+
 
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"
@@ -14,24 +16,25 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 # * Handles the conversion from pdf to html, and forwards to next stage.
 # 
 
-#
-# * Fetches the upload from Ink File Picker (writing it into local file).
-# * If it works - invoke the passed along callback function.
-# 
-fetch = (inkUrl, callOnSuccess) ->
-  
-  #outFile = inkUrl + '.pdf';
-  outFile = "../local-copies/" + "pdf/" + inkUrl.replace("https://www.filepicker.io/api/file/", "") + ".pdf"
-  download = getFromUrl(inkUrl, (error, response, body) ->
-    if (not error and response.statusCode is 200)
-        callOnSuccess(outFile)
-    else
-      console.log "fetching from InkFilepicker returned http status " + response.statusCode
-      if error
-        logging.log "fetching from InkFilepicker returned error " + error  if error
-  ).pipe(fs.createWriteStream(outFile))
-
 exports.go = (req, res) ->
+
+  #
+  # * Fetches the upload from Ink File Picker (writing it into local file).
+  # * If it works - invoke the passed along callback function.
+  # 
+  fetch = (inkUrl, baseFileName, callOnSuccess) ->
+    
+    #outFile = inkUrl + '.pdf';
+    outFile = "../local-copies/" + "pdf/" + baseFileName + ".pdf"
+    download = getFromUrl(inkUrl, (error, response, body) ->
+      if (not error and response.statusCode is 200)
+          callOnSuccess(outFile, docLogger)
+      else
+        console.log "fetching from InkFilepicker returned http status " + response.statusCode
+        if error
+          logging.log "fetching from InkFilepicker returned error " + error 
+    ).pipe(fs.createWriteStream(outFile))
+
   redirectToShowHtml = (redirectString) ->
     logging.log "Passing html result to next level handler, by redirecting to: " + redirectString
     res.writeHead 301,
@@ -44,10 +47,10 @@ exports.go = (req, res) ->
       Location: redirectString
 
     res.end()
-  convert = (localCopy) ->
+  convert = (localCopy, docLogger) ->
     name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
-    storage.store "pdf", name, localCopy
-    docMeta.storePdfMetaData localCopy
+    storage.store "pdf", name, localCopy, docLogger
+    docMeta.storePdfMetaData localCopy, docLogger
     
     #docMeta.storePdfMetaData(name, localCopy)
     
@@ -82,6 +85,17 @@ exports.go = (req, res) ->
         # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
         # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
         util.timelog "Conversion to html"
-        redirectToExtract "http://localhost/" + "extract" + "?name=" + name
+        redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
 
-  fetch req.query.tempLocation, convert  # fetch the upload and pass control to the convert function
+  inkUrl = req.query.tempLocation
+  baseFileName = inkUrl.replace("https://www.filepicker.io/api/file/", "")
+   
+  
+  # Initialize logger for this document
+  docLogger = new winston.Logger
+  docLoggername = baseFileName + '.log'
+  docLogger.add(winston.transports.File, {filename: docLoggername})
+  #docLogger = new (winston.Logger)({transports: [new (winston.transports.File)({filename: 'ffff'})]})
+  console.log('Logging handling for ' + baseFileName + ' in ' + docLoggername)
+
+  fetch(inkUrl, baseFileName, convert)  # fetch the upload and pass control to the convert function
