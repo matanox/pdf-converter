@@ -8,7 +8,6 @@ require 'stream'
 winston = require 'winston'
 exec = require("child_process").exec
 
-
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"
 
@@ -85,7 +84,8 @@ exports.go = (req, res) ->
         # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
         # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
         util.timelog "Conversion to html"
-        redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
+        require('./extract').go(name, res)
+        #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
 
   inkUrl = req.query.tempLocation
   baseFileName = inkUrl.replace("https://www.filepicker.io/api/file/", "")

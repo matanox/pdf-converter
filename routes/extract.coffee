@@ -29,12 +29,12 @@ filterZeroLengthText = (ourDivRepresentation) ->
 #
 # Extract text content and styles from html
 #
-exports.go = (req, res) ->
+exports.go = (name, res) ->
   util.timelog('Extraction from html stage A')
 
   # Read the input html 
   path = '../local-copies/' + 'html-converted/' 
-  name = req.query.name
+  #name = req.query.name
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
 
   # Extract all style info 

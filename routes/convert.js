@@ -71,7 +71,7 @@ exports.go = function(req, res) {
         return logging.log(executable + "'sexec error: " + error);
       } else {
         util.timelog("Conversion to html");
-        return redirectToExtract("http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger);
+        return require('./extract').go(name, res);
       }
     });
   };

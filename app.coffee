@@ -16,8 +16,8 @@ path    = require 'path'
 user    = require './routes/user'
 
 # Regular module dependencies
-convert       = require './routes/convert'
-extract       = require './routes/extract'
+#convert       = require './routes/convert'
+#extract       = require './routes/extract'
 errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './logging' 
@@ -78,8 +78,10 @@ app.use errorHandling.errorHandler
 #
 app.get '/', routes.index
 app.get '/users', user.list
-app.get '/convert', convert.go
-app.get '/extract', extract.go
+
+app.get '/handleInputFile', require('./routes/handleInputFile').go
+#app.get '/convert', convert.go
+#app.get '/extract', extract.go
 
 #
 # Authorization

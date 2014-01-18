@@ -51,11 +51,10 @@ filterZeroLengthText = function(ourDivRepresentation) {
   return filtered;
 };
 
-exports.go = function(req, res) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, markSentence, name, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
+exports.go = function(name, res) {
+  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
-  name = req.query.name;
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, path + name + '/');
   htmlparser = require("htmlparser2");
