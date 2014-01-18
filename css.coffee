@@ -1,5 +1,6 @@
-cssParser = require('css-parse')
-util = require('./util')
+cssParser = require 'css-parse'
+util = require './util'
+fs = require 'fs'
 
 relevantStyles = [
   'font-family',

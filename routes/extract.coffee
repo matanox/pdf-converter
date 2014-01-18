@@ -1,13 +1,13 @@
-require "fs"
-util    = require "../util"
+fs      = require 'fs'
+util    = require '../util'
 logging = require '../logging' 
-timer   = require "../timer"
-css     = require "../css"
-html    = require "../html"
-model   = require "../model"
-output  = require "../output"
-ctype   = require "../ctype"
-markers = require "../markers"
+timer   = require '../timer'
+css     = require '../css'
+html    = require '../html'
+model   = require '../model'
+output  = require '../output'
+ctype   = require '../ctype'
+markers = require '../markers'
 verbex  = require 'verbal-expressions'
 
 isImage = (text) -> util.startsWith(text, "<img ")
@@ -122,7 +122,7 @@ exports.go = (req, res) ->
       
     if util.objectPropertiesCount(token.finalStyles) is 0
       logging.warn('No final styles applied to token')
-      console.dir(token)
+      logging.warn(token)
 
   #
   # Mark tokens that begin or end their line 

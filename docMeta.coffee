@@ -1,5 +1,6 @@
 util = require './util'
 logging = require './logging' 
+exec = require('child_process').exec
 
 exports.storePdfMetaData = (localCopy) ->
   
@@ -8,12 +9,12 @@ exports.storePdfMetaData = (localCopy) ->
   
   execCommand = 'pdfinfo -meta' + ' '
   execCommand += localCopy
-  logging.log execCommand
+  logging.log 'issuing command ' + execCommand
   exec execCommand, (error, stdout, stderr) ->
-    logging.log executable + "'s stdout: " + stdout
-    logging.log executable + "'s stderr: " + stderr
+    logging.log execCommand + "'s stdout: " + stdout
+    logging.log execCommand + "'s stderr: " + stderr
     if error isnt null
-      logging.log executable + "'sexec error: " + error
+      logging.log execCommand + "'sexec error: " + error
     else
       util.timelog "Getting pdf file metadata using pdfinfo"
       meta = {raw: stdout, stderr: stderr}

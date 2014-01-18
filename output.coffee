@@ -1,5 +1,6 @@
+util    = require './util'
 logging = require './logging' 
-require "fs"
+fs = require 'fs'
 #require "jsdom"
 #textHookPoint = getElementByID(window.hookPoint)
 #textHookPoint.innerHTML = "aaaaa" 
