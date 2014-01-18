@@ -15,6 +15,10 @@ exports.warn = function(msgOrObj) {
   return log('warn', msgOrObj);
 };
 
+exports.error = function(msgOrObj) {
+  return log('error', msgOrObj);
+};
+
 exports.init = function() {};
 
 tty = {

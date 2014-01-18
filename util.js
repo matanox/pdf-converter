@@ -102,14 +102,18 @@ exports.logObject = function(obj) {
   return logging.log(JSON.stringify(obj, null, 2));
 };
 
-timelog = function(timer) {
+timelog = function(timer, logger) {
   var end, start;
   if (timelog.timersLookup == null) {
     timelog.timersLookup = {};
   }
   if (timelog.timersLookup[timer] != null) {
     end = new Date();
-    logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
+    if (logger != null) {
+      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
+    } else {
+      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
+    }
     return delete timelog.timersLookup[timer];
   } else {
     start = new Date();

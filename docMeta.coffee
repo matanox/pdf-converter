@@ -2,7 +2,7 @@ util = require './util'
 logging = require './logging' 
 exec = require('child_process').exec
 
-exports.storePdfMetaData = (localCopy) ->
+exports.storePdfMetaData = (localCopy, docLogger) ->
   
   logging.log "Getting pdf file metadata using pdfinfo"
   util.timelog "Getting pdf file metadata using pdfinfo"

@@ -31,17 +31,17 @@ exports.go = (req, res) ->
       else
         console.log "fetching from InkFilepicker returned http status " + response.statusCode
         if error
-          logging.log "fetching from InkFilepicker returned error " + error 
+          docLogger.info "fetching from InkFilepicker returned error " + error 
     ).pipe(fs.createWriteStream(outFile))
 
   redirectToShowHtml = (redirectString) ->
-    logging.log "Passing html result to next level handler, by redirecting to: " + redirectString
+    docLogger.info "Passing html result to next level handler, by redirecting to: " + redirectString
     res.writeHead 301,
       Location: redirectString
 
     res.end()
   redirectToExtract = (redirectString) ->
-    logging.log "Passing html result to next level handler, by redirecting to: " + redirectString
+    docLogger.info "Passing html result to next level handler, by redirecting to: " + redirectString
     res.writeHead 301,
       Location: redirectString
 
@@ -50,7 +50,7 @@ exports.go = (req, res) ->
     name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
     storage.store "pdf", name, localCopy, docLogger
     docMeta.storePdfMetaData localCopy, docLogger
-    
+        
     #docMeta.storePdfMetaData(name, localCopy)
     
     # 
@@ -64,7 +64,7 @@ exports.go = (req, res) ->
     #		 * outputs for that file - the html, and accompanying files such as css, fonts, images, 
     #		 * and javascript that the html2pdfEX output needs to have. 
     #		 
-    logging.log "Starting the conversion from pdf to html"
+    docLogger.info "Starting the conversion from pdf to html"
     util.timelog "Conversion to html"
     
     #res.send('Please wait...'');
@@ -73,12 +73,12 @@ exports.go = (req, res) ->
     #outFileName = name + '.html'
     outFolder = "../local-copies/" + "html-converted/"
     execCommand += localCopy + " " + executalbeParams + " " + "--dest-dir=" + outFolder + "/" + name
-    logging.log execCommand
+    docLogger.info execCommand
     exec execCommand, (error, stdout, stderr) ->
-      logging.log executable + "'s stdout: " + stdout
-      logging.log executable + "'s stderr: " + stderr
+      docLogger.info executable + "'s stdout: " + stdout
+      docLogger.info executable + "'s stderr: " + stderr
       if error isnt null
-        logging.log executable + "'sexec error: " + error
+        docLogger.error executable + "'sexec error: " + error
       else
         
         # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
@@ -93,9 +93,12 @@ exports.go = (req, res) ->
   
   # Initialize logger for this document
   docLogger = new winston.Logger
-  docLoggername = baseFileName + '.log'
-  docLogger.add(winston.transports.File, {filename: docLoggername})
+  now = new Date()
+  docLoggerName = 'logs/' + baseFileName + '-' + now.toISOString() + '.log' + '.json'
+  docLogger.add(winston.transports.File, {
+    filename: docLoggerName,
+    timestamp: true})
   #docLogger = new (winston.Logger)({transports: [new (winston.transports.File)({filename: 'ffff'})]})
-  console.log('Logging handling for ' + baseFileName + ' in ' + docLoggername)
+  console.log('Logging handling of ' + baseFileName + ' in ' + docLoggerName)
 
   fetch(inkUrl, baseFileName, convert)  # fetch the upload and pass control to the convert function

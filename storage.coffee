@@ -1,6 +1,8 @@
 util = require './util'
 logging = require './logging' 
-exports.store = (bucket, filename, file) ->
+riak = require('riak-js').getClient({host: "localhost", port: "8098"})
+
+exports.store = (bucket, filename, file, docLogger) ->
   #
   # TODO: handle case that file already exists
   # TODO: handle riak error (winston email notifying of it etc.)
@@ -11,13 +13,12 @@ exports.store = (bucket, filename, file) ->
   #
   fs = require 'fs'
   util.timelog "storing file to clustered storage"
-  riak = require('riak-js').getClient({host: "localhost", port: "8098"})
   # alternative node riak client - https://github.com/nathanaschbacher/nodiak
   fileContent = fs.readFileSync(file)
   riak.save(bucket, filename, fileContent, (error) -> 
-    util.timelog "storing file to clustered storage"
+    util.timelog "storing file to clustered storage", docLogger
     if error?
-      console.error("failed storing file to clustered storage")
+      docLogger.error("failed storing file to clustered storage")
       return false
     return true)
 

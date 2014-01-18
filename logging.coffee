@@ -2,8 +2,9 @@ winston = require 'winston'
 
 log = (level, msgOrObj) -> winston.log(level, msgOrObj)
 
-exports.log  = (msgOrObj) -> log('info', msgOrObj)
-exports.warn = (msgOrObj) -> log('warn', msgOrObj)
+exports.log   = (msgOrObj) -> log('info',  msgOrObj)
+exports.warn  = (msgOrObj) -> log('warn',  msgOrObj)
+exports.error = (msgOrObj) -> log('error', msgOrObj)
 
 exports.init = () ->
   #winston.remove(winston.transports.Console) # turn off winston's default console logging

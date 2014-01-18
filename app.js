@@ -87,23 +87,21 @@ app.get('/handleInputFile', require('./routes/handleInputFile').go);
 authorization.googleAuthSetup(app, host, routes);
 
 startServer = function() {
-  var server;
+  var server, testFile, testUrl;
   server = http.createServer(app);
-  return server.listen(app.get('port'), function() {
+  server.listen(app.get('port'), function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
-  /*
-  # In dev mode, self-test on startup
-  unless env is 'production' 
-    #testFile = 'AzPP5D8IS0GDeeC1hFxs'
-    testFile = 'leZrsgpZQOSCCtS98bsu'
-    http.get('http://localhost/extract?name=' + testFile, (res) -> # xt7duLM0Q3Ow2gIBOvED
-      logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
-  
-  # Attach primus for development iterating, as long as it's convenient 
-  unless env is 'production' then primus.start(server)
-  */
-
+  if (env !== 'production') {
+    testFile = 'S7VUdDeES5O6Xby6xtc7';
+    testUrl = 'http://localhost/handleInputFile?tempLocation=https://www.filepicker.io/api/file/' + testFile;
+    http.get(testUrl, function(res) {
+      return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
+    });
+  }
+  if (env !== 'production') {
+    return primus.start(server);
+  }
 };
 
 markers.load(startServer);

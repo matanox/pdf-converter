@@ -7,7 +7,7 @@ logging = require('./logging');
 
 exec = require('child_process').exec;
 
-exports.storePdfMetaData = function(localCopy) {
+exports.storePdfMetaData = function(localCopy, docLogger) {
   var execCommand;
   logging.log("Getting pdf file metadata using pdfinfo");
   util.timelog("Getting pdf file metadata using pdfinfo");

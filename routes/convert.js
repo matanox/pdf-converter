@@ -24,7 +24,7 @@ executable = "pdf2htmlEX";
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0";
 
 exports.go = function(req, res) {
-  var baseFileName, convert, docLogger, docLoggername, fetch, inkUrl, redirectToExtract, redirectToShowHtml;
+  var baseFileName, convert, docLogger, docLoggerName, fetch, inkUrl, now, redirectToExtract, redirectToShowHtml;
   fetch = function(inkUrl, baseFileName, callOnSuccess) {
     var download, outFile;
     outFile = "../local-copies/" + "pdf/" + baseFileName + ".pdf";
@@ -34,20 +34,20 @@ exports.go = function(req, res) {
       } else {
         console.log("fetching from InkFilepicker returned http status " + response.statusCode);
         if (error) {
-          return logging.log("fetching from InkFilepicker returned error " + error);
+          return docLogger.info("fetching from InkFilepicker returned error " + error);
         }
       }
     }).pipe(fs.createWriteStream(outFile));
   };
   redirectToShowHtml = function(redirectString) {
-    logging.log("Passing html result to next level handler, by redirecting to: " + redirectString);
+    docLogger.info("Passing html result to next level handler, by redirecting to: " + redirectString);
     res.writeHead(301, {
       Location: redirectString
     });
     return res.end();
   };
   redirectToExtract = function(redirectString) {
-    logging.log("Passing html result to next level handler, by redirecting to: " + redirectString);
+    docLogger.info("Passing html result to next level handler, by redirecting to: " + redirectString);
     res.writeHead(301, {
       Location: redirectString
     });
@@ -58,17 +58,17 @@ exports.go = function(req, res) {
     name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
     storage.store("pdf", name, localCopy, docLogger);
     docMeta.storePdfMetaData(localCopy, docLogger);
-    logging.log("Starting the conversion from pdf to html");
+    docLogger.info("Starting the conversion from pdf to html");
     util.timelog("Conversion to html");
     execCommand = executable + " ";
     outFolder = "../local-copies/" + "html-converted/";
     execCommand += localCopy + " " + executalbeParams + " " + "--dest-dir=" + outFolder + "/" + name;
-    logging.log(execCommand);
+    docLogger.info(execCommand);
     return exec(execCommand, function(error, stdout, stderr) {
-      logging.log(executable + "'s stdout: " + stdout);
-      logging.log(executable + "'s stderr: " + stderr);
+      docLogger.info(executable + "'s stdout: " + stdout);
+      docLogger.info(executable + "'s stderr: " + stderr);
       if (error !== null) {
-        return logging.log(executable + "'sexec error: " + error);
+        return docLogger.error(executable + "'sexec error: " + error);
       } else {
         util.timelog("Conversion to html");
         return require('./extract').go(name, res);
@@ -78,10 +78,12 @@ exports.go = function(req, res) {
   inkUrl = req.query.tempLocation;
   baseFileName = inkUrl.replace("https://www.filepicker.io/api/file/", "");
   docLogger = new winston.Logger;
-  docLoggername = baseFileName + '.log';
+  now = new Date();
+  docLoggerName = 'logs/' + baseFileName + '-' + now.toISOString() + '.log' + '.json';
   docLogger.add(winston.transports.File, {
-    filename: docLoggername
+    filename: docLoggerName,
+    timestamp: true
   });
-  console.log('Logging handling for ' + baseFileName + ' in ' + docLoggername);
+  console.log('Logging handling of ' + baseFileName + ' in ' + docLoggerName);
   return fetch(inkUrl, baseFileName, convert);
 };

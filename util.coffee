@@ -82,7 +82,7 @@ exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2)
 #        both starting and ending a timer - just supply the same timer description string to both.
 #        The second call will log the time elapsed between the two. 
 #
-timelog = (timer) ->
+timelog = (timer, logger) ->
   #timer = timer + ' took'                                    # the timer string is also the message 
                                                               # it will log to the console when it ends.
                                                               # this just makes the logging nicer to look at.
@@ -91,7 +91,10 @@ timelog = (timer) ->
   if timelog.timersLookup[timer]?                             # is this timer already started?
     #console.timeEnd(timer)
     end = new Date()
-    logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
+    if logger?
+      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
+    else
+      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
 
     delete timelog.timersLookup[timer]
 
