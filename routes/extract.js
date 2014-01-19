@@ -51,7 +51,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
   return filtered;
 };
 
-exports.go = function(name, res) {
+exports.go = function(name, res, docLogger) {
   var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, iterator, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
@@ -61,15 +61,15 @@ exports.go = function(name, res) {
   util.timelog('htmlparser2');
   handler = new htmlparser.DomHandler(function(error, dom) {
     if (error) {
-      return logging.log('htmlparser2 failed loading document');
+      return docLogger.error('htmlparser2 failed loading document');
     } else {
-      return logging.log('htmlparser2 loaded document');
+      return docLogger.info('htmlparser2 loaded document');
     }
   });
   parser = new htmlparser.Parser(handler);
   parser.parseComplete(rawHtml);
   dom = handler.dom;
-  util.timelog('htmlparser2');
+  util.timelog('htmlparser2', docLogger);
   nodesWithStyles = html.representNodes(dom);
   tokenArrays = (function() {
     var _i, _len, _results;
@@ -88,6 +88,10 @@ exports.go = function(name, res) {
       tokens.push(token);
     }
   }
+  if (tokens.length === 0) {
+    docLogger.error("No text was extracted from input");
+    return false;
+  }
   tokens.reduce(function(x, y) {
     if (y.metaType === 'delimiter') {
       y.stylesArray = x.stylesArray;
@@ -101,10 +105,6 @@ exports.go = function(name, res) {
         throw "Error - zero length text in data";
       }
     }
-  }
-  if (tokens.length === 0) {
-    logging.log("No text was extracted from input");
-    throw "No text was extracted from input";
   }
   for (_l = 0, _len3 = tokens.length; _l < _len3; _l++) {
     token = tokens[_l];
@@ -129,8 +129,8 @@ exports.go = function(name, res) {
       }
     }
     if (util.objectPropertiesCount(token.finalStyles) === 0) {
-      logging.warn('No final styles applied to token');
-      logging.warn(token);
+      docLogger.warn('No final styles applied to token');
+      docLogger.warn(token);
     }
   }
   util.first(tokens).lineLocation = 'opener';
@@ -161,7 +161,7 @@ exports.go = function(name, res) {
     }
     return _results;
   };
-  logging.log(tokens.length);
+  docLogger.info(tokens.length);
   iterator(tokens, function(a, b, i, tokens) {
     var newDelimiter;
     if (b.lineLocation === 'opener') {
@@ -197,7 +197,7 @@ exports.go = function(name, res) {
     }
     return b;
   });
-  util.timelog('Extraction from html stage A');
+  util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
   for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
@@ -205,7 +205,7 @@ exports.go = function(name, res) {
     token.id = id;
     id += 1;
   }
-  util.timelog('ID seeding');
+  util.timelog('ID seeding', docLogger);
   textIndex = [];
   for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
     token = tokens[_q];
@@ -224,7 +224,7 @@ exports.go = function(name, res) {
       return -1;
     }
   });
-  util.timelog('Index creation');
+  util.timelog('Index creation', docLogger);
   /*
   markersRegex = ''
   
@@ -235,31 +235,31 @@ exports.go = function(name, res) {
     unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
   
     if markers.anything.test(markerText)
-      logging.log('in split for: ' + markerText)
+      docLogger.info('in split for: ' + markerText)
       splitText = markerText.split(markers.anything)
       for s in [0..splitText.length-1]
         unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
         if markers.anything.test(splitText[s])
           markerRegex += '\s'                    # add logical 'and then anything' to regex
-          logging.log('anything found')
+          docLogger.info('anything found')
         else
           markerRegex += splitText[s]            # add as-is text to the regex
-          logging.log('no anything marker')
+          docLogger.info('no anything marker')
     else
       markerRegex += markerText
   
   
     markersRegex += markerRegex
-    #logging.log(markerText)
-    #logging.log(markerRegex.source)
-    logging.log(markersRegex)
+    #docLogger.info(markerText)
+    #docLogger.info(markerRegex.source)
+    docLogger.info(markersRegex)
   
     
     util.timelog('Markers visualization') 
-    #logging.log('Marker regex length is ' + markersRegex.toString().length)
-    #logging.log(markersRegex.source)
+    #docLogger.info('Marker regex length is ' + markersRegex.toString().length)
+    #docLogger.info(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
-    #logging.log(testverbex.toRegExp().source)
+    #docLogger.info(testverbex.toRegExp().source)
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
@@ -268,10 +268,10 @@ exports.go = function(name, res) {
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
-        logging.log('All Caps Style detected for word: ' + token.text);
+        docLogger.info('All Caps Style detected for word: ' + token.text);
       }
       if (util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))) {
-        logging.log('Interspaced Title Word detected for word: ' + token.text);
+        docLogger.info('Interspaced Title Word detected for word: ' + token.text);
       }
     }
   }
@@ -305,7 +305,7 @@ exports.go = function(name, res) {
   if (group.length !== 0) {
     groups.push(group);
   }
-  util.timelog('Sentence tokenizing');
+  util.timelog('Sentence tokenizing', docLogger);
   documentQuantifiers = {};
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
@@ -315,54 +315,61 @@ exports.go = function(name, res) {
     var marker, matchedMarkers, outputHtml, sentence, _len11, _len12, _t, _u;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
-    for (_t = 0, _len11 = sentence.length; _t < _len11; _t++) {
-      token = sentence[_t];
-      if (token.metaType !== 'delimiter') {
-        for (_u = 0, _len12 = docSieve.length; _u < _len12; _u++) {
-          marker = docSieve[_u];
-          switch (marker.markerTokens[marker.nextExpected].metaType) {
-            case 'regular':
-              if (token.text === marker.markerTokens[marker.nextExpected].text) {
-                if (marker.nextExpected === (marker.markerTokens.length - 1)) {
-                  matchedMarkers.push(marker);
-                  token.finalStyles['color'] = 'red';
-                  marker.nextExpected = 0;
-                } else {
-                  marker.nextExpected += 1;
-                }
-              } else {
-                if (marker.markerTokens[marker.nextExpected].metaType !== 'anyOneOrMore') {
-                  marker.nextExpected = 0;
-                }
-              }
-              break;
-            case 'anyOneOrMore':
-              if (marker.nextExpected === (marker.markerTokens.length - 1)) {
-                marker.nextExpected = 0;
-              } else {
-                if (token.text === marker.markerTokens[marker.nextExpected + 1].text) {
-                  if ((marker.nextExpected + 1) === (marker.markerTokens.length - 1)) {
+    if (sentence != null) {
+      for (_t = 0, _len11 = sentence.length; _t < _len11; _t++) {
+        token = sentence[_t];
+        if (token.metaType !== 'delimiter') {
+          for (_u = 0, _len12 = docSieve.length; _u < _len12; _u++) {
+            marker = docSieve[_u];
+            switch (marker.markerTokens[marker.nextExpected].metaType) {
+              case 'regular':
+                if (token.text === marker.markerTokens[marker.nextExpected].text) {
+                  if (marker.nextExpected === (marker.markerTokens.length - 1)) {
                     matchedMarkers.push(marker);
                     token.finalStyles['color'] = 'red';
                     marker.nextExpected = 0;
                   } else {
-                    marker.nextExpected += 2;
+                    marker.nextExpected += 1;
+                  }
+                } else {
+                  if (marker.markerTokens[marker.nextExpected].metaType !== 'anyOneOrMore') {
+                    marker.nextExpected = 0;
                   }
                 }
-              }
+                break;
+              case 'anyOneOrMore':
+                if (marker.nextExpected === (marker.markerTokens.length - 1)) {
+                  marker.nextExpected = 0;
+                } else {
+                  if (token.text === marker.markerTokens[marker.nextExpected + 1].text) {
+                    if ((marker.nextExpected + 1) === (marker.markerTokens.length - 1)) {
+                      matchedMarkers.push(marker);
+                      token.finalStyles['color'] = 'red';
+                      marker.nextExpected = 0;
+                    } else {
+                      marker.nextExpected += 2;
+                    }
+                  }
+                }
+            }
           }
         }
       }
-    }
-    sentenceIdx += 1;
-    if (sentenceIdx < groups.length) {
-      return setImmediate(function() {
-        return markSentence(sentenceIdx + 1);
-      });
+      sentenceIdx += 1;
+      if (sentenceIdx < groups.length) {
+        return setImmediate(function() {
+          return markSentence(sentenceIdx);
+        });
+      } else {
+        util.timelog('Markers visualization', docLogger);
+        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger);
+        return output.serveOutput(outputHtml, name, res, docLogger);
+      }
     } else {
-      util.timelog('Markers visualization');
-      outputHtml = html.buildOutputHtml(tokens, inputStylesMap);
-      return output.serveOutput(outputHtml, name, res);
+      console.error('zero length sentence registered');
+      console.error(sentenceIdx);
+      console.error(groups.length);
+      return console.error(name);
     }
   };
   return markSentence(0);

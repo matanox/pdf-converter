@@ -236,7 +236,7 @@ exports.tokenize = (nodeWithStyles) ->
 #
 # Build html output
 #
-exports.buildOutputHtml = (tokens, finalStyles) ->
+exports.buildOutputHtml = (tokens, finalStyles, docLogger) ->
 
   #
   # Building the output for a single token....
@@ -258,7 +258,7 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
       return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
     else 
-      logging.warn('token had no styles attached to it when building output. token text: ' + token.text)
+      docLogger.warn('token had no styles attached to it when building output. token text: ' + token.text)
       return "<span>#{token.text}</span>"
 
 
@@ -278,7 +278,7 @@ exports.buildOutputHtml = (tokens, finalStyles) ->
       #plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
       plainText = plainText + wrapWithAttributes(x)
 
-  util.timelog('Serialization to output') 
+  util.timelog('Serialization to output', docLogger) 
 
   #logging.log(plainText)
   plainText

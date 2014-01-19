@@ -29,7 +29,7 @@ filterZeroLengthText = (ourDivRepresentation) ->
 #
 # Extract text content and styles from html
 #
-exports.go = (name, res) ->
+exports.go = (name, res ,docLogger) ->
   util.timelog('Extraction from html stage A')
 
   # Read the input html 
@@ -44,15 +44,15 @@ exports.go = (name, res) ->
   util.timelog('htmlparser2') 
   handler = new htmlparser.DomHandler((error, dom) ->
     if (error)
-      logging.log('htmlparser2 failed loading document')
+      docLogger.error('htmlparser2 failed loading document')
     else
-      logging.log('htmlparser2 loaded document')
+      docLogger.info('htmlparser2 loaded document')
   )
   parser = new htmlparser.Parser(handler)
   parser.parseComplete(rawHtml)
   dom = handler.dom
-  #logging.log(dom)
-  util.timelog('htmlparser2') 
+  #docLogger.info(dom)
+  util.timelog 'htmlparser2', docLogger 
  
   # Discard any divs that contain zero-length text
   #nodesWithStyles = filterZeroLengthText(divsWithStyles)
@@ -63,21 +63,26 @@ exports.go = (name, res) ->
   # to implicitly infer a delimiter at the end of each div, otherwise we do.
   # The use of a constant ratio test is extremely coarse and temporary,
   # a refined solution should replace it.
-  #logging.log(endsSpaceDelimited)
-  #logging.log(endsSpaceDelimited / divsNum)
+  #docLogger.info(endsSpaceDelimited)
+  #docLogger.info(endsSpaceDelimited / divsNum)
   #if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
   nodesWithStyles = html.representNodes(dom)
 
   tokenArrays = (html.tokenize node for node in nodesWithStyles)
 
-  #logging.log(node)
+  #docLogger.info(node)
 
   # Flatten to one-dimensional array of tokens...
   tokens = []
   for tokenArray in tokenArrays
     for token in tokenArray
       tokens.push(token)
+
+  if tokens.length == 0
+    docLogger.error("No text was extracted from input")
+    return false
+    #throw("No text was extracted from input")
 
   # Smooth out styles such that each delimiter 
   # inherits the style of its preceding token. 
@@ -91,29 +96,25 @@ exports.go = (name, res) ->
     if token.text.length == 0
       throw "Error - zero length text in data"
 
-  if tokens.length == 0
-    logging.log("No text was extracted from input")
-    throw("No text was extracted from input")
-
   #
   # Augment each token with its final calculated styles as well as position information.
   # E.g. read the css style definitions, of the css classes assigned to a token, 
   # and add them to the token.
   #
-  #logging.log(tokens)  
+  #docLogger.info(tokens)  
   for token in tokens 
     #console.dir(token)
     token.finalStyles = {}
     token.positionInfo = {}
 
     for cssClasses in token.stylesArray  # cascade the styles from each parent node 
-      #logging.log cssClasses
+      #docLogger.info cssClasses
       for cssClass in cssClasses         # iterate over each css class indicated for the token,
                                          # adding its final style definitions to the token
-        #logging.log cssClass                                         
+        #docLogger.info cssClass                                         
         styles = css.getFinalStyles(cssClass, inputStylesMap)
         if styles? 
-          #logging.log(styles)
+          #docLogger.info(styles)
           for style in styles 
             if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
               token.positionInfo[style.property] = style.value
@@ -121,8 +122,8 @@ exports.go = (name, res) ->
               token.finalStyles[style.property] = style.value
       
     if util.objectPropertiesCount(token.finalStyles) is 0
-      logging.warn('No final styles applied to token')
-      logging.warn(token)
+      docLogger.warn('No final styles applied to token')
+      docLogger.warn(token)
 
   #
   # Mark tokens that begin or end their line 
@@ -142,13 +143,13 @@ exports.go = (name, res) ->
     if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener                         
-      #logging.log('closer: ' + a.text)
-      #logging.log('opener: ' + b.text)
+      #docLogger.info('closer: ' + a.text)
+      #docLogger.info('opener: ' + b.text)
       
       if lastRowPosLeft?
-        #logging.log(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
+        #docLogger.info(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
         if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
-          #logging.log('opener')
+          #docLogger.info('opener')
           a.paragraph = 'closer'
           b.paragraph = 'opener'      
       lastRowPosLeft = b.positionInfo.left
@@ -168,12 +169,12 @@ exports.go = (name, res) ->
   # 1. Delimitation augmentation
   # 2. Uniting hyphen-split words (E.g. 'associa-', 'ted' -> 'associated')
   #
-  logging.log(tokens.length)
+  docLogger.info(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
     if b.lineLocation is 'opener'       
       if a.lineLocation is 'closer'       
         if a.metaType is 'regular' # line didn't include an ending delimiter 
-          #logging.log('undelimited end of line detected')
+          #docLogger.info('undelimited end of line detected')
           # if detected, unite a line boundary 'hypen-split'
           if util.endsWith(a.text, '-')
             a.text = a.text.slice(0, -1)   # discard the hyphen
@@ -185,7 +186,7 @@ exports.go = (name, res) ->
           # was just united, in which case it's not necessary
           else
             #if a.text is 'approach' and b.text is 'to'         
-              #logging.log('found at ' + i)
+              #docLogger.info('found at ' + i)
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles    
@@ -193,10 +194,10 @@ exports.go = (name, res) ->
             return 2
     return 1)
 
-  #logging.log(tokens.length)
+  #docLogger.info(tokens.length)
   #util.logObject(tokens)
   #for token in tokens 
-  #  logging.log(token.metaType)
+  #  docLogger.info(token.metaType)
 
   #
   # Unite token couples that have no delimiter in between them,
@@ -215,9 +216,9 @@ exports.go = (name, res) ->
         return a
     return b
   
-  #logging.log(tokens.length)
+  #docLogger.info(tokens.length)
 
-  util.timelog('Extraction from html stage A')
+  util.timelog 'Extraction from html stage A', docLogger
 
   # Add unique ids to tokens - after all uniting of tokens already took place
   util.timelog('ID seeding')        
@@ -225,7 +226,7 @@ exports.go = (name, res) ->
   for token in tokens
     token.id = id
     id += 1
-  util.timelog('ID seeding')            
+  util.timelog 'ID seeding', docLogger
 
   # Create a sorted index
   textIndex = []
@@ -237,8 +238,8 @@ exports.go = (name, res) ->
       return 1
     else
       return -1)
-  util.timelog('Index creation')      
-  #logging.log textIndex
+  util.timelog 'Index creation', docLogger      
+  #docLogger.info textIndex
 
   ###
   markersRegex = ''
@@ -250,31 +251,31 @@ exports.go = (name, res) ->
     unless m is 40 then markersRegex += "|"  # add logical 'or' to regex 
 
     if markers.anything.test(markerText)
-      logging.log('in split for: ' + markerText)
+      docLogger.info('in split for: ' + markerText)
       splitText = markerText.split(markers.anything)
       for s in [0..splitText.length-1]
         unless s is 0 then markerRegex += '|'    # add logical 'or' to regex 
         if markers.anything.test(splitText[s])
           markerRegex += '\s'                    # add logical 'and then anything' to regex
-          logging.log('anything found')
+          docLogger.info('anything found')
         else
           markerRegex += splitText[s]            # add as-is text to the regex
-          logging.log('no anything marker')
+          docLogger.info('no anything marker')
     else
       markerRegex += markerText
 
 
     markersRegex += markerRegex
-    #logging.log(markerText)
-    #logging.log(markerRegex.source)
-    logging.log(markersRegex)
+    #docLogger.info(markerText)
+    #docLogger.info(markerRegex.source)
+    docLogger.info(markersRegex)
 
     
     util.timelog('Markers visualization') 
-    #logging.log('Marker regex length is ' + markersRegex.toString().length)
-    #logging.log(markersRegex.source)
+    #docLogger.info('Marker regex length is ' + markersRegex.toString().length)
+    #docLogger.info(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
-    #logging.log(testverbex.toRegExp().source)
+    #docLogger.info(testverbex.toRegExp().source)
     ###
 
   docSieve = markers.createDocumentSieve(markers.baseSieve)
@@ -288,9 +289,9 @@ exports.go = (name, res) ->
     if token.metaType is 'regular'
       token.calculatedProperties = []
       if util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
-        logging.log('All Caps Style detected for word: ' + token.text);
+        docLogger.info('All Caps Style detected for word: ' + token.text);
       if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
-        logging.log('Interspaced Title Word detected for word: ' + token.text)
+        docLogger.info('Interspaced Title Word detected for word: ' + token.text)
 
 
   #
@@ -317,7 +318,7 @@ exports.go = (name, res) ->
           group = []
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
-  util.timelog('Sentence tokenizing')  
+  util.timelog 'Sentence tokenizing', docLogger  
 
   # Log some statistics about sentences
   documentQuantifiers = {}
@@ -334,52 +335,58 @@ exports.go = (name, res) ->
   # iterate the sentences such that each sentence queues handling 
   # of the next one on the call stack. So that this cpu intensive bit doesn't block the process
   markSentence = (sentenceIdx) ->
-    #logging.log(sentenceIdx)
+    #docLogger.info(sentenceIdx)
     sentence = groups[sentenceIdx]
     matchedMarkers = []
-
-    for token in sentence when token.metaType isnt 'delimiter'  # for each text token of the sentence
-      for marker in docSieve
-        #logging.log (marker.nextExpected.toString() + ' ' + token.text + 'v.s.'+ marker.markerTokens[marker.nextExpected].text)
-        switch marker.markerTokens[marker.nextExpected].metaType
-          when 'regular' 
-            
-            if token.text is marker.markerTokens[marker.nextExpected].text
-              if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
-                #logging.log('whole marker matched: ' + console.dir(marker))
-                matchedMarkers.push(marker)
-                token.finalStyles['color'] = 'red'
-                marker.nextExpected = 0
-              else
-                #logging.log('marker token matched ')
-                marker.nextExpected += 1
-            else 
-              unless marker.markerTokens[marker.nextExpected].metaType is 'anyOneOrMore'
-                marker.nextExpected = 0  # out of match for this marker
-
-          when 'anyOneOrMore'
-            if marker.nextExpected is (marker.markerTokens.length - 1)       # is it the last token of the marker?
-              marker.nextExpected = 0    # out of match for this marker
-            else 
-              if token.text is marker.markerTokens[marker.nextExpected + 1].text 
-                if (marker.nextExpected + 1) is (marker.markerTokens.length - 1)
-                  #logging.log('whole marker matched after wildcard: ' + console.dir(marker))
+    if sentence?
+      for token in sentence when token.metaType isnt 'delimiter'  # for each text token of the sentence
+        for marker in docSieve
+          #docLogger.info (marker.nextExpected.toString() + ' ' + token.text + 'v.s.'+ marker.markerTokens[marker.nextExpected].text)
+          switch marker.markerTokens[marker.nextExpected].metaType
+            when 'regular' 
+              
+              if token.text is marker.markerTokens[marker.nextExpected].text
+                if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
+                  #docLogger.info('whole marker matched: ' + console.dir(marker))
                   matchedMarkers.push(marker)
                   token.finalStyles['color'] = 'red'
                   marker.nextExpected = 0
                 else
-                  marker.nextExpected += 2
+                  #docLogger.info('marker token matched ')
+                  marker.nextExpected += 1
+              else 
+                unless marker.markerTokens[marker.nextExpected].metaType is 'anyOneOrMore'
+                  marker.nextExpected = 0  # out of match for this marker
 
-    sentenceIdx += 1
-    if sentenceIdx < groups.length
-      setImmediate(() -> markSentence(sentenceIdx+1)) # queue handling of the next sentence while 
-                                                      # allowing IO to occur in between (http://nodejs.org/api/timers.html#timers_setimmediate_callback_arg)
-    else 
-      util.timelog('Markers visualization') 
+            when 'anyOneOrMore'
+              if marker.nextExpected is (marker.markerTokens.length - 1)       # is it the last token of the marker?
+                marker.nextExpected = 0    # out of match for this marker
+              else 
+                if token.text is marker.markerTokens[marker.nextExpected + 1].text 
+                  if (marker.nextExpected + 1) is (marker.markerTokens.length - 1)
+                    #docLogger.info('whole marker matched after wildcard: ' + console.dir(marker))
+                    matchedMarkers.push(marker)
+                    token.finalStyles['color'] = 'red'
+                    marker.nextExpected = 0
+                  else
+                    marker.nextExpected += 2
 
-      # Send back the outcome
-      outputHtml = html.buildOutputHtml(tokens, inputStylesMap)
-      output.serveOutput(outputHtml, name, res)
+      sentenceIdx += 1
+      if sentenceIdx < groups.length
+        setImmediate(() -> markSentence(sentenceIdx)) # queue handling of the next sentence while 
+                                                        # allowing IO to occur in between (http://nodejs.org/api/timers.html#timers_setimmediate_callback_arg)
+      else 
+        util.timelog 'Markers visualization', docLogger
+
+        # Send back the outcome
+        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)
+        output.serveOutput(outputHtml, name, res, docLogger)
+
+    else
+      console.error 'zero length sentence registered'
+      console.error sentenceIdx
+      console.error groups.length
+      console.error name
 
   markSentence(0) # start the iteration over sentences. 
                   # Each one queues the next. Last one passes over to the next phase.
@@ -387,7 +394,7 @@ exports.go = (name, res) ->
     #if matchedMarkers.length > 0
       #util.logObject(matchedMarkers)
       #util.logObject(sentence)
-      #logging.log()
+      #docLogger.info()
       #for token in sentence
         #token.finalStyles['color'] = 'red'  # overide the color
   

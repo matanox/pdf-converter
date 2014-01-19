@@ -110,9 +110,9 @@ timelog = function(timer, logger) {
   if (timelog.timersLookup[timer] != null) {
     end = new Date();
     if (logger != null) {
-      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
+      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms');
     } else {
-      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms');
+      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms');
     }
     return delete timelog.timersLookup[timer];
   } else {

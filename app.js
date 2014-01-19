@@ -89,12 +89,13 @@ authorization.googleAuthSetup(app, host, routes);
 startServer = function() {
   var server, testFile, testUrl;
   server = http.createServer(app);
+  server.timeout = 0;
   server.listen(app.get('port'), function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
   if (env !== 'production') {
-    testFile = 'S7VUdDeES5O6Xby6xtc7';
-    testUrl = 'http://localhost/handleInputFile?tempLocation=https://www.filepicker.io/api/file/' + testFile;
+    testFile = 'rwUEzeLnRfKgNh23R82W';
+    testUrl = 'http://localhost/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile;
     http.get(testUrl, function(res) {
       return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
     });

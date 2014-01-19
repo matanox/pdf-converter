@@ -92,9 +92,9 @@ timelog = (timer, logger) ->
     #console.timeEnd(timer)
     end = new Date()
     if logger?
-      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
+      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms')
     else
-      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + 'ms')
+      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms')
 
     delete timelog.timersLookup[timer]
 

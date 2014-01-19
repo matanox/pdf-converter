@@ -85,7 +85,7 @@ tokenizeMarker = function(marker) {
   return tokens;
 };
 
-exports.createDocumentSieve = function(baseSieve) {
+exports.createDocumentSieve = function(baseSieve, docLogger) {
   var baseSieveRow, k, sieve, sieveRow, _i, _len;
   sieve = [];
   for (_i = 0, _len = baseSieve.length; _i < _len; _i++) {

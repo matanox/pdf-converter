@@ -13,7 +13,7 @@ hookId = 'hookPoint';
 
 hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span id="' + hookId + '"')) + 1;
 
-exports.serveOutput = function(html, name, res) {
+exports.serveOutput = function(html, name, res, docLogger) {
   var outputFile, outputHtml;
   outputFile = '../local-copies/' + 'output/' + name + '.html';
   outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos));
@@ -23,8 +23,9 @@ exports.serveOutput = function(html, name, res) {
       res.send(500);
       throw err;
     }
-    util.timelog('Saving serialized output to file');
-    logging.log('Sending response....');
+    util.timelog('Saving serialized output to file', docLogger);
+    docLogger.info('Sending response....');
+    util.timelog('from upload to serving', docLogger);
     return res.sendfile(name + '.html', {
       root: '../local-copies/' + 'output/'
     });

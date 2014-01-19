@@ -84,7 +84,7 @@ tokenizeMarker = (marker) ->
 #
 # Derive a working copy sieve by deep copying the base sieve, and augment it
 #
-exports.createDocumentSieve = (baseSieve) ->
+exports.createDocumentSieve = (baseSieve, docLogger) ->
   sieve = []
   for baseSieveRow in baseSieve
     #

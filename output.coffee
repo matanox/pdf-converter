@@ -15,7 +15,7 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span i
 
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
-exports.serveOutput = (html, name, res) ->
+exports.serveOutput = (html, name, res, docLogger) ->
   #logging.log(html)
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
@@ -30,8 +30,10 @@ exports.serveOutput = (html, name, res) ->
       res.send(500)
       throw err
 
-    util.timelog('Saving serialized output to file')  
+    util.timelog('Saving serialized output to file', docLogger)  
     #logging.log('Output saved')
 
-    logging.log('Sending response....')
+    docLogger.info('Sending response....')
+    util.timelog 'from upload to serving', docLogger
     res.sendfile(name + '.html', {root: '../local-copies/' + 'output/'})) # variable use by closure here...
+

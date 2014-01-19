@@ -9,24 +9,21 @@ exec = require('child_process').exec;
 
 exports.storePdfMetaData = function(localCopy, docLogger) {
   var execCommand;
-  logging.log("Getting pdf file metadata using pdfinfo");
   util.timelog("Getting pdf file metadata using pdfinfo");
   execCommand = 'pdfinfo -meta' + ' ';
   execCommand += localCopy;
-  logging.log('issuing command ' + execCommand);
   return exec(execCommand, function(error, stdout, stderr) {
     var meta;
-    logging.log(execCommand + "'s stdout: " + stdout);
-    logging.log(execCommand + "'s stderr: " + stderr);
+    docLogger.info(execCommand + "'s stdout: " + stdout);
+    docLogger.info(execCommand + "'s stderr: " + stderr);
     if (error !== null) {
-      return logging.log(execCommand + "'sexec error: " + error);
+      return docLogger.error(execCommand + "'sexec error: " + error);
     } else {
-      util.timelog("Getting pdf file metadata using pdfinfo");
-      meta = {
-        raw: stdout,
-        stderr: stderr
+      util.timelog("Getting pdf file metadata using pdfinfo", docLogger);
+      return meta = {
+        'raw': stdout,
+        'stderr': stderr
       };
-      return console.dir(meta);
     }
   });
 };

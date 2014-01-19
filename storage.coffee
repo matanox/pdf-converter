@@ -18,13 +18,7 @@ exports.store = (bucket, filename, file, docLogger) ->
   riak.save(bucket, filename, fileContent, (error) -> 
     util.timelog "storing file to clustered storage", docLogger
     if error?
-      docLogger.error("failed storing file to clustered storage")
-      return false
-    return true)
-
-
-
-
+      docLogger.error("failed storing file to clustered storage"))
 
   ###
   riak.get('pdf', 'tXqIBGiBR5aMgxBQBOVY', (error, fileContent) ->

@@ -220,7 +220,7 @@ exports.tokenize = function(nodeWithStyles) {
   return tokens;
 };
 
-exports.buildOutputHtml = function(tokens, finalStyles) {
+exports.buildOutputHtml = function(tokens, finalStyles, docLogger) {
   var plainText, wrapWithAttributes, x, _i, _len;
   wrapWithAttributes = function(token, moreStyle) {
     var style, stylesString, text, val, _ref;
@@ -242,7 +242,7 @@ exports.buildOutputHtml = function(tokens, finalStyles) {
       }
       return "<span " + stylesString + " id=\"" + x.id + "\">" + text + "</span>";
     } else {
-      logging.warn('token had no styles attached to it when building output. token text: ' + token.text);
+      docLogger.warn('token had no styles attached to it when building output. token text: ' + token.text);
       return "<span>" + token.text + "</span>";
     }
   };
@@ -265,6 +265,6 @@ exports.buildOutputHtml = function(tokens, finalStyles) {
       plainText = plainText + wrapWithAttributes(x);
     }
   }
-  util.timelog('Serialization to output');
+  util.timelog('Serialization to output', docLogger);
   return plainText;
 };
