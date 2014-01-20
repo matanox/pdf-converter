@@ -38,6 +38,8 @@ logUsageIfChanged = () ->
   	else 
   	  logUsage(later, 'decreased to')
 
+
+  logging.logPerf('on interval')
   former = later
 
 exports.start = () ->

@@ -42,6 +42,7 @@ logUsageIfChanged = function() {
       logUsage(later, 'decreased to');
     }
   }
+  logging.logPerf('on interval');
   return former = later;
 };
 

@@ -33,7 +33,7 @@ responses = 0;
 
 aggregateWait = 0;
 
-util.timelog('Overall duration');
+util.timelog('Overall ');
 
 _ref = fs.readdirSync(directory);
 for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -54,12 +54,13 @@ for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           requestElapsedTime = util.timelog('Server response for ' + filename);
           aggregateWait += requestElapsedTime / 1000;
           if (responses === requests) {
+            logging.logPerf('');
             util.timelog('Overall ');
             logging.logPerf('');
             logging.logPerf('-----------------------------');
             logging.logPerf('Aggregate response await time');
-            logging.logPerf('time: ' + aggregateWait);
-            logging.logPerf('normalized:' + (aggregateWait / responses));
+            logging.logPerf('time:       ' + aggregateWait + ' secs');
+            logging.logPerf('normalized: ' + (aggregateWait / responses));
             logging.logPerf('');
             process.exit(0);
           }

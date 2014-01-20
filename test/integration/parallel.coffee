@@ -30,7 +30,7 @@ responses = 0
 # Initializing for an aggregation of overall response await time
 aggregateWait = 0
 
-util.timelog 'Overall duration'
+util.timelog 'Overall '
 
 for filename in fs.readdirSync(directory)
   if fs.statSync(directory + filename).isFile() 
@@ -51,12 +51,13 @@ for filename in fs.readdirSync(directory)
           aggregateWait += (requestElapsedTime / 1000)
 
           if responses is requests
+            logging.logPerf ''
             util.timelog 'Overall '
             logging.logPerf ''
             logging.logPerf '-----------------------------'
             logging.logPerf 'Aggregate response await time'
-            logging.logPerf 'time: '      + aggregateWait
-            logging.logPerf 'normalized:' + (aggregateWait / responses)
+            logging.logPerf 'time:       ' + aggregateWait + ' secs'
+            logging.logPerf 'normalized: ' + (aggregateWait / responses)
             logging.logPerf ''
             process.exit(0) 
             return) (filename)
