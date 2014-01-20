@@ -85,22 +85,25 @@ exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2)
 timelog = (timer, logger) ->
   #timer = timer + ' took'                                    # the timer string is also the message 
                                                               # it will log to the console when it ends.
-                                                              # this just makes the logging nicer to look at.
+                                                             
   unless timelog.timersLookup? then timelog.timersLookup = {} # init timers array only once
   
   if timelog.timersLookup[timer]?                             # is this timer already started?
     #console.timeEnd(timer)
     end = new Date()
+    elapsed = (end.getTime() - timelog.timersLookup[timer])
     if logger?
-      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms')
+      logger.info(timer + ' took: ' + elapsed + ' ms')
     else
-      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms')
+      logging.log(timer + ' took: ' + elapsed + ' ms')
 
     delete timelog.timersLookup[timer]
+    return elapsed
 
   else                                                        # or is it starting now?
     start = new Date()
     timelog.timersLookup[timer] = start.getTime()
+    return null
     #console.time(timer)
 
   # We should later also send this data to an analytics engine or depo. 

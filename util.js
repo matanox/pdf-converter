@@ -103,21 +103,24 @@ exports.logObject = function(obj) {
 };
 
 timelog = function(timer, logger) {
-  var end, start;
+  var elapsed, end, start;
   if (timelog.timersLookup == null) {
     timelog.timersLookup = {};
   }
   if (timelog.timersLookup[timer] != null) {
     end = new Date();
+    elapsed = end.getTime() - timelog.timersLookup[timer];
     if (logger != null) {
-      logger.info(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms');
+      logger.info(timer + ' took: ' + elapsed + ' ms');
     } else {
-      logging.log(timer + ' took: ' + (end.getTime() - timelog.timersLookup[timer]) + ' ms');
+      logging.log(timer + ' took: ' + elapsed + ' ms');
     }
-    return delete timelog.timersLookup[timer];
+    delete timelog.timersLookup[timer];
+    return elapsed;
   } else {
     start = new Date();
-    return timelog.timersLookup[timer] = start.getTime();
+    timelog.timersLookup[timer] = start.getTime();
+    return null;
   }
 };
 

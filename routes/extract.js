@@ -90,6 +90,10 @@ exports.go = function(name, res, docLogger) {
   }
   if (tokens.length === 0) {
     docLogger.error("No text was extracted from input");
+    console.info("No text was extracted from input");
+    res.writeHead(505);
+    res.write('We are sorry but the pdf you uploaded ' + '(' + name + ')' + 'cannot be processed.');
+    res.end();
     return false;
   }
   tokens.reduce(function(x, y) {
