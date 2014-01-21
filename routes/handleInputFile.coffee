@@ -55,7 +55,7 @@ initDocLogger = (name) ->
   docLogger
 
 exports.go = (req, res) -> 
-
+  
   #
   # Handle api request for inkUrl file (fetch the upload and pass on to conversion)
   #

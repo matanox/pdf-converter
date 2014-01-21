@@ -96,9 +96,6 @@ startServer = function() {
   if (env !== 'production') {
     testFile = 'rwUEzeLnRfKgNh23R82W';
     testUrl = 'http://localhost/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile;
-    http.get(testUrl, function(res) {
-      return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
-    });
   }
   if (env !== 'production') {
     return primus.start(server);

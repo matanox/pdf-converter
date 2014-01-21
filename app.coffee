@@ -110,8 +110,8 @@ startServer = () ->
     testFile = 'rwUEzeLnRfKgNh23R82W'
 
     testUrl = 'http://localhost/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile
-    http.get(testUrl, (res) ->
-      logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
+    #http.get(testUrl, (res) ->
+    #  logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
 
   # Attach primus for development iterating, as long as it's convenient 
   unless env is 'production' then primus.start(server)

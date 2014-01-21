@@ -92,7 +92,7 @@ exports.go = function(name, res, docLogger) {
     docLogger.error("No text was extracted from input");
     console.info("No text was extracted from input");
     res.writeHead(505);
-    res.write('We are sorry but the pdf you uploaded ' + '(' + name + ')' + 'cannot be processed.');
+    res.write('We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.');
     res.end();
     return false;
   }
