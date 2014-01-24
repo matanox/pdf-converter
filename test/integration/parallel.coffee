@@ -3,13 +3,23 @@ fs = require 'fs'
 nconf = require 'nconf'
 util = require '../../util'
 logging = require '../../logging'
-#timer = require("../../timer")
 
 nconf.argv().env()
-nconf.defaults host: "localhost"
-host = nconf.get "host"
+nconf.defaults host: "localhost", serial: false
 
-logging.logGreen 'Running against host: ' + nconf.get('host') + '...'
+serial = nconf.get "serial"
+switch serial
+  when false
+    logging.logGreen 'Running in concurrent mode'
+  when true
+    logging.logGreen 'Running in serial mode'
+  else
+    logging.logYellow "Invalid value supplied for the --serial argument, value can only be true or false"
+    process.exit(0)
+
+host = nconf.get "host"  
+logging.logGreen 'Running against host: ' + host + '...'
+
 logging.logGreen ''
 
 http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses after the 5 first client-side
@@ -18,10 +28,8 @@ http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses 
                                    # and practically take whole minutes to execute..... 
                                    # This definition removes this concurrency limitation from the client-side.
 
-# createCallBack = (callback, paramToFix) ->
-# httpCallBack()
 
-# invoke for all files in a directory
+# scan for files in the input directory
 directory = '../local-copies/pdf/'
 
 requests = 0
@@ -30,44 +38,79 @@ responses = 0
 # Initializing for an aggregation of overall response await time
 aggregateWait = 0
 
-util.timelog 'Overall '
+makeRequest = (filename) ->
 
+  requests += 1
+  httpCallBack = ((filename) -> 
+    (res) ->
+
+      responses +=1
+
+      # get the server response data
+      responseBody = ''
+
+      res.on('data', (chunk) -> responseBody += chunk)
+
+      res.on('end', () -> 
+        if res.statusCode is 200
+          logging.logGreen 'Server response for ' + filename + ' is:   ' + res.statusCode
+        else 
+          logging.logYellow 'Server response for ' + filename + ' is:   ' + res.statusCode + ', ' + responseBody
+
+        if serial
+          # Invoke next request unless all requests already made
+          toRequest.shift()
+          if toRequest.length > 0 
+            makeRequest(toRequest[0])
+
+        console.log responses + ' responses out of ' + requests + ' requests received thus far'
+        requestElapsedTime = util.timelog 'Server response for ' + filename
+
+        # add up time waited for this request, to the overal wait impact metric
+        aggregateWait += (requestElapsedTime / 1000)
+
+        if responses is requests
+          logging.logPerf ''
+          util.timelog 'Overall'
+          logging.logPerf ''
+          logging.logPerf '-----------------------------'
+          logging.logPerf 'Aggregate response await time'
+          logging.logPerf 'time:       ' + aggregateWait + ' secs'
+          logging.logPerf 'normalized: ' + (aggregateWait / responses)
+          logging.logPerf ''
+          process.exit(0) 
+          return)) (filename) # Callback application
+
+  console.log "Requesting " + directory + filename
+  util.timelog 'Server response for ' + filename
+
+  # Invoke api request
+  http.get 
+    host: host
+    port: 80
+    path: '/handleInputFile?' + 'localLocation=' + filename
+    method: 'GET',
+    httpCallBack 
+
+util.timelog 'Overall'
+
+toRequest = []
 for filename in fs.readdirSync(directory)
   if fs.statSync(directory + filename).isFile() 
     if filename != '.gitignore'
-      requests += 1
-      httpCallBack = ((filename) -> 
-        (res) ->
-          responses +=1
-          if res.statusCode is 200
-            logging.logGreen 'Server response for ' + filename + ' is:   ' + res.statusCode
-          else 
-            logging.logYellow 'Server response for ' + filename + ' is:   ' + res.statusCode
-
-          console.log responses + ' responses out of ' + requests + ' requests received thus far'
-          requestElapsedTime = util.timelog 'Server response for ' + filename
-
-          # add up time waited for this request, to the overal wait impact metric
-          aggregateWait += (requestElapsedTime / 1000)
-
-          if responses is requests
-            logging.logPerf ''
-            util.timelog 'Overall '
-            logging.logPerf ''
-            logging.logPerf '-----------------------------'
-            logging.logPerf 'Aggregate response await time'
-            logging.logPerf 'time:       ' + aggregateWait + ' secs'
-            logging.logPerf 'normalized: ' + (aggregateWait / responses)
-            logging.logPerf ''
-            process.exit(0) 
-            return) (filename)
-
-      console.log "Requesting " + directory + filename
-      util.timelog 'Server response for ' + filename
-      
-      # Invoke api request
-      http.get 'http://' + host + '/handleInputFile?' + 'localLocation=' + filename, httpCallBack 
+      toRequest.push(filename)
     else
       console.log 'Skipping .gitignore' 
   else
     console.log 'Skipping subdirectory ' + filename
+
+if toRequest.length > 0
+  if serial
+    makeRequest(toRequest[0])
+  else
+    for filename in toRequest
+      makeRequest(filename)
+else
+  console.log 'No files to process in directory. Existing.'
+    
+    
