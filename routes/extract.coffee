@@ -10,6 +10,14 @@ ctype   = require '../ctype'
 markers = require '../markers'
 verbex  = require 'verbal-expressions'
 
+iterator = (tokens, iterationFunc) ->
+  i = 1
+  while i < tokens.length
+    a = tokens[i-1]
+    b = tokens[i]
+    i = i + iterationFunc(a, b, i, tokens) 
+
+
 isImage = (text) -> util.startsWith(text, "<img ")
 
 # Utility function for filtering out images
@@ -161,13 +169,6 @@ exports.go = (name, res ,docLogger) ->
     return b
   util.last(tokens).lineLocation = 'closer'
 
-  iterator = (tokens, iterationFunc) ->
-    i = 1
-    while i < tokens.length
-      a = tokens[i-1]
-      b = tokens[i]
-      i = i + iterationFunc(a, b, i, tokens) 
-
   #
   # Handle end-of-line tokenization aspects: 
   # 1. Delimitation augmentation
@@ -203,6 +204,7 @@ exports.go = (name, res ,docLogger) ->
   #for token in tokens 
   #  docLogger.info(token.metaType)
 
+  ###
   #
   # Unite token couples that have no delimiter in between them,
   # the first of which ending with '-' (while applying the
@@ -219,7 +221,23 @@ exports.go = (name, res ,docLogger) ->
         tokens.splice(index, 1)        # remove second element
         return a
     return b
+  ###
   
+  #
+  # Unite tokens that do not have a delimiter in between them.
+  # This is necessary for the cases where pdf2html splits parts of 
+  # the same word between span elements. 
+  #
+  # (Should it actually better be part of the html level tokenization?)
+  #
+  iterator(tokens, (a, b, index, tokens) -> 
+    if a.metaType is 'regular' and b.metaType is 'regular'
+
+      a.text = a.text.concat(b.text) # concatenate text of second element into first
+      tokens.splice(index, 1)        # remove second element
+      return 0
+    return 1)
+
   #docLogger.info(tokens.length)
 
   util.timelog 'Extraction from html stage A', docLogger

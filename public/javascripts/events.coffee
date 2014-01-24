@@ -28,12 +28,27 @@ mark = (elements) ->
     document.getElementById(element).style.background = '#FAAC58'
   dragElements = new Array()
 
+contextmenuHandler = (event) ->
+  remove = (node) ->
+    node.parentNode.removeChild node
+
+  event.preventDefault()
+  event.stopPropagation()
+  event.stopImmediatePropagation()
+  console.log "right-click event captured"
+  console.log event.target
+
+  # We avoid taking action on the top element where the listener was registered.
+  # target is the element invoked on, currentTarget is the element where the 
+  # event listener was registered. In a DOM hierarcy of objects, they are 
+  # (typically) not the same element.
+  remove event.target unless event.target is event.currentTarget
+  false
+
 startEventMgmt = () ->
   console.log "Setting up events..."
   container = document.getElementById('hookPoint')
   page = document.body
-  remove = (node) ->
-    node.parentNode.removeChild node
 
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
@@ -62,19 +77,7 @@ startEventMgmt = () ->
     if inDrag and (event.target isnt container)
       dragElements.push event.target.id
 
-  container.oncontextmenu = (event) ->
-    event.preventDefault()
-    event.stopPropagation()
-    event.stopImmediatePropagation()
-    console.log "right-click event captured"
-    console.log event.target
-    
-    # We avoid taking action on the top element where the listener was registered.
-    # target is the element invoked on, currentTarget is the element where the 
-    # event listener was registered. In a DOM hierarcy of objects, they are 
-    # (typically) not the same element.
-    remove event.target unless event.target is event.currentTarget
-    false
+  container.addEventListener("contextmenu", contextmenuHandler)
 
   container.onclick = (event) ->
     event.preventDefault()
@@ -143,12 +146,15 @@ window.onload = () -> startEventMgmt()
 # SECURITY: Remove this function in case reloading may have adverse effect on logic
 #
 reload = () ->
-    script = document.createElement("script")
-    script.type = "text/javascript"
-    script.src = "javascripts/events.js"
-    document.getElementsByTagName("head")[0].appendChild(script)
-    startEventMgmt()
-    console.log('reloaded')
+  script = document.createElement("script")
+  script.type = "text/javascript"
+  script.src = "javascripts/events.js"
+  document.getElementsByTagName("head")[0].appendChild(script)
+  startEventMgmt()
+  console.log('reloaded')
+
+enableContext = () ->
+  document.getElementById("hookPoint").removeEventListener("contextmenu", contextmenuHandler)
 
 #
 #  eventCapture = function(event) 

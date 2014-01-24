@@ -15,8 +15,8 @@ parseCssClasses = (styleString) ->
 # Serializes html hierarchy into a sequence of 
 # tokens composed of text and style each.
 #
-# Basically it recursively walks the object model having been composed
-# by htmlparser2 from raw html, and spits out one token for each piece of text. 
+# Basically it recursively walks the object model having already been composed
+# by htmlparser2 out of raw html, and spits out one token for each piece of text. 
 #
 # The htmlparser2 object model can be seen and explored here - 
 # http://demos.forbeslindesay.co.uk/htmlparser2/
@@ -153,20 +153,9 @@ exports.tokenize = (nodeWithStyles) ->
     filtered.push(token) for token in tokens when token.length > 0
     filtered
 
-  # First off, tokenizing by space characters
   #
-  # In the process, double spaces (or more generally, sequences of spaces),  
-  # are automatically suppressed here for now. That's good as:
-  # at least pdf2htmlEX may provide double spaces where the 
-  # original line of text is very sparse (typically due to 
-  # accomodating all lines ending at the same pixel location).
-
-  # Record whether the string ends with a space character or not.
-  # This indicates whether the last token to be detected on it
-  # is itself post-delimited by a space or not - which matters.
-  
   # Split into tokens
-
+  #
   tokenize = (nodeWithStyles) ->
 
     # Function for passing on style to each token being created.
@@ -176,8 +165,20 @@ exports.tokenize = (nodeWithStyles) ->
       token.stylesArray = nodeWithStyles.stylesArray
       token
 
-    string = nodeWithStyles.text
+    # Tokenizing by space characters
+    #
+    # In the process, double spaces (or more generally, sequences of spaces),  
+    # are automatically suppressed here for now. That's good as:
+    # at least pdf2htmlEX may provide double spaces where the 
+    # original line of text is very sparse (typically due to 
+    # accomodating all lines ending at the same pixel location).
 
+    # Record whether the string ends with a space character or not.
+    # This indicates whether the last token to be detected on it
+    # is itself post-delimited by a space or not - which matters.
+
+    string = nodeWithStyles.text
+    
     insideWord      = false
     insideDelimiter = false
     tokens = []
