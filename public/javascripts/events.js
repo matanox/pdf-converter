@@ -62,7 +62,9 @@ startEventMgmt = function() {
     inDrag = false;
     inDrabMaybe = false;
     console.log("drag ended");
-    return mark(dragElements.unique());
+    if (dragElements.length > 0) {
+      return mark(dragElements.unique());
+    }
   };
   mousemoveHandler = function(event) {
     if (inDragMaybe === true) {

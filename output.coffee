@@ -6,12 +6,12 @@ fs = require 'fs'
 #textHookPoint.innerHTML = "aaaaa" 
 
 # Load the output template only once
-outputTemplate = fs.readFileSync('outputTemplate/index.html').toString() # this should be speedy and cached, sync won't hurt much
+outputTemplate = fs.readFileSync('outputTemplate/template.html').toString() # this should be speedy and cached, sync won't hurt much
 # Locate to the text position (inside the designated html element), 
 # where the output should be inserted in the template. 
 # (that's one character after the '>' closing the marked element's opening tag)
 hookId = 'hookPoint'
-hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span id="' + hookId + '"')) + 1
+hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1
 
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template

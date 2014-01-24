@@ -55,9 +55,8 @@ startEventMgmt = () ->
     inDrag      = false
     inDrabMaybe = false
     console.log "drag ended"
-    #console.dir dragElements.unique()
-    mark(dragElements.unique())
-    #ragElements = new Array()
+    if dragElements.length > 0
+      mark(dragElements.unique())
 
   mousemoveHandler = (event) ->
   

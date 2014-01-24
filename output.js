@@ -7,11 +7,11 @@ logging = require('./logging');
 
 fs = require('fs');
 
-outputTemplate = fs.readFileSync('outputTemplate/index.html').toString();
+outputTemplate = fs.readFileSync('outputTemplate/template.html').toString();
 
 hookId = 'hookPoint';
 
-hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('<span id="' + hookId + '"')) + 1;
+hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1;
 
 exports.serveOutput = function(html, name, res, docLogger) {
   var outputFile, outputHtml;

@@ -127,5 +127,5 @@ if (toRequest.length > 0) {
     }
   }
 } else {
-  console.log('No files to process in directory. Existing.');
+  logging.logYellow('No files to process in directory. Existing.');
 }

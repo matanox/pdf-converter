@@ -111,6 +111,6 @@ if toRequest.length > 0
     for filename in toRequest
       makeRequest(filename)
 else
-  console.log 'No files to process in directory. Existing.'
+  logging.logYellow 'No files to process in directory. Existing.'
     
     
