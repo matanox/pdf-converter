@@ -16,45 +16,53 @@ Array::unique = ->
   output[@[key]] = @[key] for key in [0...@length]
   value for key, value of output
 
-inDrag = false
+leftDown    = false
+inDragMaybe = false
+inDrag      = false
 dragElements = new Array()
 
 mark = (elements) ->
   for i in [Math.min.apply(null, elements)..Math.max.apply(null, elements)]
-    document.getElementById(i).style.background = '#FAAB58'
+    document.getElementById(i).style.background = '#FAA058'
   for element in elements
     document.getElementById(element).style.background = '#FAAC58'
   dragElements = new Array()
 
-endDrag = ->
-  hookPoint.removeEventListener "mousemove", mousemoveHandler, false
-  inDrag = false
-  console.log "drag ended"
-  #console.dir dragElements.unique()
-  mark(dragElements.unique())
-  #ragElements = new Array()
-
-mousemoveHandler = (event) ->
-  
-  #console.log('mouse move detected')
-  #console.dir(event)
-  #console.log(event.relatedTarget)
-  #console.log(event.srcElement)
-  #console.log(event.toElement)
-  #console.log(event.target)
-  
-  #console.log(event.target.id) 
-  if (inDrag is true) and (event.target.id isnt 'hookPoint')
-    dragElements.push event.target.id
-
-window.onload = ->
+startEventMgmt = () ->
   console.log "Setting up events..."
-  hookPoint = document.getElementById("hookPoint")
-  container = document.body
+  container = document.getElementById('hookPoint')
+  page = document.body
   remove = (node) ->
     node.parentNode.removeChild node
 
-  hookPoint.oncontextmenu = (event) ->
+  endDrag = ->
+    container.removeEventListener "mousemove", mousemoveHandler, false
+    inDrag      = false
+    inDrabMaybe = false
+    console.log "drag ended"
+    #console.dir dragElements.unique()
+    mark(dragElements.unique())
+    #ragElements = new Array()
+
+  mousemoveHandler = (event) ->
+  
+    #console.log('mouse move detected')
+    #console.dir(event)
+    #console.log(event.relatedTarget)
+    #console.log(event.srcElement)
+    #console.log(event.toElement)
+    #console.log(event.target)
+    #console.log(event.target.id) 
+
+    if inDragMaybe is true
+      inDrag = true             # only if mouse was moved after a click, then we are in a real 'drag situation'
+      console.log('dragging')
+      inDragMaybe = false       # avoid superfluous condition recurence 
+
+    if inDrag and (event.target isnt container)
+      dragElements.push event.target.id
+
+  container.oncontextmenu = (event) ->
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
@@ -65,10 +73,10 @@ window.onload = ->
     # target is the element invoked on, currentTarget is the element where the 
     # event listener was registered. In a DOM hierarcy of objects, they are 
     # (typically) not the same element.
-    remove event.target  unless event.target is event.currentTarget
+    remove event.target unless event.target is event.currentTarget
     false
 
-  hookPoint.onclick = (event) ->
+  container.onclick = (event) ->
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
@@ -77,7 +85,7 @@ window.onload = ->
     #console.log(event.target)
     false
 
-  hookPoint.ondblclick = (event) ->
+  container.ondblclick = (event) ->
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
@@ -86,26 +94,32 @@ window.onload = ->
     #console.log(event.target)
     false
 
-  container.onmouseup = (event) ->
+  page.onmouseup = (event) ->
     
     #event.preventDefault()
     #event.stopPropagation()
     #event.stopImmediatePropagation()
     # console.log(event.target)
     # then this is the end of the drag..
+    if event.button is 0 then leftDown = false
+    inDragMaybe = false   
     endDrag() if inDrag is true
     false
 
   # disable word selection on double click
   # for non-IE
-  container.onmousedown = (event) ->
+  page.onmousedown = (event) ->
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
-    console.log "(mouse-down event captured. skipping listing the target object)"
-    if (event.button is 0) and (event.target.id isnt 'hookPoint')
-      inDrag = true
-      hookPoint.addEventListener "mousemove", mousemoveHandler, false
+    console.log "mouse-down event captured"
+    #console.log event.button
+    #console.log event.buttons
+    if event.button is 0
+      leftDown = true
+      if event.target isnt container
+        inDragMaybe = true
+        container.addEventListener "mousemove", mousemoveHandler, false
     
     # console.log(event.target)
     false
@@ -122,6 +136,20 @@ window.onload = ->
     #console.log(event.target)
     false
 
+window.onload = () -> startEventMgmt()
+
+#
+# For easier code iteration in the browser - just invoke this function from the browser console
+# SECURITY: Remove this function in case reloading may have adverse effect on logic
+#
+reload = () ->
+    script = document.createElement("script")
+    script.type = "text/javascript"
+    script.src = "javascripts/events.js"
+    document.getElementsByTagName("head")[0].appendChild(script)
+    startEventMgmt()
+    console.log('reloaded')
+
 #
 #  eventCapture = function(event) 
 #  {
@@ -132,5 +160,5 @@ window.onload = ->
 #    return false
 #  }
 #
-#  hookPoint.oncontextmenu = eventCapture
+#  container.oncontextmenu = eventCapture
 #
