@@ -39,32 +39,58 @@ startAfterPrerequisites = function() {
 };
 
 startEventMgmt = function() {
-  var Color, baseMarkColor, container, contextmenuHandler, dragElements, endDrag, inDrag, inDragMaybe, leftDown, mark, mousemoveHandler, noColor, page;
+  var Color, baseMarkColor, container, contextmenuHandler, dragElements, endDrag, inDrag, inDragMaybe, leftDown, leftDrag, logDrag, mark, mousemoveHandler, noColor, page, rightDown, rightDrag;
   console.log("Setting up events...");
   container = document.getElementById('hookPoint');
   page = document.body;
   leftDown = false;
+  rightDown = false;
+  leftDrag = false;
+  rightDrag = false;
   inDragMaybe = false;
   inDrag = false;
   dragElements = new Array();
+  logDrag = function() {
+    console.log(leftDown);
+    console.log(rightDown);
+    console.log(leftDrag);
+    return console.log(rightDrag);
+  };
   Color = net.brehaut.Color;
   baseMarkColor = Color('#FAA058');
-  noColor = Color('#000000');
-  mark = function(elements) {
+  noColor = Color('rgba(0, 0, 0, 0)');
+  mark = function(elements, type) {
     var currentColor, currentCssBackground, element, i, newColor, _i, _ref, _ref1;
     for (i = _i = _ref = Math.min.apply(null, elements), _ref1 = Math.max.apply(null, elements); _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
       element = document.getElementById(i);
       currentCssBackground = window.getComputedStyle(element, null).getPropertyValue('background-color');
       if (currentCssBackground != null) {
+        console.log(currentCssBackground);
         currentColor = Color().fromObject(currentCssBackground);
-        console.log(currentColor.toCSSHex(), noColor.toCSSHex());
-        if (currentColor.toCSSHex() === noColor.toCSSHex()) {
-          console.log('no background found');
-          newColor = baseMarkColor;
-        } else {
-          newColor = currentColor.darkenByRatio(0.05);
-        }
-        element.style.background = newColor.toCSS();
+      } else {
+        currentColor = noColor;
+      }
+      switch (type) {
+        case 'on':
+          if (currentColor.toCSSHex() === noColor.toCSSHex()) {
+            newColor = baseMarkColor;
+          } else {
+            newColor = currentColor.darkenByRatio(0.05);
+          }
+          element.style.backgroundColor = newColor.toCSS();
+          break;
+        case 'off':
+          switch (currentColor.toCSSHex()) {
+            case baseMarkColor.toCSSHex():
+              newColor = noColor;
+              element.style.backgroundColor = newColor.toCSS();
+              break;
+            case noColor.toCSSHex():
+              break;
+            default:
+              newColor = currentColor.lightenByRatio(0.05);
+              element.style.setProperty('background-color', newColor.toCSS());
+          }
       }
     }
     /*
@@ -83,12 +109,25 @@ startEventMgmt = function() {
     inDrabMaybe = false;
     console.log("drag ended");
     if (dragElements.length > 0) {
-      return mark(dragElements.unique());
+      if (leftDrag) {
+        leftDrag = false;
+        mark(dragElements.unique(), 'on');
+      }
+      if (rightDrag) {
+        rightDrag = false;
+        return mark(dragElements.unique(), 'off');
+      }
     }
   };
   mousemoveHandler = function(event) {
     if (inDragMaybe === true) {
       inDrag = true;
+      if (leftDown) {
+        leftDrag = true;
+      }
+      if (rightDown) {
+        rightDrag = true;
+      }
       console.log('dragging');
       inDragMaybe = false;
     }
@@ -106,9 +145,6 @@ startEventMgmt = function() {
     event.stopImmediatePropagation();
     console.log("right-click event captured");
     console.log(event.target);
-    if (event.target !== event.currentTarget) {
-      remove(event.target);
-    }
     return false;
   };
   container.addEventListener("contextmenu", contextmenuHandler);
@@ -129,6 +165,8 @@ startEventMgmt = function() {
   page.onmouseup = function(event) {
     if (event.button === 0) {
       leftDown = false;
+    } else {
+      rightDown = false;
     }
     inDragMaybe = false;
     if (inDrag === true) {
@@ -143,10 +181,12 @@ startEventMgmt = function() {
     console.log("mouse-down event captured");
     if (event.button === 0) {
       leftDown = true;
-      if (event.target !== container) {
-        inDragMaybe = true;
-        container.addEventListener("mousemove", mousemoveHandler, false);
-      }
+    } else {
+      rightDown = true;
+    }
+    if (event.target !== container) {
+      inDragMaybe = true;
+      container.addEventListener("mousemove", mousemoveHandler, false);
     }
     return false;
   };

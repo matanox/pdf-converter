@@ -48,29 +48,53 @@ startEventMgmt = () ->
   page = document.body
 
   leftDown    = false
+  rightDown   = false
+  leftDrag    = false
+  rightDrag   = false
   inDragMaybe = false
   inDrag      = false
   dragElements = new Array()
 
+  logDrag = () -> 
+    console.log leftDown
+    console.log rightDown
+    console.log leftDrag
+    console.log rightDrag
+
   Color = net.brehaut.Color
   baseMarkColor = Color('#FAA058')
-  noColor = Color('#000000')
+  noColor = Color('rgba(0, 0, 0, 0)')
 
-  mark = (elements) ->
+  mark = (elements, type) ->
     for i in [Math.min.apply(null, elements)..Math.max.apply(null, elements)]
 
       element = document.getElementById(i)
       currentCssBackground = window.getComputedStyle(element, null).getPropertyValue('background-color')
       if currentCssBackground?
+        console.log(currentCssBackground)
         currentColor = Color().fromObject(currentCssBackground)
-        console.log currentColor.toCSSHex(), noColor.toCSSHex() 
-        if currentColor.toCSSHex() is noColor.toCSSHex() 
-          console.log('no background found')
-          newColor = baseMarkColor
-        else
-          newColor = currentColor.darkenByRatio(0.05)
+      else
+        currentColor = noColor
 
-        element.style.background = newColor.toCSS()
+      switch type
+
+        when 'on'
+          if currentColor.toCSSHex() is noColor.toCSSHex() 
+            newColor = baseMarkColor
+          else
+            newColor = currentColor.darkenByRatio(0.05)
+          element.style.backgroundColor = newColor.toCSS()
+
+        when 'off'
+          switch currentColor.toCSSHex() 
+            when baseMarkColor.toCSSHex() 
+              newColor = noColor
+              element.style.backgroundColor = newColor.toCSS()
+            when noColor.toCSSHex()
+              # do nothing
+            else
+              newColor = currentColor.lightenByRatio(0.05)
+              element.style.setProperty('background-color', newColor.toCSS())
     
     ###
     # Further highlight more the words actually hovered,
@@ -86,7 +110,14 @@ startEventMgmt = () ->
     inDrabMaybe = false
     console.log "drag ended"
     if dragElements.length > 0
-      mark(dragElements.unique())
+      if leftDrag
+        leftDrag = false
+        mark(dragElements.unique(), 'on')
+      if rightDrag
+        rightDrag = false
+        mark(dragElements.unique(), 'off')
+
+
 
   mousemoveHandler = (event) ->
   
@@ -99,9 +130,16 @@ startEventMgmt = () ->
     #console.log(event.target.id) 
     #console.log inDragMaybe
     #console.log inDrag
+    #logDrag()
+    if inDragMaybe is true  # only if mouse was moved after a click, then we are in a real 'drag situation'
 
-    if inDragMaybe is true
-      inDrag = true             # only if mouse was moved after a click, then we are in a real 'drag situation'
+      inDrag = true             
+
+      if leftDown
+        leftDrag = true
+      if rightDown
+        rightDrag = true
+
       console.log('dragging')
       inDragMaybe = false       # avoid superfluous condition recurence 
 
@@ -122,7 +160,8 @@ startEventMgmt = () ->
     # target is the element invoked on, currentTarget is the element where the 
     # event listener was registered. In a DOM hierarcy of objects, they are 
     # (typically) not the same element.
-    remove event.target unless event.target is event.currentTarget
+
+    #remove event.target unless event.target is event.currentTarget
     false
 
   container.addEventListener("contextmenu", contextmenuHandler)
@@ -155,7 +194,11 @@ startEventMgmt = () ->
     #console.log inDragMaybe
     #console.log inDrag
 
-    if event.button is 0 then leftDown = false
+    if event.button is 0 
+      leftDown = false
+    else 
+      rightDown = false
+
     inDragMaybe = false   
     endDrag() if inDrag is true
     false
@@ -173,10 +216,13 @@ startEventMgmt = () ->
     #console.log container
     if event.button is 0
       leftDown = true
-      if event.target isnt container
-        inDragMaybe = true
-        container.addEventListener "mousemove", mousemoveHandler, false
-    
+    else
+      rightDown = true
+
+    if event.target isnt container
+      inDragMaybe = true
+      container.addEventListener "mousemove", mousemoveHandler, false
+  
     # console.log(event.target)
     false
 
