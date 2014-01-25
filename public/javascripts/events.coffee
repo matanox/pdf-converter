@@ -1,7 +1,39 @@
+# http://coffeescriptcookbook.com/chapters/arrays/removing-duplicate-elements-from-arrays
+Array::unique = ->
+  output = {}
+  output[@[key]] = @[key] for key in [0...@length]
+  value for key, value of output
+
+startAfterPrerequisites = () ->
+  ajaxRequest = new XMLHttpRequest()
+
+  ajaxRequest.onreadystatechange = () ->
+    if ajaxRequest.readyState is 4
+      if ajaxRequest.status is 200
+        console.log 'Ajax fetching javascript succeeded.'
+        console.log 'Proceeding to start processing after fetched javascript will have been fully loaded'
+
+        script = document.createElement("script")
+        script.type = "text/javascript"
+        inject = ajaxRequest.responseText + '\n' + 'go()'
+        script.innerHTML = inject
+        document.getElementsByTagName("head")[0].appendChild(script)
+        
+        #console.log(ajaxRequest.responseText)
+        #eval(inject)
+
+        #console.log 'Fetched javascript loaded (?)'
+        #go()
+      else
+        console.error 'Failed loading prerequisite library via ajax. Aborting...'
+
+  #ajaxRequest.open('GET', 'javascripts/external/superagent.js', true)
+  ajaxRequest.open('GET', 'javascripts/external/color.js', true)
+  ajaxRequest.send(null)
+
 #
 # Attaches event handlers to the page called for
 #
-
 #
 # Optional TODO: 
 # The event window.onload is a bit late - text can be manipulated before it fires, 
@@ -9,46 +41,44 @@
 #   Can attach all these events directly inside the hookPoint element in the html,
 #   or introduce something like (or leaner than) jquery 
 #
-
-# http://coffeescriptcookbook.com/chapters/arrays/removing-duplicate-elements-from-arrays
-Array::unique = ->
-  output = {}
-  output[@[key]] = @[key] for key in [0...@length]
-  value for key, value of output
-
-leftDown    = false
-inDragMaybe = false
-inDrag      = false
-dragElements = new Array()
-
-mark = (elements) ->
-  for i in [Math.min.apply(null, elements)..Math.max.apply(null, elements)]
-    document.getElementById(i).style.background = '#FAA058'
-  for element in elements
-    document.getElementById(element).style.background = '#FAAC58'
-  dragElements = new Array()
-
-contextmenuHandler = (event) ->
-  remove = (node) ->
-    node.parentNode.removeChild node
-
-  event.preventDefault()
-  event.stopPropagation()
-  event.stopImmediatePropagation()
-  console.log "right-click event captured"
-  console.log event.target
-
-  # We avoid taking action on the top element where the listener was registered.
-  # target is the element invoked on, currentTarget is the element where the 
-  # event listener was registered. In a DOM hierarcy of objects, they are 
-  # (typically) not the same element.
-  remove event.target unless event.target is event.currentTarget
-  false
-
 startEventMgmt = () ->
+
   console.log "Setting up events..."
   container = document.getElementById('hookPoint')
   page = document.body
+
+  leftDown    = false
+  inDragMaybe = false
+  inDrag      = false
+  dragElements = new Array()
+
+  Color = net.brehaut.Color
+  baseMarkColor = Color('#FAA058')
+  noColor = Color('#000000')
+
+  mark = (elements) ->
+    for i in [Math.min.apply(null, elements)..Math.max.apply(null, elements)]
+
+      element = document.getElementById(i)
+      currentCssBackground = window.getComputedStyle(element, null).getPropertyValue('background-color')
+      if currentCssBackground?
+        currentColor = Color().fromObject(currentCssBackground)
+        console.log currentColor.toCSSHex(), noColor.toCSSHex() 
+        if currentColor.toCSSHex() is noColor.toCSSHex() 
+          console.log('no background found')
+          newColor = baseMarkColor
+        else
+          newColor = currentColor.darkenByRatio(0.05)
+
+        element.style.background = newColor.toCSS()
+    
+    ###
+    # Further highlight more the words actually hovered,
+    # but not those that were only part of the selected range
+    for element in elements
+      document.getElementById(element).style.background = '#FAAC58'
+    ###
+    dragElements = new Array()
 
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
@@ -67,6 +97,8 @@ startEventMgmt = () ->
     #console.log(event.toElement)
     #console.log(event.target)
     #console.log(event.target.id) 
+    #console.log inDragMaybe
+    #console.log inDrag
 
     if inDragMaybe is true
       inDrag = true             # only if mouse was moved after a click, then we are in a real 'drag situation'
@@ -75,6 +107,23 @@ startEventMgmt = () ->
 
     if inDrag and (event.target isnt container)
       dragElements.push event.target.id
+
+  contextmenuHandler = (event) ->
+    remove = (node) ->
+      node.parentNode.removeChild node
+
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+    console.log "right-click event captured"
+    console.log event.target
+
+    # We avoid taking action on the top element where the listener was registered.
+    # target is the element invoked on, currentTarget is the element where the 
+    # event listener was registered. In a DOM hierarcy of objects, they are 
+    # (typically) not the same element.
+    remove event.target unless event.target is event.currentTarget
+    false
 
   container.addEventListener("contextmenu", contextmenuHandler)
 
@@ -103,6 +152,9 @@ startEventMgmt = () ->
     #event.stopImmediatePropagation()
     # console.log(event.target)
     # then this is the end of the drag..
+    #console.log inDragMaybe
+    #console.log inDrag
+
     if event.button is 0 then leftDown = false
     inDragMaybe = false   
     endDrag() if inDrag is true
@@ -117,6 +169,8 @@ startEventMgmt = () ->
     console.log "mouse-down event captured"
     #console.log event.button
     #console.log event.buttons
+    #console.log event.target
+    #console.log container
     if event.button is 0
       leftDown = true
       if event.target isnt container
@@ -138,7 +192,23 @@ startEventMgmt = () ->
     #console.log(event.target)
     false
 
-window.onload = () -> startEventMgmt()
+  #
+  #  eventCapture = function(event) 
+  #  {
+  #    event.preventDefault()
+  #    event.stopPropagation()
+  #    event.stopImmediatePropagation()
+  #    console.log(event.type + ' event captured for element ' + JSON.stringify(event.target));
+  #    return false
+  #  }
+  #
+  #  container.oncontextmenu = eventCapture
+  #
+
+go = () ->
+  window.onload = () -> startEventMgmt()
+
+startAfterPrerequisites()
 
 #
 # For easier code iteration in the browser - just invoke this function from the browser console
@@ -154,16 +224,3 @@ reload = () ->
 
 enableContext = () ->
   document.getElementById("hookPoint").removeEventListener("contextmenu", contextmenuHandler)
-
-#
-#  eventCapture = function(event) 
-#  {
-#    event.preventDefault()
-#    event.stopPropagation()
-#    event.stopImmediatePropagation()
-#    console.log(event.type + ' event captured for element ' + JSON.stringify(event.target));
-#    return false
-#  }
-#
-#  container.oncontextmenu = eventCapture
-#
