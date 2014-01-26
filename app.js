@@ -84,6 +84,8 @@ app.get('/users', user.list);
 
 app.get('/handleInputFile', require('./routes/handleInputFile').go);
 
+app.get('/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go);
+
 authorization.googleAuthSetup(app, host, routes);
 
 startServer = function() {

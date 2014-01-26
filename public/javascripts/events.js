@@ -57,7 +57,7 @@ startEventMgmt = function() {
     return console.log(rightDrag);
   };
   Color = net.brehaut.Color;
-  baseMarkColor = Color('#FAA058');
+  baseMarkColor = Color('#FFB068');
   noColor = Color('rgba(0, 0, 0, 0)');
   mark = function(elements, type) {
     var currentColor, currentCssBackground, element, i, newColor, _i, _ref, _ref1;

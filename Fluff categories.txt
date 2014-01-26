@@ -1,0 +1,12 @@
+Journal name
+Institution
+Classification
+Article ID
+Author
+Contact details
+Auther description
+keywords list
+History (received, pubslished dates etc)
+Document type description (e.g. 'Research Article')
+Ad (e.g. in some Hindawi articles' last page)
+Copyright and permissions

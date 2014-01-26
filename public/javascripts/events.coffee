@@ -4,6 +4,10 @@ Array::unique = ->
   output[@[key]] = @[key] for key in [0...@length]
   value for key, value of output
 
+#
+# Load prerequisite library via ajax, and pass along to our code after it has been added
+# to the page context. Uses a small trick - see comment within.
+#
 startAfterPrerequisites = () ->
   ajaxRequest = new XMLHttpRequest()
 
@@ -15,20 +19,14 @@ startAfterPrerequisites = () ->
 
         script = document.createElement("script")
         script.type = "text/javascript"
-        inject = ajaxRequest.responseText + '\n' + 'go()'
+        inject = ajaxRequest.responseText + '\n' + 'go()'  # appending a call to our code to the original script
         script.innerHTML = inject
         document.getElementsByTagName("head")[0].appendChild(script)
-        
-        #console.log(ajaxRequest.responseText)
-        #eval(inject)
-
-        #console.log 'Fetched javascript loaded (?)'
-        #go()
       else
         console.error 'Failed loading prerequisite library via ajax. Aborting...'
 
   #ajaxRequest.open('GET', 'javascripts/external/superagent.js', true)
-  ajaxRequest.open('GET', 'javascripts/external/color.js', true)
+  ajaxRequest.open('GET', 'javascripts/external/color.js', true)  # from https://github.com/brehaut/color-js
   ajaxRequest.send(null)
 
 #
@@ -39,7 +37,9 @@ startAfterPrerequisites = () ->
 # The event window.onload is a bit late - text can be manipulated before it fires, 
 # but alas document.onload doesn't work in Chrome. So to set up the events earlier:
 #   Can attach all these events directly inside the hookPoint element in the html,
-#   or introduce something like (or leaner than) jquery 
+#   or introduce something like (or leaner than) jquery. Or, maybe no need to wait 
+#   for the entire page to load as long as the necessary hookpoint has already 
+#   been created!
 #
 startEventMgmt = () ->
 
@@ -62,7 +62,7 @@ startEventMgmt = () ->
     console.log rightDrag
 
   Color = net.brehaut.Color
-  baseMarkColor = Color('#FAA058')
+  baseMarkColor = Color('#FFB068')
   noColor = Color('rgba(0, 0, 0, 0)')
 
   mark = (elements, type) ->
