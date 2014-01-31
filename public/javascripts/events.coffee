@@ -54,6 +54,7 @@ startEventMgmt = () ->
   inDragMaybe = false
   inDrag      = false
   dragElements = new Array()
+  fluffChooser = null
 
   logDrag = () -> 
     console.log leftDown
@@ -124,7 +125,7 @@ startEventMgmt = () ->
   buttonGroupHtml = """<div class="panel panel-default">
                          <div class="panel-heading">What did you just mark?</div>
                          <div class="panel-body">
-                           <p>Help clean up this document by saying here which category below does it belong to.</p>
+                           <p>Help clean up this document by picking which category below does it belong to.</p>
                          </div>
                          <div class="list-group">
                            <a href="#" class="list-group-item">Journal name</a>
@@ -139,6 +140,7 @@ startEventMgmt = () ->
                            <a href="#" class="list-group-item">History (received, pubslished dates etc)</a>                                                            
                            <a href="#" class="list-group-item">Copyright and permissions</a>                              
                            <a href="#" class="list-group-item">Document type description (e.g. 'Research Article')</a>                              
+                           <a href="#" class="list-group-item">Not sure / other</a>                              
                          </div>
                        </div>"""
 
@@ -153,20 +155,30 @@ startEventMgmt = () ->
     horizontalStart -= (injectionPoint.getBoundingClientRect().top + window.scrollY)
     newElem.style.setProperty('margin-top', horizontalStart + 'px')
     injectionPoint.appendChild(newElem)  
+    newElem
 
-  fluffChooser = (elements) ->
+  fluffChooserDisplay = (state, elements) ->
     #addElement(buttonHtml, 'top-bar', 'btn-group')
+    switch state
+      when 'show'
+        unless fluffChooser?
+          downMost  = 100000
+          topBorder = 100000
 
-    downMost  = 100000
-    topBorder = 100000
-
-    for element in elements
-      rectangle = document.getElementById(element).getBoundingClientRect()
-      console.log rectangle.top + window.scrollY
-      if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
-      if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
-      console.log topBorder
-    addElement(buttonGroupHtml, 'left-col', topBorder)
+          for element in elements
+            rectangle = document.getElementById(element).getBoundingClientRect()
+            #console.log rectangle.top + window.scrollY
+            if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
+            if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
+            #console.log topBorder
+          fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder)
+      when 'hide'
+        fluffChooser.parentNode.removeChild(fluffChooser)
+        console.log 'removing fluffchooser'
+        fluffChooser = null
+      when 'verifyHidden'
+        if fluffChooser?
+          fluffChooserDisplay('hide')
 
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
@@ -178,7 +190,7 @@ startEventMgmt = () ->
       if leftDrag
         leftDrag = false
         mark(dragElements.unique(), 'on')
-        fluffChooser(dragElements.unique())
+        fluffChooserDisplay('show', dragElements.unique())
         dragElements = new Array()
 
       if rightDrag
@@ -223,6 +235,7 @@ startEventMgmt = () ->
     event.stopImmediatePropagation()
     console.log "right-click event captured"
     console.log event.target
+    fluffChooserDisplay('verifyHidden')
 
     # We avoid taking action on the top element where the listener was registered.
     # target is the element invoked on, currentTarget is the element where the 
@@ -239,6 +252,7 @@ startEventMgmt = () ->
     event.stopPropagation()
     event.stopImmediatePropagation()
     console.log "click event captured"
+    fluffChooserDisplay('verifyHidden')
     
     #console.log(event.target)
     false

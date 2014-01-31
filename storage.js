@@ -24,15 +24,16 @@ exports.store = function(bucket, filename, file, docLogger) {
   });
 };
 
-exports.fetch = function(bucket, filename, file, docLogger) {
+exports.fetch = function(bucket, filename, callback) {
   util.timelog("fetching file from clustered storage");
-  return riak.get('pdf', filename, function(error, fileContent) {
+  return riak.get(bucket, filename, function(error, fileContent) {
     if (error != null) {
-      docLogger.error("failed fetching file from clustered storage");
+      console.error("failed fetching file from clustered storage");
       return false;
     } else {
       util.timelog("fetching file from clustered storage");
-      return fileContent;
+      console.log(fileContent);
+      return callback(fileContent);
     }
   });
   /*

@@ -39,7 +39,7 @@ startAfterPrerequisites = function() {
 };
 
 startEventMgmt = function() {
-  var Color, addElement, baseMarkColor, buttonGroupHtml, buttonHtml, container, contextmenuHandler, dragElements, endDrag, fluffChooser, inDrag, inDragMaybe, leftDown, leftDrag, logDrag, mark, mousemoveHandler, noColor, page, rightDown, rightDrag;
+  var Color, addElement, baseMarkColor, buttonGroupHtml, buttonHtml, container, contextmenuHandler, dragElements, endDrag, fluffChooser, fluffChooserDisplay, inDrag, inDragMaybe, leftDown, leftDrag, logDrag, mark, mousemoveHandler, noColor, page, rightDown, rightDrag;
   console.log("Setting up events...");
   container = document.getElementById('hookPoint');
   page = document.body;
@@ -50,6 +50,7 @@ startEventMgmt = function() {
   inDragMaybe = false;
   inDrag = false;
   dragElements = new Array();
+  fluffChooser = null;
   logDrag = function() {
     console.log(leftDown);
     console.log(rightDown);
@@ -107,7 +108,7 @@ startEventMgmt = function() {
 
   };
   buttonHtml = "<div class=\"btn-group\">\n  <button type=\"button\" class=\"btn btn-primary btn-lg\">Primary</button>\n  <button type=\"button\" class=\"btn btn-primary btn-lg dropdown-toggle\" data-toggle=\"dropdown\">\n    <span class=\"caret\"></span>\n    <span class=\"sr-only\">Toggle Dropdown</span>\n  </button>\n  <ul class=\"dropdown-menu\" role=\"menu\">\n    <li><a href=\"#\">Action</a></li>\n    <li><a href=\"#\">Another action</a></li>\n    <li><a href=\"#\">Something else here</a></li>\n    <li class=\"divider\"></li>\n    <li><a href=\"#\">Separated link</a></li>\n  </ul>\n</div>";
-  buttonGroupHtml = "<div class=\"panel panel-default\">\n  <div class=\"panel-heading\">What did you just mark?</div>\n  <div class=\"panel-body\">\n    <p>Help clean up this document by saying here which category below does it belong to.</p>\n  </div>\n  <div class=\"list-group\">\n    <a href=\"#\" class=\"list-group-item\">Journal name</a>\n    <a href=\"#\" class=\"list-group-item\">Institution</a>\n    <a href=\"#\" class=\"list-group-item\">Author</a>                              \n    <a href=\"#\" class=\"list-group-item\">Contact details</a>                              \n    <a href=\"#\" class=\"list-group-item\">Auther description</a>                              \n    <a href=\"#\" class=\"list-group-item\">Classification</a>                              \n    <a href=\"#\" class=\"list-group-item\">Article ID</a>                              \n    <a href=\"#\" class=\"list-group-item\">List of keywords</a>\n    <a href=\"#\" class=\"list-group-item\">Advertisement</a>                              \n    <a href=\"#\" class=\"list-group-item\">History (received, pubslished dates etc)</a>                                                            \n    <a href=\"#\" class=\"list-group-item\">Copyright and permissions</a>                              \n    <a href=\"#\" class=\"list-group-item\">Document type description (e.g. 'Research Article')</a>                              \n  </div>\n</div>";
+  buttonGroupHtml = "<div class=\"panel panel-default\">\n  <div class=\"panel-heading\">What did you just mark?</div>\n  <div class=\"panel-body\">\n    <p>Help clean up this document by picking which category below does it belong to.</p>\n  </div>\n  <div class=\"list-group\">\n    <a href=\"#\" class=\"list-group-item\">Journal name</a>\n    <a href=\"#\" class=\"list-group-item\">Institution</a>\n    <a href=\"#\" class=\"list-group-item\">Author</a>                              \n    <a href=\"#\" class=\"list-group-item\">Contact details</a>                              \n    <a href=\"#\" class=\"list-group-item\">Auther description</a>                              \n    <a href=\"#\" class=\"list-group-item\">Classification</a>                              \n    <a href=\"#\" class=\"list-group-item\">Article ID</a>                              \n    <a href=\"#\" class=\"list-group-item\">List of keywords</a>\n    <a href=\"#\" class=\"list-group-item\">Advertisement</a>                              \n    <a href=\"#\" class=\"list-group-item\">History (received, pubslished dates etc)</a>                                                            \n    <a href=\"#\" class=\"list-group-item\">Copyright and permissions</a>                              \n    <a href=\"#\" class=\"list-group-item\">Document type description (e.g. 'Research Article')</a>                              \n    <a href=\"#\" class=\"list-group-item\">Not sure / other</a>                              \n  </div>\n</div>";
   addElement = function(html, atElement, horizontalStart, cssClass) {
     var injectionPoint, newElem;
     injectionPoint = document.getElementById(atElement);
@@ -118,25 +119,38 @@ startEventMgmt = function() {
     newElem.innerHTML = html;
     horizontalStart -= injectionPoint.getBoundingClientRect().top + window.scrollY;
     newElem.style.setProperty('margin-top', horizontalStart + 'px');
-    return injectionPoint.appendChild(newElem);
+    injectionPoint.appendChild(newElem);
+    return newElem;
   };
-  fluffChooser = function(elements) {
+  fluffChooserDisplay = function(state, elements) {
     var downMost, element, rectangle, topBorder, _i, _len;
-    downMost = 100000;
-    topBorder = 100000;
-    for (_i = 0, _len = elements.length; _i < _len; _i++) {
-      element = elements[_i];
-      rectangle = document.getElementById(element).getBoundingClientRect();
-      console.log(rectangle.top + window.scrollY);
-      if (rectangle.top + window.scrollY < topBorder) {
-        topBorder = rectangle.top + window.scrollY;
-      }
-      if (rectangle.bottom + window.scrollY < downMost) {
-        downMost = rectangle.bottom + window.scrollY;
-      }
-      console.log(topBorder);
+    switch (state) {
+      case 'show':
+        if (fluffChooser == null) {
+          downMost = 100000;
+          topBorder = 100000;
+          for (_i = 0, _len = elements.length; _i < _len; _i++) {
+            element = elements[_i];
+            rectangle = document.getElementById(element).getBoundingClientRect();
+            if (rectangle.top + window.scrollY < topBorder) {
+              topBorder = rectangle.top + window.scrollY;
+            }
+            if (rectangle.bottom + window.scrollY < downMost) {
+              downMost = rectangle.bottom + window.scrollY;
+            }
+          }
+          return fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder);
+        }
+        break;
+      case 'hide':
+        fluffChooser.parentNode.removeChild(fluffChooser);
+        console.log('removing fluffchooser');
+        return fluffChooser = null;
+      case 'verifyHidden':
+        if (fluffChooser != null) {
+          return fluffChooserDisplay('hide');
+        }
     }
-    return addElement(buttonGroupHtml, 'left-col', topBorder);
   };
   endDrag = function() {
     var inDrabMaybe;
@@ -148,7 +162,7 @@ startEventMgmt = function() {
       if (leftDrag) {
         leftDrag = false;
         mark(dragElements.unique(), 'on');
-        fluffChooser(dragElements.unique());
+        fluffChooserDisplay('show', dragElements.unique());
         dragElements = new Array();
       }
       if (rightDrag) {
@@ -183,6 +197,7 @@ startEventMgmt = function() {
     event.stopImmediatePropagation();
     console.log("right-click event captured");
     console.log(event.target);
+    fluffChooserDisplay('verifyHidden');
     return false;
   };
   container.addEventListener("contextmenu", contextmenuHandler);
@@ -191,6 +206,7 @@ startEventMgmt = function() {
     event.stopPropagation();
     event.stopImmediatePropagation();
     console.log("click event captured");
+    fluffChooserDisplay('verifyHidden');
     return false;
   };
   container.ondblclick = function(event) {
