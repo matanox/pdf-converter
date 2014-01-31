@@ -5,38 +5,39 @@ fs = require 'fs'
 
 exports.go = (req, res) -> 
 
+  #
+  # Optional TODO: Embed the pdf inside a page that still looks like you're 
+  #                within the application. As much as Chrome, firefox, Safari allow.
+  #                The related base code is now commented out below. Possibly
+  #                the embed html tag may work if research so indicates.
+  #
   serve = (pdfBytes) ->
     console.log pdfBytes
     if pdfBytes
         
       # Load the output template only once
       #outputTemplate = fs.readFileSync('outputTemplate/template.html').toString() # this should be speedy and cached, sync won't hurt much
-
-      outputTemplate = """<html><body><div id="hookPoint"></div></body></html>"""
-
-      # Locate to the text position (inside the designated html element), 
-      # where the output should be inserted in the template. 
-      # (that's one character after the '>' closing the marked element's opening tag)
-      hookId = 'hookPoint'
-      hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1
+      #outputTemplate = """<html><body><div id="hookPoint"></div></body></html>"""
+      #hookId = 'hookPoint'
+      #hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1
 
       # Serves the output after inserting the transformed content
       # into the designated insertion position in the template
 
-      outputFile = '../local-copies/' + 'pdf-serving/' + name + '.html'
-
-      outputHtml = outputTemplate.slice(0, hookElementTextPos).concat('', outputTemplate.slice(hookElementTextPos))
+      #outputFile = '../local-copies/' + 'pdf-serving/' + name + '.html'
+      #outputHtml = outputTemplate.slice(0, hookElementTextPos).concat('', outputTemplate.slice(hookElementTextPos))
        
-      util.timelog('Saving pdf to local file')  
+      #util.timelog('Saving pdf to local file')  
 
+      ###
       fs.writeFile(outputFile, outputHtml, (err) -> 
         
         if err?
           res.send(500)
           throw err)
+      ###
 
-      util.timelog('Saving pdf to local file')  
-      #logging.log('Output saved')
+      #util.timelog('Saving pdf to local file')  
 
       console.info('Sending response....')
       util.timelog 'serving original pdf'

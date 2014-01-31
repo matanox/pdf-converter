@@ -12,22 +12,16 @@ fs = require('fs');
 exports.go = function(req, res) {
   var name, pdfBytes, serve;
   serve = function(pdfBytes) {
-    var hookElementTextPos, hookId, outputFile, outputHtml, outputTemplate;
     console.log(pdfBytes);
     if (pdfBytes) {
-      outputTemplate = "<html><body><div id=\"hookPoint\"></div></body></html>";
-      hookId = 'hookPoint';
-      hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1;
-      outputFile = '../local-copies/' + 'pdf-serving/' + name + '.html';
-      outputHtml = outputTemplate.slice(0, hookElementTextPos).concat('', outputTemplate.slice(hookElementTextPos));
-      util.timelog('Saving pdf to local file');
-      fs.writeFile(outputFile, outputHtml, function(err) {
-        if (err != null) {
-          res.send(500);
-          throw err;
-        }
-      });
-      util.timelog('Saving pdf to local file');
+      /*
+      fs.writeFile(outputFile, outputHtml, (err) -> 
+        
+        if err?
+          res.send(500)
+          throw err)
+      */
+
       console.info('Sending response....');
       util.timelog('serving original pdf');
       res.setHeader('Content-Type', 'application/pdf');
