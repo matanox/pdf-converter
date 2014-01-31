@@ -102,7 +102,71 @@ startEventMgmt = () ->
     for element in elements
       document.getElementById(element).style.background = '#FAAC58'
     ###
-    dragElements = new Array()
+ 
+
+    
+  buttonHtml = """<div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-lg">Primary</button>
+                    <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                    </ul>
+                  </div>"""
+
+
+  buttonGroupHtml = """<div class="panel panel-default">
+                         <div class="panel-heading">What did you just mark?</div>
+                         <div class="panel-body">
+                           <p>Help clean up this document by saying here which category below does it belong to.</p>
+                         </div>
+                         <div class="list-group">
+                           <a href="#" class="list-group-item">Journal name</a>
+                           <a href="#" class="list-group-item">Institution</a>
+                           <a href="#" class="list-group-item">Author</a>                              
+                           <a href="#" class="list-group-item">Contact details</a>                              
+                           <a href="#" class="list-group-item">Auther description</a>                              
+                           <a href="#" class="list-group-item">Classification</a>                              
+                           <a href="#" class="list-group-item">Article ID</a>                              
+                           <a href="#" class="list-group-item">List of keywords</a>
+                           <a href="#" class="list-group-item">Advertisement</a>                              
+                           <a href="#" class="list-group-item">History (received, pubslished dates etc)</a>                                                            
+                           <a href="#" class="list-group-item">Copyright and permissions</a>                              
+                           <a href="#" class="list-group-item">Document type description (e.g. 'Research Article')</a>                              
+                         </div>
+                       </div>"""
+
+
+
+  addElement = (html, atElement, horizontalStart, cssClass) ->
+        
+    injectionPoint = document.getElementById(atElement)
+    newElem = document.createElement('div')
+    newElem.className = cssClass if classCss?
+    newElem.innerHTML = html
+    horizontalStart -= (injectionPoint.getBoundingClientRect().top + window.scrollY)
+    newElem.style.setProperty('margin-top', horizontalStart + 'px')
+    injectionPoint.appendChild(newElem)  
+
+  fluffChooser = (elements) ->
+    #addElement(buttonHtml, 'top-bar', 'btn-group')
+
+    downMost  = 100000
+    topBorder = 100000
+
+    for element in elements
+      rectangle = document.getElementById(element).getBoundingClientRect()
+      console.log rectangle.top + window.scrollY
+      if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
+      if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
+      console.log topBorder
+    addElement(buttonGroupHtml, 'left-col', topBorder)
 
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
@@ -110,9 +174,13 @@ startEventMgmt = () ->
     inDrabMaybe = false
     console.log "drag ended"
     if dragElements.length > 0
+
       if leftDrag
         leftDrag = false
         mark(dragElements.unique(), 'on')
+        fluffChooser(dragElements.unique())
+        dragElements = new Array()
+
       if rightDrag
         rightDrag = false
         mark(dragElements.unique(), 'off')

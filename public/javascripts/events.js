@@ -39,7 +39,7 @@ startAfterPrerequisites = function() {
 };
 
 startEventMgmt = function() {
-  var Color, baseMarkColor, container, contextmenuHandler, dragElements, endDrag, inDrag, inDragMaybe, leftDown, leftDrag, logDrag, mark, mousemoveHandler, noColor, page, rightDown, rightDrag;
+  var Color, addElement, baseMarkColor, buttonGroupHtml, buttonHtml, container, contextmenuHandler, dragElements, endDrag, fluffChooser, inDrag, inDragMaybe, leftDown, leftDrag, logDrag, mark, mousemoveHandler, noColor, page, rightDown, rightDrag;
   console.log("Setting up events...");
   container = document.getElementById('hookPoint');
   page = document.body;
@@ -60,7 +60,8 @@ startEventMgmt = function() {
   baseMarkColor = Color('#FFB068');
   noColor = Color('rgba(0, 0, 0, 0)');
   mark = function(elements, type) {
-    var currentColor, currentCssBackground, element, i, newColor, _i, _ref, _ref1;
+    var currentColor, currentCssBackground, element, i, newColor, _i, _ref, _ref1, _results;
+    _results = [];
     for (i = _i = _ref = Math.min.apply(null, elements), _ref1 = Math.max.apply(null, elements); _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
       element = document.getElementById(i);
       currentCssBackground = window.getComputedStyle(element, null).getPropertyValue('background-color');
@@ -77,22 +78,26 @@ startEventMgmt = function() {
           } else {
             newColor = currentColor.darkenByRatio(0.05);
           }
-          element.style.backgroundColor = newColor.toCSS();
+          _results.push(element.style.backgroundColor = newColor.toCSS());
           break;
         case 'off':
           switch (currentColor.toCSSHex()) {
             case baseMarkColor.toCSSHex():
               newColor = noColor;
-              element.style.backgroundColor = newColor.toCSS();
+              _results.push(element.style.backgroundColor = newColor.toCSS());
               break;
             case noColor.toCSSHex():
               break;
             default:
               newColor = currentColor.lightenByRatio(0.05);
-              element.style.setProperty('background-color', newColor.toCSS());
+              _results.push(element.style.setProperty('background-color', newColor.toCSS()));
           }
+          break;
+        default:
+          _results.push(void 0);
       }
     }
+    return _results;
     /*
     # Further highlight more the words actually hovered,
     # but not those that were only part of the selected range
@@ -100,7 +105,38 @@ startEventMgmt = function() {
       document.getElementById(element).style.background = '#FAAC58'
     */
 
-    return dragElements = new Array();
+  };
+  buttonHtml = "<div class=\"btn-group\">\n  <button type=\"button\" class=\"btn btn-primary btn-lg\">Primary</button>\n  <button type=\"button\" class=\"btn btn-primary btn-lg dropdown-toggle\" data-toggle=\"dropdown\">\n    <span class=\"caret\"></span>\n    <span class=\"sr-only\">Toggle Dropdown</span>\n  </button>\n  <ul class=\"dropdown-menu\" role=\"menu\">\n    <li><a href=\"#\">Action</a></li>\n    <li><a href=\"#\">Another action</a></li>\n    <li><a href=\"#\">Something else here</a></li>\n    <li class=\"divider\"></li>\n    <li><a href=\"#\">Separated link</a></li>\n  </ul>\n</div>";
+  buttonGroupHtml = "<div class=\"panel panel-default\">\n  <div class=\"panel-heading\">What did you just mark?</div>\n  <div class=\"panel-body\">\n    <p>Help clean up this document by saying here which category below does it belong to.</p>\n  </div>\n  <div class=\"list-group\">\n    <a href=\"#\" class=\"list-group-item\">Journal name</a>\n    <a href=\"#\" class=\"list-group-item\">Institution</a>\n    <a href=\"#\" class=\"list-group-item\">Author</a>                              \n    <a href=\"#\" class=\"list-group-item\">Contact details</a>                              \n    <a href=\"#\" class=\"list-group-item\">Auther description</a>                              \n    <a href=\"#\" class=\"list-group-item\">Classification</a>                              \n    <a href=\"#\" class=\"list-group-item\">Article ID</a>                              \n    <a href=\"#\" class=\"list-group-item\">List of keywords</a>\n    <a href=\"#\" class=\"list-group-item\">Advertisement</a>                              \n    <a href=\"#\" class=\"list-group-item\">History (received, pubslished dates etc)</a>                                                            \n    <a href=\"#\" class=\"list-group-item\">Copyright and permissions</a>                              \n    <a href=\"#\" class=\"list-group-item\">Document type description (e.g. 'Research Article')</a>                              \n  </div>\n</div>";
+  addElement = function(html, atElement, horizontalStart, cssClass) {
+    var injectionPoint, newElem;
+    injectionPoint = document.getElementById(atElement);
+    newElem = document.createElement('div');
+    if (typeof classCss !== "undefined" && classCss !== null) {
+      newElem.className = cssClass;
+    }
+    newElem.innerHTML = html;
+    horizontalStart -= injectionPoint.getBoundingClientRect().top + window.scrollY;
+    newElem.style.setProperty('margin-top', horizontalStart + 'px');
+    return injectionPoint.appendChild(newElem);
+  };
+  fluffChooser = function(elements) {
+    var downMost, element, rectangle, topBorder, _i, _len;
+    downMost = 100000;
+    topBorder = 100000;
+    for (_i = 0, _len = elements.length; _i < _len; _i++) {
+      element = elements[_i];
+      rectangle = document.getElementById(element).getBoundingClientRect();
+      console.log(rectangle.top + window.scrollY);
+      if (rectangle.top + window.scrollY < topBorder) {
+        topBorder = rectangle.top + window.scrollY;
+      }
+      if (rectangle.bottom + window.scrollY < downMost) {
+        downMost = rectangle.bottom + window.scrollY;
+      }
+      console.log(topBorder);
+    }
+    return addElement(buttonGroupHtml, 'left-col', topBorder);
   };
   endDrag = function() {
     var inDrabMaybe;
@@ -112,6 +148,8 @@ startEventMgmt = function() {
       if (leftDrag) {
         leftDrag = false;
         mark(dragElements.unique(), 'on');
+        fluffChooser(dragElements.unique());
+        dragElements = new Array();
       }
       if (rightDrag) {
         rightDrag = false;
