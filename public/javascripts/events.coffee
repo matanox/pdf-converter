@@ -1,3 +1,44 @@
+#
+# Status: shaky
+#
+# Detail: The interaction has become a bit shaky as of integrating touch support.
+#         The mouse and touch models are not really equivalent, and also present 
+#         different idiosyncracies each.
+#
+#         Touch may also invoke mouse events, and the exact cases and order of events
+#         may be quite browser and mobile operating system specific.
+#
+#         E.g. a quick touch may actually invoke a click event, so the two event models
+#         are a bit interwined.
+#
+#         Cool and useful remote debugging can be accomplished using http://jsconsole.com/
+#         Very basic simulation for confirming browser behavior can be carried out by something like 
+#         http://patrickhlauke.github.io/touch/tests/event-listener.html or by forking it to
+#         resemble a less minimal page.
+#
+# Note:   Behavior when emulating touch events on Chrome desktop's is the most quirky, probably
+#         due to some interaction between touch and mouse events during emulation, which
+#         may change in the next version of Chrome anyway.
+#
+# Bug:    Seems to stop working in iOS5 Safari after few marks.
+#
+# Missing touch features:
+#  
+#   This currently blocks the swipe-to-scroll behavior.
+#   Blocking other built-in gesture recognition is good, but up/down scrolling
+#   is imperative.
+#
+# 
+# Recommendation: 
+#    
+#   Reorder functions per event model and clean up commented out code, 
+#   before making any incremental change or addition.
+#
+
+
+remove = (node) ->
+  node.parentNode.removeChild node
+
 # http://coffeescriptcookbook.com/chapters/arrays/removing-duplicate-elements-from-arrays
 Array::unique = ->
   output = {}
@@ -53,7 +94,9 @@ startEventMgmt = () ->
   rightDrag   = false
   inDragMaybe = false
   inDrag      = false
-  dragElements = new Array()
+  inTouch     = false
+  dragElements = new Array()  
+
   fluffChooser = null
 
   logDrag = () -> 
@@ -67,12 +110,13 @@ startEventMgmt = () ->
   noColor = Color('rgba(0, 0, 0, 0)')
 
   mark = (elements, type) ->
+    #console.dir elements
     for i in [Math.min.apply(null, elements)..Math.max.apply(null, elements)]
 
       element = document.getElementById(i)
       currentCssBackground = window.getComputedStyle(element, null).getPropertyValue('background-color')
       if currentCssBackground?
-        console.log(currentCssBackground)
+        #console.log(currentCssBackground)
         currentColor = Color().fromObject(currentCssBackground)
       else
         currentColor = noColor
@@ -83,7 +127,7 @@ startEventMgmt = () ->
           if currentColor.toCSSHex() is noColor.toCSSHex() 
             newColor = baseMarkColor
           else
-            newColor = currentColor.darkenByRatio(0.05)
+            newColor = currentColor.darkenByRatio(0.1)
           element.style.backgroundColor = newColor.toCSS()
 
         when 'off'
@@ -94,9 +138,9 @@ startEventMgmt = () ->
             when noColor.toCSSHex()
               # do nothing
             else
-              newColor = currentColor.lightenByRatio(0.05)
+              newColor = currentColor.lightenByRatio(0.1)
               element.style.setProperty('background-color', newColor.toCSS())
-    
+  
     ###
     # Further highlight more the words actually hovered,
     # but not those that were only part of the selected range
@@ -161,17 +205,19 @@ startEventMgmt = () ->
     #addElement(buttonHtml, 'top-bar', 'btn-group')
     switch state
       when 'show'
-        unless fluffChooser?
-          downMost  = 100000
-          topBorder = 100000
+        if fluffChooser?  # first off remove if already visible
+          fluffChooserDisplay('hide', elements)
 
-          for element in elements
-            rectangle = document.getElementById(element).getBoundingClientRect()
-            #console.log rectangle.top + window.scrollY
-            if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
-            if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
-            #console.log topBorder
-          fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder)
+        downMost  = 100000
+        topBorder = 100000
+
+        for element in elements
+          rectangle = document.getElementById(element).getBoundingClientRect()
+          #console.log rectangle.top + window.scrollY
+          if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
+          if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
+          #console.log topBorder
+        fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder)
       when 'hide'
         fluffChooser.parentNode.removeChild(fluffChooser)
         console.log 'removing fluffchooser'
@@ -182,20 +228,33 @@ startEventMgmt = () ->
 
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
+    #container.removeEventListener "touchmove", touchmoveHandler, false
+    #container.removeEventListener "touchend", page.ontouchend, false
+      
     inDrag      = false
     inDrabMaybe = false
     console.log "drag ended"
     if dragElements.length > 0
+      
+      console.log 'inTouch is ' + inTouch
+
+      if inTouch
+        inTouch = false
+        mark(dragElements.unique(), 'on')
+        #fluffChooserDisplay('show', dragElements.unique())
+        return       
 
       if leftDrag
         leftDrag = false
         mark(dragElements.unique(), 'on')
         fluffChooserDisplay('show', dragElements.unique())
-        dragElements = new Array()
 
       if rightDrag
         rightDrag = false
         mark(dragElements.unique(), 'off')
+
+      dragElements = new Array()
+
 
 
 
@@ -211,7 +270,7 @@ startEventMgmt = () ->
     #console.log inDragMaybe
     #console.log inDrag
     #logDrag()
-    if inDragMaybe is true  # only if mouse was moved after a click, then we are in a real 'drag situation'
+    if inDragMaybe  # only if mouse was moved after a click, then we are in a real 'drag situation'
 
       inDrag = true             
 
@@ -226,9 +285,26 @@ startEventMgmt = () ->
     if inDrag and (event.target isnt container)
       dragElements.push event.target.id
 
+  touchmoveHandler = (event) ->
+    console.log 'in touch move handler'
+    for touch in event.touches
+      #console.dir touch
+      if touch.target isnt container
+        #console.log 'in touch move: ' + touch.target.id + ' when ' + dragElements + ' on ' + event.timeStamp 
+        #overElement = document.elementFromPoint(touch.pageX, touch.pageY)
+        #console.log overElement
+        #overElement = document.elementFromPoint(touch.screenX, touch.screenY)
+        #console.log overElement
+        overElement = document.elementFromPoint(touch.clientX, touch.clientY)
+        console.log overElement
+
+        if overElement
+          console.log overElement.id
+          dragElements.push overElement.id
+    false
+
+
   contextmenuHandler = (event) ->
-    remove = (node) ->
-      node.parentNode.removeChild node
 
     event.preventDefault()
     event.stopPropagation()
@@ -267,23 +343,30 @@ startEventMgmt = () ->
     false
 
   page.onmouseup = (event) ->
+    console.log 'in mouse up'
     
-    #event.preventDefault()
-    #event.stopPropagation()
-    #event.stopImmediatePropagation()
-    # console.log(event.target)
-    # then this is the end of the drag..
-    #console.log inDragMaybe
-    #console.log inDrag
-
     if event.button is 0 
       leftDown = false
     else 
       rightDown = false
 
     inDragMaybe = false   
-    endDrag() if inDrag is true
+    endDrag() if inDrag
     false
+
+  page.ontouchend = (event) ->
+    for touch in event.changedTouches
+      #console.dir touch
+
+      ###
+      if touch.target isnt container
+        dragElements.push touch.target.id
+        console.log 'in touch end/cancel: ' + touch.target.id + ' when ' + dragElements + ' on ' + event.timeStamp 
+        #console.dir dragElements 
+      ###
+    endDrag()
+
+  page.ontouchcancel = (event) -> page.ontouchend(event)
 
   # disable word selection on double click
   # for non-IE
@@ -304,9 +387,37 @@ startEventMgmt = () ->
     if event.target isnt container
       inDragMaybe = true
       container.addEventListener "mousemove", mousemoveHandler, false
+      
+    # console.log(event.target)
+    false
+
+  page.ontouchstart = (event) ->
+    #event.preventDefault()
+    #event.stopPropagation()
+    #event.stopImmediatePropagation()
+    #console.log "touch start event captured " + event.timeStamp
+    #console.log event.target
+    #console.log container
+
+    if event.target isnt container
+      inTouch = true
+      ###
+      #
+      # 
+      #
+      for touch in event.changedTouches
+        if touch.target isnt container
+          console.log 'in touch start: ' + touch.target.id + ' when ' + dragElements + ' on ' + event.timeStamp 
+          dragElements.push touch.target.id
+      ###
   
     # console.log(event.target)
     false
+
+  container.addEventListener("touchstart", page.ontouchstart, false)
+  container.addEventListener("touchend", page.ontouchend, false)
+  container.addEventListener("touchmove", touchmoveHandler, false)
+
 
   # disable word selection on double click
   # see http://javascript.info/tutorial/mouse-events#preventing-selection
@@ -341,6 +452,8 @@ startAfterPrerequisites()
 #
 # For easier code iteration in the browser - just invoke this function from the browser console
 # SECURITY: Remove this function in case reloading may have adverse effect on logic
+# TODO: This may not unregister event listeners and therefore cause pre-reloaded code
+#       being executed even after reload finished. 
 #
 reload = () ->
   script = document.createElement("script")
