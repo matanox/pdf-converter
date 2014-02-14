@@ -5,7 +5,7 @@
 #  https://github.com/elasticsearch/elasticsearch-js
 
 
-elasticsearch = require("elasticsearch")
+elasticsearch = require 'elasticsearch'
 
 ###
 
@@ -28,19 +28,20 @@ client = new elasticsearch.Client(host: "https://user:password@elasticsearch1/se
 
 # Connect to the this host's elasticsearch, then connect to more nodes on the 
 # elasticsearch cluster it belongs to (by sniffing for the rest of the cluster right away and on interval).
-es = elasticsearch.Client(
+esClient = elasticsearch.Client(
   host: "localhost:9200"
   sniffOnStart: true
   sniffInterval: 300000
   apiVersion: '1.0'
 )
 
-es.create(
-  {
-    index: 'meta'
-    type:  'in-text-appearance'
-    body:
-    	text: 'bla'
-    	article: 'bla'
-  }, (error) -> console.error(error) if error?)
+test = () ->
+  esClient.create(
+    {
+      index: 'meta'
+      type:  'test'
+      body:
+      	text: 'bla'
+      	article: 'bla'
+    }, (error) -> console.error(error) if error?)
 

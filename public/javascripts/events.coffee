@@ -150,7 +150,7 @@ startEventMgmt = () ->
  
 
     
-  buttonHtml = """<div class="btn-group">
+  buttonHtmlObsolete = """<div class="btn-group">
                     <button type="button" class="btn btn-primary btn-lg">Primary</button>
                     <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
                       <span class="caret"></span>
@@ -166,7 +166,7 @@ startEventMgmt = () ->
                   </div>"""
 
 
-  buttonGroupHtml = """<div class="panel panel-default">
+  buttonGroupHtmlOld = """<div class="panel panel-default">
                          <div class="panel-heading">What did you just mark?</div>
                          <div class="panel-body">
                            <p>Help clean up this document by picking which category below does it belong to.</p>
@@ -176,7 +176,7 @@ startEventMgmt = () ->
                            <a href="#" class="list-group-item">Institution</a>
                            <a href="#" class="list-group-item">Author</a>                              
                            <a href="#" class="list-group-item">Contact details</a>                              
-                           <a href="#" class="list-group-item">Auther description</a>                              
+                           <a href="#" class="list-group-item">Author description</a>                              
                            <a href="#" class="list-group-item">Classification</a>                              
                            <a href="#" class="list-group-item">Article ID</a>                              
                            <a href="#" class="list-group-item">List of keywords</a>
@@ -187,6 +187,39 @@ startEventMgmt = () ->
                            <a href="#" class="list-group-item">Not sure / other</a>                              
                          </div>
                        </div>"""
+
+  buttonGroupHtml = """<div class="panel panel-default">
+                         <div class="panel-heading">What did you just mark?</div>
+                         <div class="panel-body">
+                           <p>Help clean up this document by picking which category below does it belong to.</p>
+                         </div>
+                         <div class="btn-group-vertical">
+                           <button type="button"  class="btn btn-default">Journal name</button>
+                           <button type="button"  class="btn btn-default">Institution</button>
+                           <button type="button"  class="btn btn-default">Author</button>      
+                           <div class="btn-group open">
+                            <button type="button" id="btnGroupVerticalDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                             Author
+                              <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupVerticalDrop1">
+                                <li><a >Author Name</a></li>
+                                <li><a >Author Description</a></li>
+                              </ul>
+                            </div>            
+                           <button type="button"  class="btn btn-default">Contact details</button>                              
+                           <button type="button"  class="btn btn-default">Author description</button>                              
+                           <button type="button"  class="btn btn-default">Classification</button>                              
+                           <button type="button"  class="btn btn-default">Article ID</button>                              
+                           <button type="button"  class="btn btn-default">List of keywords</button>
+                           <button type="button"  class="btn btn-default">Advertisement</button>                              
+                           <button type="button"  class="btn btn-default">History (received, pubslished dates etc)</button>                                                            
+                           <button type="button"  class="btn btn-default">Copyright and permissions</button>                              
+                           <button type="button"  class="btn btn-default">Document type description (e.g. 'Research Article')</button>                              
+                           <button type="button"  class="btn btn-default">Not sure / other</button>                              
+                         </div>
+                       </div>"""
+
 
 
 

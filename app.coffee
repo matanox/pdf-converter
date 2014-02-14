@@ -22,6 +22,7 @@ errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './logging' 
 markers       = require './markers'
+fluff         = require './metaFluff'
 
 #
 # Configure and start express
@@ -122,5 +123,6 @@ startServer = () ->
 #
 
 markers.load(startServer)
+fluff.load()
 
 selfMonitor = require('./selfMonitor').start()
