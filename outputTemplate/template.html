@@ -2,17 +2,98 @@
 <!-- customized from file:///home/matan/ingi/repos/front-end/outputTemplate/mybootstrap.html -->
 <html lang="en">
   <head>
+
+    <style>
+
+      body {
+       font: 24px Helvetica;
+       background: #999999;
+      }
+
+      #main {
+       min-height: 800px;
+       margin: 0px;
+       padding: 0px;
+       display: -webkit-flex;
+       display:         flex;
+       -webkit-flex-flow: row;
+               flex-flow: row;
+       }
+     
+      #main > article {
+       margin: 4px;
+       padding: 5px;
+       border: 1px solid #cccc33;
+       border-radius: 7pt;
+       background: #dddd88;
+       -webkit-flex: 3 1 60%;
+               flex: 3 1 60%;
+       -webkit-order: 2;
+               order: 2;
+       }
+      
+      #main > nav {
+       margin: 4px;
+       padding: 5px;
+       border: 1px solid #8888bb;
+       border-radius: 7pt;
+       background: #ccccff;
+       -webkit-flex: 1 6 20%;
+               flex: 1 6 20%;
+       -webkit-order: 1;
+               order: 1;
+       }
+      
+      #main > aside {
+       margin: 4px;
+       padding: 5px;
+       border: 1px solid #8888bb;
+       border-radius: 7pt;
+       background: #ccccff;
+       -webkit-flex: 1 6 20%;
+               flex: 1 6 20%;
+       -webkit-order: 3;
+               order: 3;
+       }
+     
+      header, footer {
+       display: block;
+       margin: 4px;
+       padding: 5px;
+       min-height: 100px;
+       border: 1px solid #eebb55;
+       border-radius: 7pt;
+       background: #ffeebb;
+       }
+     
+      /* Too narrow to support three columns */
+      @media all and (max-width: 640px) {
+      
+       #main, #page {
+        -webkit-flex-flow: column;
+                flex-flow: column;
+                flex-direction: column;
+       }
+
+       #main > article, #main > nav, #main > aside {
+        /* Return them to document order */
+        -webkit-order: 0;
+                order: 0;
+       }
+      
+       #main > nav, #main > aside, header, footer {
+        min-height: 50px;
+        max-height: 50px;
+       }
+      }
+
+    </style>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>(research tool)</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../bootstrap3/bootstrap.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="../bootstrap3/jumbotron.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -30,51 +111,15 @@
   </head>
 
   <body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="top-bar">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"></a>
-        </div>
-        <div class="navbar-collapse collapse">
-        </div><!--/.navbar-collapse -->
-      </div>
+    <header>
+      <a class="btn btn-primary btn-lg" role="button" href="serveIntermediaryFile?name=ansOLpAQTx6nqJEtYMhq">Open original pdf</a>
+    </header> 
+    <div id='main'>
+      <article id="hookPoint" style="font-size: 0; white-space:normal;"></article>
+      <nav id="left-col"></nav>
+      <aside></aside>
     </div>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1></h1>
-        <p>
-          <a class="btn btn-primary btn-lg" role="button" href="serveIntermediaryFile?name=ansOLpAQTx6nqJEtYMhq">Open original pdf</a>
-        </p>
-      </div>
-    </div>
-
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-3", id="left-col">
-        </div>
-        <div class="col-md-6" id="hookPoint" style="font-size: 0; white-space:normal;">
-       </div>
-        <div class="col-md-3">
-        </div>
-      </div>
-
-      <hr>
-
-      <!--footer>
-        <!p>&copy; Company 2013</p>
-      </footer-->
-    </div> <!-- /container -->
-
+    <footer></footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

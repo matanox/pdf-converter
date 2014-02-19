@@ -30,7 +30,10 @@
     "winston-graylog2": "~0.1.10",
     "winston-logio": "~0.2.0",
     "winston-logstash": "~0.1.7",
-    "elasticsearch": "~1.4.0"
+    "elasticsearch": "~1.4.0",
+    "async": ">= 0.1.x", 
+    "node-uuid": ">= 0.0.x",
+    "mkdirp": ">= 0.3.3"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"
