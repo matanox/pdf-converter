@@ -221,8 +221,8 @@ exports.tokenize = function(nodeWithStyles) {
 };
 
 exports.buildOutputHtml = function(tokens, finalStyles, docLogger) {
-  var plainText, wrapWithAttributes, x, _i, _len;
-  wrapWithAttributes = function(token, moreStyle) {
+  var convertToHtml, paragraphOpeningDelimitation, plainText, tokenSequence, x, _i, _j, _len, _len1;
+  convertToHtml = function(token, moreStyle) {
     var style, stylesString, text, val, _ref;
     stylesString = '';
     _ref = token.finalStyles;
@@ -253,17 +253,30 @@ exports.buildOutputHtml = function(tokens, finalStyles, docLogger) {
       switch (x.paragraph) {
         case 'closer':
           x.text = x.text + '<br /><br />';
-          plainText = plainText + wrapWithAttributes(x);
+          plainText = plainText + convertToHtml(x);
           break;
         case 'opener':
-          plainText = plainText + wrapWithAttributes(x, 'display: inline-block; text-indent: 2em;');
+          plainText = plainText + convertToHtml(x, 'display: inline-block; text-indent: 2em;');
           break;
         default:
-          plainText = plainText + wrapWithAttributes(x);
+          plainText = plainText + convertToHtml(x);
       }
     } else {
-      plainText = plainText + wrapWithAttributes(x);
+      plainText = plainText + convertToHtml(x);
     }
+  }
+  tokenSequence = [];
+  paragraphOpeningDelimitation = {
+    metaType: 'paragraphBreak'
+  };
+  for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
+    x = tokens[_j];
+    if (x.metaType === 'regular') {
+      if (x.paragraph === 'opener') {
+        tokenSequence.push(paragraphOpeningDelimitation);
+      }
+    }
+    tokenSequence.push(x);
   }
   util.timelog('Serialization to output', docLogger);
   return plainText;

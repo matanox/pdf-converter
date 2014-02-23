@@ -240,9 +240,13 @@ exports.tokenize = (nodeWithStyles) ->
 exports.buildOutputHtml = (tokens, finalStyles, docLogger) ->
 
   #
-  # Building the output for a single token....
+  # Create displayable html from token
+  # ==================================
   #
-  wrapWithAttributes = (token, moreStyle) ->
+  # This includes arranging attributes of a token -
+  # Creating css style string, adding extra styles if supplied, creating id attribute
+  #
+  convertToHtml = (token, moreStyle) ->
 
     stylesString = ''
     for style, val of token.finalStyles
@@ -265,19 +269,36 @@ exports.buildOutputHtml = (tokens, finalStyles, docLogger) ->
 
   util.timelog('Serialization to output')  
 
+  # Old construction
   for x in tokens 
     if x.metaType is 'regular'
+
       switch x.paragraph
         when 'closer'
           x.text = x.text + '<br /><br />'
-          plainText = plainText + wrapWithAttributes(x)
+          plainText = plainText + convertToHtml(x)
         when 'opener'
-          plainText = plainText + wrapWithAttributes(x, 'display: inline-block; text-indent: 2em;')
+          plainText = plainText + convertToHtml(x, 'display: inline-block; text-indent: 2em;')
         else
-          plainText = plainText + wrapWithAttributes(x)
+          plainText = plainText + convertToHtml(x)
+
     else 
-      #plainText = plainText + wrapWithAttributes(x, 'white-space:pre;') # makes white-space chars show...
-      plainText = plainText + wrapWithAttributes(x)
+
+      #plainText = plainText + convertToHtml(x, 'white-space:pre;') # makes white-space chars show...
+      plainText = plainText + convertToHtml(x)
+
+   
+  # New construction
+  tokenSequence = []
+  paragraphOpeningDelimitation = { metaType: 'paragraphBreak' }
+
+  for x in tokens 
+
+    if x.metaType is 'regular'
+      if x.paragraph is 'opener'
+        tokenSequence.push(paragraphOpeningDelimitation)
+
+    tokenSequence.push(x)      
 
   util.timelog('Serialization to output', docLogger) 
 
