@@ -194,29 +194,21 @@ startEventMgmt = () ->
                            <p>Help clean up this document by picking which category below does it belong to.</p>
                          </div>
                          <div class="btn-group-vertical">
-                           <button type="button"  class="btn btn-default">Journal name</button>
-                           <button type="button"  class="btn btn-default">Institution</button>
-                           <button type="button"  class="btn btn-default">Author</button>      
-                           <div class="btn-group open">
-                            <button type="button" id="btnGroupVerticalDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                             Author
-                              <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupVerticalDrop1">
-                                <li><a >Author Name</a></li>
-                                <li><a >Author Description</a></li>
-                              </ul>
-                            </div>            
-                           <button type="button"  class="btn btn-default">Contact details</button>                              
-                           <button type="button"  class="btn btn-default">Author description</button>                              
-                           <button type="button"  class="btn btn-default">Classification</button>                              
-                           <button type="button"  class="btn btn-default">Article ID</button>                              
-                           <button type="button"  class="btn btn-default">List of keywords</button>
-                           <button type="button"  class="btn btn-default">Advertisement</button>                              
-                           <button type="button"  class="btn btn-default">History (received, pubslished dates etc)</button>                                                            
-                           <button type="button"  class="btn btn-default">Copyright and permissions</button>                              
-                           <button type="button"  class="btn btn-default">Document type description (e.g. 'Research Article')</button>                              
-                           <button type="button"  class="btn btn-default">Not sure / other</button>                              
+                           <button type="button">Journal name</button>
+                           <button type="button">Institution</button>
+                           <button type="button">Author</button>      
+                           <button type="button">Author Name</a></button>
+                           <button type="button">Author Description</buttoni>
+                           <button type="button">Contact details</button>                              
+                           <button type="button">Author description</button>                              
+                           <button type="button">Classification</button>                              
+                           <button type="button">Article ID</button>                              
+                           <button type="button">List of keywords</button>
+                           <button type="button">Advertisement</button>                              
+                           <button type="button">History (received, pubslished dates etc)</button>                                                            
+                           <button type="button">Copyright and permissions</button>                              
+                           <button type="button">Document type description (e.g. 'Research Article')</button>                              
+                           <button type="button">Not sure / other</button>                              
                          </div>
                        </div>"""
 
