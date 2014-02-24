@@ -19,8 +19,9 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 
 exports.go = function(localCopy, docLogger, req, res) {
   var execCommand, name, outFolder;
-  util.timelog("from upload to serving");
   name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
+  req.session.name = name;
+  util.timelog("from upload to serving");
   docMeta.storePdfMetaData(localCopy, docLogger);
   storage.store("pdf", name, localCopy, docLogger);
   util.timelog("Conversion to html");
@@ -36,7 +37,7 @@ exports.go = function(localCopy, docLogger, req, res) {
       return docLogger.error(executable + "'sexec error: " + error);
     } else {
       util.timelog("Conversion to html", docLogger);
-      return require('./extract').go(name, res, docLogger);
+      return require('./extract').go(req, name, res, docLogger);
     }
   });
 };

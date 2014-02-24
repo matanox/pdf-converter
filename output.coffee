@@ -20,8 +20,10 @@ exports.serveOutput = (html, name, res, docLogger) ->
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
-  outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
- 
+  #Old paradigm
+  #outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
+  #
+
   util.timelog('Saving serialized output to file')  
 
   fs.writeFile(outputFile, outputHtml, (err) -> 

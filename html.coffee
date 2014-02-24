@@ -287,19 +287,6 @@ exports.buildOutputHtml = (tokens, finalStyles, docLogger) ->
       #plainText = plainText + convertToHtml(x, 'white-space:pre;') # makes white-space chars show...
       plainText = plainText + convertToHtml(x)
 
-   
-  # New construction
-  tokenSequence = []
-  paragraphOpeningDelimitation = { metaType: 'paragraphBreak' }
-
-  for x in tokens 
-
-    if x.metaType is 'regular'
-      if x.paragraph is 'opener'
-        tokenSequence.push(paragraphOpeningDelimitation)
-
-    tokenSequence.push(x)      
-
   util.timelog('Serialization to output', docLogger) 
 
   #logging.log(plainText)

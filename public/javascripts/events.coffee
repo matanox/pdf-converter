@@ -20,7 +20,8 @@
 #         due to some interaction between touch and mouse events during emulation, which
 #         may change in the next version of Chrome anyway.
 #
-# Bug:    Seems to stop working in iOS5 Safari after few marks.
+# Bug:    Dehighlighting may produce lighter than background shade after tinkering
+#         with multiple partly overlapping highlights 
 #
 # Missing touch features:
 #  
@@ -469,8 +470,30 @@ startEventMgmt = () ->
   #  container.oncontextmenu = eventCapture
   #
 
+myAjax = (url) ->  
+  ajaxRequest = new XMLHttpRequest()
+  console.log 'Making ajax call to ' + url
+
+  ajaxRequest.onreadystatechange = () ->
+    if ajaxRequest.readyState is 4
+      if ajaxRequest.status is 200
+        console.log 'Ajax call to ' + url + ' succeded.'
+        return ajaxRequest.responseText
+      else
+        console.error 'Ajax call to ' + url + ' failed'
+
+  ajaxRequest.open('GET', url, true)
+  ajaxRequest.send(null)
+
+
+loadArticleText = () ->
+  # Make ajax request to get article text tokens
+  myAjax()
+  # Convert tokens into dispay text
+
 go = () ->
   window.onload = () -> startEventMgmt()
+  loadArticleText() 
 
 startAfterPrerequisites()
 

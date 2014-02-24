@@ -221,7 +221,7 @@ exports.tokenize = function(nodeWithStyles) {
 };
 
 exports.buildOutputHtml = function(tokens, finalStyles, docLogger) {
-  var convertToHtml, paragraphOpeningDelimitation, plainText, tokenSequence, x, _i, _j, _len, _len1;
+  var convertToHtml, plainText, x, _i, _len;
   convertToHtml = function(token, moreStyle) {
     var style, stylesString, text, val, _ref;
     stylesString = '';
@@ -264,19 +264,6 @@ exports.buildOutputHtml = function(tokens, finalStyles, docLogger) {
     } else {
       plainText = plainText + convertToHtml(x);
     }
-  }
-  tokenSequence = [];
-  paragraphOpeningDelimitation = {
-    metaType: 'paragraphBreak'
-  };
-  for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
-    x = tokens[_j];
-    if (x.metaType === 'regular') {
-      if (x.paragraph === 'opener') {
-        tokenSequence.push(paragraphOpeningDelimitation);
-      }
-    }
-    tokenSequence.push(x);
   }
   util.timelog('Serialization to output', docLogger);
   return plainText;

@@ -13,8 +13,11 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 # 
 exports.go = (localCopy, docLogger, req, res) ->
 
-  util.timelog "from upload to serving"
   name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
+  req.session.name = name 
+
+  util.timelog "from upload to serving"
+
   docMeta.storePdfMetaData localCopy, docLogger
   storage.store "pdf", name, localCopy, docLogger
 
@@ -51,7 +54,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
       # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
       util.timelog "Conversion to html", docLogger
-      require('./extract').go(name, res, docLogger)
+      require('./extract').go(req, name, res, docLogger)
       #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
 
   

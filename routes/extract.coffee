@@ -37,7 +37,8 @@ filterZeroLengthText = (ourDivRepresentation) ->
 #
 # Extract text content and styles from html
 #
-exports.go = (name, res ,docLogger) ->
+exports.go = (req, name, res ,docLogger) ->
+
   util.timelog('Extraction from html stage A')
 
   # Read the input html 
@@ -400,8 +401,9 @@ exports.go = (name, res ,docLogger) ->
       else 
         util.timelog 'Markers visualization', docLogger
 
-        # Send back the outcome
-        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)
+        # Done. Send back response, after attaching the result data to the session
+        req.session.tokens = tokens
+        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)        
         output.serveOutput(outputHtml, name, res, docLogger)
 
     else

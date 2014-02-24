@@ -63,7 +63,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
   return filtered;
 };
 
-exports.go = function(name, res, docLogger) {
+exports.go = function(req, name, res, docLogger) {
   var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
@@ -383,6 +383,7 @@ exports.go = function(name, res, docLogger) {
         });
       } else {
         util.timelog('Markers visualization', docLogger);
+        req.session.tokens = tokens;
         outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger);
         return output.serveOutput(outputHtml, name, res, docLogger);
       }
