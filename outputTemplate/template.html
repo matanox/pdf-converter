@@ -91,7 +91,15 @@
 
     <!-- The following button style was generated using CSSButtonGenerator.com -->
     <style type="text/css">
-      .simpleButton {
+      .simpleButton { 
+
+        cursor: default;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
         -moz-box-shadow:inset 0px 1px 0px 0px #cae3fc;
         -webkit-box-shadow:inset 0px 1px 0px 0px #cae3fc;
@@ -161,7 +169,7 @@
 
   <body>
     <header>
-      <a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Open original pdf</a>
+      <a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a>
     </header> 
     <div id='main'>
       <article id="hookPoint" style="font-size: 0; white-space:normal;"></article>

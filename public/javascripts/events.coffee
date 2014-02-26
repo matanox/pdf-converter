@@ -561,10 +561,12 @@ loadArticleText = () ->
     tokenSequence = JSON.parse(tokenSequenceSerialized)
     #console.dir tokenSequence
     console.timeEnd('unpickling')
-    renderText(tokenSequence))
+    renderText(tokenSequence)
+    console.log('starting event mgmt')
+    startEventMgmt())
 
 go = () ->
-  window.onload = () -> startEventMgmt()
+  #window.onload = () -> startEventMgmt()
   loadArticleText() 
 
 startAfterPrerequisites()

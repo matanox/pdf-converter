@@ -58,7 +58,21 @@ exports.representNodes = (domObject) ->
             #logging.log text 
             #logging.log stylesArray
 
-  handleNode(domObject)
+  # Home in on the main text container in the html, and parse it.
+  # The original table of contents part in the html, if any, is excluded by this.
+
+  findNode = (domObject) ->
+    for object in domObject
+      switch object.type 
+        when 'tag' 
+          #console.log(object.attribs['id'])
+          if object.attribs['id'] is 'page-container'   # this is the ID given by pdf2htmlEX to the core text top node
+            handleNode([object])                        # passing a single element array here
+            return
+          if object.children?
+            findNode(object.children)
+
+  findNode(domObject)
 
   #util.logObject myObjects
   return myObjects

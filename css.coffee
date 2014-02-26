@@ -10,6 +10,7 @@ relevantStyles = [
   'word-spacing',
   'line-height',
   'color',
+  'letter-spacing'
 ]
 
 positionData = [

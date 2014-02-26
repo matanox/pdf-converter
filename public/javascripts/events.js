@@ -389,14 +389,13 @@ loadArticleText = function() {
     console.time('unpickling');
     tokenSequence = JSON.parse(tokenSequenceSerialized);
     console.timeEnd('unpickling');
-    return renderText(tokenSequence);
+    renderText(tokenSequence);
+    console.log('starting event mgmt');
+    return startEventMgmt();
   });
 };
 
 go = function() {
-  window.onload = function() {
-    return startEventMgmt();
-  };
   return loadArticleText();
 };
 

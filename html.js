@@ -15,7 +15,7 @@ parseCssClasses = function(styleString) {
 };
 
 exports.representNodes = function(domObject) {
-  var handleNode, myObjects;
+  var findNode, handleNode, myObjects;
   myObjects = [];
   handleNode = function(domObject, stylesArray) {
     var inheritingStylesArray, object, styleString, styles, text, _i, _len, _results;
@@ -64,7 +64,23 @@ exports.representNodes = function(domObject) {
     }
     return _results;
   };
-  handleNode(domObject);
+  findNode = function(domObject) {
+    var object, _i, _len;
+    for (_i = 0, _len = domObject.length; _i < _len; _i++) {
+      object = domObject[_i];
+      switch (object.type) {
+        case 'tag':
+          if (object.attribs['id'] === 'page-container') {
+            handleNode([object]);
+            return;
+          }
+          if (object.children != null) {
+            findNode(object.children);
+          }
+      }
+    }
+  };
+  findNode(domObject);
   return myObjects;
 };
 
