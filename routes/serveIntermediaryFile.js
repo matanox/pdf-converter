@@ -29,12 +29,12 @@ exports.go = function(req, res) {
       return util.timelog('serving original pdf');
     }
   };
-  if (req.query.name != null) {
-    name = req.query.name;
+  if (req.session.name != null) {
+    name = req.session.name;
     console.log(name);
     return pdfBytes = storage.fetch('pdf', name, serve);
   } else {
-    console.error('request missing the name parameter');
+    console.error('session does not contain the name parameter');
     return res.send(500);
   }
 };

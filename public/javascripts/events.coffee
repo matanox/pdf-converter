@@ -470,7 +470,7 @@ startEventMgmt = () ->
   #  container.oncontextmenu = eventCapture
   #
 
-myAjax = (url) ->  
+myAjax = (url, callback) ->  
   ajaxRequest = new XMLHttpRequest()
   console.log 'Making ajax call to ' + url
 
@@ -478,7 +478,7 @@ myAjax = (url) ->
     if ajaxRequest.readyState is 4
       if ajaxRequest.status is 200
         console.log 'Ajax call to ' + url + ' succeded.'
-        return ajaxRequest.responseText
+        callback(ajaxRequest.responseText)
       else
         console.error 'Ajax call to ' + url + ' failed'
 
@@ -486,10 +486,82 @@ myAjax = (url) ->
   ajaxRequest.send(null)
 
 
+    
+#
+# Build text html
+#
+# TODO:
+# 1. Report time breakdown back to server, or queue for next reporting tick
+# 2. Use same time logging utility function as server side
+#
+renderText = (tokens) ->
+
+  #
+  # Create displayable html from token
+  # ==================================
+  #
+  # This includes arranging attributes of a token -
+  # Creating css style string, adding extra styles if supplied, creating id attribute
+  #
+  convertToHtml = (token, moreStyle) ->
+
+    stylesString = ''
+    for style, val of token.finalStyles
+      stylesString = stylesString + style + ':' + val + '; '
+
+    if moreStyle? then stylesString = stylesString + ' ' + moreStyle
+
+    if stylesString.length > 0
+      stylesString = 'style=\"' + stylesString + '\"'
+      if token.metaType is 'regular' 
+        text = token.text
+      else 
+        text = ' '
+      #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
+      return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
+    else 
+      console.warn('token had no styles attached to it when building output. token text: ' + token.text)
+      return "<span>#{token.text}</span>"
+
+  for x in tokens 
+    if x.metaType is 'regular'
+
+      switch x.paragraph
+        when 'closer'
+          x.text = x.text + '<br /><br />'
+          plainText = plainText + convertToHtml(x)
+        when 'opener'
+          plainText = plainText + convertToHtml(x, 'display: inline-block; text-indent: 2em;')
+        else
+          plainText = plainText + convertToHtml(x)
+
+    else 
+
+      #plainText = plainText + convertToHtml(x, 'white-space:pre;') # makes white-space chars show...
+      plainText = plainText + convertToHtml(x)
+
+  #logging.log(plainText)
+  
+  document.getElementById('hookPoint').innerHTML = plainText
+
+
+#
+# TODO:
+# 1. Report time breakdown back to server, or queue for next reporting tick
+# 2. Use same time logging utility function as server side
+#
 loadArticleText = () ->
   # Make ajax request to get article text tokens
-  myAjax()
-  # Convert tokens into dispay text
+  ajaxHost = location.protocol + '//' + location.hostname
+  myAjax(ajaxHost + '/tokenSync', (tokenSequenceSerialized) ->  
+    # Convert tokens into dispay text
+    console.log(tokenSequenceSerialized.length)
+    console.time('unpickling')
+    #console.log tokenSequenceSerialized
+    tokenSequence = JSON.parse(tokenSequenceSerialized)
+    #console.dir tokenSequence
+    console.timeEnd('unpickling')
+    renderText(tokenSequence))
 
 go = () ->
   window.onload = () -> startEventMgmt()

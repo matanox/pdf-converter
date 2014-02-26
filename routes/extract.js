@@ -300,8 +300,7 @@ exports.go = function(req, name, res, docLogger) {
   connect_token_group = function(_arg) {
     var group, token;
     group = _arg.group, token = _arg.token;
-    group.push(token);
-    return token.partOf = group;
+    return group.push(token);
   };
   abbreviations = 0;
   groups = [];
@@ -383,7 +382,10 @@ exports.go = function(req, name, res, docLogger) {
         });
       } else {
         util.timelog('Markers visualization', docLogger);
-        req.session.tokens = tokens;
+        util.timelog('pickling');
+        req.session.tokens = JSON.stringify(tokens);
+        console.log(req.session.tokens.length);
+        util.timelog('pickling');
         outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger);
         return output.serveOutput(outputHtml, name, res, docLogger);
       }

@@ -8,17 +8,17 @@ logging = require('../logging');
 css = require('../css');
 
 exports.go = function(req, res) {
-  var paragraphOpeningDelimitation, tokenSequence, x, _i, _len, _ref;
-  if (!req.session.tokens) {
+  var paragraphOpeningDelimitation, tokenSequence, tokenSequenceSerialized, tokens, x, _i, _len;
+  if (req.session.tokens == null) {
     return;
   }
+  tokens = JSON.parse(req.session.tokens);
   tokenSequence = [];
   paragraphOpeningDelimitation = {
     metaType: 'paragraphBreak'
   };
-  _ref = req.session.tokens;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    x = _ref[_i];
+  for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+    x = tokens[_i];
     if (x.metaType === 'regular') {
       if (x.paragraph === 'opener') {
         tokenSequence.push(paragraphOpeningDelimitation);
@@ -26,5 +26,6 @@ exports.go = function(req, res) {
     }
     tokenSequence.push(x);
   }
-  return res.json(tokenSequence);
+  tokenSequenceSerialized = JSON.stringify(tokenSequence);
+  return res.end(tokenSequenceSerialized);
 };

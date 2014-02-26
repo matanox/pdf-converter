@@ -86,7 +86,7 @@ app.get('/users', user.list);
 
 app.get('/handleInputFile', require('./routes/handleInputFile').go);
 
-app.get('/getTokens', require('./routes/tokenSync').go);
+app.get('/tokenSync', require('./routes/tokenSync').go);
 
 app.get('/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go);
 

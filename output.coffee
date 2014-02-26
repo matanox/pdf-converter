@@ -17,15 +17,15 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' +
 # into the designated insertion position in the template
 exports.serveOutput = (html, name, res, docLogger) ->
   #logging.log(html)
+
+  util.timelog('Saving serialized output to file')  
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
   #Old paradigm
   #outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
-  #
-
-  util.timelog('Saving serialized output to file')  
-
+  
+  outputHtml = outputTemplate
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	
     if err?

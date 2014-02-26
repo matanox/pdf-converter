@@ -14,9 +14,10 @@ hookId = 'hookPoint';
 hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1;
 
 exports.serveOutput = function(html, name, res, docLogger) {
-  var outputFile;
-  outputFile = '../local-copies/' + 'output/' + name + '.html';
+  var outputFile, outputHtml;
   util.timelog('Saving serialized output to file');
+  outputFile = '../local-copies/' + 'output/' + name + '.html';
+  outputHtml = outputTemplate;
   return fs.writeFile(outputFile, outputHtml, function(err) {
     if (err != null) {
       res.send(500);

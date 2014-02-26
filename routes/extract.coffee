@@ -325,7 +325,7 @@ exports.go = (req, name, res ,docLogger) ->
   util.timelog('Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
     group.push(token)
-    token.partOf = group      
+    #token.partOf = group      
 
   abbreviations = 0
   groups = [] # sequence of all groups
@@ -402,7 +402,12 @@ exports.go = (req, name, res ,docLogger) ->
         util.timelog 'Markers visualization', docLogger
 
         # Done. Send back response, after attaching the result data to the session
-        req.session.tokens = tokens
+        util.timelog 'pickling'
+        #req.session.tokens = require('circular-json').stringify(tokens) # takes 100 times longer than JSON.stringify so can't afford it
+        req.session.tokens = JSON.stringify(tokens)
+        console.log req.session.tokens.length
+        util.timelog 'pickling'
+        #console.log req.session.tokens
         outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)        
         output.serveOutput(outputHtml, name, res, docLogger)
 

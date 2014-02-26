@@ -48,11 +48,11 @@ exports.go = (req, res) ->
       util.timelog 'serving original pdf'
 
 
-  if req.query.name?
-    name = req.query.name
+  if req.session.name?
+    name = req.session.name
     console.log name
     pdfBytes = storage.fetch('pdf', name, serve)
   else
-    console.error 'request missing the name parameter'
+    console.error 'session does not contain the name parameter'
     res.send(500)
 
