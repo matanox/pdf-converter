@@ -147,27 +147,58 @@ exports.go = (req, name, res ,docLogger) ->
   # TODO: parameterize direction to support RTL languages
   # TODO: this code assumes postions are given in .left and .bottom not .right and .top or other
   # TODO: this code compares position on an integer rounding basis, this is only usually correct
-  # TODO: this code assumes the size unit is px 
+  # TODO: this code assumes the size unit is px and some more 
   #
   util.first(tokens).lineLocation = 'opener'
 
   lastRowPosLeft = null  # a closure
-  tokens.reduce (a, b) ->                             
-    if parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)  # later is more downwards than former
+  tokens.reduce (a, b, i, tokens) ->                             
+
+    sameRow = true
+  
+    # Identify and handle new text column
+    # By examining height difference between consequtive words
+    if parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100
+      sameRow = false
+      a.lineLocation = 'closer'       # a line closer       
+      b.lineLocation = 'opener'       # a line opener 
+      lastRowPosLeft = b.positionInfo.left  # recalibrate for forthcoming new paragraph beginning
+
+    # Identify and handle new paragraph
+    # By examining height difference between consequtive words and some more
+    if parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom) 
+      sameRow = false
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener                         
       #docLogger.info('closer: ' + a.text)
       #docLogger.info('opener: ' + b.text)
       
       if lastRowPosLeft?
-        #docLogger.info(parseInt(b.positionInfo.left) - parseInt(lastRowPosLeft))
+        # Is there a new paragraph indentation shift?
         if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
-          #docLogger.info('opener')
           a.paragraph = 'closer'
-          b.paragraph = 'opener'      
+          b.paragraph = 'opener'   
+
+        # Is it a new line with a larger line space?
+        if parseInt(b.positionInfo.bottom) + 12 < parseInt(a.positionInfo.bottom) 
+          a.paragraph = 'closer'
+          b.paragraph = 'opener'   
+
       lastRowPosLeft = b.positionInfo.left
 
+    if sameRow
+      # Identify and handle superscript and subscript
+      if Math.abs(parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)) > 0
+        # Add a delimiter so that a differently vertically-positioned token pair isn't combined into a single token
+        # This can later be refined to reflect this is not a regular space delimiter,
+        # as well as enable propagating the relative font size and height of the super/subscript.
+        newDelimiter = {'metaType': 'delimiter'}
+        newDelimiter.styles = a.styles
+        newDelimiter.finalStyles = a.finalStyles    
+        tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
+
     return b
+
   util.last(tokens).lineLocation = 'closer'
 
   #
@@ -191,8 +222,6 @@ exports.go = (req, name, res ,docLogger) ->
           # add a delimiter at the end of the line, unless a hyphen-split 
           # was just united, in which case it's not necessary
           else
-            #if a.text is 'approach' and b.text is 'to'         
-              #docLogger.info('found at ' + i)
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles    
@@ -200,30 +229,6 @@ exports.go = (req, name, res ,docLogger) ->
             return 2
     return 1)
 
-  #docLogger.info(tokens.length)
-  #util.logObject(tokens)
-  #for token in tokens 
-  #  docLogger.info(token.metaType)
-
-  ###
-  #
-  # Unite token couples that have no delimiter in between them,
-  # the first of which ending with '-' (while applying the
-  # styles of the first one to both).
-  #
-  # Note: this should also unite triples and so on, not just couples
-  #
-  tokens.reduce (a, b, index) -> 
-    if a.metaType is 'regular' and b.metaType is 'regular'
-
-      if util.endsWith(a.text, '-')
-        a.text = a.text.slice(0, -1)   # discard the hyphen
-        a.text = a.text.concat(b.text) # concatenate text of second element into first
-        tokens.splice(index, 1)        # remove second element
-        return a
-    return b
-  ###
-  
   #
   # Unite tokens that do not have a delimiter in between them.
   # This is necessary for the cases where pdf2html splits parts of 
@@ -234,7 +239,10 @@ exports.go = (req, name, res ,docLogger) ->
   iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'
 
+      # Merge the two tokens - styles from first, paragraph status from second
       a.text = a.text.concat(b.text) # concatenate text of second element into first
+      a.paragraph = b.paragraph
+
       tokens.splice(index, 1)        # remove second element
       return 0
     return 1)
@@ -372,7 +380,7 @@ exports.go = (req, name, res ,docLogger) ->
                 if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
                   #docLogger.info('whole marker matched: ' + console.dir(marker))
                   matchedMarkers.push(marker)
-                  token.finalStyles['color'] = 'red'
+                  token.emphasis = true
                   marker.nextExpected = 0
                 else
                   #docLogger.info('marker token matched ')
@@ -389,7 +397,7 @@ exports.go = (req, name, res ,docLogger) ->
                   if (marker.nextExpected + 1) is (marker.markerTokens.length - 1)
                     #docLogger.info('whole marker matched after wildcard: ' + console.dir(marker))
                     matchedMarkers.push(marker)
-                    token.finalStyles['color'] = 'red'
+                    token.emphasis = true
                     marker.nextExpected = 0
                   else
                     marker.nextExpected += 2

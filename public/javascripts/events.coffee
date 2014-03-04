@@ -72,7 +72,7 @@ startAfterPrerequisites = () ->
   ajaxRequest.send(null)
 
 #
-# Attaches event handlers to the page called for
+# Attaches event handlers to the page
 #
 #
 # Optional TODO: 
@@ -83,7 +83,14 @@ startAfterPrerequisites = () ->
 #   for the entire page to load as long as the necessary hookpoint has already 
 #   been created!
 #
-startEventMgmt = () ->
+
+userEventMgmtEnabled = false
+
+userEventMgmt = () ->
+
+  # Skip starting if already started
+  if userEventMgmtEnabled then return 
+  userEventMgmtEnabled = true
 
   console.log "Setting up events..."
   container = document.getElementById('hookPoint')
@@ -149,49 +156,9 @@ startEventMgmt = () ->
       document.getElementById(element).style.background = '#FAAC58'
     ###
  
-
-    
-  buttonHtmlObsolete = """<div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-lg">Primary</button>
-                    <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                    </ul>
-                  </div>"""
-
-
-  buttonGroupHtmlOld = """<div class="panel panel-default">
-                         <div class="panel-heading">What did you just mark?</div>
-                         <div class="panel-body">
-                           <p>Help clean up this document by picking which category below does it belong to.</p>
-                         </div>
-                         <div class="list-group">
-                           <a href="#" class="list-group-item">Journal name</a>
-                           <a href="#" class="list-group-item">Institution</a>
-                           <a href="#" class="list-group-item">Author</a>                              
-                           <a href="#" class="list-group-item">Contact details</a>                              
-                           <a href="#" class="list-group-item">Author description</a>                              
-                           <a href="#" class="list-group-item">Classification</a>                              
-                           <a href="#" class="list-group-item">Article ID</a>                              
-                           <a href="#" class="list-group-item">List of keywords</a>
-                           <a href="#" class="list-group-item">Advertisement</a>                              
-                           <a href="#" class="list-group-item">History (received, pubslished dates etc)</a>                                                            
-                           <a href="#" class="list-group-item">Copyright and permissions</a>                              
-                           <a href="#" class="list-group-item">Document type description (e.g. 'Research Article')</a>                              
-                           <a href="#" class="list-group-item">Not sure / other</a>                              
-                         </div>
-                       </div>"""
-
-  buttonGroupHtml = """<div class="panel panel-default">
-                         <div class="panel-heading">What did you just mark?</div>
-                         <div class="panel-body">
+  buttonGroupHtml = """<div class="panel panel-default" style="padding-left:2em; padding-right:2em;">
+                         <div class="panel-heading" style="font-family: 'Averia Sans Libre', cursive;">What did you just mark?</div>
+                         <div class="panel-body" style="font-family: 'Averia Sans Libre', cursive;">
                            <p>Help clean up this document by picking which category below does it belong to.</p>
                          </div>
                          <div class="btn-group-vertical">
@@ -199,7 +166,6 @@ startEventMgmt = () ->
                            <button type="button">Institution</button>
                            <button type="button">Author</button>      
                            <button type="button">Author Name</a></button>
-                           <button type="button">Author Description</buttoni>
                            <button type="button">Contact details</button>                              
                            <button type="button">Author description</button>                              
                            <button type="button">Classification</button>                              
@@ -208,7 +174,7 @@ startEventMgmt = () ->
                            <button type="button">Advertisement</button>                              
                            <button type="button">History (received, pubslished dates etc)</button>                                                            
                            <button type="button">Copyright and permissions</button>                              
-                           <button type="button">Document type description (e.g. 'Research Article')</button>                              
+                           <button type="button">Document type description</button>                              
                            <button type="button">Not sure / other</button>                              
                          </div>
                        </div>"""
@@ -477,7 +443,7 @@ myAjax = (url, callback) ->
   ajaxRequest.onreadystatechange = () ->
     if ajaxRequest.readyState is 4
       if ajaxRequest.status is 200
-        console.log 'Ajax call to ' + url + ' succeded.'
+        console.log 'Ajax call to ' + url + ' succeeded.'
         callback(ajaxRequest.responseText)
       else
         console.error 'Ajax call to ' + url + ' failed'
@@ -503,11 +469,19 @@ renderText = (tokens) ->
   # This includes arranging attributes of a token -
   # Creating css style string, adding extra styles if supplied, creating id attribute
   #
-  convertToHtml = (token, moreStyle) ->
+  deriveHtml = (token, moreStyle) ->
 
     stylesString = ''
     for style, val of token.finalStyles
-      stylesString = stylesString + style + ':' + val + '; '
+      unless style in ['font-family', 'line-height', 'color']
+        stylesString = stylesString + style + ':' + val + '; '
+
+    if token.emphasis 
+      color = "rgb(100,200,200)"
+    else 
+      color = "rgb(255,255,220)"
+      
+    stylesString = stylesString + 'color' + ':' + color + '; ' 
 
     if moreStyle? then stylesString = stylesString + ' ' + moreStyle
 
@@ -521,29 +495,31 @@ renderText = (tokens) ->
       return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
     else 
       console.warn('token had no styles attached to it when building output. token text: ' + token.text)
+      console.dir(token)
       return "<span>#{token.text}</span>"
 
   for x in tokens 
-    if x.metaType is 'regular'
+    switch x.metaType 
+      when 'regular'
+        switch x.paragraph
+          when 'closer'
+            x.text = x.text + '<br /><br />'
+            html = html + deriveHtml(x)
+          when 'opener'
+            html = html + deriveHtml(x, 'display: inline-block; text-indent: 2em;')
+          else
+            html = html + deriveHtml(x)
+      when 'delimiter'
+        html = html + deriveHtml(x) # add word space
 
-      switch x.paragraph
-        when 'closer'
-          x.text = x.text + '<br /><br />'
-          plainText = plainText + convertToHtml(x)
-        when 'opener'
-          plainText = plainText + convertToHtml(x, 'display: inline-block; text-indent: 2em;')
-        else
-          plainText = plainText + convertToHtml(x)
-
-    else 
-
-      #plainText = plainText + convertToHtml(x, 'white-space:pre;') # makes white-space chars show...
-      plainText = plainText + convertToHtml(x)
-
-  #logging.log(plainText)
+  #logging.log(html)
   
-  document.getElementById('hookPoint').innerHTML = plainText
+  document.getElementById('hookPoint').innerHTML = html
 
+
+
+
+tokenSequence = {} # a global, so it can be queried from the browser console 
 
 #
 # TODO:
@@ -563,10 +539,10 @@ loadArticleText = () ->
     console.timeEnd('unpickling')
     renderText(tokenSequence)
     console.log('starting event mgmt')
-    startEventMgmt())
+    userEventMgmt())
 
 go = () ->
-  #window.onload = () -> startEventMgmt()
+  #window.onload = () -> userEventMgmt()
   loadArticleText() 
 
 startAfterPrerequisites()
@@ -582,7 +558,7 @@ reload = () ->
   script.type = "text/javascript"
   script.src = "javascripts/events.js"
   document.getElementsByTagName("head")[0].appendChild(script)
-  startEventMgmt()
+  userEventMgmt()
   console.log('reloaded')
 
 enableContext = () ->

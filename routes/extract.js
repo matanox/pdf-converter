@@ -151,8 +151,17 @@ exports.go = function(req, name, res, docLogger) {
   }
   util.first(tokens).lineLocation = 'opener';
   lastRowPosLeft = null;
-  tokens.reduce(function(a, b) {
-    if (parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)) {
+  tokens.reduce(function(a, b, i, tokens) {
+    var newDelimiter, sameRow;
+    sameRow = true;
+    if (parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100) {
+      sameRow = false;
+      a.lineLocation = 'closer';
+      b.lineLocation = 'opener';
+      lastRowPosLeft = b.positionInfo.left;
+    }
+    if (parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom)) {
+      sameRow = false;
       a.lineLocation = 'closer';
       b.lineLocation = 'opener';
       if (lastRowPosLeft != null) {
@@ -160,8 +169,22 @@ exports.go = function(req, name, res, docLogger) {
           a.paragraph = 'closer';
           b.paragraph = 'opener';
         }
+        if (parseInt(b.positionInfo.bottom) + 12 < parseInt(a.positionInfo.bottom)) {
+          a.paragraph = 'closer';
+          b.paragraph = 'opener';
+        }
       }
       lastRowPosLeft = b.positionInfo.left;
+    }
+    if (sameRow) {
+      if (Math.abs(parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)) > 0) {
+        newDelimiter = {
+          'metaType': 'delimiter'
+        };
+        newDelimiter.styles = a.styles;
+        newDelimiter.finalStyles = a.finalStyles;
+        tokens.splice(i, 0, newDelimiter);
+      }
     }
     return b;
   });
@@ -191,28 +214,10 @@ exports.go = function(req, name, res, docLogger) {
     }
     return 1;
   });
-  /*
-  #
-  # Unite token couples that have no delimiter in between them,
-  # the first of which ending with '-' (while applying the
-  # styles of the first one to both).
-  #
-  # Note: this should also unite triples and so on, not just couples
-  #
-  tokens.reduce (a, b, index) -> 
-    if a.metaType is 'regular' and b.metaType is 'regular'
-  
-      if util.endsWith(a.text, '-')
-        a.text = a.text.slice(0, -1)   # discard the hyphen
-        a.text = a.text.concat(b.text) # concatenate text of second element into first
-        tokens.splice(index, 1)        # remove second element
-        return a
-    return b
-  */
-
   iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
       a.text = a.text.concat(b.text);
+      a.paragraph = b.paragraph;
       tokens.splice(index, 1);
       return 0;
     }
@@ -346,7 +351,7 @@ exports.go = function(req, name, res, docLogger) {
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {
                   if (marker.nextExpected === (marker.markerTokens.length - 1)) {
                     matchedMarkers.push(marker);
-                    token.finalStyles['color'] = 'red';
+                    token.emphasis = true;
                     marker.nextExpected = 0;
                   } else {
                     marker.nextExpected += 1;
@@ -364,7 +369,7 @@ exports.go = function(req, name, res, docLogger) {
                   if (token.text === marker.markerTokens[marker.nextExpected + 1].text) {
                     if ((marker.nextExpected + 1) === (marker.markerTokens.length - 1)) {
                       matchedMarkers.push(marker);
-                      token.finalStyles['color'] = 'red';
+                      token.emphasis = true;
                       marker.nextExpected = 0;
                     } else {
                       marker.nextExpected += 2;
