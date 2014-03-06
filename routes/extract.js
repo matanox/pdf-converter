@@ -64,7 +64,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var abbreviations, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, group, groups, handler, htmlparser, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, rawHtml, style, styles, textIndex, token, tokenArray, tokenArrays, tokens, _i, _j, _k, _l, _len, _len1, _len10, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _s;
+  var a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, maxBottom, maxTop, node, nodesWithStyles, parser, path, physicalPageSide, rawHtml, repeat, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, topRepeatSequence, topSequence, topSequences, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _s, _t, _u, _v, _w, _x, _y;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -149,6 +149,64 @@ exports.go = function(req, name, res, docLogger) {
       docLogger.warn(token);
     }
   }
+  util.timelog('remove repeat headers');
+  maxTop = 0;
+  maxBottom = 100000;
+  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
+    token = tokens[_p];
+    bottom = parseInt(token.positionInfo.bottom);
+    if (bottom < maxBottom) {
+      maxBottom = bottom;
+    }
+    if (bottom > maxTop) {
+      maxTop = bottom;
+    }
+  }
+  console.log(maxTop);
+  console.log(maxBottom);
+  topSequences = [];
+  topSequence = [];
+  iterator(tokens, function(a, b, i, tokens) {
+    if (parseInt(a.positionInfo.bottom) === maxTop) {
+      topSequence.push(a);
+      if (parseInt(b.positionInfo.bottom) !== maxTop) {
+        topSequences.push(topSequence);
+        topSequence = [];
+      }
+    }
+    return 1;
+  });
+  for (physicalPageSide = _q = 0; _q <= 1; physicalPageSide = ++_q) {
+    topRepeatSequence = 0;
+    for (i = _r = physicalPageSide, _ref1 = topSequences.length - 1 - 2; _r <= _ref1; i = _r += 2) {
+      a = topSequences[i];
+      b = topSequences[i + 2];
+      repeat = true;
+      if (a.length === b.length) {
+        for (t = _s = 0, _ref2 = a.length - 1; 0 <= _ref2 ? _s <= _ref2 : _s >= _ref2; t = 0 <= _ref2 ? ++_s : --_s) {
+          if (!((b[t].text === a[t].text) || (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) === 2))) {
+            repeat = false;
+          }
+        }
+      }
+      if (repeat) {
+        for (t = _t = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _t <= _ref3 : _t >= _ref3; t = 0 <= _ref3 ? ++_t : --_t) {
+          a[t].fluff = true;
+          b[t].fluff = true;
+        }
+        topRepeatSequence += 1;
+      }
+    }
+    console.log(topRepeatSequence);
+  }
+  filtered = [];
+  for (t = _u = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _u <= _ref4 : _u >= _ref4; t = 0 <= _ref4 ? ++_u : --_u) {
+    if (tokens[t].fluff == null) {
+      filtered.push(tokens[t]);
+    }
+  }
+  tokens = filtered;
+  util.timelog('remove repeat headers');
   util.first(tokens).lineLocation = 'opener';
   lastRowPosLeft = null;
   tokens.reduce(function(a, b, i, tokens) {
@@ -226,15 +284,15 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
-  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
-    token = tokens[_p];
+  for (_v = 0, _len8 = tokens.length; _v < _len8; _v++) {
+    token = tokens[_v];
     token.id = id;
     id += 1;
   }
   util.timelog('ID seeding', docLogger);
   textIndex = [];
-  for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
-    token = tokens[_q];
+  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
+    token = tokens[_w];
     if (token.metaType === 'regular') {
       textIndex.push({
         text: token.text,
@@ -289,8 +347,8 @@ exports.go = function(req, name, res, docLogger) {
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
-  for (_r = 0, _len9 = tokens.length; _r < _len9; _r++) {
-    token = tokens[_r];
+  for (_x = 0, _len10 = tokens.length; _x < _len10; _x++) {
+    token = tokens[_x];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -310,8 +368,8 @@ exports.go = function(req, name, res, docLogger) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_s = 0, _len10 = tokens.length; _s < _len10; _s++) {
-    token = tokens[_s];
+  for (_y = 0, _len11 = tokens.length; _y < _len11; _y++) {
+    token = tokens[_y];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -337,15 +395,15 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _len11, _len12, _t, _u;
+    var marker, matchedMarkers, outputHtml, sentence, _aa, _len12, _len13, _z;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_t = 0, _len11 = sentence.length; _t < _len11; _t++) {
-        token = sentence[_t];
+      for (_z = 0, _len12 = sentence.length; _z < _len12; _z++) {
+        token = sentence[_z];
         if (token.metaType !== 'delimiter') {
-          for (_u = 0, _len12 = docSieve.length; _u < _len12; _u++) {
-            marker = docSieve[_u];
+          for (_aa = 0, _len13 = docSieve.length; _aa < _len13; _aa++) {
+            marker = docSieve[_aa];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {

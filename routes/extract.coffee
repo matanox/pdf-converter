@@ -139,6 +139,73 @@ exports.go = (req, name, res ,docLogger) ->
       docLogger.warn(token)
 
   #
+  # Find repeat header and footer text
+  # 
+  util.timelog 'remove repeat headers'
+
+  # Get topmost and bottom-most text position
+  maxTop    = 0
+  maxBottom = 100000
+  for token in tokens
+    bottom = parseInt(token.positionInfo.bottom)
+    if bottom < maxBottom
+      maxBottom = bottom
+    if bottom > maxTop
+      maxTop = bottom
+      
+  console.log maxTop
+  console.log maxBottom
+
+  # Create an array of all sequences appearing at that topmost location
+
+  topSequences = [] # Array of same row topmost elements 
+
+  topSequence = []
+  iterator(tokens, (a, b, i, tokens) ->
+      if parseInt(a.positionInfo.bottom) is maxTop
+        topSequence.push(a)
+        if parseInt(b.positionInfo.bottom) isnt maxTop
+          # flush
+          topSequences.push(topSequence)
+          topSequence = []
+      return 1 # go one position forward
+    ) 
+
+  for physicalPageSide in [0..1] # Once for left-hand pages, and once for right-hand ones
+    topRepeatSequence = 0
+    for i in [physicalPageSide..topSequences.length-1-2] by 2
+      a = topSequences[i]
+      b = topSequences[i+2]
+
+      #console.log a.length
+      #console.log b.length
+
+      # Is it a sequence repeating across two pages, at the top of them?
+      repeat = true
+      if a.length is b.length
+        for t in [0..a.length-1]
+          unless ((b[t].text is a[t].text) or (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) is 2)) # are they the same or one number apart?
+            repeat = false
+            
+      # Mark the sequence as fluff in both pages?
+      if repeat 
+        for t in [0..a.length-1]
+          a[t].fluff = true
+          b[t].fluff = true
+        topRepeatSequence +=1
+      
+    console.log topRepeatSequence
+
+  # Now effectively remove the identified repeat sequences
+  filtered = []
+  for t in [0..tokens.length-1]
+    unless tokens[t].fluff?
+      filtered.push(tokens[t])
+  tokens = filtered
+
+  util.timelog 'remove repeat headers'
+
+  #
   # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
   #
