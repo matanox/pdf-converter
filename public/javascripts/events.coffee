@@ -114,7 +114,8 @@ userEventMgmt = () ->
     console.log rightDrag
 
   Color = net.brehaut.Color
-  baseMarkColor = Color('#FFB068')
+  #baseMarkColor = Color('#FFB068')
+  baseMarkColor = Color('#505050')
   noColor = Color('rgba(0, 0, 0, 0)')
 
   mark = (elements, type) ->
@@ -162,20 +163,20 @@ userEventMgmt = () ->
                            <p>Help clean up this document by picking which category below does it belong to.</p>
                          </div>
                          <div class="btn-group-vertical">
-                           <button type="button">Journal name</button>
-                           <button type="button">Institution</button>
-                           <button type="button">Author</button>      
-                           <button type="button">Author Name</a></button>
-                           <button type="button">Contact details</button>                              
-                           <button type="button">Author description</button>                              
-                           <button type="button">Classification</button>                              
-                           <button type="button">Article ID</button>                              
-                           <button type="button">List of keywords</button>
-                           <button type="button">Advertisement</button>                              
-                           <button type="button">History (received, pubslished dates etc)</button>                                                            
-                           <button type="button">Copyright and permissions</button>                              
-                           <button type="button">Document type description</button>                              
-                           <button type="button">Not sure / other</button>                              
+                           <button type="button" class=fluffChoiceButton>Journal name</button>
+                           <button type="button" class=fluffChoiceButton>Institution</button>
+                           <button type="button" class=fluffChoiceButton>Author</button>      
+                           <button type="button" class=fluffChoiceButton>Author Name</a></button>
+                           <button type="button" class=fluffChoiceButton>Contact details</button>                              
+                           <button type="button" class=fluffChoiceButton>Author description</button>                              
+                           <button type="button" class=fluffChoiceButton>Classification</button>                              
+                           <button type="button" class=fluffChoiceButton>Article ID</button>                              
+                           <button type="button" class=fluffChoiceButton>List of keywords</button>
+                           <button type="button" class=fluffChoiceButton>Advertisement</button>                              
+                           <button type="button" class=fluffChoiceButton>History (received, pubslished dates etc)</button>                                                            
+                           <button type="button" class=fluffChoiceButton>Copyright and permissions</button>                              
+                           <button type="button" class=fluffChoiceButton>Document type description</button>                              
+                           <button type="button" class=fluffChoiceButton>Not sure / other</button>                              
                          </div>
                        </div>"""
 
