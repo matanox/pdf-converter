@@ -15,8 +15,9 @@ parseCssClasses = function(styleString) {
 };
 
 exports.representNodes = function(domObject) {
-  var findNode, handleNode, myObjects;
+  var findNode, handleNode, myObjects, page;
   myObjects = [];
+  page = null;
   handleNode = function(domObject, stylesArray) {
     var inheritingStylesArray, object, styleString, styles, text, _i, _len, _results;
     _results = [];
@@ -25,7 +26,7 @@ exports.representNodes = function(domObject) {
       switch (object.type) {
         case 'tag':
           if (object.attribs['data-page-no'] != null) {
-            myObjects.push('page-beginning');
+            page = object.attribs['data-page-no'];
           }
           if (object.children != null) {
             if (stylesArray == null) {
@@ -55,7 +56,8 @@ exports.representNodes = function(domObject) {
             text = object.data;
             _results.push(myObjects.push({
               text: text,
-              stylesArray: stylesArray
+              stylesArray: stylesArray,
+              page: page
             }));
           } else {
             _results.push(void 0);
@@ -89,8 +91,8 @@ exports.representNodes = function(domObject) {
 
 punctuation = [',', ':', ';', '.', ')'];
 
-exports.tokenize = function(nodeWithStyles) {
-  var filterEmptyString, splitByPrefixChar, splitBySuffixChar, token, tokenize, tokens, _i, _len;
+exports.tokenize = function(node) {
+  var filterEmptyString, go, splitByPrefixChar, splitBySuffixChar, token, tokens, _i, _len;
   splitBySuffixChar = function(inputTokens) {
     var endsWithPunctuation, text, token, tokens, _i, _len;
     punctuation = [',', ':', ';', '.', ')'];
@@ -109,12 +111,14 @@ exports.tokenize = function(nodeWithStyles) {
               tokens.push({
                 'metaType': 'regular',
                 'text': text.slice(0, text.length - 1),
-                'stylesArray': token.stylesArray
+                'stylesArray': token.stylesArray,
+                'page': token.page
               });
               tokens.push({
                 'metaType': 'regular',
                 'text': text.slice(text.length - 1),
-                'stylesArray': token.stylesArray
+                'stylesArray': token.stylesArray,
+                'page': token.page
               });
             } else {
               tokens.push(token);
@@ -147,12 +151,14 @@ exports.tokenize = function(nodeWithStyles) {
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(0, 1),
-              'stylesArray': token.stylesArray
+              'stylesArray': token.stylesArray,
+              'page': token.page
             });
             tokens.push({
               'metaType': 'regular',
               'text': text.slice(1),
-              'stylesArray': token.stylesArray
+              'stylesArray': token.stylesArray,
+              'page': token.page
             });
           } else {
             tokens.push(token);
@@ -176,13 +182,14 @@ exports.tokenize = function(nodeWithStyles) {
     }
     return filtered;
   };
-  tokenize = function(nodeWithStyles) {
-    var char, i, insideDelimiter, insideWord, string, tokens, withStyles, word, _i, _ref;
+  go = function(node) {
+    var char, i, insideDelimiter, insideWord, page, string, tokens, withStyles, word, _i, _ref;
     withStyles = function(token) {
-      token.stylesArray = nodeWithStyles.stylesArray;
+      token.stylesArray = node.stylesArray;
       return token;
     };
-    string = nodeWithStyles.text;
+    string = node.text;
+    page = node.page;
     insideWord = false;
     insideDelimiter = false;
     tokens = [];
@@ -195,13 +202,15 @@ exports.tokenize = function(nodeWithStyles) {
         if (insideWord) {
           tokens.push(withStyles({
             'metaType': 'regular',
-            'text': word
+            'text': word,
+            page: page
           }));
           insideWord = false;
         }
         if (!insideDelimiter) {
           tokens.push(withStyles({
-            'metaType': 'delimiter'
+            'metaType': 'delimiter',
+            page: page
           }));
           insideDelimiter = true;
         }
@@ -220,12 +229,13 @@ exports.tokenize = function(nodeWithStyles) {
     if (insideWord) {
       tokens.push(withStyles({
         'metaType': 'regular',
-        'text': word
+        'text': word,
+        page: page
       }));
     }
     return tokens;
   };
-  tokens = tokenize(nodeWithStyles);
+  tokens = go(node);
   tokens = splitBySuffixChar(tokens);
   tokens = splitByPrefixChar(tokens);
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {

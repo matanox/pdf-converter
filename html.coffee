@@ -24,14 +24,16 @@ parseCssClasses = (styleString) ->
 exports.representNodes = (domObject) ->
 
   myObjects = []
+  page = null # a closure
 
   handleNode = (domObject, stylesArray) ->
     for object in domObject
       switch object.type 
         when 'tag' 
-          # mark page beginnings in output
+          # handle assigning the source page number to each token
+          # this relies on pdf2htmlEX's page numbering
           if object.attribs['data-page-no']?
-            myObjects.push('page-beginning')
+            page = object.attribs['data-page-no']
 
           # recurse for all children
           if object.children?
@@ -57,7 +59,7 @@ exports.representNodes = (domObject) ->
           unless object.data is '\n'   # ingore bare newlines in between html elements
             # flush a new object
             text = object.data
-            myObjects.push({text, stylesArray})
+            myObjects.push({text, stylesArray, page})
             #logging.log 'adding text'
             #logging.log text 
             #logging.log stylesArray
@@ -89,7 +91,7 @@ punctuation = [',',
 
 # Tokenize strings to words and punctuation,
 # while also conserving the association to the style attached to the input.
-exports.tokenize = (nodeWithStyles) ->
+exports.tokenize = (node) ->
 
   # Splits punctuation that is the last character of a token
   # E.g. ['aaa', 'bbb:', 'ccc'] => ['aaa', 'bbb', ';', 'ccc']
@@ -118,8 +120,8 @@ exports.tokenize = (nodeWithStyles) ->
                                                                            #    and then a first non-word delimiter which is ;
                                                                            #    which is the last character of the string              
               # Split it into two
-              tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'stylesArray': token.stylesArray} ) # all but last char
-              tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'stylesArray': token.stylesArray} )    # only last char	      
+              tokens.push( {'metaType': 'regular', 'text': text.slice(0, text.length - 1), 'stylesArray': token.stylesArray, 'page': token.page} ) # all but last char
+              tokens.push( {'metaType': 'regular', 'text': text.slice(text.length - 1), 'stylesArray': token.stylesArray, 'page': token.page} )    # only last char	      
             else
                # Push as is
                tokens.push(token)  
@@ -152,8 +154,8 @@ exports.tokenize = (nodeWithStyles) ->
           startsWithPunctuation = util.startsWithAnyOf(text, punctuation)
           if startsWithPunctuation and (text.length > 1)
             # Split it into two
-            tokens.push( {'metaType': 'regular', 'text': text.slice(0, 1), 'stylesArray': token.stylesArray} ) # only first char
-            tokens.push( {'metaType': 'regular', 'text': text.slice(1), 'stylesArray': token.stylesArray} )    # all but first char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(0, 1), 'stylesArray': token.stylesArray, 'page': token.page} ) # only first char
+            tokens.push( {'metaType': 'regular', 'text': text.slice(1), 'stylesArray': token.stylesArray, 'page': token.page} )    # all but first char
           else 
             # Push as is
             tokens.push(token) 
@@ -174,13 +176,13 @@ exports.tokenize = (nodeWithStyles) ->
   #
   # Split into tokens
   #
-  tokenize = (nodeWithStyles) ->
+  go = (node) ->
 
     # Function for passing on style to each token being created.
     # The style of each token being created is that of the node 
     # from which it is being parsed herein. 
     withStyles = (token) -> 
-      token.stylesArray = nodeWithStyles.stylesArray
+      token.stylesArray = node.stylesArray
       token
 
     # Tokenizing by space characters
@@ -195,7 +197,8 @@ exports.tokenize = (nodeWithStyles) ->
     # This indicates whether the last token to be detected on it
     # is itself post-delimited by a space or not - which matters.
 
-    string = nodeWithStyles.text
+    string = node.text
+    page = node.page
     
     insideWord      = false
     insideDelimiter = false
@@ -212,11 +215,11 @@ exports.tokenize = (nodeWithStyles) ->
         
         # Push the last accumulated word if any
         if insideWord
-          tokens.push( withStyles {'metaType': 'regular', 'text': word} )
+          tokens.push( withStyles {'metaType': 'regular', 'text': word, page} )
           insideWord = false
 
         unless insideDelimiter
-          tokens.push( withStyles {'metaType': 'delimiter'} )
+          tokens.push( withStyles {'metaType': 'delimiter', page} )
           insideDelimiter = true
 
       else 
@@ -227,16 +230,14 @@ exports.tokenize = (nodeWithStyles) ->
           word = char
           insideWord = true
 
-    tokens.push( withStyles {'metaType': 'regular', 'text': word} ) if insideWord # flushes the last word if any
+    tokens.push( withStyles {'metaType': 'regular', 'text': word, page} ) if insideWord # flushes the last word if any
 
     #logging.log(tokens)
 
     tokens
 
-  tokens = tokenize(nodeWithStyles)
 
-  #spaceDelimitedTokens = string.text.split(/\s/) # split by any space character
-  #spaceDelimitedTokens = filterEmptyString(spaceDelimitedTokens)
+  tokens = go(node)
 
   # Split more to tokenize select punctuation marks as tokens
   tokens = splitBySuffixChar(tokens)
@@ -247,7 +248,7 @@ exports.tokenize = (nodeWithStyles) ->
   for token in tokens when token.metaType == 'regular'
     if token.text.length == 0
       throw "error in tokenize"
-  
+
   #console.dir(tokens)  
   tokens
 

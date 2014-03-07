@@ -64,7 +64,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var GT, ST, a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, physicalPageSide, position, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _s, _t, _u, _v, _w, _x, _y, _z;
+  var GT, ST, a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, page, pageOpeners, parser, path, physicalPageSide, position, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _results, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -149,6 +149,14 @@ exports.go = function(req, name, res, docLogger) {
       docLogger.warn(token);
     }
   }
+  page = null;
+  pageOpeners = [util.first(tokens)];
+  iterator(tokens, function(a, b, i, tokens) {
+    if (a.page !== b.page) {
+      pageOpeners.push(b);
+    }
+    return 1;
+  });
   util.timelog('remove repeat headers');
   GT = function(j, k) {
     return j > k;
@@ -181,10 +189,20 @@ exports.go = function(req, name, res, docLogger) {
     extremeSequences = [];
     extremeSequence = [];
     iterator(tokens, function(a, b, i, tokens) {
+      var consoleMsg;
       if (Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2) {
         extremeSequence.push(a);
-        if (parseInt(b.positionInfo.bottom) !== extreme.extreme) {
+        if (!(Math.abs(parseInt(b.positionInfo.bottom) - extreme.extreme) < 2)) {
           extremeSequences.push(extremeSequence);
+          consoleMsg = (function() {
+            var _len9, _r, _results;
+            _results = [];
+            for (_r = 0, _len9 = extremeSequence.length; _r < _len9; _r++) {
+              token = extremeSequence[_r];
+              _results.push(token.text);
+            }
+            return _results;
+          })();
           extremeSequence = [];
         }
       }
@@ -263,6 +281,7 @@ exports.go = function(req, name, res, docLogger) {
         };
         newDelimiter.styles = a.styles;
         newDelimiter.finalStyles = a.finalStyles;
+        newDelimiter.page = a.page;
         tokens.splice(i, 0, newDelimiter);
       }
     }
@@ -286,6 +305,7 @@ exports.go = function(req, name, res, docLogger) {
             };
             newDelimiter.styles = a.styles;
             newDelimiter.finalStyles = a.finalStyles;
+            newDelimiter.page = a.page;
             tokens.splice(i, 0, newDelimiter);
             return 2;
           }
@@ -481,5 +501,15 @@ exports.go = function(req, name, res, docLogger) {
       return console.error(name);
     }
   };
-  return markSentence(0);
+  markSentence(0);
+  _results = [];
+  for (_aa = 0, _len13 = tokens.length; _aa < _len13; _aa++) {
+    token = tokens[_aa];
+    if (token.page == null) {
+      throw "Internal Error - token is missing page number";
+    } else {
+      _results.push(void 0);
+    }
+  }
+  return _results;
 };

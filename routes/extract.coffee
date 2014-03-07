@@ -139,6 +139,17 @@ exports.go = (req, name, res ,docLogger) ->
       docLogger.warn(token)
 
   #
+  # Create page openers index
+  #
+  page = null
+  pageOpeners = [util.first(tokens)]
+  iterator(tokens, (a, b, i, tokens) ->
+      if a.page isnt b.page
+        pageOpeners.push(b)
+      return 1
+    )
+
+  #
   # Find repeat header and footer text
   # 
   util.timelog 'remove repeat headers'
@@ -163,13 +174,16 @@ exports.go = (req, name, res ,docLogger) ->
     extremeSequences = [] # Array of same row top-most/bottom-most elements 
 
     extremeSequence = []
+
     iterator(tokens, (a, b, i, tokens) ->
-        if Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2 # grace variance
+        if Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2  # grace variance
           extremeSequence.push(a)
           #console.log 'extreme word: ' + a.text
-          if parseInt(b.positionInfo.bottom) isnt extreme.extreme
+          unless Math.abs(parseInt(b.positionInfo.bottom) - extreme.extreme) < 2 # same grace
             # flush
             extremeSequences.push(extremeSequence)
+            consoleMsg = (token.text for token in extremeSequence)
+            #console.log consoleMsg
             extremeSequence = []
         return 1 # go one position forward
       ) 
@@ -273,6 +287,7 @@ exports.go = (req, name, res ,docLogger) ->
         newDelimiter = {'metaType': 'delimiter'}
         newDelimiter.styles = a.styles
         newDelimiter.finalStyles = a.finalStyles    
+        newDelimiter.page = a.page
         tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
 
     return b
@@ -302,7 +317,8 @@ exports.go = (req, name, res ,docLogger) ->
           else
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
-            newDelimiter.finalStyles = a.finalStyles    
+            newDelimiter.finalStyles = a.finalStyles 
+            newDelimiter.page = a.page   
             tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
             return 2
     return 1)
@@ -513,5 +529,7 @@ exports.go = (req, name, res ,docLogger) ->
       #for token in sentence
         #token.finalStyles['color'] = 'red'  # overide the color
   
-
-  
+  # TODO: duplicate to unit test
+  for token in tokens
+    unless token.page? 
+      throw "Internal Error - token is missing page number"
