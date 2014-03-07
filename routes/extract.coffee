@@ -164,9 +164,9 @@ exports.go = (req, name, res ,docLogger) ->
 
     extremeSequence = []
     iterator(tokens, (a, b, i, tokens) ->
-        if parseInt(a.positionInfo.bottom) is extreme.extreme
+        if Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2 # grace variance
           extremeSequence.push(a)
-          console.log 'extreme word: ' + a.text
+          #console.log 'extreme word: ' + a.text
           if parseInt(b.positionInfo.bottom) isnt extreme.extreme
             # flush
             extremeSequences.push(extremeSequence)

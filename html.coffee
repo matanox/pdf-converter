@@ -29,6 +29,10 @@ exports.representNodes = (domObject) ->
     for object in domObject
       switch object.type 
         when 'tag' 
+          # mark page beginnings in output
+          if object.attribs['data-page-no']?
+            myObjects.push('page-beginning')
+
           # recurse for all children
           if object.children?
 

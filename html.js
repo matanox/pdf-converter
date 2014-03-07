@@ -24,6 +24,9 @@ exports.representNodes = function(domObject) {
       object = domObject[_i];
       switch (object.type) {
         case 'tag':
+          if (object.attribs['data-page-no'] != null) {
+            myObjects.push('page-beginning');
+          }
           if (object.children != null) {
             if (stylesArray == null) {
               stylesArray = [];

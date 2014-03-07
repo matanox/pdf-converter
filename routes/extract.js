@@ -181,9 +181,8 @@ exports.go = function(req, name, res, docLogger) {
     extremeSequences = [];
     extremeSequence = [];
     iterator(tokens, function(a, b, i, tokens) {
-      if (parseInt(a.positionInfo.bottom) === extreme.extreme) {
+      if (Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2) {
         extremeSequence.push(a);
-        console.log('extreme word: ' + a.text);
         if (parseInt(b.positionInfo.bottom) !== extreme.extreme) {
           extremeSequences.push(extremeSequence);
           extremeSequence = [];
