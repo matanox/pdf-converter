@@ -64,7 +64,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, maxBottom, maxTop, node, nodesWithStyles, parser, path, physicalPageSide, rawHtml, repeat, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, topRepeatSequence, topSequence, topSequences, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _s, _t, _u, _v, _w, _x, _y;
+  var GT, ST, a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, parser, path, physicalPageSide, position, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -150,59 +150,82 @@ exports.go = function(req, name, res, docLogger) {
     }
   }
   util.timelog('remove repeat headers');
-  maxTop = 0;
-  maxBottom = 100000;
-  for (_p = 0, _len7 = tokens.length; _p < _len7; _p++) {
-    token = tokens[_p];
-    bottom = parseInt(token.positionInfo.bottom);
-    if (bottom < maxBottom) {
-      maxBottom = bottom;
-    }
-    if (bottom > maxTop) {
-      maxTop = bottom;
-    }
-  }
-  console.log(maxTop);
-  console.log(maxBottom);
-  topSequences = [];
-  topSequence = [];
-  iterator(tokens, function(a, b, i, tokens) {
-    if (parseInt(a.positionInfo.bottom) === maxTop) {
-      topSequence.push(a);
-      if (parseInt(b.positionInfo.bottom) !== maxTop) {
-        topSequences.push(topSequence);
-        topSequence = [];
+  GT = function(j, k) {
+    return j > k;
+  };
+  ST = function(j, k) {
+    return j < k;
+  };
+  top = {
+    name: 'top',
+    goalName: 'header',
+    comparer: GT,
+    extreme: 0
+  };
+  bottom = {
+    name: 'bottom',
+    goalName: 'footer',
+    comparer: ST,
+    extreme: 100000
+  };
+  extremes = [top, bottom];
+  for (_p = 0, _len7 = extremes.length; _p < _len7; _p++) {
+    extreme = extremes[_p];
+    for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
+      token = tokens[_q];
+      position = parseInt(token.positionInfo.bottom);
+      if (extreme.comparer(position, extreme.extreme)) {
+        extreme.extreme = position;
       }
     }
-    return 1;
-  });
-  for (physicalPageSide = _q = 0; _q <= 1; physicalPageSide = ++_q) {
-    topRepeatSequence = 0;
-    for (i = _r = physicalPageSide, _ref1 = topSequences.length - 1 - 2; _r <= _ref1; i = _r += 2) {
-      a = topSequences[i];
-      b = topSequences[i + 2];
-      repeat = true;
-      if (a.length === b.length) {
-        for (t = _s = 0, _ref2 = a.length - 1; 0 <= _ref2 ? _s <= _ref2 : _s >= _ref2; t = 0 <= _ref2 ? ++_s : --_s) {
-          if (!((b[t].text === a[t].text) || (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) === 2))) {
-            repeat = false;
+    extremeSequences = [];
+    extremeSequence = [];
+    iterator(tokens, function(a, b, i, tokens) {
+      if (parseInt(a.positionInfo.bottom) === extreme.extreme) {
+        extremeSequence.push(a);
+        console.log('extreme word: ' + a.text);
+        if (parseInt(b.positionInfo.bottom) !== extreme.extreme) {
+          extremeSequences.push(extremeSequence);
+          extremeSequence = [];
+        }
+      }
+      return 1;
+    });
+    for (physicalPageSide = _r = 0; _r <= 1; physicalPageSide = ++_r) {
+      repeatSequence = 0;
+      for (i = _s = physicalPageSide, _ref1 = extremeSequences.length - 1 - 2; _s <= _ref1; i = _s += 2) {
+        a = extremeSequences[i];
+        b = extremeSequences[i + 2];
+        repeat = true;
+        if (a.length === b.length) {
+          for (t = _t = 0, _ref2 = a.length - 1; 0 <= _ref2 ? _t <= _ref2 : _t >= _ref2; t = 0 <= _ref2 ? ++_t : --_t) {
+            if (!((b[t].text === a[t].text) || (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) === 2))) {
+              repeat = false;
+            }
+          }
+          if (repeat) {
+            console.log('repeat header/footer:');
+            for (t = _u = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _u <= _ref3 : _u >= _ref3; t = 0 <= _ref3 ? ++_u : --_u) {
+              a[t].fluff = true;
+              b[t].fluff = true;
+            }
+            repeatSequence += 1;
           }
         }
       }
-      if (repeat) {
-        for (t = _t = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _t <= _ref3 : _t >= _ref3; t = 0 <= _ref3 ? ++_t : --_t) {
-          a[t].fluff = true;
-          b[t].fluff = true;
-        }
-        topRepeatSequence += 1;
+      if (!(repeatSequence > 0)) {
+        console.log('no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + physicalPageSide);
+      } else {
+        console.log(repeatSequence + ' ' + 'repeat' + ' ' + extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + physicalPageSide);
       }
     }
-    console.log(topRepeatSequence);
   }
   filtered = [];
-  for (t = _u = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _u <= _ref4 : _u >= _ref4; t = 0 <= _ref4 ? ++_u : --_u) {
+  for (t = _v = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _v <= _ref4 : _v >= _ref4; t = 0 <= _ref4 ? ++_v : --_v) {
     if (tokens[t].fluff == null) {
       filtered.push(tokens[t]);
+    } else {
+
     }
   }
   tokens = filtered;
@@ -284,15 +307,15 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
-  for (_v = 0, _len8 = tokens.length; _v < _len8; _v++) {
-    token = tokens[_v];
+  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
+    token = tokens[_w];
     token.id = id;
     id += 1;
   }
   util.timelog('ID seeding', docLogger);
   textIndex = [];
-  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
-    token = tokens[_w];
+  for (_x = 0, _len10 = tokens.length; _x < _len10; _x++) {
+    token = tokens[_x];
     if (token.metaType === 'regular') {
       textIndex.push({
         text: token.text,
@@ -347,8 +370,8 @@ exports.go = function(req, name, res, docLogger) {
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
-  for (_x = 0, _len10 = tokens.length; _x < _len10; _x++) {
-    token = tokens[_x];
+  for (_y = 0, _len11 = tokens.length; _y < _len11; _y++) {
+    token = tokens[_y];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -368,8 +391,8 @@ exports.go = function(req, name, res, docLogger) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_y = 0, _len11 = tokens.length; _y < _len11; _y++) {
-    token = tokens[_y];
+  for (_z = 0, _len12 = tokens.length; _z < _len12; _z++) {
+    token = tokens[_z];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -395,15 +418,15 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _aa, _len12, _len13, _z;
+    var marker, matchedMarkers, outputHtml, sentence, _aa, _ab, _len13, _len14;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_z = 0, _len12 = sentence.length; _z < _len12; _z++) {
-        token = sentence[_z];
+      for (_aa = 0, _len13 = sentence.length; _aa < _len13; _aa++) {
+        token = sentence[_aa];
         if (token.metaType !== 'delimiter') {
-          for (_aa = 0, _len13 = docSieve.length; _aa < _len13; _aa++) {
-            marker = docSieve[_aa];
+          for (_ab = 0, _len14 = docSieve.length; _ab < _len14; _ab++) {
+            marker = docSieve[_ab];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {

@@ -144,63 +144,74 @@ exports.go = (req, name, res ,docLogger) ->
   util.timelog 'remove repeat headers'
 
   # Get topmost and bottom-most text position
-  maxTop    = 0
-  maxBottom = 100000
-  for token in tokens
-    bottom = parseInt(token.positionInfo.bottom)
-    if bottom < maxBottom
-      maxBottom = bottom
-    if bottom > maxTop
-      maxTop = bottom
-      
-  console.log maxTop
-  console.log maxBottom
 
-  # Create an array of all sequences appearing at that topmost location
+  # Functional style preparation for handling both types of page extremes
+  GT  = (j, k) -> return j > k
+  ST = (j, k) -> return j < k
+  top    = { name: 'top', goalName: 'header', comparer: GT, extreme: 0}
+  bottom = { name: 'bottom', goalName:'footer', comparer: ST, extreme: 100000}
+  extremes = [top, bottom]
 
-  topSequences = [] # Array of same row topmost elements 
+  for extreme in extremes
+    for token in tokens
+      position = parseInt(token.positionInfo.bottom)
+      if extreme.comparer(position, extreme.extreme)
+        extreme.extreme = position
 
-  topSequence = []
-  iterator(tokens, (a, b, i, tokens) ->
-      if parseInt(a.positionInfo.bottom) is maxTop
-        topSequence.push(a)
-        if parseInt(b.positionInfo.bottom) isnt maxTop
-          # flush
-          topSequences.push(topSequence)
-          topSequence = []
-      return 1 # go one position forward
-    ) 
+    # Create an array of all sequences appearing at that top-most/bottom-most location
 
-  for physicalPageSide in [0..1] # Once for left-hand pages, and once for right-hand ones
-    topRepeatSequence = 0
-    for i in [physicalPageSide..topSequences.length-1-2] by 2
-      a = topSequences[i]
-      b = topSequences[i+2]
+    extremeSequences = [] # Array of same row top-most/bottom-most elements 
 
-      #console.log a.length
-      #console.log b.length
+    extremeSequence = []
+    iterator(tokens, (a, b, i, tokens) ->
+        if parseInt(a.positionInfo.bottom) is extreme.extreme
+          extremeSequence.push(a)
+          console.log 'extreme word: ' + a.text
+          if parseInt(b.positionInfo.bottom) isnt extreme.extreme
+            # flush
+            extremeSequences.push(extremeSequence)
+            extremeSequence = []
+        return 1 # go one position forward
+      ) 
 
-      # Is it a sequence repeating across two pages, at the top of them?
-      repeat = true
-      if a.length is b.length
-        for t in [0..a.length-1]
-          unless ((b[t].text is a[t].text) or (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) is 2)) # are they the same or one number apart?
-            repeat = false
-            
-      # Mark the sequence as fluff in both pages?
-      if repeat 
-        for t in [0..a.length-1]
-          a[t].fluff = true
-          b[t].fluff = true
-        topRepeatSequence +=1
-      
-    console.log topRepeatSequence
+    # Check that array for consecutive repeats, consecutively by a two page distance
+    # because typically an article has repeat left-side headers/footers, 
+    # and repeat right-hand headers/footers
+    for physicalPageSide in [0..1] # Once for left-hand pages, and once for right-hand ones
+      repeatSequence = 0
+      for i in [physicalPageSide..extremeSequences.length-1-2] by 2
+        a = extremeSequences[i]
+        b = extremeSequences[i+2]
+
+        # Is it a sequence repeating across two pages, at the top of them?
+        repeat = true
+        if a.length is b.length
+          for t in [0..a.length-1]
+            unless ((b[t].text is a[t].text) or (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) is 2)) # are they the same or one number apart?
+              repeat = false
+              
+          # Mark the sequence as fluff in both 'consecutive' pages where it apperas
+          if repeat 
+            console.log 'repeat header/footer:'
+            for t in [0..a.length-1]
+              a[t].fluff = true
+              b[t].fluff = true
+              #console.log a[t].text
+            repeatSequence +=1
+          
+      #console.log repeatSequence
+      unless repeatSequence > 0 
+        console.log 'no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + physicalPageSide
+      else 
+        console.log repeatSequence + ' ' + 'repeat' + ' '+ extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + physicalPageSide
 
   # Now effectively remove the identified repeat sequences
   filtered = []
   for t in [0..tokens.length-1]
     unless tokens[t].fluff?
       filtered.push(tokens[t])
+    else
+      #console.log """filtered out token text: #{tokens[t].text}"""
   tokens = filtered
 
   util.timelog 'remove repeat headers'
