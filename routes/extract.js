@@ -64,7 +64,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var GT, ST, a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, docSieve, documentQuantifiers, dom, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastRowPosLeft, markSentence, node, nodesWithStyles, page, pageOpeners, parser, path, physicalPageSide, position, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _results, _s, _t, _u, _v, _w, _x, _y, _z;
+  var GT, ST, a, abbreviations, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, distributionArray, distributionObject, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, key, lineOpeners, markSentence, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, rowOpener, rowOpeners, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, val, _aa, _ab, _ac, _ad, _ae, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _results, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -157,7 +157,7 @@ exports.go = function(req, name, res, docLogger) {
     }
     return 1;
   });
-  util.timelog('remove repeat headers');
+  util.timelog('remove repeat headers and footers');
   GT = function(j, k) {
     return j > k;
   };
@@ -246,52 +246,93 @@ exports.go = function(req, name, res, docLogger) {
     }
   }
   tokens = filtered;
-  util.timelog('remove repeat headers');
+  util.timelog('remove repeat headers and footers');
+  util.timelog('basic handle line and paragraph beginnings');
+  newLineThreshold = 12;
+  lineOpeners = [];
+  rowOpeners = [];
   util.first(tokens).lineLocation = 'opener';
-  lastRowPosLeft = null;
-  tokens.reduce(function(a, b, i, tokens) {
-    var heightChange, newDelimiter, sameRow;
-    sameRow = true;
+  for (i = _w = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _w <= _ref5 : _w >= _ref5; i = 1 <= _ref5 ? ++_w : --_w) {
+    a = tokens[i - 1];
+    b = tokens[i];
     if (parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100) {
-      sameRow = false;
       a.lineLocation = 'closer';
       b.lineLocation = 'opener';
-      lastRowPosLeft = b.positionInfo.left;
-    }
-    if (parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom)) {
-      sameRow = false;
-      a.lineLocation = 'closer';
-      b.lineLocation = 'opener';
-      if (lastRowPosLeft != null) {
-        if (parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)) {
-          a.paragraph = 'closer';
-          b.paragraph = 'opener';
-        }
-        if (parseInt(b.positionInfo.bottom) + 12 < parseInt(a.positionInfo.bottom)) {
-          a.paragraph = 'closer';
-          b.paragraph = 'opener';
-        }
+      a.columnCloser = true;
+      b.columnOpener = true;
+      lineOpeners.push(i);
+      rowOpeners.push(parseInt(b.positionInfo.left));
+    } else {
+      if (parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom)) {
+        a.lineLocation = 'closer';
+        b.lineLocation = 'opener';
+        lineOpeners.push(i);
+        rowOpeners.push(parseInt(b.positionInfo.left));
       }
-      lastRowPosLeft = b.positionInfo.left;
     }
-    if (sameRow) {
-      heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom);
-      if (Math.abs(heightChange) > 0) {
-        newDelimiter = {
-          'metaType': 'delimiter'
-        };
-        newDelimiter.styles = a.styles;
-        newDelimiter.finalStyles = a.finalStyles;
-        newDelimiter.page = a.page;
-        tokens.splice(i, 0, newDelimiter);
-        if (heightChange > 0) {
-          b.superscript = true;
+  }
+  util.last(tokens).lineLocation = 'closer';
+  for (i = _x = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _x <= _ref6 : _x >= _ref6; i = 1 <= _ref6 ? ++_x : --_x) {
+    currOpener = tokens[lineOpeners[i]];
+    prevOpener = tokens[lineOpeners[i - 1]];
+    nextOpener = tokens[lineOpeners[i + 1]];
+    prevToken = tokens[lineOpeners[i] - 1];
+    if (parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)) {
+      if (currOpener.columnOpener) {
+        if (parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)) {
+          currOpener.paragraph = 'opener';
+          prevToken.paragraph = 'closer';
         }
+      } else {
+        currOpener.paragraph = 'opener';
+        prevToken.paragraph = 'closer';
       }
+    }
+    if (parseInt(currOpener.positionInfo.bottom) + newLineThreshold < parseInt(prevOpener.positionInfo.bottom)) {
+      currOpener.paragraph = 'opener';
+      prevToken.paragraph = 'closer';
+    }
+  }
+  util.timelog('basic handle line and paragraph beginnings');
+  distributionObject = {};
+  for (_y = 0, _len9 = rowOpeners.length; _y < _len9; _y++) {
+    rowOpener = rowOpeners[_y];
+    if (distributionObject[rowOpener] != null) {
+      distributionObject[rowOpener] += 1;
+    } else {
+      distributionObject[rowOpener] = 1;
+    }
+  }
+  distributionArray = [];
+  for (key in distributionObject) {
+    val = distributionObject[key];
+    distributionArray.push({
+      key: key,
+      val: val
+    });
+  }
+  distributionArray.sort(function(a, b) {
+    return b.val - a.val;
+  });
+  for (_z = 0, _len10 = distributionArray.length; _z < _len10; _z++) {
+    entry = distributionArray[_z];
+    console.log("row beginnings on left position " + entry.key + " - detected " + entry.val + " times");
+  }
+  tokens.reduce(function(a, b, i, tokens) {
+    var heightChange, newDelimiter, _ref7;
+    heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom);
+    if ((newLineThreshold > (_ref7 = Math.abs(heightChange)) && _ref7 > 0)) {
+      b.superscript = true;
+      newDelimiter = {
+        'metaType': 'delimiter'
+      };
+      newDelimiter.styles = a.styles;
+      newDelimiter.finalStyles = a.finalStyles;
+      newDelimiter.page = a.page;
+      tokens.splice(i, 0, newDelimiter);
     }
     return b;
   });
-  util.last(tokens).lineLocation = 'closer';
   docLogger.info(tokens.length);
   iterator(tokens, function(a, b, i, tokens) {
     var newDelimiter;
@@ -330,15 +371,15 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
-  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
-    token = tokens[_w];
+  for (_aa = 0, _len11 = tokens.length; _aa < _len11; _aa++) {
+    token = tokens[_aa];
     token.id = id;
     id += 1;
   }
   util.timelog('ID seeding', docLogger);
   textIndex = [];
-  for (_x = 0, _len10 = tokens.length; _x < _len10; _x++) {
-    token = tokens[_x];
+  for (_ab = 0, _len12 = tokens.length; _ab < _len12; _ab++) {
+    token = tokens[_ab];
     if (token.metaType === 'regular') {
       textIndex.push({
         text: token.text,
@@ -393,8 +434,8 @@ exports.go = function(req, name, res, docLogger) {
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
-  for (_y = 0, _len11 = tokens.length; _y < _len11; _y++) {
-    token = tokens[_y];
+  for (_ac = 0, _len13 = tokens.length; _ac < _len13; _ac++) {
+    token = tokens[_ac];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -414,8 +455,8 @@ exports.go = function(req, name, res, docLogger) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_z = 0, _len12 = tokens.length; _z < _len12; _z++) {
-    token = tokens[_z];
+  for (_ad = 0, _len14 = tokens.length; _ad < _len14; _ad++) {
+    token = tokens[_ad];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -441,15 +482,15 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _aa, _ab, _len13, _len14;
+    var marker, matchedMarkers, outputHtml, sentence, _ae, _af, _len15, _len16;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_aa = 0, _len13 = sentence.length; _aa < _len13; _aa++) {
-        token = sentence[_aa];
+      for (_ae = 0, _len15 = sentence.length; _ae < _len15; _ae++) {
+        token = sentence[_ae];
         if (token.metaType !== 'delimiter') {
-          for (_ab = 0, _len14 = docSieve.length; _ab < _len14; _ab++) {
-            marker = docSieve[_ab];
+          for (_af = 0, _len16 = docSieve.length; _af < _len16; _af++) {
+            marker = docSieve[_af];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {
@@ -507,8 +548,8 @@ exports.go = function(req, name, res, docLogger) {
   };
   markSentence(0);
   _results = [];
-  for (_aa = 0, _len13 = tokens.length; _aa < _len13; _aa++) {
-    token = tokens[_aa];
+  for (_ae = 0, _len15 = tokens.length; _ae < _len15; _ae++) {
+    token = tokens[_ae];
     if (token.page == null) {
       throw "Internal Error - token is missing page number";
     } else {

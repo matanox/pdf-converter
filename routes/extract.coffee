@@ -152,7 +152,7 @@ exports.go = (req, name, res ,docLogger) ->
   #
   # Find repeat header and footer text
   # 
-  util.timelog 'remove repeat headers'
+  util.timelog 'remove repeat headers and footers'
 
   # Functional style preparation for handling both types of page extremes
   GT  = (j, k) -> return j > k
@@ -228,7 +228,7 @@ exports.go = (req, name, res ,docLogger) ->
       #console.log """filtered out token text: #{tokens[t].text}"""
   tokens = filtered
 
-  util.timelog 'remove repeat headers'
+  util.timelog 'remove repeat headers and footers'
 
   #
   # Mark tokens that begin or end their line 
@@ -244,67 +244,110 @@ exports.go = (req, name, res ,docLogger) ->
   # TODO: this code compares position on an integer rounding basis, this is only usually correct
   # TODO: this code assumes the size unit is px and some more 
   #
+  
+  util.timelog 'basic handle line and paragraph beginnings'
+
+  # first pass
+
+  newLineThreshold = 12
+  lineOpeners = []
+  rowOpeners = []
+
   util.first(tokens).lineLocation = 'opener'
 
-  lastRowPosLeft = null  # a closure
-  tokens.reduce (a, b, i, tokens) ->                             
+  # Mark line openers and closers, 
+  # as well as column openers and closers
+  for i in [1..tokens.length-1]
+    a = tokens[i-1]
+    b = tokens[i]
 
-    sameRow = true
-  
-    # Identify and handle new text column
-    # By examining height difference between consequtive words
+    # Identify and handle new text column, and thus identify a new line
     if parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100
-      sameRow = false
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener 
-      lastRowPosLeft = b.positionInfo.left  # recalibrate for forthcoming new paragraph beginning
+      a.columnCloser = true           # a column closer
+      b.columnOpener = true          # a column opener
+      lineOpeners.push(i)  # pushes the index of b
+      rowOpeners.push parseInt(b.positionInfo.left)
 
-    # Identify and handle new paragraph
-    # By examining height difference between consequtive words and some more
-    if parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom) 
-      sameRow = false
-      a.lineLocation = 'closer'       # a line closer       
-      b.lineLocation = 'opener'       # a line opener                         
-      #docLogger.info('closer: ' + a.text)
-      #docLogger.info('opener: ' + b.text)
-      
-      if lastRowPosLeft?
-        # Is there a new paragraph indentation shift?
-        if parseInt(b.positionInfo.left) > parseInt(lastRowPosLeft)
-          a.paragraph = 'closer'
-          b.paragraph = 'opener'   
+    # Identify and handle a new line 
+    else
+      if parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom) 
+        a.lineLocation = 'closer'       # a line closer       
+        b.lineLocation = 'opener'       # a line opener                         
+        lineOpeners.push(i)  # pushes the index of b
+        rowOpeners.push parseInt(b.positionInfo.left)
+    
+  util.last(tokens).lineLocation = 'closer'
 
-        # Is it a new line with a larger line space?
-        if parseInt(b.positionInfo.bottom) + 12 < parseInt(a.positionInfo.bottom) 
-          a.paragraph = 'closer'
-          b.paragraph = 'opener'   
+  # Based on the above, deduce paragraph splitting
+  for i in [1..lineOpeners.length-1-1]
+    currOpener  = tokens[lineOpeners[i]]   # current row opener
+    prevOpener = tokens[lineOpeners[i-1]] # previous row opener  
+    nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
+    prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
+    if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
+      if currOpener.columnOpener
+        if parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)
+          # it's a paragraph beginning at the very top of a new column
+          currOpener.paragraph = 'opener'   
+          prevToken.paragraph = 'closer'
+      else
+        # it's an indentation signaled paragraph beginning
+        currOpener.paragraph = 'opener'   
+        prevToken.paragraph = 'closer'
 
-      lastRowPosLeft = b.positionInfo.left
+    if parseInt(currOpener.positionInfo.bottom) + newLineThreshold < parseInt(prevOpener.positionInfo.bottom) 
+      # it's a space signaled paragraph beginning
+      currOpener.paragraph = 'opener'   
+      prevToken.paragraph = 'closer'
 
-    if sameRow
+  util.timelog 'basic handle line and paragraph beginnings'
+
+  # Just some fancy stats
+  # TODO: turn into generic utility function for distributions
+  distributionObject = {}
+  for rowOpener in rowOpeners
+    if distributionObject[rowOpener]?
+      distributionObject[rowOpener] += 1
+    else 
+      distributionObject[rowOpener] = 1
+
+  distributionArray = []
+  for key, val of distributionObject
+    distributionArray.push({key, val})
+  
+  distributionArray.sort( (a, b) -> return b.val - a.val )
+
+  for entry in distributionArray
+    console.log """row beginnings on left position #{entry.key} - detected #{entry.val} times"""
+
+  #
+  # Identify and handle superscript 
+  # TODO: this may possibly move to the basic tokenization
+  #       rather than be handled here 'in retrospect'
+  #
+  tokens.reduce (a, b, i, tokens) ->        
+
+    heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)
+    if newLineThreshold > Math.abs(heightChange) > 0
+      b.superscript = true  # Carry on superscript indication
+
       #
-      # Identify and handle superscript and subscript
-      # TODO: this should probably move to the basic tokenization
-      #       rather than be handled here 'in retrospect'
+      # Add a delimiter so that the superscript token doesn't get combined with 
+      # the token preceding it, thus losing its superscript property in the curernt algorithm
+      # This can later be refined e.g. to reflect this is not a regular space delimiter,
+      # as well as enable propagating the relative font size and height of the super/subscript, 
+      # or otherwise
       #
-      heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)
-      if Math.abs(heightChange) > 0
-        # Add a delimiter so that a differently vertically-positioned token pair isn't combined into a single token
-        # This can later be refined e.g. to reflect this is not a regular space delimiter,
-        # as well as enable propagating the relative font size and height of the super/subscript.
-        newDelimiter = {'metaType': 'delimiter'}
-        newDelimiter.styles = a.styles
-        newDelimiter.finalStyles = a.finalStyles    
-        newDelimiter.page = a.page
-        tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
 
-        # Carry on superscript indication
-        if heightChange > 0
-          b.superscript = true
+      newDelimiter = {'metaType': 'delimiter'}
+      newDelimiter.styles = a.styles
+      newDelimiter.finalStyles = a.finalStyles    
+      newDelimiter.page = a.page
+      tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
 
     return b
-
-  util.last(tokens).lineLocation = 'closer'
 
   #
   # Handle end-of-line tokenization aspects: 
