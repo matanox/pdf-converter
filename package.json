@@ -24,7 +24,7 @@
     "jsdom": "~0.8.10",
     "csvtojson": "~0.1.5",
     "verbal-expressions": "~0.1.2",
-    "rethinkdb": "~1.11.0-1",
+    "rethinkdb": "~1.11.0-4",
     "riak-js": "~0.10.2",
     "winston": "~0.7.2",
     "winston-graylog2": "~0.1.10",

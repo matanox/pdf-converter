@@ -482,6 +482,9 @@ renderText = (tokens) ->
     else 
       color = "rgb(255,255,220)"
       
+    if token.superscript
+      stylesString = stylesString + 'vertical-align' + ':' + 'top' + '; '       
+
     stylesString = stylesString + 'color' + ':' + color + '; ' 
 
     if moreStyle? then stylesString = stylesString + ' ' + moreStyle
@@ -492,8 +495,8 @@ renderText = (tokens) ->
         text = token.text
       else 
         text = ' '
-      #return """<span #{stylesString} id="#{x.id}">#{text}</span>\n"""
       return """<span #{stylesString} id="#{x.id}">#{text}</span>"""
+
     else 
       console.warn('token had no styles attached to it when building output. token text: ' + token.text)
       console.dir(token)

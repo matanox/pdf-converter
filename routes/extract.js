@@ -250,7 +250,7 @@ exports.go = function(req, name, res, docLogger) {
   util.first(tokens).lineLocation = 'opener';
   lastRowPosLeft = null;
   tokens.reduce(function(a, b, i, tokens) {
-    var newDelimiter, sameRow;
+    var heightChange, newDelimiter, sameRow;
     sameRow = true;
     if (parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100) {
       sameRow = false;
@@ -275,7 +275,8 @@ exports.go = function(req, name, res, docLogger) {
       lastRowPosLeft = b.positionInfo.left;
     }
     if (sameRow) {
-      if (Math.abs(parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)) > 0) {
+      heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom);
+      if (Math.abs(heightChange) > 0) {
         newDelimiter = {
           'metaType': 'delimiter'
         };
@@ -283,6 +284,9 @@ exports.go = function(req, name, res, docLogger) {
         newDelimiter.finalStyles = a.finalStyles;
         newDelimiter.page = a.page;
         tokens.splice(i, 0, newDelimiter);
+        if (heightChange > 0) {
+          b.superscript = true;
+        }
       }
     }
     return b;

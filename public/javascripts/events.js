@@ -354,6 +354,9 @@ renderText = function(tokens) {
     } else {
       color = "rgb(255,255,220)";
     }
+    if (token.superscript) {
+      stylesString = stylesString + 'vertical-align' + ':' + 'top' + '; ';
+    }
     stylesString = stylesString + 'color' + ':' + color + '; ';
     if (moreStyle != null) {
       stylesString = stylesString + ' ' + moreStyle;

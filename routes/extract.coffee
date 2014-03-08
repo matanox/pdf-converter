@@ -154,8 +154,6 @@ exports.go = (req, name, res ,docLogger) ->
   # 
   util.timelog 'remove repeat headers'
 
-  # Get topmost and bottom-most text position
-
   # Functional style preparation for handling both types of page extremes
   GT  = (j, k) -> return j > k
   ST = (j, k) -> return j < k
@@ -163,7 +161,10 @@ exports.go = (req, name, res ,docLogger) ->
   bottom = { name: 'bottom', goalName:'footer', comparer: ST, extreme: 100000}
   extremes = [top, bottom]
 
+  # Handle headers and footers 
   for extreme in extremes
+
+    # Get top-most and bottom-most page location across entire article
     for token in tokens
       position = parseInt(token.positionInfo.bottom)
       if extreme.comparer(position, extreme.extreme)
@@ -174,7 +175,6 @@ exports.go = (req, name, res ,docLogger) ->
     extremeSequences = [] # Array of same row top-most/bottom-most elements 
 
     extremeSequence = []
-
     iterator(tokens, (a, b, i, tokens) ->
         if Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2  # grace variance
           extremeSequence.push(a)
@@ -236,6 +236,9 @@ exports.go = (req, name, res ,docLogger) ->
   #
   # This function has few logical holes in it:
   #
+  # Bug:  this code doesn't recognize a new paragraph beginning on
+  #       a first row of a new column.
+  #
   # TODO: parameterize direction to support RTL languages
   # TODO: this code assumes postions are given in .left and .bottom not .right and .top or other
   # TODO: this code compares position on an integer rounding basis, this is only usually correct
@@ -279,16 +282,25 @@ exports.go = (req, name, res ,docLogger) ->
       lastRowPosLeft = b.positionInfo.left
 
     if sameRow
+      #
       # Identify and handle superscript and subscript
-      if Math.abs(parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)) > 0
+      # TODO: this should probably move to the basic tokenization
+      #       rather than be handled here 'in retrospect'
+      #
+      heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)
+      if Math.abs(heightChange) > 0
         # Add a delimiter so that a differently vertically-positioned token pair isn't combined into a single token
-        # This can later be refined to reflect this is not a regular space delimiter,
+        # This can later be refined e.g. to reflect this is not a regular space delimiter,
         # as well as enable propagating the relative font size and height of the super/subscript.
         newDelimiter = {'metaType': 'delimiter'}
         newDelimiter.styles = a.styles
         newDelimiter.finalStyles = a.finalStyles    
         newDelimiter.page = a.page
         tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
+
+        # Carry on superscript indication
+        if heightChange > 0
+          b.superscript = true
 
     return b
 
