@@ -3,6 +3,31 @@ var logging;
 
 logging = require('./logging');
 
+exports.generateDistribution = function(array) {
+  var arrayItem, distributionArray, distributionObject, key, val, _i, _len;
+  distributionObject = {};
+  for (_i = 0, _len = array.length; _i < _len; _i++) {
+    arrayItem = array[_i];
+    if (distributionObject[arrayItem] != null) {
+      distributionObject[arrayItem] += 1;
+    } else {
+      distributionObject[arrayItem] = 1;
+    }
+  }
+  distributionArray = [];
+  for (key in distributionObject) {
+    val = distributionObject[key];
+    distributionArray.push({
+      key: key,
+      val: val
+    });
+  }
+  distributionArray.sort(function(a, b) {
+    return parseInt(b.val) - parseInt(a.val);
+  });
+  return distributionArray;
+};
+
 exports.analytic = function(tokens) {
   var frequencies, frequency, token, word, wordFrequencies, wordFrequenciesArray, _i, _len;
   frequencies = function(objectsArray, filterKey, filterBy, property, parentProperty) {

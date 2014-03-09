@@ -1,4 +1,21 @@
 logging = require './logging' 
+
+exports.generateDistribution = (array) ->
+
+  distributionObject = {}
+  for arrayItem in array
+    if distributionObject[arrayItem]?
+      distributionObject[arrayItem] += 1
+    else 
+      distributionObject[arrayItem] = 1
+
+  distributionArray = []
+  for key, val of distributionObject
+    distributionArray.push({key, val})
+  
+  distributionArray.sort( (a, b) -> return parseInt(b.val) - parseInt(a.val) )
+  return distributionArray
+
 exports.analytic = (tokens) ->
 
   #

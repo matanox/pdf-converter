@@ -1,14 +1,15 @@
-fs      = require 'fs'
-util    = require '../util'
-logging = require '../logging' 
-timer   = require '../timer'
-css     = require '../css'
-html    = require '../html'
-model   = require '../model'
-output  = require '../output'
-ctype   = require '../ctype'
-markers = require '../markers'
-verbex  = require 'verbal-expressions'
+fs       = require 'fs'
+util     = require '../util'
+logging  = require '../logging' 
+timer    = require '../timer'
+css      = require '../css'
+html     = require '../html'
+model    = require '../model'
+output   = require '../output'
+ctype    = require '../ctype'
+markers  = require '../markers'
+analytic = require '../analytic'
+verbex   = require 'verbal-expressions'
 
 iterator = (tokens, iterationFunc) ->
   i = 1
@@ -251,7 +252,7 @@ exports.go = (req, name, res ,docLogger) ->
 
   newLineThreshold = 12
   lineOpeners = []
-  rowOpeners = []
+  lineOpenersForStats = []
 
   util.first(tokens).lineLocation = 'opener'
 
@@ -266,9 +267,9 @@ exports.go = (req, name, res ,docLogger) ->
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener 
       a.columnCloser = true           # a column closer
-      b.columnOpener = true          # a column opener
+      b.columnOpener = true           # a column opener
       lineOpeners.push(i)  # pushes the index of b
-      rowOpeners.push parseInt(b.positionInfo.left)
+      lineOpenersForStats.push parseInt(b.positionInfo.left)
 
     # Identify and handle a new line 
     else
@@ -276,13 +277,14 @@ exports.go = (req, name, res ,docLogger) ->
         a.lineLocation = 'closer'       # a line closer       
         b.lineLocation = 'opener'       # a line opener                         
         lineOpeners.push(i)  # pushes the index of b
-        rowOpeners.push parseInt(b.positionInfo.left)
+        lineOpenersForStats.push parseInt(b.positionInfo.left)
     
   util.last(tokens).lineLocation = 'closer'
 
-  # Based on the above, deduce paragraph splitting
+  # Based on the above, deduce paragraph splittings
+
   for i in [1..lineOpeners.length-1-1]
-    currOpener  = tokens[lineOpeners[i]]   # current row opener
+    currOpener = tokens[lineOpeners[i]]   # current row opener
     prevOpener = tokens[lineOpeners[i-1]] # previous row opener  
     nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
     prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
@@ -292,6 +294,7 @@ exports.go = (req, name, res ,docLogger) ->
           # it's a paragraph beginning at the very top of a new column
           currOpener.paragraph = 'opener'   
           prevToken.paragraph = 'closer'
+
       else
         # it's an indentation signaled paragraph beginning
         currOpener.paragraph = 'opener'   
@@ -302,50 +305,70 @@ exports.go = (req, name, res ,docLogger) ->
       currOpener.paragraph = 'opener'   
       prevToken.paragraph = 'closer'
 
+  #
+  # Derive paragraph count and length statistics
+  #
+  lastOpenerIndex = 0
+  paragraphCount = 0
+  paragraphLengths = []
+  for i in [0..tokens.length-1] 
+    if tokens[i].paragraph is 'opener'
+      paragraphCount += 1
+      paragraphLengths.push(i - lastOpenerIndex)
+      lastOpenerIndex = i
+
+  console.log """detected #{paragraphCount} paragraphs"""
+  paragraphLengths.sort( (a, b) -> return parseInt(b.val) - parseInt(a.val) )
+  for length in paragraphLengths
+    console.log """detected paragraph length #{length}"""
+
+  #paragraphLengthsDistribution = analytic.generateDistribution(paragraphLengths)
+  #for entry in paragraphLengthsDistribution
+  #  console.log """paragraph length of #{entry.key} tokens - detected #{entry.val} times"""
+
   util.timelog 'basic handle line and paragraph beginnings'
 
+  #
   # Just some fancy stats
-  # TODO: turn into generic utility function for distributions
-  distributionObject = {}
-  for rowOpener in rowOpeners
-    if distributionObject[rowOpener]?
-      distributionObject[rowOpener] += 1
-    else 
-      distributionObject[rowOpener] = 1
+  #
+  lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats)
 
-  distributionArray = []
-  for key, val of distributionObject
-    distributionArray.push({key, val})
-  
-  distributionArray.sort( (a, b) -> return b.val - a.val )
-
-  for entry in distributionArray
-    console.log """row beginnings on left position #{entry.key} - detected #{entry.val} times"""
+  for entry in lineOpenersDistribution
+    console.log """line beginnings on left position #{entry.key} - detected #{entry.val} times"""
 
   #
   # Identify and handle superscript 
-  # TODO: this may possibly move to the basic tokenization
-  #       rather than be handled here 'in retrospect'
+  # While adding a delimiter so that the superscript token doesn't get combined with 
+  # the token preceding it, thus losing its superscript property in the curernt algorithm
+  # This can later be refined e.g. to reflect this is not a regular space delimiter,
+  # as well as enable propagating the relative font size and height of the super/subscript, 
+  # or otherwise
   #
+  # TODO: this may possibly move to the basic tokenization
+  #       rather than be handled here 'in retrospect', or be extended
+  #       to handling other formatting variances (?) not just superscript
+  #
+
+  addStyleSeparationDelimiter = (i, tokens) ->
+
+    a = tokens[i]
+
+    newDelimiter = {'metaType': 'delimiter'}
+    newDelimiter.styles = a.styles
+    newDelimiter.finalStyles = a.finalStyles    
+    newDelimiter.page = a.page
+    tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
+
   tokens.reduce (a, b, i, tokens) ->        
 
-    heightChange = parseInt(b.positionInfo.bottom) - parseInt(a.positionInfo.bottom)
-    if newLineThreshold > Math.abs(heightChange) > 0
-      b.superscript = true  # Carry on superscript indication
-
-      #
-      # Add a delimiter so that the superscript token doesn't get combined with 
-      # the token preceding it, thus losing its superscript property in the curernt algorithm
-      # This can later be refined e.g. to reflect this is not a regular space delimiter,
-      # as well as enable propagating the relative font size and height of the super/subscript, 
-      # or otherwise
-      #
-
-      newDelimiter = {'metaType': 'delimiter'}
-      newDelimiter.styles = a.styles
-      newDelimiter.finalStyles = a.finalStyles    
-      newDelimiter.page = a.page
-      tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
+    unless a.lineLocation is 'closer'
+      switch
+        when parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom)
+            b.superscript = true  
+            addStyleSeparationDelimiter(i, tokens)
+        when parseInt(b.positionInfo.bottom) < parseInt(a.positionInfo.bottom)
+            a.superscript = true  
+            addStyleSeparationDelimiter(i, tokens)
 
     return b
 
