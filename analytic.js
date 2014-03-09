@@ -23,9 +23,19 @@ exports.generateDistribution = function(array) {
     });
   }
   distributionArray.sort(function(a, b) {
-    return parseInt(b.val) - parseInt(a.val);
+    return parseFloat(b.val) - parseFloat(a.val);
   });
   return distributionArray;
+};
+
+exports.average = function(array, valRef) {
+  var item, sum, _i, _len;
+  sum = 0;
+  for (_i = 0, _len = array.length; _i < _len; _i++) {
+    item = array[_i];
+    sum += valRef(item);
+  }
+  return sum / array.length;
 };
 
 exports.analytic = function(tokens) {

@@ -248,11 +248,15 @@ exports.go = (req, name, res ,docLogger) ->
   
   util.timelog 'basic handle line and paragraph beginnings'
 
+  util.timelog 'making copy'
+  #tokens = JSON.parse(JSON.stringify(tokens))
+  util.timelog 'making copy'
+
   # first pass
 
-  newLineThreshold = 12
   lineOpeners = []
   lineOpenersForStats = []
+  lineSpaces = []
 
   util.first(tokens).lineLocation = 'opener'
 
@@ -263,22 +267,33 @@ exports.go = (req, name, res ,docLogger) ->
     b = tokens[i]
 
     # Identify and handle new text column, and thus identify a new line
-    if parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom) + 100
+    if parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100
       a.lineLocation = 'closer'       # a line closer       
       b.lineLocation = 'opener'       # a line opener 
       a.columnCloser = true           # a column closer
       b.columnOpener = true           # a column opener
       lineOpeners.push(i)  # pushes the index of b
-      lineOpenersForStats.push parseInt(b.positionInfo.left)
+      lineOpenersForStats.push parseFloat(b.positionInfo.left)
 
-    # Identify and handle a new line 
+    # Identify and handle a new line within same column
     else
-      if parseInt(b.positionInfo.bottom) + 5 < parseInt(a.positionInfo.bottom) 
+      if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
         a.lineLocation = 'closer'       # a line closer       
         b.lineLocation = 'opener'       # a line opener                         
         lineOpeners.push(i)  # pushes the index of b
-        lineOpenersForStats.push parseInt(b.positionInfo.left)
-    
+        lineOpenersForStats.push parseFloat(b.positionInfo.left)
+        lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom) 
+
+  lineSpaceDistribution = analytic.generateDistribution(lineSpaces)
+  
+  #for entry in lineSpaceDistribution
+  #  console.log """line space of #{entry.key} - detected #{entry.val} times"""
+
+  newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1  # arbitrary grace interval to absorb
+                                                                            # floating point calculation deviations 
+                                                                            # and document deviations 
+  console.log """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
+
   util.last(tokens).lineLocation = 'closer'
 
   # Based on the above, deduce paragraph splittings
@@ -288,53 +303,64 @@ exports.go = (req, name, res ,docLogger) ->
     prevOpener = tokens[lineOpeners[i-1]] # previous row opener  
     nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
     prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
+    
+    # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
+      # is it a column transition?
       if currOpener.columnOpener
         if parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)
           # it's a paragraph beginning at the very top of a new column
           currOpener.paragraph = 'opener'   
           prevToken.paragraph = 'closer'
+          #console.log currOpener.text
 
       else
-        # it's an indentation signaled paragraph beginning
+        # it's a paragraph beginning within the same column
         currOpener.paragraph = 'opener'   
         prevToken.paragraph = 'closer'
+        #console.log currOpener.text
 
-    if parseInt(currOpener.positionInfo.bottom) + newLineThreshold < parseInt(prevOpener.positionInfo.bottom) 
+    if parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) 
       # it's a space signaled paragraph beginning
       currOpener.paragraph = 'opener'   
       prevToken.paragraph = 'closer'
 
+      #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
+
   #
-  # Derive paragraph count and length statistics
+  # Derive paragraph length and quantity statistics
   #
   lastOpenerIndex = 0
-  paragraphCount = 0
-  paragraphLengths = []
+  paragraphs = []
   for i in [0..tokens.length-1] 
     if tokens[i].paragraph is 'opener'
-      paragraphCount += 1
-      paragraphLengths.push(i - lastOpenerIndex)
+      paragraphs.push {'length': i - lastOpenerIndex, 'opener': tokens[i]}
       lastOpenerIndex = i
 
-  console.log """detected #{paragraphCount} paragraphs"""
-  paragraphLengths.sort( (a, b) -> return parseInt(b.val) - parseInt(a.val) )
-  for length in paragraphLengths
-    console.log """detected paragraph length #{length}"""
+  console.log """detected #{paragraphs.length} paragraphs"""
+  #paragraphs.sort( (a, b) -> return parseInt(b.length) - parseInt(a.length) )
+  
+  #for paragraph in paragraphs
+  #  console.log """beginning in page #{paragraph.opener.page}: paragraph of length #{paragraph.length}"""
 
-  #paragraphLengthsDistribution = analytic.generateDistribution(paragraphLengths)
-  #for entry in paragraphLengthsDistribution
-  #  console.log """paragraph length of #{entry.key} tokens - detected #{entry.val} times"""
+  console.log parseInt(util.last(tokens).page)
+  paragraphsRatio = paragraphs.length / parseInt(util.last(tokens).page)
 
-  util.timelog 'basic handle line and paragraph beginnings'
+  averageParagraphLength = analytic.average(paragraphs, (a) -> a.length)
+  
+  console.log """paragraphs to pages ratio: #{paragraphsRatio}"""
+  console.log """average paragraph length:  #{averageParagraphLength}"""
 
-  #
-  # Just some fancy stats
-  #
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats)
-
   for entry in lineOpenersDistribution
     console.log """line beginnings on left position #{entry.key} - detected #{entry.val} times"""
+
+
+  ###
+  paragraphLengthsDistribution = analytic.generateDistribution(paragraphLengths)
+  for entry in paragraphLengthsDistribution
+   console.log """paragraph length of #{entry.key} tokens - detected #{entry.val} times"""
+  ###
 
   #
   # Identify and handle superscript 

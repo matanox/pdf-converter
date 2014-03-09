@@ -13,8 +13,15 @@ exports.generateDistribution = (array) ->
   for key, val of distributionObject
     distributionArray.push({key, val})
   
-  distributionArray.sort( (a, b) -> return parseInt(b.val) - parseInt(a.val) )
+  distributionArray.sort( (a, b) -> return parseFloat(b.val) - parseFloat(a.val) )
   return distributionArray
+
+exports.average = (array, valRef) -> 
+  sum = 0
+  for item in array
+    sum += valRef(item)
+  return sum / array.length
+
 
 exports.analytic = (tokens) ->
 
