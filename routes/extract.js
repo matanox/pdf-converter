@@ -66,7 +66,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _results, _s, _t, _u, _v, _w, _x, _y, _z;
+  var GT, ST, a, abbreviations, abstract, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, fontSizes, fontSizesDistribution, group, groups, handler, htmlparser, i, id, inputStylesMap, largestFontSizeSequence, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, mainFontSize, markSentence, minAbstractTokensNum, minTitleTokensNum, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sequence, sequences, style, styles, t, textIndex, title, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _ak, _al, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len20, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _results, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -249,14 +249,88 @@ exports.go = function(req, name, res, docLogger) {
   }
   tokens = filtered;
   util.timelog('remove repeat headers and footers');
+  fontSizes = [];
+  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
+    token = tokens[_w];
+    fontSizes.push(parseFloat(token.finalStyles['font-size']));
+  }
+  fontSizesDistribution = analytic.generateDistribution(fontSizes);
+  console.dir(fontSizesDistribution);
+  mainFontSize = parseFloat(util.first(fontSizesDistribution).key);
+  sequences = [];
+  sequence = {
+    'font-size': tokens[0].finalStyles[font - size]({
+      'font-family': tokens[0].finalStyles[font - family],
+      'start': 0
+    })
+  };
+  for (t = _x = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _x <= _ref5 : _x >= _ref5; t = 1 <= _ref5 ? ++_x : --_x) {
+    if (!(ParseInt(tokens[t].page) === 1)) {
+      continue;
+    }
+    token = tokens[t];
+    if ((token.finalStyles[font - size] !== sequence[font - size]) || (token.finalStyles[font - family] !== sequence[font - family])) {
+      sequence.end = t - 1;
+      sequence.numOfTokens = sequence.end - sequence.start + 1;
+      sequences.push(sequence);
+      sequence = {
+        'font-size': parseFloat(token.finalStyles[font - size])({
+          'font-family': token.finalStyles[font - family],
+          'startToken': t,
+          'startLeft': t.positionInfo.left,
+          'startBottom': t.positionInfo.bottom
+        })
+      };
+    }
+  }
+  minAbstractTokensNum = 50;
+  minTitleTokensNum = 7;
+  sequences.sort(function(a, b) {
+    return b.startBottom - a.startBottom;
+  });
+  largestFontSizeSequence = 0;
+  for (_y = 0, _len10 = sequences.length; _y < _len10; _y++) {
+    sequence = sequences[_y];
+    if (sequence[font - size] > largestFontSizeSequence) {
+      largestFontSizeSequence = sequence[font - size];
+    }
+  }
+  for (_z = 0, _len11 = sequences.length; _z < _len11; _z++) {
+    sequence = sequences[_z];
+    if (sequence[font - size] = largestFontSizeSequence) {
+      if (sequence.numOfTokens > minTitleTokensNum) {
+        title = sequence;
+        break;
+      }
+    }
+  }
+  for (_aa = 0, _len12 = sequences.length; _aa < _len12; _aa++) {
+    sequence = sequences[_aa];
+    if (sequence.tokensNum > minAbstractTokensNum) {
+      abstract = sequence;
+      break;
+    }
+  }
+  for (_ab = 0, _len13 = abstract.length; _ab < _len13; _ab++) {
+    tokens = abstract[_ab];
+    token.meta = 'abstract';
+  }
+  for (_ac = 0, _len14 = title.length; _ac < _len14; _ac++) {
+    tokens = title[_ac];
+    token.meta = 'title';
+  }
   util.timelog('basic handle line and paragraph beginnings');
-  util.timelog('making copy');
-  util.timelog('making copy');
+  /*
+  util.timelog 'making copy'
+  tokens = JSON.parse(JSON.stringify(tokens))
+  util.timelog 'making copy'
+  */
+
   lineOpeners = [];
   lineOpenersForStats = [];
   lineSpaces = [];
   util.first(tokens).lineLocation = 'opener';
-  for (i = _w = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _w <= _ref5 : _w >= _ref5; i = 1 <= _ref5 ? ++_w : --_w) {
+  for (i = _ad = 1, _ref6 = tokens.length - 1; 1 <= _ref6 ? _ad <= _ref6 : _ad >= _ref6; i = 1 <= _ref6 ? ++_ad : --_ad) {
     a = tokens[i - 1];
     b = tokens[i];
     if (parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100) {
@@ -280,7 +354,7 @@ exports.go = function(req, name, res, docLogger) {
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
   console.log("ordinary new line space set to the document's most common line space of " + newLineThreshold);
   util.last(tokens).lineLocation = 'closer';
-  for (i = _x = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _x <= _ref6 : _x >= _ref6; i = 1 <= _ref6 ? ++_x : --_x) {
+  for (i = _ae = 1, _ref7 = lineOpeners.length - 1 - 1; 1 <= _ref7 ? _ae <= _ref7 : _ae >= _ref7; i = 1 <= _ref7 ? ++_ae : --_ae) {
     currOpener = tokens[lineOpeners[i]];
     prevOpener = tokens[lineOpeners[i - 1]];
     nextOpener = tokens[lineOpeners[i + 1]];
@@ -303,7 +377,7 @@ exports.go = function(req, name, res, docLogger) {
   }
   lastOpenerIndex = 0;
   paragraphs = [];
-  for (i = _y = 0, _ref7 = tokens.length - 1; 0 <= _ref7 ? _y <= _ref7 : _y >= _ref7; i = 0 <= _ref7 ? ++_y : --_y) {
+  for (i = _af = 0, _ref8 = tokens.length - 1; 0 <= _ref8 ? _af <= _ref8 : _af >= _ref8; i = 0 <= _ref8 ? ++_af : --_af) {
     if (tokens[i].paragraph === 'opener') {
       paragraphs.push({
         'length': i - lastOpenerIndex,
@@ -321,8 +395,8 @@ exports.go = function(req, name, res, docLogger) {
   console.log("paragraphs to pages ratio: " + paragraphsRatio);
   console.log("average paragraph length:  " + averageParagraphLength);
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats);
-  for (_z = 0, _len9 = lineOpenersDistribution.length; _z < _len9; _z++) {
-    entry = lineOpenersDistribution[_z];
+  for (_ag = 0, _len15 = lineOpenersDistribution.length; _ag < _len15; _ag++) {
+    entry = lineOpenersDistribution[_ag];
     console.log("line beginnings on left position " + entry.key + " - detected " + entry.val + " times");
   }
   /*
@@ -394,15 +468,15 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
-  for (_aa = 0, _len10 = tokens.length; _aa < _len10; _aa++) {
-    token = tokens[_aa];
+  for (_ah = 0, _len16 = tokens.length; _ah < _len16; _ah++) {
+    token = tokens[_ah];
     token.id = id;
     id += 1;
   }
   util.timelog('ID seeding', docLogger);
   textIndex = [];
-  for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
-    token = tokens[_ab];
+  for (_ai = 0, _len17 = tokens.length; _ai < _len17; _ai++) {
+    token = tokens[_ai];
     if (token.metaType === 'regular') {
       textIndex.push({
         text: token.text,
@@ -457,8 +531,8 @@ exports.go = function(req, name, res, docLogger) {
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
-  for (_ac = 0, _len12 = tokens.length; _ac < _len12; _ac++) {
-    token = tokens[_ac];
+  for (_aj = 0, _len18 = tokens.length; _aj < _len18; _aj++) {
+    token = tokens[_aj];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -478,8 +552,8 @@ exports.go = function(req, name, res, docLogger) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_ad = 0, _len13 = tokens.length; _ad < _len13; _ad++) {
-    token = tokens[_ad];
+  for (_ak = 0, _len19 = tokens.length; _ak < _len19; _ak++) {
+    token = tokens[_ak];
     if (token.type = 'regular') {
       connect_token_group({
         group: group,
@@ -505,15 +579,15 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _ae, _af, _len14, _len15;
+    var marker, matchedMarkers, outputHtml, sentence, _al, _am, _len20, _len21;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_ae = 0, _len14 = sentence.length; _ae < _len14; _ae++) {
-        token = sentence[_ae];
+      for (_al = 0, _len20 = sentence.length; _al < _len20; _al++) {
+        token = sentence[_al];
         if (token.metaType !== 'delimiter') {
-          for (_af = 0, _len15 = docSieve.length; _af < _len15; _af++) {
-            marker = docSieve[_af];
+          for (_am = 0, _len21 = docSieve.length; _am < _len21; _am++) {
+            marker = docSieve[_am];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {
@@ -571,8 +645,8 @@ exports.go = function(req, name, res, docLogger) {
   };
   markSentence(0);
   _results = [];
-  for (_ae = 0, _len14 = tokens.length; _ae < _len14; _ae++) {
-    token = tokens[_ae];
+  for (_al = 0, _len20 = tokens.length; _al < _len20; _al++) {
+    token = tokens[_al];
     if (token.page == null) {
       throw "Internal Error - token is missing page number";
     } else {

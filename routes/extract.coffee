@@ -232,6 +232,88 @@ exports.go = (req, name, res ,docLogger) ->
   util.timelog 'remove repeat headers and footers'
 
   #
+  # Calculate most common font sizes
+  #
+  fontSizes = []
+  for token in tokens
+    fontSizes.push parseFloat(token.finalStyles['font-size'])
+
+  fontSizesDistribution = analytic.generateDistribution(fontSizes)
+
+  console.dir fontSizesDistribution
+
+  mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
+
+  #
+  # handle article title and abstract
+  #
+  
+  sequences = []
+
+  sequence = 'font-size':   tokens[0].finalStyles[font-size]
+             'font-family': tokens[0].finalStyles[font-family]
+             'start':       0
+
+  for t in [1..tokens.length-1] when ParseInt(tokens[t].page) is 1
+    token = tokens[t]
+
+    if (token.finalStyles[font-size] isnt sequence[font-size]) or (token.finalStyles[font-family] isnt sequence[font-family])
+
+       # close off terminated sequence       
+       sequence.end       = t-1  
+       sequence.numOfTokens = sequence.end - sequence.start + 1
+       sequences.push sequence
+
+       # start next sequence
+       sequence = 'font-size':   parseFloat(token.finalStyles[font-size])
+                  'font-family': token.finalStyles[font-family]
+                  'startToken':  t
+                  'startLeft':   t.positionInfo.left
+                  'startBottom': t.positionInfo.bottom
+
+  minAbstractTokensNum    = 50 
+  minTitleTokensNum       = 7
+
+  # sort from top to bottom
+  sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
+
+  #
+  # get title by the following criterion -
+  # first sequence using largest font-size used on first page
+  #
+  largestFontSizeSequence = 0
+  for sequence in sequences   # get largest font-size in first page
+    if sequence[font-size] > largestFontSizeSequence
+      largestFontSizeSequence = sequence[font-size]
+  
+  for sequence in sequences   # get first sequence using it
+    if sequence[font-size] = largestFontSizeSequence
+      if sequence.numOfTokens > minTitleTokensNum
+        title = sequence
+        break
+
+  #
+  # get abstract by the following criterion -
+  # first 'long' sequence on first page
+  #
+  for sequence in sequences     
+    if sequence.tokensNum > minAbstractTokensNum
+      abstract = sequence
+      break
+
+  for tokens in abstract
+    token.meta = 'abstract'
+
+  for tokens in title
+    token.meta = 'title'
+
+  #
+  # Detect anything on the first page that is fluff
+  #
+
+    
+
+  #
   # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
   #
@@ -248,11 +330,16 @@ exports.go = (req, name, res ,docLogger) ->
   
   util.timelog 'basic handle line and paragraph beginnings'
 
+  ###
   util.timelog 'making copy'
-  #tokens = JSON.parse(JSON.stringify(tokens))
+  tokens = JSON.parse(JSON.stringify(tokens))
   util.timelog 'making copy'
+  ###
 
-  # first pass
+  #
+  # Mark line openers and closers, 
+  # as well as column openers and closers
+  #
 
   lineOpeners = []
   lineOpenersForStats = []
@@ -260,8 +347,6 @@ exports.go = (req, name, res ,docLogger) ->
 
   util.first(tokens).lineLocation = 'opener'
 
-  # Mark line openers and closers, 
-  # as well as column openers and closers
   for i in [1..tokens.length-1]
     a = tokens[i-1]
     b = tokens[i]
@@ -306,6 +391,7 @@ exports.go = (req, name, res ,docLogger) ->
     
     # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
+      
       # is it a column transition?
       if currOpener.columnOpener
         if parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)
