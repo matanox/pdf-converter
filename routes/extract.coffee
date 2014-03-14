@@ -18,7 +18,6 @@ iterator = (tokens, iterationFunc) ->
     b = tokens[i]
     i = i + iterationFunc(a, b, i, tokens) 
 
-
 isImage = (text) -> util.startsWith(text, "<img ")
 
 # Utility function for filtering out images
@@ -34,6 +33,115 @@ filterZeroLengthText = (ourDivRepresentation) ->
   filtered = []
   filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
   filtered
+
+titleAndAbstract = (tokens) ->
+
+  #
+  # Calculate most common font sizes
+  #
+  fontSizes = []
+  for token in tokens
+    fontSizes.push parseFloat(token.finalStyles['font-size'])
+
+  fontSizesDistribution = analytic.generateDistribution(fontSizes)
+
+  console.dir fontSizesDistribution
+
+  mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
+
+  #
+  # handle article title and abstract
+  #
+  
+  sequences = []
+
+  sequence = 
+    'font-size':   tokens[0].finalStyles['font-size'],
+    'font-family': tokens[0].finalStyles['font-family'],
+    'start':       0
+
+  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
+    token = tokens[t]
+
+    if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
+
+       # close off terminated sequence       
+       sequence.endToken    = t-1  
+       sequence.numOfTokens = sequence.endToken - sequence.start + 1
+       sequences.push sequence
+       #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+
+       # start next sequence
+       sequence = 
+         'font-size':   token.finalStyles['font-size'],
+         'font-family': token.finalStyles['font-family'],
+         'startToken':  t,
+         'startLeft':   parseFloat(token.positionInfo.left),
+         'startBottom': parseFloat(token.positionInfo.bottom)
+
+  minAbstractTokensNum    = 50 
+  minTitleTokensNum       = 7
+
+  # sort from top to bottom - to simplify next steps
+  sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
+
+  #
+  # get title by the following criterion -
+  # first sequence using largest font-size used on first page
+  #
+  # bottom-wise first will be detected relying on the array having been sorted already
+  #
+  largestFontSizeSequence = 0
+  for sequence in sequences   # get largest font-size in first page
+    if parseFloat(sequence['font-size']) > largestFontSizeSequence
+      largestFontSizeSequence = parseFloat(sequence['font-size'])
+  
+  for sequence in sequences   # get first sequence using it
+    console.log parseFloat(sequence['font-size']) + ' ' + largestFontSizeSequence
+    console.log sequence.startBottom
+    util.simpleLogSequence(tokens, sequence, 'sequence')
+    if parseFloat(sequence['font-size']) is largestFontSizeSequence
+      console.log 'IS LARGEST FONT SIZE'
+      if sequence.numOfTokens > minTitleTokensNum
+        title = sequence
+        break
+
+  #
+  # get abstract by the following criterion -
+  # first 'long' sequence on first page
+  #
+  # bottom-wise first will be detected relying on the array having been sorted already
+  #
+  for sequence in sequences     
+    if sequence.numOfTokens > minAbstractTokensNum
+      abstract = sequence
+      break
+
+  if abstract?
+    util.markTokens(tokens, abstract, 'abstract')
+    # util.simpleLogSequence(abstract, 'abstract')
+  else 
+    console.warn 'abstract not detected'
+
+  if title?
+    util.markTokens(tokens, title, 'title')  
+    # util.simpleLogSequence(title, 'title')
+  else 
+    console.warn 'title not detected'
+  
+
+  #console.log '========='
+  #
+  # Detect anything on the first page that is fluff
+  #
+  # assums that anything above the bottom of the abstract other than what's 
+  # been already tagged and handled, is fluff.
+  #
+
+  #for token in tokens when ParseInt(token.page) is 1
+  #  if abstract.startBottom - token.positionInfo.bottom > tokens[mainText].bottom
+
+
 
 #
 # Extract text content and styles from html
@@ -111,8 +219,7 @@ exports.go = (req, name, res ,docLogger) ->
       throw "Error - zero length text in data"
 
   #
-  # Augment each token with its final calculated styles as well as position information.
-  # E.g. read the css style definitions, of the css classes assigned to a token, 
+  # Read the css style definitions of the css classes assigned to a token, 
   # and add them to the token.
   #
   #docLogger.info(tokens)  
@@ -232,99 +339,6 @@ exports.go = (req, name, res ,docLogger) ->
   util.timelog 'remove repeat headers and footers'
 
   #
-  # Calculate most common font sizes
-  #
-  fontSizes = []
-  for token in tokens
-    fontSizes.push parseFloat(token.finalStyles['font-size'])
-
-  fontSizesDistribution = analytic.generateDistribution(fontSizes)
-
-  console.dir fontSizesDistribution
-
-  mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
-
-  #
-  # handle article title and abstract
-  #
-  
-  sequences = []
-
-  sequence = 
-    'font-size':   tokens[0].finalStyles['font-size'],
-    'font-family': tokens[0].finalStyles['font-family'],
-    'start':       0
-
-  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
-    token = tokens[t]
-
-    if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
-
-       # close off terminated sequence       
-       sequence.endToken    = t-1  
-       sequence.numOfTokens = sequence.endToken - sequence.start + 1
-       sequences.push sequence
-       util.simpleLogSequence(tokens, sequence, 'detected sequence')
-
-       # start next sequence
-       sequence = 
-         'font-size':   token.finalStyles['font-size'],
-         'font-family': token.finalStyles['font-family'],
-         'startToken':  t,
-         'startLeft':   token.positionInfo.left,
-         'startBottom': token.positionInfo.bottom
-
-  minAbstractTokensNum    = 50 
-  minTitleTokensNum       = 7
-
-  # sort from top to bottom
-  sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
-
-  #
-  # get title by the following criterion -
-  # first sequence using largest font-size used on first page
-  #
-  largestFontSizeSequence = 0
-  for sequence in sequences   # get largest font-size in first page
-    if parseFloat(sequence['font-size']) > largestFontSizeSequence
-      largestFontSizeSequence = parseFloat(sequence['font-size'])
-  
-  for sequence in sequences   # get first sequence using it
-    if parseFloat(sequence['font-size']) is largestFontSizeSequence
-      if sequence.numOfTokens > minTitleTokensNum
-        title = sequence
-        break
-
-  #
-  # get abstract by the following criterion -
-  # first 'long' sequence on first page
-  #
-  for sequence in sequences     
-    if sequence.numOfTokens > minAbstractTokensNum
-      abstract = sequence
-      break
-
-  ###
-  if abstract?
-    util.simpleLogSequence(abstract, 'abstract')
-  if title?
-    util.simpleLogSequence(title, 'title')
-  ###
-  
-
-  console.log '========='
-  #
-  # Detect anything on the first page that is fluff
-  #
-  # assums that anything above the bottom of the abstract other than what's 
-  # been already tagged and handled, is fluff.
-  #
-
-  #for token in tokens when ParseInt(token.page) is 1
-  #  if abstract.startBottom - token.positionInfo.bottom > tokens[mainText].bottom
-
-
-  #
   # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
   #
@@ -424,6 +438,8 @@ exports.go = (req, name, res ,docLogger) ->
 
       #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
 
+  util.timelog 'basic handle line and paragraph beginnings'
+
   #
   # Derive paragraph length and quantity statistics
   #
@@ -471,6 +487,8 @@ exports.go = (req, name, res ,docLogger) ->
   #       rather than be handled here 'in retrospect', or be extended
   #       to handling other formatting variances (?) not just superscript
   #
+
+  titleAndAbstract(tokens)
 
   addStyleSeparationDelimiter = (i, tokens) ->
 
@@ -634,7 +652,7 @@ exports.go = (req, name, res ,docLogger) ->
   groups = [] # sequence of all groups
   group = []  
   for token in tokens
-    if token.type = 'regular' 
+    if token.metaType is 'regular' 
       connect_token_group({group:group, token:token})
       if token.text is '.'             # Is this a sentence splitter?
         unless group.length > (1 + 1)  # One word and then a period are not a 'sentence', 

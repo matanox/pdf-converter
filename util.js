@@ -156,18 +156,28 @@ exports.pushIfTrue = function(array, functionResult) {
 };
 
 exports.simpleLogSequence = function(tokens, sequence, heading) {
-  var t, token, _i, _ref, _ref1, _results;
+  var output, t, token, _i, _ref, _ref1;
   if (heading != null) {
     console.log(heading + ':');
   }
-  _results = [];
+  output = '';
   for (t = _i = _ref = sequence.startToken, _ref1 = sequence.endToken; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; t = _ref <= _ref1 ? ++_i : --_i) {
     token = tokens[t];
     if (token.text != null) {
-      _results.push(console.log(token.text));
+      output += token.text;
     } else {
-      _results.push(console.log(' '));
+      output += ' ';
     }
+  }
+  return console.log(output);
+};
+
+exports.markTokens = function(tokens, sequence, mark) {
+  var t, token, _i, _ref, _ref1, _results;
+  _results = [];
+  for (t = _i = _ref = sequence.startToken, _ref1 = sequence.endToken; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; t = _ref <= _ref1 ? ++_i : --_i) {
+    token = tokens[t];
+    _results.push(token.meta = mark);
   }
   return _results;
 };

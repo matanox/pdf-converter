@@ -143,9 +143,18 @@ exports.pushIfTrue = (array, functionResult) ->
 
 exports.simpleLogSequence = (tokens, sequence, heading) -> 
   console.log heading+':' if heading?
+  output = ''
   for t in [sequence.startToken..sequence.endToken]
     token = tokens[t]
     if token.text?
-      console.log token.text 
+      output += token.text 
     else 
-      console.log ' '
+      output += ' '
+
+  console.log output
+  
+
+exports.markTokens = (tokens, sequence, mark) -> 
+  for t in [sequence.startToken..sequence.endToken]
+    token = tokens[t]
+    token.meta = mark 
