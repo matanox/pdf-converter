@@ -250,26 +250,29 @@ exports.go = (req, name, res ,docLogger) ->
   
   sequences = []
 
-  sequence = 'font-size':   tokens[0].finalStyles[font-size]
-             'font-family': tokens[0].finalStyles[font-family]
-             'start':       0
+  sequence = 
+    'font-size':   tokens[0].finalStyles['font-size'],
+    'font-family': tokens[0].finalStyles['font-family'],
+    'start':       0
 
-  for t in [1..tokens.length-1] when ParseInt(tokens[t].page) is 1
+  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
     token = tokens[t]
 
-    if (token.finalStyles[font-size] isnt sequence[font-size]) or (token.finalStyles[font-family] isnt sequence[font-family])
+    if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
 
        # close off terminated sequence       
-       sequence.end       = t-1  
-       sequence.numOfTokens = sequence.end - sequence.start + 1
+       sequence.endToken    = t-1  
+       sequence.numOfTokens = sequence.endToken - sequence.start + 1
        sequences.push sequence
+       util.simpleLogSequence(tokens, sequence, 'detected sequence')
 
        # start next sequence
-       sequence = 'font-size':   parseFloat(token.finalStyles[font-size])
-                  'font-family': token.finalStyles[font-family]
-                  'startToken':  t
-                  'startLeft':   t.positionInfo.left
-                  'startBottom': t.positionInfo.bottom
+       sequence = 
+         'font-size':   token.finalStyles['font-size'],
+         'font-family': token.finalStyles['font-family'],
+         'startToken':  t,
+         'startLeft':   token.positionInfo.left,
+         'startBottom': token.positionInfo.bottom
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 7
@@ -283,11 +286,11 @@ exports.go = (req, name, res ,docLogger) ->
   #
   largestFontSizeSequence = 0
   for sequence in sequences   # get largest font-size in first page
-    if sequence[font-size] > largestFontSizeSequence
-      largestFontSizeSequence = sequence[font-size]
+    if parseFloat(sequence['font-size']) > largestFontSizeSequence
+      largestFontSizeSequence = parseFloat(sequence['font-size'])
   
   for sequence in sequences   # get first sequence using it
-    if sequence[font-size] = largestFontSizeSequence
+    if parseFloat(sequence['font-size']) is largestFontSizeSequence
       if sequence.numOfTokens > minTitleTokensNum
         title = sequence
         break
@@ -297,21 +300,29 @@ exports.go = (req, name, res ,docLogger) ->
   # first 'long' sequence on first page
   #
   for sequence in sequences     
-    if sequence.tokensNum > minAbstractTokensNum
+    if sequence.numOfTokens > minAbstractTokensNum
       abstract = sequence
       break
 
-  for tokens in abstract
-    token.meta = 'abstract'
+  ###
+  if abstract?
+    util.simpleLogSequence(abstract, 'abstract')
+  if title?
+    util.simpleLogSequence(title, 'title')
+  ###
+  
 
-  for tokens in title
-    token.meta = 'title'
-
+  console.log '========='
   #
   # Detect anything on the first page that is fluff
   #
+  # assums that anything above the bottom of the abstract other than what's 
+  # been already tagged and handled, is fluff.
+  #
 
-    
+  #for token in tokens when ParseInt(token.page) is 1
+  #  if abstract.startBottom - token.positionInfo.bottom > tokens[mainText].bottom
+
 
   #
   # Mark tokens that begin or end their line 

@@ -140,3 +140,12 @@ exports.pushIfTrue = (array, functionResult) ->
       array.push(functionResult)
       return true
     return false
+
+exports.simpleLogSequence = (tokens, sequence, heading) -> 
+  console.log heading+':' if heading?
+  for t in [sequence.startToken..sequence.endToken]
+    token = tokens[t]
+    if token.text?
+      console.log token.text 
+    else 
+      console.log ' '

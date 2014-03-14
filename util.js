@@ -154,3 +154,20 @@ exports.pushIfTrue = function(array, functionResult) {
   }
   return false;
 };
+
+exports.simpleLogSequence = function(tokens, sequence, heading) {
+  var t, token, _i, _ref, _ref1, _results;
+  if (heading != null) {
+    console.log(heading + ':');
+  }
+  _results = [];
+  for (t = _i = _ref = sequence.startToken, _ref1 = sequence.endToken; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; t = _ref <= _ref1 ? ++_i : --_i) {
+    token = tokens[t];
+    if (token.text != null) {
+      _results.push(console.log(token.text));
+    } else {
+      _results.push(console.log(' '));
+    }
+  }
+  return _results;
+};
