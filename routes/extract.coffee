@@ -34,7 +34,12 @@ filterZeroLengthText = (ourDivRepresentation) ->
   filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
   filtered
 
+#
+# handle article title and abstract
+#
 titleAndAbstract = (tokens) ->
+
+  util.timelog('Title and abstract recognition')
 
   #
   # Calculate most common font sizes
@@ -49,35 +54,49 @@ titleAndAbstract = (tokens) ->
 
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
 
+  # Figure line beginnings and endings - currently not in use
+  # Unlike core text, here we don't expect intricacies like
+  # two or more text columns for the same text sequence
+  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
+    a = tokens[t-1]
+    b = tokens[t]
+    lineOpeners = []
+    if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
+      a.lineLocation = 'closer'       # a line closer  
+      b.lineLocation = 'opener'       # a line opener    
+      lineOpeners.push(t)  # pushes the index of b
+
   #
-  # handle article title and abstract
+  # Detect sequences 
   #
-  
   sequences = []
 
   sequence = 
     'font-size':   tokens[0].finalStyles['font-size'],
     'font-family': tokens[0].finalStyles['font-family'],
-    'start':       0
+    'startToken':  0
 
   for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
+
     token = tokens[t]
+    prev  = tokens[t-1]
 
     if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
+       unless token.positionInfo.bottom is prev.positionInfo.bottom
 
-       # close off terminated sequence       
-       sequence.endToken    = t-1  
-       sequence.numOfTokens = sequence.endToken - sequence.start + 1
-       sequences.push sequence
-       #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+         # close off terminated sequence       
+         sequence.endToken    = t-1  
+         sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
+         sequences.push sequence
+         #util.simpleLogSequence(tokens, sequence, 'detected sequence')
 
-       # start next sequence
-       sequence = 
-         'font-size':   token.finalStyles['font-size'],
-         'font-family': token.finalStyles['font-family'],
-         'startToken':  t,
-         'startLeft':   parseFloat(token.positionInfo.left),
-         'startBottom': parseFloat(token.positionInfo.bottom)
+         # start next sequence
+         sequence = 
+           'font-size':   token.finalStyles['font-size'],
+           'font-family': token.finalStyles['font-family'],
+           'startToken':  t,
+           'startLeft':   parseFloat(token.positionInfo.left),
+           'startBottom': parseFloat(token.positionInfo.bottom)
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 7
@@ -93,6 +112,7 @@ titleAndAbstract = (tokens) ->
   #
   largestFontSizeSequence = 0
   for sequence in sequences   # get largest font-size in first page
+    console.dir sequence
     if parseFloat(sequence['font-size']) > largestFontSizeSequence
       largestFontSizeSequence = parseFloat(sequence['font-size'])
   
@@ -101,7 +121,7 @@ titleAndAbstract = (tokens) ->
     console.log sequence.startBottom
     util.simpleLogSequence(tokens, sequence, 'sequence')
     if parseFloat(sequence['font-size']) is largestFontSizeSequence
-      console.log 'IS LARGEST FONT SIZE'
+      console.log sequence.numOfTokens
       if sequence.numOfTokens > minTitleTokensNum
         title = sequence
         break
@@ -128,7 +148,6 @@ titleAndAbstract = (tokens) ->
     # util.simpleLogSequence(title, 'title')
   else 
     console.warn 'title not detected'
-  
 
   #console.log '========='
   #
@@ -141,6 +160,7 @@ titleAndAbstract = (tokens) ->
   #for token in tokens when ParseInt(token.page) is 1
   #  if abstract.startBottom - token.positionInfo.bottom > tokens[mainText].bottom
 
+  util.timelog('Title and abstract recognition')
 
 
 #
@@ -327,6 +347,19 @@ exports.go = (req, name, res ,docLogger) ->
       else 
         console.log repeatSequence + ' ' + 'repeat' + ' '+ extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + physicalPageSide
 
+  #
+  # Remove first page number footer even if it does not appear consistently as 
+  # in later pages repeat footers
+  #
+  # TODO: consider grouping with elaborate fluff removal when implemented
+  #
+
+  console.log 'bottom extreme is ' + bottom.extreme
+  for token in tokens when parseInt(token.page) is 1
+    if Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2 # same grace      
+      console.log '1st page non-repeat footer text detected: ' + token.text
+      token.fluff = true
+  
   # Now effectively remove the identified repeat sequences
   filtered = []
   for t in [0..tokens.length-1]
