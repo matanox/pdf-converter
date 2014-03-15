@@ -105,26 +105,33 @@ titleAndAbstract = (tokens) ->
   sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
 
   #
-  # get title by the following criterion -
-  # first sequence using largest font-size used on first page
+  # Detect the title 
   #
-  # bottom-wise first will be detected relying on the array having been sorted already
-  #
+  # looks for first sequence, from top to bottom, that starts with 
+  # a large font and is longer than some minimum value. The algorithm
+  # moves from largest font to next largest font and so forth, 
+  # until a long enough sequence is detected.
+  # 
+  # Note: this assumes that the title uses a single font.
+  #       in some edge cases, this can fail. The sequencing 
+  #       and algorithm can be refined to solve for that.
+  #       
 
+  ###
   largestFontSizeSequence = 0
   for sequence in sequences   # get largest font-size in first page
     #console.dir sequence
     if parseFloat(sequence['font-size']) > largestFontSizeSequence
       largestFontSizeSequence = parseFloat(sequence['font-size'])
+  ###
 
   fontSizesUnique = util.unique(fontSizes, true)
-  console.dir fontSizesUnique
   fontSizesUnique.sort( (a, b) -> return b - a )  # sort descending and discard duplicates
   console.dir fontSizesUnique
 
   i = 0  # look for largest font size sequence
   until title? or i>2
-  
+
     for sequence in sequences   # get sequence using it
       #console.log parseFloat(sequence['font-size']) + ' ' + fontSizesUnique[i]
       #console.log sequence.startBottom
@@ -135,8 +142,6 @@ titleAndAbstract = (tokens) ->
           title = sequence
 
     i += 1  # look for next largest font size sequence
-
-  
 
   #
   # get abstract by the following criterion -
@@ -150,14 +155,15 @@ titleAndAbstract = (tokens) ->
       break
 
   if abstract?
+    
     util.markTokens(tokens, abstract, 'abstract')
-    # util.simpleLogSequence(abstract, 'abstract')
+    util.simpleLogSequence(tokens, abstract, 'abstract')
   else 
     console.warn 'abstract not detected'
 
   if title?
     util.markTokens(tokens, title, 'title')  
-    # util.simpleLogSequence(title, 'title')
+    util.simpleLogSequence(tokens, title, 'title')
   else 
     console.warn 'title not detected'
 
