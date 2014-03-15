@@ -32,17 +32,22 @@ exports.go = function(req, res) {
   if (req.session.name != null) {
     name = req.session.name;
     type = req.param('type');
-    console.log(name + ' ' + type);
-    switch (type) {
-      case 'pdf':
-        return bytes = storage.fetch('pdf', name, serve);
-      case 'html':
-        return res.sendfile(name + '.html', {
-          root: '../local-copies/' + '/html-converted' + '/' + name
-        });
-      default:
-        console.error('unsupported type parameter supplied');
-        return res.send(500);
+    if (type != null) {
+      console.log(name + ' ' + type);
+      switch (type) {
+        case 'pdf':
+          return bytes = storage.fetch('pdf', name, serve);
+        case 'html':
+          return res.sendfile(name + '.html', {
+            root: '../local-copies/' + '/html-converted' + '/' + name
+          });
+        default:
+          console.error('unsupported type parameter supplied');
+          return res.send(500);
+      }
+    } else {
+      console.error('type parameter omitted');
+      return res.send(500);
     }
   } else {
     console.error('session does not contain the name parameter');
