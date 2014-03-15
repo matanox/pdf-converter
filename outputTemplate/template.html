@@ -180,9 +180,9 @@
   <body>
     <header 
       onmouseover=
-        "console.log('in display button'); document.getElementById('IntermediaryForms').style.display = 'inline-block';" /* show */
+        "console.log('showing button'); document.getElementById('IntermediaryForms').style.display = 'inline-block';" /* show */
       onmouseout=
-        "console.log('in display button'); document.getElementById('IntermediaryForms').style.display = 'none';"         /* hide */
+        "console.log('hiding button'); document.getElementById('IntermediaryForms').style.display = 'none';"         /* hide */
     >
       <!-- a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a-->
       <div class="btn-group">
@@ -191,8 +191,8 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupVerticalDrop4">
-          <li><a href="/serveIntermediaryFile">Original PDF</a></li>
-          <li><a href="#">Crude conversion</a></li>
+          <li><a href="/serveIntermediaryFile?type=pdf" target="_blank">Original PDF</a></li>
+          <li><a href="/serveIntermediaryFile?type=html" target="_blank">Crude conversion</a></li>
         </ul>
       </div>
     </header> 

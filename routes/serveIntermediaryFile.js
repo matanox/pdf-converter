@@ -10,10 +10,10 @@ logging = require('../logging');
 fs = require('fs');
 
 exports.go = function(req, res) {
-  var name, pdfBytes, serve;
-  serve = function(pdfBytes) {
-    console.log(pdfBytes);
-    if (pdfBytes) {
+  var bytes, name, serve, type;
+  serve = function(bytes) {
+    console.log(bytes);
+    if (bytes) {
       /*
       fs.writeFile(outputFile, outputHtml, (err) -> 
         
@@ -23,16 +23,27 @@ exports.go = function(req, res) {
       */
 
       console.info('Sending response....');
-      util.timelog('serving original pdf');
+      util.timelog('serving intermediary file');
       res.setHeader('Content-Type', 'application/pdf');
-      res.end(pdfBytes);
-      return util.timelog('serving original pdf');
+      res.end(bytes);
+      return util.timelog('serving intermediary file');
     }
   };
   if (req.session.name != null) {
     name = req.session.name;
-    console.log(name);
-    return pdfBytes = storage.fetch('pdf', name, serve);
+    type = req.param('type');
+    console.log(name + ' ' + type);
+    switch (type) {
+      case 'pdf':
+        return bytes = storage.fetch('pdf', name, serve);
+      case 'html':
+        return res.sendfile(name + '.html', {
+          root: '../local-copies/' + '/html-converted' + '/' + name
+        });
+      default:
+        console.error('unsupported type parameter supplied');
+        return res.send(500);
+    }
   } else {
     console.error('session does not contain the name parameter');
     return res.send(500);
