@@ -3,6 +3,9 @@
 <html lang="en">
   <head>
     <link href='http://fonts.googleapis.com/css?family=Roboto|Averia+Sans+Libre' rel='stylesheet' type='text/css'>
+    <link href="stylesheets/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css" />
+
 
     <style>
 
@@ -175,8 +178,23 @@
   </head>
 
   <body>
-    <header>
-      <a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a>
+    <header 
+      onmouseover=
+        "console.log('in display button'); document.getElementById('IntermediaryForms').style.display = 'inline-block';" /* show */
+      onmouseout=
+        "console.log('in display button'); document.getElementById('IntermediaryForms').style.display = 'none';"         /* hide */
+    >
+      <!-- a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a-->
+      <div class="btn-group">
+        <button id="IntermediaryForms" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          intermediary forms
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupVerticalDrop4">
+          <li><a href="/serveIntermediaryFile">Original PDF</a></li>
+          <li><a href="#">Crude conversion</a></li>
+        </ul>
+      </div>
     </header> 
     <div id='main'>
       <article id="hookPoint" style="font-size: 0; white-space:normal;"></article>
@@ -190,5 +208,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="../bootstrap3/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('IntermediaryForms').setAttribute("style","display: none");
+    </script>
   </body>
 </html>

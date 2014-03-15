@@ -167,6 +167,7 @@ titleAndAbstract = (tokens) ->
   else 
     console.warn 'title not detected'
 
+
   #console.log '========='
   #
   # Detect anything on the first page that is fluff
@@ -459,12 +460,20 @@ exports.go = (req, name, res ,docLogger) ->
 
   # Based on the above, deduce paragraph splittings
 
-  for i in [1..lineOpeners.length-1-1]
+  for i in [1..lineOpeners.length-1-1] 
+
     currOpener = tokens[lineOpeners[i]]   # current row opener
     prevOpener = tokens[lineOpeners[i-1]] # previous row opener  
     nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
     prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
     
+    # skip new paragraph recognition within the article title -
+    # as titles tend to span few lines while being center justified,
+    # the paragraph splitting test should be avoided within them
+    if currOpener.meta is 'title' 
+      console.log "IN TITLE"
+      continue 
+
     # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
       
@@ -497,7 +506,7 @@ exports.go = (req, name, res ,docLogger) ->
   lastOpenerIndex = 0
   paragraphs = []
   for i in [0..tokens.length-1] 
-    if tokens[i].paragraph is 'opener'
+    if tokens[i].paragraph is 'opener' 
       paragraphs.push {'length': i - lastOpenerIndex, 'opener': tokens[i]}
       lastOpenerIndex = i
 

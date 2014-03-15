@@ -403,6 +403,10 @@ exports.go = function(req, name, res, docLogger) {
     prevOpener = tokens[lineOpeners[i - 1]];
     nextOpener = tokens[lineOpeners[i + 1]];
     prevToken = tokens[lineOpeners[i] - 1];
+    if (currOpener.meta === 'title') {
+      console.log("IN TITLE");
+      continue;
+    }
     if (parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)) {
       if (currOpener.columnOpener) {
         if (parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)) {
