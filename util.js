@@ -43,6 +43,25 @@ isAnyOf = function(string, matches) {
 
 exports.isAnyOf = isAnyOf;
 
+exports.unique = function(array, preserveFloat) {
+  var item, key, result, temp, value, _i, _len;
+  temp = {};
+  result = [];
+  for (_i = 0, _len = array.length; _i < _len; _i++) {
+    item = array[_i];
+    temp[item] = true;
+  }
+  for (key in temp) {
+    value = temp[key];
+    if (preserveFloat) {
+      result.push(parseFloat(key));
+    } else {
+      result.push(key);
+    }
+  }
+  return result;
+};
+
 exports.objectPropertiesCount = function(object) {
   return Object.keys(object).length;
 };

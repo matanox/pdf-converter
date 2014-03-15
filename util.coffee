@@ -39,6 +39,19 @@ isAnyOf = (string, matches) ->
 
 exports.isAnyOf = isAnyOf
 
+# return unique values of an input array
+exports.unique = (array, preserveFloat) ->
+  temp = {}
+  result = []
+  for item in array
+    temp[item] = true
+  for key, value of temp
+    if preserveFloat
+      result.push(parseFloat(key))
+    else
+      result.push(key)
+  result
+
 # For sizing map objects. 
 # Returns object's number of properties
 exports.objectPropertiesCount = (object) -> Object.keys(object).length
@@ -152,7 +165,6 @@ exports.simpleLogSequence = (tokens, sequence, heading) ->
       output += ' '
 
   console.log output
-  
 
 exports.markTokens = (tokens, sequence, mark) -> 
   for t in [sequence.startToken..sequence.endToken]

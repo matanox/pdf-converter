@@ -66,7 +66,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 titleAndAbstract = function(tokens) {
-  var a, abstract, b, fontSizes, fontSizesDistribution, largestFontSizeSequence, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, sequence, sequences, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _ref, _ref1;
+  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, largestFontSizeSequence, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, sequence, sequences, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _ref, _ref1;
   util.timelog('Title and abstract recognition');
   fontSizes = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -124,23 +124,28 @@ titleAndAbstract = function(tokens) {
   largestFontSizeSequence = 0;
   for (_l = 0, _len1 = sequences.length; _l < _len1; _l++) {
     sequence = sequences[_l];
-    console.dir(sequence);
     if (parseFloat(sequence['font-size']) > largestFontSizeSequence) {
       largestFontSizeSequence = parseFloat(sequence['font-size']);
     }
   }
-  for (_m = 0, _len2 = sequences.length; _m < _len2; _m++) {
-    sequence = sequences[_m];
-    console.log(parseFloat(sequence['font-size']) + ' ' + largestFontSizeSequence);
-    console.log(sequence.startBottom);
-    util.simpleLogSequence(tokens, sequence, 'sequence');
-    if (parseFloat(sequence['font-size']) === largestFontSizeSequence) {
-      console.log(sequence.numOfTokens);
-      if (sequence.numOfTokens > minTitleTokensNum) {
-        title = sequence;
-        break;
+  fontSizesUnique = util.unique(fontSizes, true);
+  console.dir(fontSizesUnique);
+  fontSizesUnique.sort(function(a, b) {
+    return b - a;
+  });
+  console.dir(fontSizesUnique);
+  i = 0;
+  while (!((title != null) || i > 2)) {
+    for (_m = 0, _len2 = sequences.length; _m < _len2; _m++) {
+      sequence = sequences[_m];
+      if (parseFloat(sequence['font-size']) === fontSizesUnique[i]) {
+        console.log(sequence.numOfTokens);
+        if (sequence.numOfTokens > minTitleTokensNum) {
+          title = sequence;
+        }
       }
     }
+    i += 1;
   }
   for (_n = 0, _len3 = sequences.length; _n < _len3; _n++) {
     sequence = sequences[_n];

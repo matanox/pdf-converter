@@ -110,21 +110,33 @@ titleAndAbstract = (tokens) ->
   #
   # bottom-wise first will be detected relying on the array having been sorted already
   #
+
   largestFontSizeSequence = 0
   for sequence in sequences   # get largest font-size in first page
-    console.dir sequence
+    #console.dir sequence
     if parseFloat(sequence['font-size']) > largestFontSizeSequence
       largestFontSizeSequence = parseFloat(sequence['font-size'])
+
+  fontSizesUnique = util.unique(fontSizes, true)
+  console.dir fontSizesUnique
+  fontSizesUnique.sort( (a, b) -> return b - a )  # sort descending and discard duplicates
+  console.dir fontSizesUnique
+
+  i = 0  # look for largest font size sequence
+  until title? or i>2
   
-  for sequence in sequences   # get first sequence using it
-    console.log parseFloat(sequence['font-size']) + ' ' + largestFontSizeSequence
-    console.log sequence.startBottom
-    util.simpleLogSequence(tokens, sequence, 'sequence')
-    if parseFloat(sequence['font-size']) is largestFontSizeSequence
-      console.log sequence.numOfTokens
-      if sequence.numOfTokens > minTitleTokensNum
-        title = sequence
-        break
+    for sequence in sequences   # get sequence using it
+      #console.log parseFloat(sequence['font-size']) + ' ' + fontSizesUnique[i]
+      #console.log sequence.startBottom
+      #util.simpleLogSequence(tokens, sequence, 'sequence')
+      if parseFloat(sequence['font-size']) is fontSizesUnique[i]
+        console.log sequence.numOfTokens
+        if sequence.numOfTokens > minTitleTokensNum
+          title = sequence
+
+    i += 1  # look for next largest font size sequence
+
+  
 
   #
   # get abstract by the following criterion -
