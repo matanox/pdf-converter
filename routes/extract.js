@@ -66,7 +66,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 titleAndAbstract = function(tokens) {
-  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, sequence, sequences, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1;
+  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1;
   util.timelog('Title and abstract recognition');
   fontSizes = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -101,18 +101,24 @@ titleAndAbstract = function(tokens) {
     }
     token = tokens[t];
     prev = tokens[t - 1];
+    if (token.lineLocation === 'opener') {
+      rowLeftLast = rowLeftCurr;
+      rowLeftCurr = parseFloat(token.positionInfo.left);
+    }
     if ((token.finalStyles['font-size'] !== sequence['font-size']) || (token.finalStyles['font-family'] !== sequence['font-family'])) {
       if (token.positionInfo.bottom !== prev.positionInfo.bottom) {
-        sequence.endToken = t - 1;
-        sequence.numOfTokens = sequence.endToken - sequence.startToken + 1;
-        sequences.push(sequence);
-        sequence = {
-          'font-size': token.finalStyles['font-size'],
-          'font-family': token.finalStyles['font-family'],
-          'startToken': t,
-          'startLeft': parseFloat(token.positionInfo.left),
-          'startBottom': parseFloat(token.positionInfo.bottom)
-        };
+        if (!(token.lineLocation === 'opener' && Math.abs(rowLeftLast - rowLeftCurr) < 2)) {
+          sequence.endToken = t - 1;
+          sequence.numOfTokens = sequence.endToken - sequence.startToken + 1;
+          sequences.push(sequence);
+          sequence = {
+            'font-size': token.finalStyles['font-size'],
+            'font-family': token.finalStyles['font-family'],
+            'startToken': t,
+            'startLeft': parseFloat(token.positionInfo.left),
+            'startBottom': parseFloat(token.positionInfo.bottom)
+          };
+        }
       }
     }
   }

@@ -81,22 +81,31 @@ titleAndAbstract = (tokens) ->
     token = tokens[t]
     prev  = tokens[t-1]
 
+    if token.lineLocation is 'opener' 
+      rowLeftLast = rowLeftCurr
+      rowLeftCurr = parseFloat(token.positionInfo.left)
+      #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
+
+    # Same font size and family?  
     if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
+       # Same row?
        unless token.positionInfo.bottom is prev.positionInfo.bottom
+         # New row but same horizontal start location as previous row?
+         unless (token.lineLocation is 'opener' and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
 
-         # close off terminated sequence       
-         sequence.endToken    = t-1  
-         sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
-         sequences.push sequence
-         #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+           # close off terminated sequence       
+           sequence.endToken    = t-1  
+           sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
+           sequences.push sequence
+           #util.simpleLogSequence(tokens, sequence, 'detected sequence')
 
-         # start next sequence
-         sequence = 
-           'font-size':   token.finalStyles['font-size'],
-           'font-family': token.finalStyles['font-family'],
-           'startToken':  t,
-           'startLeft':   parseFloat(token.positionInfo.left),
-           'startBottom': parseFloat(token.positionInfo.bottom)
+           # start next sequence
+           sequence = 
+             'font-size':   token.finalStyles['font-size'],
+             'font-family': token.finalStyles['font-family'],
+             'startToken':  t,
+             'startLeft':   parseFloat(token.positionInfo.left),
+             'startBottom': parseFloat(token.positionInfo.bottom)
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 7

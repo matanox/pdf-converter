@@ -59,9 +59,9 @@ exports.go = (req, res) ->
           bytes = storage.fetch('pdf', name, serve)
         when 'html'
           res.sendfile(name + '.html', {root: '../local-copies/' + '/html-converted' + '/' + name}) # variable use by closure here...
-          # to fully implement this, need to push the html file/folder from pdf2HTML into
-          # the clustered file system, or serve it only from the local copies directory,
-          # accounting for the fact it is a bunch of files not a single one, per article
+          # as long as the intermediary html version is kept on local storage, this should work.
+          # Otherwise, need to consider pushing the html *folder* from pdf2HTML into
+          # the clustered file system in the first place, and manage it there
 
           # console.error 'this feature is not yet implemented'
           # res.send(501)
@@ -71,7 +71,7 @@ exports.go = (req, res) ->
     else 
       console.error 'type parameter omitted'
       res.send(500)
-      
+
   else
     console.error 'session does not contain the name parameter'
     res.send(500)

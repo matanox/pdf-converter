@@ -26,7 +26,7 @@ exports.representNodes = function(domObject) {
       switch (object.type) {
         case 'tag':
           if (object.attribs['data-page-no'] != null) {
-            page = object.attribs['data-page-no'];
+            page = parseInt(object.attribs['data-page-no'], 16);
           }
           if (object.children != null) {
             if (stylesArray == null) {

@@ -33,7 +33,7 @@ exports.representNodes = (domObject) ->
           # handle assigning the source page number to each token
           # this relies on pdf2htmlEX's page numbering
           if object.attribs['data-page-no']?
-            page = object.attribs['data-page-no']
+            page = parseInt(object.attribs['data-page-no'], 16) # parse from hex string
 
           # recurse for all children
           if object.children?
