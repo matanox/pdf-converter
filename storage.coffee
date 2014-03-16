@@ -3,8 +3,8 @@ logging = require './logging'
 riak =    require('riak-js').getClient({host: "localhost", port: "8098"})
 # alternative node riak client - https://github.com/nathanaschbacher/nodiak
 fs =      require 'fs'
-crypto =  require('crypto');
-
+crypto =  require 'crypto'
+dbms   =  require 'rethinkdb'
 
 exports.store = (bucket, filename, file, docLogger) ->
   #
@@ -28,6 +28,14 @@ exports.store = (bucket, filename, file, docLogger) ->
   util.timelog "hashing input file"
   console.log hash
 
+  dbms.connect( {host: 'localhost', port: 28015}, (err, connection) ->
+    if (err) then throw err
+    dbms.db('test').tableCreate('file_hashes').run(connection, (err, result) ->
+        if (err) then throw err;
+        console.log(JSON.stringify(result, null, 2))
+      )
+  )
+ 
   riak.save(bucket, filename, fileContent, (error) -> 
     util.timelog "storing file to clustered storage", docLogger
     if error?
