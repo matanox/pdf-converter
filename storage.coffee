@@ -1,7 +1,10 @@
-util = require './util'
+util =    require './util'
 logging = require './logging' 
-riak = require('riak-js').getClient({host: "localhost", port: "8098"})
-fs = require 'fs'
+riak =    require('riak-js').getClient({host: "localhost", port: "8098"})
+# alternative node riak client - https://github.com/nathanaschbacher/nodiak
+fs =      require 'fs'
+crypto =  require('crypto');
+
 
 exports.store = (bucket, filename, file, docLogger) ->
   #
@@ -12,9 +15,19 @@ exports.store = (bucket, filename, file, docLogger) ->
   # TODO: tune/set riak bucket replication parameters
   # Optional: check out availability of riak cloud service
   #
+
   util.timelog "storing file to clustered storage"
-  # alternative node riak client - https://github.com/nathanaschbacher/nodiak
+
+  hasher = crypto.createHash('md5');
+
   fileContent = fs.readFileSync(file)
+
+  util.timelog "hashing input file"
+  hasher.update(fileContent)
+  hash = hasher.digest('hex')
+  util.timelog "hashing input file"
+  console.log hash
+
   riak.save(bucket, filename, fileContent, (error) -> 
     util.timelog "storing file to clustered storage", docLogger
     if error?
