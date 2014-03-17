@@ -6,7 +6,6 @@
     <link href="stylesheets/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="stylesheets/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css" />
 
-
     <style>
 
       body {
@@ -174,11 +173,12 @@
     <!-- Remote deubgging through http://jsconsole.com/?%3Alisten and http://jsconsole.com/remote-debugging.html! -->
     <!-- script src="http://jsconsole.com/remote.js?A8FC6AEA-C21C-4DFD-BE15-71DB67B5D074"></script-->
 
+    <script type="text/javascript" src="scripts/FitText.js"></script>
     <script type="text/javascript" src="javascripts/events.js"></script>
   </head>
 
   <body>
-    <header 
+    <header id="header"
       onmouseover=
         "console.log('showing button'); document.getElementById('IntermediaryForms').style.display = 'inline-block';" /* show */
       onmouseout=
@@ -196,11 +196,16 @@
         </ul>
       </div>
     </header> 
+
     <div id='main'>
-      <article id="hookPoint" style="font-size: 0; white-space:normal;"></article>
+      <article>
+        <div id='title' style="font-size: 50px; font-weight: bold; padding-bottom: 0.7em; text-align: center;"></div>
+        <div id='core' style="font-size: 0; white-space:normal;"></div>
+      </article>
       <nav id="left-col"></nav>
       <aside></aside>
     </div>
+
     <footer></footer>
 
     <!-- Bootstrap core JavaScript

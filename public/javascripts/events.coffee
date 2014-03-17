@@ -93,7 +93,7 @@ userEventMgmt = () ->
   userEventMgmtEnabled = true
 
   console.log "Setting up events..."
-  container = document.getElementById('hookPoint')
+  container = document.getElementById('core')
   page = document.body
 
   leftDown    = false
@@ -470,17 +470,21 @@ renderText = (tokens) ->
   # This includes arranging attributes of a token -
   # Creating css style string, adding extra styles if supplied, creating id attribute
   #
-  deriveHtml = (token, moreStyle) ->
+  deriveHtml = (token, moreStyle, lessStyle) ->
 
     stylesString = ''
     for style, val of token.finalStyles
       unless style in ['font-family', 'line-height', 'color']
-        stylesString = stylesString + style + ':' + val + '; '
+        unless (token.meta is 'title' and style is 'font-size')  # as title is to be resized dynamically
+          stylesString = stylesString + style + ':' + val + '; '
 
-    if token.emphasis 
-      color = "rgb(100,200,200)"
-    else 
-      color = "rgb(255,255,220)"
+    if token.meta is 'title'
+      color = "#444444"
+    else
+      if token.emphasis 
+        color = "rgb(100,200,200)"
+      else 
+        color = "rgb(255,255,220)"
       
     if token.superscript
       stylesString = stylesString + 'vertical-align' + ':' + 'top' + '; '       
@@ -502,26 +506,35 @@ renderText = (tokens) ->
       console.dir(token)
       return "<span>#{token.text}</span>"
 
+  mainText = ''
+  titleText = ''  
   for x in tokens 
-    switch x.metaType 
-      when 'regular'
-        switch x.paragraph
-          when 'closer'
-            x.text = x.text + '<br /><br />'
-            html = html + deriveHtml(x)
-          when 'opener'
-            html = html + deriveHtml(x, 'display: inline-block; text-indent: 2em;')
-          else
-            html = html + deriveHtml(x)
-      when 'delimiter'
-        html = html + deriveHtml(x) # add word space
+    switch x.meta 
+      when 'title'
+        titleText = titleText + deriveHtml(x, null, 'font-size')
+      else
+        switch x.metaType 
+          when 'regular'
+            switch x.paragraph
+              when 'closer'
+                x.text = x.text + '<br /><br />'
+                mainText = mainText + deriveHtml(x)
+              when 'opener'
+                mainText = mainText + deriveHtml(x, 'display: inline-block; text-indent: 2em;')
+              else
+                mainText = mainText + deriveHtml(x)
+          when 'delimiter'
+            mainText = mainText + deriveHtml(x) # add word space
 
-  #logging.log(html)
+  #logging.log(mainText)
   
-  document.getElementById('hookPoint').innerHTML = html
+  #title = document.createElement('div')
+  title = document.getElementById('title')
+  title.innerHTML = titleText
+  #document.getElementsByTagName('article')[0].appendChild(title)
+  #window.fitText( title, 1)
 
-
-
+  document.getElementById('core').innerHTML = mainText
 
 tokenSequence = {} # a global, so it can be queried from the browser console 
 
@@ -566,4 +579,4 @@ reload = () ->
   console.log('reloaded')
 
 enableContext = () ->
-  document.getElementById("hookPoint").removeEventListener("contextmenu", contextmenuHandler)
+  document.getElementById('core').removeEventListener("contextmenu", contextmenuHandler)

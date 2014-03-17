@@ -11,6 +11,7 @@ relevantStyles = [
   'line-height',
   'color',
   'letter-spacing'
+  # 'transform'  # for detecting non-horizontal text - see https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function, non zero b indicates rotation 
 ]
 
 positionData = [

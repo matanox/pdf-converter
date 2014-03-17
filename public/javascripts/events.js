@@ -51,7 +51,7 @@ userEventMgmt = function() {
   }
   userEventMgmtEnabled = true;
   console.log("Setting up events...");
-  container = document.getElementById('hookPoint');
+  container = document.getElementById('core');
   page = document.body;
   leftDown = false;
   rightDown = false;
@@ -338,21 +338,27 @@ myAjax = function(url, callback) {
 };
 
 renderText = function(tokens) {
-  var deriveHtml, html, x, _i, _len;
-  deriveHtml = function(token, moreStyle) {
+  var deriveHtml, mainText, title, titleText, x, _i, _len;
+  deriveHtml = function(token, moreStyle, lessStyle) {
     var color, style, stylesString, text, val, _ref;
     stylesString = '';
     _ref = token.finalStyles;
     for (style in _ref) {
       val = _ref[style];
       if (style !== 'font-family' && style !== 'line-height' && style !== 'color') {
-        stylesString = stylesString + style + ':' + val + '; ';
+        if (!(token.meta === 'title' && style === 'font-size')) {
+          stylesString = stylesString + style + ':' + val + '; ';
+        }
       }
     }
-    if (token.emphasis) {
-      color = "rgb(100,200,200)";
+    if (token.meta === 'title') {
+      color = "#444444";
     } else {
-      color = "rgb(255,255,220)";
+      if (token.emphasis) {
+        color = "rgb(100,200,200)";
+      } else {
+        color = "rgb(255,255,220)";
+      }
     }
     if (token.superscript) {
       stylesString = stylesString + 'vertical-align' + ':' + 'top' + '; ';
@@ -375,27 +381,37 @@ renderText = function(tokens) {
       return "<span>" + token.text + "</span>";
     }
   };
+  mainText = '';
+  titleText = '';
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
-    switch (x.metaType) {
-      case 'regular':
-        switch (x.paragraph) {
-          case 'closer':
-            x.text = x.text + '<br /><br />';
-            html = html + deriveHtml(x);
-            break;
-          case 'opener':
-            html = html + deriveHtml(x, 'display: inline-block; text-indent: 2em;');
-            break;
-          default:
-            html = html + deriveHtml(x);
-        }
+    switch (x.meta) {
+      case 'title':
+        titleText = titleText + deriveHtml(x, null, 'font-size');
         break;
-      case 'delimiter':
-        html = html + deriveHtml(x);
+      default:
+        switch (x.metaType) {
+          case 'regular':
+            switch (x.paragraph) {
+              case 'closer':
+                x.text = x.text + '<br /><br />';
+                mainText = mainText + deriveHtml(x);
+                break;
+              case 'opener':
+                mainText = mainText + deriveHtml(x, 'display: inline-block; text-indent: 2em;');
+                break;
+              default:
+                mainText = mainText + deriveHtml(x);
+            }
+            break;
+          case 'delimiter':
+            mainText = mainText + deriveHtml(x);
+        }
     }
   }
-  return document.getElementById('hookPoint').innerHTML = html;
+  title = document.getElementById('title');
+  title.innerHTML = titleText;
+  return document.getElementById('core').innerHTML = mainText;
 };
 
 tokenSequence = {};
@@ -431,5 +447,5 @@ reload = function() {
 };
 
 enableContext = function() {
-  return document.getElementById("hookPoint").removeEventListener("contextmenu", contextmenuHandler);
+  return document.getElementById('core').removeEventListener("contextmenu", contextmenuHandler);
 };
