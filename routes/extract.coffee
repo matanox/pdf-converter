@@ -200,19 +200,30 @@ titleAndAbstract = (tokens) ->
   else 
     console.warn 'title not detected'
 
-
-  #console.log '========='
   #
   # Detect anything on the first page that is fluff
   #
   # assums that anything above the bottom of the abstract other than what's 
-  # been already tagged and handled, is fluff.
+  # been already tagged and handled, is fluff. And anything left of the beginning
+  # of the core text.
   #
 
-  #for token in tokens when ParseInt(token.page) is 1
-  #  if abstract.startBottom - token.positionInfo.bottom > tokens[mainText].bottom
-
   util.timelog('Title and abstract recognition')
+
+  util.timelog('handling of first page fluff')
+
+  # Any sequence that starts higher than the abstract ends,
+  # will be marked as fluff
+  abstractEnd = tokens[abstract.endToken].positionInfo.bottom    # get bottom of abstract
+
+  for sequence in sequences 
+    unless (sequence is title or sequence is abstract)
+      if parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)  
+        for t in [sequence.startToken..sequence.endToken]
+          tokens[t].fluff = true
+
+  util.timelog('handling of first page fluff')
+
 
 
 #
@@ -332,7 +343,7 @@ exports.go = (req, name, res ,docLogger) ->
   #
   # Find repeat header and footer text
   # 
-  util.timelog 'remove repeat headers and footers'
+  util.timelog 'detect and mark repeat headers and footers'
 
   # Functional style preparation for handling both types of page extremes
   GT  = (j, k) -> return j > k
@@ -412,16 +423,7 @@ exports.go = (req, name, res ,docLogger) ->
       console.log '1st page non-repeat footer text detected: ' + token.text
       token.fluff = true
   
-  # Now effectively remove the identified repeat sequences
-  filtered = []
-  for t in [0..tokens.length-1]
-    unless tokens[t].fluff?
-      filtered.push(tokens[t])
-    else
-      #console.log """filtered out token text: #{tokens[t].text}"""
-  tokens = filtered
-
-  util.timelog 'remove repeat headers and footers'
+  util.timelog 'detect and mark repeat headers and footers'
 
   #
   # Mark tokens that begin or end their line 
@@ -438,8 +440,22 @@ exports.go = (req, name, res ,docLogger) ->
   # TODO: this code assumes the size unit is px and some more 
   #
 
-  # handle title and abstract
+  #
+  # handle title and abstract, and core text beginning detection
+  # this also marks out most first page fluff
+  #
   titleAndAbstract(tokens)
+ 
+  #
+  # Now effectively remove all identified fluff the identified repeat sequences
+  #
+  filtered = []
+  for t in [0..tokens.length-1]
+    unless tokens[t].fluff?
+      filtered.push(tokens[t])
+    else
+      #console.log """filtered out token text: #{tokens[t].text}"""
+  tokens = filtered
   
   util.timelog 'basic handle line and paragraph beginnings'
 

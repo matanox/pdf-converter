@@ -66,7 +66,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 titleAndAbstract = function(tokens) {
-  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1;
+  var a, abstract, abstractEnd, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _o, _ref, _ref1, _ref2, _ref3;
   util.timelog('Title and abstract recognition');
   fontSizes = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -181,7 +181,20 @@ titleAndAbstract = function(tokens) {
   } else {
     console.warn('title not detected');
   }
-  return util.timelog('Title and abstract recognition');
+  util.timelog('Title and abstract recognition');
+  util.timelog('handling of first page fluff');
+  abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
+  for (_n = 0, _len3 = sequences.length; _n < _len3; _n++) {
+    sequence = sequences[_n];
+    if (!(sequence === title || sequence === abstract)) {
+      if (parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)) {
+        for (t = _o = _ref2 = sequence.startToken, _ref3 = sequence.endToken; _ref2 <= _ref3 ? _o <= _ref3 : _o >= _ref3; t = _ref2 <= _ref3 ? ++_o : --_o) {
+          tokens[t].fluff = true;
+        }
+      }
+    }
+  }
+  return util.timelog('handling of first page fluff');
 };
 
 exports.go = function(req, name, res, docLogger) {
@@ -278,7 +291,7 @@ exports.go = function(req, name, res, docLogger) {
     }
     return 1;
   });
-  util.timelog('remove repeat headers and footers');
+  util.timelog('detect and mark repeat headers and footers');
   GT = function(j, k) {
     return j > k;
   };
@@ -368,6 +381,8 @@ exports.go = function(req, name, res, docLogger) {
       }
     }
   }
+  util.timelog('detect and mark repeat headers and footers');
+  titleAndAbstract(tokens);
   filtered = [];
   for (t = _w = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _w <= _ref4 : _w >= _ref4; t = 0 <= _ref4 ? ++_w : --_w) {
     if (tokens[t].fluff == null) {
@@ -377,8 +392,6 @@ exports.go = function(req, name, res, docLogger) {
     }
   }
   tokens = filtered;
-  util.timelog('remove repeat headers and footers');
-  titleAndAbstract(tokens);
   util.timelog('basic handle line and paragraph beginnings');
   /*
   util.timelog 'making copy'
