@@ -508,16 +508,24 @@ renderText = (tokens) ->
 
   mainText = ''
   titleText = ''  
+  abstractText = ''
   for x in tokens 
     switch x.meta 
 
       when 'title'
         switch x.metaType
           when 'regular'
-            titleText = titleText + deriveHtml(x, null, 'font-size')
+            titleText = titleText + deriveHtml(x, 'font-weight: bold', 'font-size')
           when 'delimiter'
             titleText = titleText + deriveHtml(x) # add word space        
-          
+
+      when 'abstract'
+        switch x.metaType
+          when 'regular'
+            abstractText = abstractText + deriveHtml(x, null, 'font-size')
+          when 'delimiter'
+            abstractText = abstractText + deriveHtml(x) # add word space        
+
       else
         switch x.metaType 
           when 'regular'
@@ -540,6 +548,9 @@ renderText = (tokens) ->
   #document.getElementsByTagName('article')[0].appendChild(title)
   #window.fitText( title, 1)
 
+  abstract = document.getElementById('abstract')
+  abstract.innerHTML = abstractText
+  
   document.getElementById('core').innerHTML = mainText
 
 tokenSequence = {} # a global, so it can be queried from the browser console 

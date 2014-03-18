@@ -338,7 +338,7 @@ myAjax = function(url, callback) {
 };
 
 renderText = function(tokens) {
-  var deriveHtml, mainText, title, titleText, x, _i, _len;
+  var abstract, abstractText, deriveHtml, mainText, title, titleText, x, _i, _len;
   deriveHtml = function(token, moreStyle, lessStyle) {
     var color, style, stylesString, text, val, _ref;
     stylesString = '';
@@ -383,16 +383,26 @@ renderText = function(tokens) {
   };
   mainText = '';
   titleText = '';
+  abstractText = '';
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
     switch (x.meta) {
       case 'title':
         switch (x.metaType) {
           case 'regular':
-            titleText = titleText + deriveHtml(x, null, 'font-size');
+            titleText = titleText + deriveHtml(x, 'font-weight: bold', 'font-size');
             break;
           case 'delimiter':
             titleText = titleText + deriveHtml(x);
+        }
+        break;
+      case 'abstract':
+        switch (x.metaType) {
+          case 'regular':
+            abstractText = abstractText + deriveHtml(x, null, 'font-size');
+            break;
+          case 'delimiter':
+            abstractText = abstractText + deriveHtml(x);
         }
         break;
       default:
@@ -417,6 +427,8 @@ renderText = function(tokens) {
   }
   title = document.getElementById('title');
   title.innerHTML = titleText;
+  abstract = document.getElementById('abstract');
+  abstract.innerHTML = abstractText;
   return document.getElementById('core').innerHTML = mainText;
 };
 
