@@ -387,7 +387,13 @@ renderText = function(tokens) {
     x = tokens[_i];
     switch (x.meta) {
       case 'title':
-        titleText = titleText + deriveHtml(x, null, 'font-size');
+        switch (x.metaType) {
+          case 'regular':
+            titleText = titleText + deriveHtml(x, null, 'font-size');
+            break;
+          case 'delimiter':
+            titleText = titleText + deriveHtml(x);
+        }
         break;
       default:
         switch (x.metaType) {

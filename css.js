@@ -7,7 +7,7 @@ util = require('./util');
 
 fs = require('fs');
 
-relevantStyles = ['font-family', 'font-size', 'font-style', 'font-weight', 'word-spacing', 'line-height', 'color', 'letter-spacing'];
+relevantStyles = ['font-family', 'font-size', 'font-style', 'font-weight', 'word-spacing', 'line-height', 'color', 'letter-spacing', 'height'];
 
 positionData = ['left', 'bottom', 'right', 'top'];
 

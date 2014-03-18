@@ -10,7 +10,8 @@ relevantStyles = [
   'word-spacing',
   'line-height',
   'color',
-  'letter-spacing'
+  'letter-spacing',
+  'height'
   # 'transform'  # for detecting non-horizontal text - see https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function, non zero b indicates rotation 
 ]
 

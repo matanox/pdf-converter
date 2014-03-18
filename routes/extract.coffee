@@ -57,10 +57,10 @@ titleAndAbstract = (tokens) ->
   # Figure line beginnings and endings - currently not in use
   # Unlike core text, here we don't expect intricacies like
   # two or more text columns for the same text sequence
+  lineOpeners = []
   for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
     a = tokens[t-1]
     b = tokens[t]
-    lineOpeners = []
     if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
       a.lineLocation = 'closer'       # a line closer  
       b.lineLocation = 'opener'       # a line opener    
@@ -74,12 +74,15 @@ titleAndAbstract = (tokens) ->
   sequence = 
     'font-size':   tokens[0].finalStyles['font-size'],
     'font-family': tokens[0].finalStyles['font-family'],
-    'startToken':  0
+    'startToken':  0,
+    'startLeft':   parseFloat(tokens[0].positionInfo.left),
+    'startBottom': parseFloat(tokens[0].positionInfo.bottom)
 
   for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
 
     token = tokens[t]
     prev  = tokens[t-1]
+    split = false
 
     if token.lineLocation is 'opener' 
       rowLeftLast = rowLeftCurr
@@ -87,25 +90,45 @@ titleAndAbstract = (tokens) ->
       #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
 
     # Same font size and family?  
-    if (token.finalStyles['font-size'] isnt sequence['font-size']) or (token.finalStyles['font-family'] isnt sequence['font-family'])
-       # Same row?
-       unless token.positionInfo.bottom is prev.positionInfo.bottom
-         # New row but same horizontal start location as previous row?
-         unless (token.lineLocation is 'opener' and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
+    if (token.finalStyles['font-size'] isnt sequence['font-size']) or 
+    (token.finalStyles['font-family'] isnt sequence['font-family'])
+      # Same row?
+      unless token.positionInfo.bottom is prev.positionInfo.bottom
+        # New row but same horizontal start location as previous row?
+        unless (token.lineLocation is 'opener' and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
+          split = true
 
-           # close off terminated sequence       
-           sequence.endToken    = t-1  
-           sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
-           sequences.push sequence
-           #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+    #
+    # Check the proportion of the effective line space compared to the font height - 
+    #
+    # this is a terrible hack and it needs to refine by better fathoming the relationship between
+    # actual visual pixel line spacing, v.s. the play between the height, font-size, bottom css 
+    # properties, and the css transform matrix as used in pdf2htmlEX output. 
+    #
+    # NOTE: 0.25 is the css transform matrix horizontal and vertical scaling factor, used
+    #       by pdf2htmlEX css. i.e. actual font pixel size is 0.25 that of the declared 
+    #       font-size property.
+    #
+    if parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom) > parseFloat(token.finalStyles['font-size'])*0.25*2
+      split = true
+    
+    if split
 
-           # start next sequence
-           sequence = 
-             'font-size':   token.finalStyles['font-size'],
-             'font-family': token.finalStyles['font-family'],
-             'startToken':  t,
-             'startLeft':   parseFloat(token.positionInfo.left),
-             'startBottom': parseFloat(token.positionInfo.bottom)
+      console.dir token
+
+      # close off terminated sequence       
+      sequence.endToken    = t-1  
+      sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
+      sequences.push sequence
+      #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+
+      # start next sequence
+      sequence = 
+        'font-size':   token.finalStyles['font-size'],
+        'font-family': token.finalStyles['font-family'],
+        'startToken':  t,
+        'startLeft':   parseFloat(token.positionInfo.left),
+        'startBottom': parseFloat(token.positionInfo.bottom)
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 7
@@ -136,10 +159,11 @@ titleAndAbstract = (tokens) ->
 
   fontSizesUnique = util.unique(fontSizes, true)
   fontSizesUnique.sort( (a, b) -> return b - a )  # sort descending and discard duplicates
-  console.dir fontSizesUnique
+  #console.dir fontSizesUnique
 
   i = 0  # look for largest font size sequence
-  until title? or i>2
+  until title? or i>2 # if no minimally long title is found with the largest font,
+                      # try the next largest, arguably heuristic but seems to work.
 
     for sequence in sequences   # get sequence using it
       #console.log parseFloat(sequence['font-size']) + ' ' + fontSizesUnique[i]
@@ -158,13 +182,13 @@ titleAndAbstract = (tokens) ->
   #
   # bottom-wise first will be detected relying on the array having been sorted already
   #
+
   for sequence in sequences     
     if sequence.numOfTokens > minAbstractTokensNum
       abstract = sequence
       break
 
   if abstract?
-    
     util.markTokens(tokens, abstract, 'abstract')
     util.simpleLogSequence(tokens, abstract, 'abstract')
   else 
@@ -413,6 +437,9 @@ exports.go = (req, name, res ,docLogger) ->
   # TODO: this code compares position on an integer rounding basis, this is only usually correct
   # TODO: this code assumes the size unit is px and some more 
   #
+
+  # handle title and abstract
+  titleAndAbstract(tokens)
   
   util.timelog 'basic handle line and paragraph beginnings'
 
@@ -480,7 +507,6 @@ exports.go = (req, name, res ,docLogger) ->
     # as titles tend to span few lines while being center justified,
     # the paragraph splitting test should be avoided within them
     if currOpener.meta is 'title' 
-      console.log "IN TITLE"
       continue 
 
     # is there an indentation change?
@@ -537,7 +563,6 @@ exports.go = (req, name, res ,docLogger) ->
   for entry in lineOpenersDistribution
     console.log """line beginnings on left position #{entry.key} - detected #{entry.val} times"""
 
-
   ###
   paragraphLengthsDistribution = analytic.generateDistribution(paragraphLengths)
   for entry in paragraphLengthsDistribution
@@ -557,8 +582,6 @@ exports.go = (req, name, res ,docLogger) ->
   #       to handling other formatting variances (?) not just superscript
   #
 
-  titleAndAbstract(tokens)
-
   addStyleSeparationDelimiter = (i, tokens) ->
 
     a = tokens[i]
@@ -567,6 +590,7 @@ exports.go = (req, name, res ,docLogger) ->
     newDelimiter.styles = a.styles
     newDelimiter.finalStyles = a.finalStyles    
     newDelimiter.page = a.page
+    newDelimiter.meta = a.meta
     tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
 
   tokens.reduce (a, b, i, tokens) ->        
@@ -607,6 +631,7 @@ exports.go = (req, name, res ,docLogger) ->
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles 
             newDelimiter.page = a.page   
+            newDelimiter.meta = a.meta
             tokens.splice(i, 0, newDelimiter) # add a delimiter in this case
             return 2
     return 1)

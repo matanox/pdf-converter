@@ -66,7 +66,7 @@ filterZeroLengthText = function(ourDivRepresentation) {
 };
 
 titleAndAbstract = function(tokens) {
-  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1;
+  var a, abstract, b, fontSizes, fontSizesDistribution, fontSizesUnique, i, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _ref1;
   util.timelog('Title and abstract recognition');
   fontSizes = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -76,13 +76,13 @@ titleAndAbstract = function(tokens) {
   fontSizesDistribution = analytic.generateDistribution(fontSizes);
   console.dir(fontSizesDistribution);
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key);
+  lineOpeners = [];
   for (t = _j = 1, _ref = tokens.length - 1; 1 <= _ref ? _j <= _ref : _j >= _ref; t = 1 <= _ref ? ++_j : --_j) {
     if (!(parseInt(tokens[t].page) === 1)) {
       continue;
     }
     a = tokens[t - 1];
     b = tokens[t];
-    lineOpeners = [];
     if (parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom)) {
       a.lineLocation = 'closer';
       b.lineLocation = 'opener';
@@ -93,7 +93,9 @@ titleAndAbstract = function(tokens) {
   sequence = {
     'font-size': tokens[0].finalStyles['font-size'],
     'font-family': tokens[0].finalStyles['font-family'],
-    'startToken': 0
+    'startToken': 0,
+    'startLeft': parseFloat(tokens[0].positionInfo.left),
+    'startBottom': parseFloat(tokens[0].positionInfo.bottom)
   };
   for (t = _k = 1, _ref1 = tokens.length - 1; 1 <= _ref1 ? _k <= _ref1 : _k >= _ref1; t = 1 <= _ref1 ? ++_k : --_k) {
     if (!(parseInt(tokens[t].page) === 1)) {
@@ -101,6 +103,7 @@ titleAndAbstract = function(tokens) {
     }
     token = tokens[t];
     prev = tokens[t - 1];
+    split = false;
     if (token.lineLocation === 'opener') {
       rowLeftLast = rowLeftCurr;
       rowLeftCurr = parseFloat(token.positionInfo.left);
@@ -108,18 +111,25 @@ titleAndAbstract = function(tokens) {
     if ((token.finalStyles['font-size'] !== sequence['font-size']) || (token.finalStyles['font-family'] !== sequence['font-family'])) {
       if (token.positionInfo.bottom !== prev.positionInfo.bottom) {
         if (!(token.lineLocation === 'opener' && Math.abs(rowLeftLast - rowLeftCurr) < 2)) {
-          sequence.endToken = t - 1;
-          sequence.numOfTokens = sequence.endToken - sequence.startToken + 1;
-          sequences.push(sequence);
-          sequence = {
-            'font-size': token.finalStyles['font-size'],
-            'font-family': token.finalStyles['font-family'],
-            'startToken': t,
-            'startLeft': parseFloat(token.positionInfo.left),
-            'startBottom': parseFloat(token.positionInfo.bottom)
-          };
+          split = true;
         }
       }
+    }
+    if (parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom) > parseFloat(token.finalStyles['font-size']) * 0.25 * 2) {
+      split = true;
+    }
+    if (split) {
+      console.dir(token);
+      sequence.endToken = t - 1;
+      sequence.numOfTokens = sequence.endToken - sequence.startToken + 1;
+      sequences.push(sequence);
+      sequence = {
+        'font-size': token.finalStyles['font-size'],
+        'font-family': token.finalStyles['font-family'],
+        'startToken': t,
+        'startLeft': parseFloat(token.positionInfo.left),
+        'startBottom': parseFloat(token.positionInfo.bottom)
+      };
     }
   }
   minAbstractTokensNum = 50;
@@ -139,7 +149,6 @@ titleAndAbstract = function(tokens) {
   fontSizesUnique.sort(function(a, b) {
     return b - a;
   });
-  console.dir(fontSizesUnique);
   i = 0;
   while (!((title != null) || i > 2)) {
     for (_l = 0, _len1 = sequences.length; _l < _len1; _l++) {
@@ -369,6 +378,7 @@ exports.go = function(req, name, res, docLogger) {
   }
   tokens = filtered;
   util.timelog('remove repeat headers and footers');
+  titleAndAbstract(tokens);
   util.timelog('basic handle line and paragraph beginnings');
   /*
   util.timelog 'making copy'
@@ -410,7 +420,6 @@ exports.go = function(req, name, res, docLogger) {
     nextOpener = tokens[lineOpeners[i + 1]];
     prevToken = tokens[lineOpeners[i] - 1];
     if (currOpener.meta === 'title') {
-      console.log("IN TITLE");
       continue;
     }
     if (parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)) {
@@ -460,7 +469,6 @@ exports.go = function(req, name, res, docLogger) {
    console.log """paragraph length of #{entry.key} tokens - detected #{entry.val} times"""
   */
 
-  titleAndAbstract(tokens);
   addStyleSeparationDelimiter = function(i, tokens) {
     var newDelimiter;
     a = tokens[i];
@@ -470,6 +478,7 @@ exports.go = function(req, name, res, docLogger) {
     newDelimiter.styles = a.styles;
     newDelimiter.finalStyles = a.finalStyles;
     newDelimiter.page = a.page;
+    newDelimiter.meta = a.meta;
     return tokens.splice(i, 0, newDelimiter);
   };
   tokens.reduce(function(a, b, i, tokens) {
@@ -504,6 +513,7 @@ exports.go = function(req, name, res, docLogger) {
             newDelimiter.styles = a.styles;
             newDelimiter.finalStyles = a.finalStyles;
             newDelimiter.page = a.page;
+            newDelimiter.meta = a.meta;
             tokens.splice(i, 0, newDelimiter);
             return 2;
           }

@@ -510,8 +510,14 @@ renderText = (tokens) ->
   titleText = ''  
   for x in tokens 
     switch x.meta 
+
       when 'title'
-        titleText = titleText + deriveHtml(x, null, 'font-size')
+        switch x.metaType
+          when 'regular'
+            titleText = titleText + deriveHtml(x, null, 'font-size')
+          when 'delimiter'
+            titleText = titleText + deriveHtml(x) # add word space        
+          
       else
         switch x.metaType 
           when 'regular'
