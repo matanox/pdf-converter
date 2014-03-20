@@ -509,22 +509,56 @@ renderText = (tokens) ->
   mainText = ''
   titleText = ''  
   abstractText = ''
+
+  #
+  # Add some narration
+  # See: http://bennettfeely.com/narrator/
+  #      http://blog.teamtreehouse.com/getting-started-speech-synthesis-api
+  #
+  # TODO: sound this during waiting for the content, not after it is already displayed,
+  #       by splitting to a separate ajax call on the back-end. Or, simply, remove.
+  #
+  titleNarration = ''
+  inTitle = false
+  for x in tokens 
+    if x.meta is 'title'
+      inTitle = true
+      switch x.metaType
+        when 'regular'
+          titleText += deriveHtml(x, 'font-weight: bold', 'font-size')
+          titleNarration += x.text
+        when 'delimiter'
+          titleText += deriveHtml(x) # add word space        
+          titleNarration += ' '
+    else
+      if inTitle # title has ended accumulating
+        msg = new SpeechSynthesisUtterance('now loading: ' + titleNarration)
+        voices = speechSynthesis.getVoices()
+        msg.voice = voices[0]
+        msg.volume = 0.5;
+        window.speechSynthesis.speak(msg)
+        break
+
+  console.log 'after title'
+
   for x in tokens 
     switch x.meta 
 
       when 'title'
-        switch x.metaType
-          when 'regular'
-            titleText = titleText + deriveHtml(x, 'font-weight: bold', 'font-size')
-          when 'delimiter'
-            titleText = titleText + deriveHtml(x) # add word space        
+        continue
+        #  switch x.metaType
+        #    when 'regular'
+        #      titleText = titleText + deriveHtml(x, 'font-weight: bold', 'font-size')
+        #    when 'delimiter'
+        #      titleText = titleText + deriveHtml(x) # add word space        
 
       when 'abstract'
+        console.log x
         switch x.metaType
           when 'regular'
-            abstractText = abstractText + deriveHtml(x, null, 'font-size')
+            abstractText += deriveHtml(x, null, 'font-size')
           when 'delimiter'
-            abstractText = abstractText + deriveHtml(x) # add word space        
+            abstractText += deriveHtml(x) # add word space        
 
       else
         switch x.metaType 
@@ -538,7 +572,7 @@ renderText = (tokens) ->
               else
                 mainText = mainText + deriveHtml(x)
           when 'delimiter'
-            mainText = mainText + deriveHtml(x) # add word space
+            mainText += deriveHtml(x) # add word space
 
   #logging.log(mainText)
   

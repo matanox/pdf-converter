@@ -338,7 +338,7 @@ myAjax = function(url, callback) {
 };
 
 renderText = function(tokens) {
-  var abstract, abstractText, deriveHtml, mainText, title, titleText, x, _i, _len;
+  var abstract, abstractText, deriveHtml, inTitle, mainText, msg, title, titleNarration, titleText, voices, x, _i, _j, _len, _len1;
   deriveHtml = function(token, moreStyle, lessStyle) {
     var color, style, stylesString, text, val, _ref;
     stylesString = '';
@@ -384,25 +384,46 @@ renderText = function(tokens) {
   mainText = '';
   titleText = '';
   abstractText = '';
+  titleNarration = '';
+  inTitle = false;
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     x = tokens[_i];
+    if (x.meta === 'title') {
+      inTitle = true;
+      switch (x.metaType) {
+        case 'regular':
+          titleText += deriveHtml(x, 'font-weight: bold', 'font-size');
+          titleNarration += x.text;
+          break;
+        case 'delimiter':
+          titleText += deriveHtml(x);
+          titleNarration += ' ';
+      }
+    } else {
+      if (inTitle) {
+        msg = new SpeechSynthesisUtterance('now loading: ' + titleNarration);
+        voices = speechSynthesis.getVoices();
+        msg.voice = voices[0];
+        msg.volume = 0.5;
+        window.speechSynthesis.speak(msg);
+        break;
+      }
+    }
+  }
+  console.log('after title');
+  for (_j = 0, _len1 = tokens.length; _j < _len1; _j++) {
+    x = tokens[_j];
     switch (x.meta) {
       case 'title':
-        switch (x.metaType) {
-          case 'regular':
-            titleText = titleText + deriveHtml(x, 'font-weight: bold', 'font-size');
-            break;
-          case 'delimiter':
-            titleText = titleText + deriveHtml(x);
-        }
-        break;
+        continue;
       case 'abstract':
+        console.log(x);
         switch (x.metaType) {
           case 'regular':
-            abstractText = abstractText + deriveHtml(x, null, 'font-size');
+            abstractText += deriveHtml(x, null, 'font-size');
             break;
           case 'delimiter':
-            abstractText = abstractText + deriveHtml(x);
+            abstractText += deriveHtml(x);
         }
         break;
       default:
@@ -421,7 +442,7 @@ renderText = function(tokens) {
             }
             break;
           case 'delimiter':
-            mainText = mainText + deriveHtml(x);
+            mainText += deriveHtml(x);
         }
     }
   }
