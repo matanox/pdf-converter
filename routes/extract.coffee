@@ -41,6 +41,23 @@ titleAndAbstract = (tokens) ->
 
   util.timelog('Title and abstract recognition')
 
+  firstPage = []
+  for token in tokens
+    if token.page is '1'
+      firstPage.push token
+    else 
+      break
+
+  for t in [0..tokens.length-1]
+    if parseFloat(tokens[t].page) > 1
+      firstPageEnd = t-1
+      break
+
+  if not firstPageEnd?
+    throw 'failed detecting end of first page'    
+
+  console.log 'first page is ' + firstPageEnd + ' tokens long'
+
   #
   # Calculate most common font sizes
   #
@@ -78,7 +95,7 @@ titleAndAbstract = (tokens) ->
     'startLeft':   parseFloat(tokens[0].positionInfo.left),
     'startBottom': parseFloat(tokens[0].positionInfo.bottom)
 
-  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
+  for t in [1..firstPageEnd]
 
     token = tokens[t]
     prev  = tokens[t-1]
@@ -114,7 +131,7 @@ titleAndAbstract = (tokens) ->
     
     if split
 
-      console.dir token
+      #console.dir token
 
       # close off terminated sequence       
       sequence.endToken    = t-1  
@@ -130,11 +147,11 @@ titleAndAbstract = (tokens) ->
         'startLeft':   parseFloat(token.positionInfo.left),
         'startBottom': parseFloat(token.positionInfo.bottom)
 
-  minAbstractTokensNum    = 50 
-  minTitleTokensNum       = 7
-
   # sort from top to bottom - to simplify next steps
   sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
+
+  minAbstractTokensNum    = 50 
+  minTitleTokensNum       = 7
 
   #
   # Detect the title 
@@ -148,14 +165,6 @@ titleAndAbstract = (tokens) ->
   #       in some edge cases, this can fail. The sequencing 
   #       and algorithm can be refined to solve for that.
   #       
-
-  ###
-  largestFontSizeSequence = 0
-  for sequence in sequences   # get largest font-size in first page
-    #console.dir sequence
-    if parseFloat(sequence['font-size']) > largestFontSizeSequence
-      largestFontSizeSequence = parseFloat(sequence['font-size'])
-  ###
 
   fontSizesUnique = util.unique(fontSizes, true)
   fontSizesUnique.sort( (a, b) -> return b - a )  # sort descending and discard duplicates
@@ -189,12 +198,58 @@ titleAndAbstract = (tokens) ->
       break
 
   if abstract?
-
     util.markTokens(tokens, abstract, 'abstract')
     util.simpleLogSequence(tokens, abstract, 'abstract')
-
   else 
     console.warn 'abstract not detected'
+
+  #
+  # locate core article beginning
+  # for now, this will work only for articles 
+  # where the core follows an 'Introduction' labeled header
+  #
+  for introduction in sequences     
+    console.log tokens[introduction.startToken].text
+    if ((tokens[introduction.startToken].text is 'Introduction') or
+        (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction'))
+      console.log 'introduction detected'
+      # remove fluff to the left of introduction section on the first page -
+      # anything on the first page that is left (and not above) the introduction section
+      for sequence in sequences     
+        if parseFloat(sequence.startLeft) < parseFloat(introduction.startLeft)
+          if parseFloat(sequence.startBottom) <= parseFloat(introduction.startBottom)
+            # mark as fluff
+            for t in [sequence.startToken..sequence.endToken]
+              tokens[t].fluff = true
+  ### 
+  #
+  # tokens iteration version of the same - untested
+  #
+  for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
+    if tokens[t].text in ['Introduction', '1. Introduction'] 
+      introduction = t
+      break
+
+  if introduction?
+    for t in [introduction..tokens.length-1] when parseInt(tokens[t].page) is 1        
+      # remove fluff to the left of introduction section on the first page -
+      # anything on the first page that is left (and not above) the introduction section
+      if parseFloat(tokens[t].positionInfo.left) < parseFloat(introduction.startLeft)
+        if parseFloat(tokens[t].positionInfo.bottom) <= parseFloat(introduction.startBottom)
+          tokens[t].fluff = true # mark as fluff
+  ###
+
+  #
+  # Now effectively remove all identified fluff the identified repeat sequences
+  # Note: if traceability is not needed, tokens.filter((token) -> not token.fluff?) may be quicker
+  #
+  #filtered = []
+  #for t in [0..firstPageEnd]
+  #  unless tokens[t].fluff?
+  #    filtered.push(tokens[t])
+  #  else
+  #    console.log """filtered out token text: #{tokens[t].text}"""
+  #tokens = filtered
 
   if title?
     util.markTokens(tokens, title, 'title')  
@@ -225,8 +280,6 @@ titleAndAbstract = (tokens) ->
           tokens[t].fluff = true
 
   util.timelog('initial handling of first page fluff')
-
-  return sequences
 
 #
 # Extract text content and styles from html
@@ -299,7 +352,7 @@ exports.go = (req, name, res ,docLogger) ->
     return y
 
   # TODO: duplicate to unit test
-  for token in tokens when token.metaType == 'regular'
+  for token in tokens when token.metaType is 'regular'
     if token.text.length == 0
       throw "Error - zero length text in data"
 
@@ -330,6 +383,35 @@ exports.go = (req, name, res ,docLogger) ->
     if util.objectPropertiesCount(token.finalStyles) is 0
       docLogger.warn('No final styles applied to token')
       docLogger.warn(token)
+
+  #
+  # Unite tokens that do not have a delimiter in between them,
+  # and are on the same line and of the same font.
+  #
+  # This is necessary for the cases where pdf2html splits parts of 
+  # the same word between span elements. 
+  #
+  util.timelog 'uniting split tokens'
+  
+  for t in [1..tokens.length-1] 
+    #if parseInt(tokens[t].page) is 1
+    a = tokens[t-1]      
+    b = tokens[t]
+    if a.metaType is 'regular' and b.metaType is 'regular'  # undelimited consecutive pair?
+      if a.positionInfo.bottom is b.positionInfo.bottom     # on same row?
+        if (a.finalStyles['font-size'] is b.finalStyles['font-size']) and
+           (a.finalStyles['font-family'] is b.finalStyles['font-family']) # with same font?
+
+          # Merge the two tokens 
+          if b.text is 'nding.' then console.log 'FOUND!!!'
+          a.text = a.text.concat(b.text) 
+          b.delete = true
+
+  console.log 'tokens count before uniting tokens: ' + tokens.length
+  tokens = tokens.filter((token) -> token.delete isnt true)
+  console.log 'tokens count after uniting tokens:  ' + tokens.length
+
+  util.timelog 'uniting split tokens'
 
   #
   # Create page openers index
@@ -427,6 +509,19 @@ exports.go = (req, name, res ,docLogger) ->
   
   util.timelog 'detect and mark repeat headers and footers'
 
+  titleAndAbstract(tokens)
+ 
+  #
+  # Now effectively remove all identified fluff the identified repeat sequences
+  #
+  filtered = []
+  for t in [0..tokens.length-1]
+    unless tokens[t].fluff?
+      filtered.push(tokens[t])
+    else
+      #console.log """filtered out token text: #{tokens[t].text}"""
+  tokens = filtered
+  
   #
   # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
@@ -446,21 +541,6 @@ exports.go = (req, name, res ,docLogger) ->
   # handle title and abstract, and core text beginning detection
   # this also marks out most first page fluff
   #
-  sequences = titleAndAbstract(tokens)
-  for introduction in sequences     
-    console.log tokens[introduction.startToken].text
- 
-  #
-  # Now effectively remove all identified fluff the identified repeat sequences
-  #
-  filtered = []
-  for t in [0..tokens.length-1]
-    unless tokens[t].fluff?
-      filtered.push(tokens[t])
-    else
-      #console.log """filtered out token text: #{tokens[t].text}"""
-  tokens = filtered
-  
   util.timelog 'basic handle line and paragraph beginnings'
 
   ###
@@ -601,7 +681,6 @@ exports.go = (req, name, res ,docLogger) ->
   #       rather than be handled here 'in retrospect', or be extended
   #       to handling other formatting variances (?) not just superscript
   #
-
   addStyleSeparationDelimiter = (i, tokens) ->
 
     a = tokens[i]
@@ -661,7 +740,8 @@ exports.go = (req, name, res ,docLogger) ->
   # This is necessary for the cases where pdf2html splits parts of 
   # the same word between span elements. 
   #
-  # (Should it actually better be part of the html level tokenization?)
+  # Moved higher up in the pipeline, can probably be removed from here
+  # as duplication
   #
   iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'
@@ -676,37 +756,6 @@ exports.go = (req, name, res ,docLogger) ->
 
   #docLogger.info(tokens.length)
 
-  util.timelog 'Filtering some more first page fluff'
-  #
-  # locate core article beginning
-  # for now, this will work only for articles 
-  # where the core follows an 'Introduction' labeled header
-  #
-  for introduction in sequences     
-    console.log tokens[introduction.startToken].text
-    if tokens[introduction.startToken].text in ['Introduction', '1. Introduction'] 
-      console.log 'IN INTRODUCTION'
-      # remove fluff to the left of introduction section on the first page -
-      # anything on the first page that is left (and not above) the introduction section
-      for sequence in sequences     
-        if parseFloat(sequence.startLeft) < parseFloat(introduction.startLeft)
-          if parseFloat(startBottom) <= parseFloat(introduction.startBottom)
-            # mark as fluff
-            for t in [sequence.startToken..sequence.endToken]
-              tokens[t].fluff = true
-
-  #
-  # Now effectively remove all identified fluff the identified repeat sequences
-  # Note: if traceability is not needed, tokens.filter((token) -> not token.fluff?) may be quicker
-  #
-  for t in [0..tokens.length-1]
-    unless tokens[t].fluff?
-      filtered.push(tokens[t])
-    else
-      console.log """filtered out token text: #{tokens[t].text}"""
-  tokens = filtered
-
-  util.timelog 'Filtering some more first page fluff'
 
   util.timelog 'Extraction from html stage A', docLogger
 
