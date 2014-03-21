@@ -417,7 +417,6 @@ renderText = function(tokens) {
       case 'title':
         continue;
       case 'abstract':
-        console.log(x);
         switch (x.metaType) {
           case 'regular':
             abstractText += deriveHtml(x, null, 'font-size');

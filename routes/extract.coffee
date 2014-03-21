@@ -146,8 +146,14 @@ titleAndAbstract = (tokens) ->
         'startToken':  t,
         'startLeft':   parseFloat(token.positionInfo.left),
         'startBottom': parseFloat(token.positionInfo.bottom)
+ 
+  # close off last sequence
+  if not sequence.endToken
+    sequence.endToken    = firstPageEnd  
+    sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
+    sequences.push sequence
 
-  # sort from top to bottom - to simplify next steps
+  # sort sequences according to horizontal location - to simplify next steps
   sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
 
   minAbstractTokensNum    = 50 
@@ -392,25 +398,21 @@ exports.go = (req, name, res ,docLogger) ->
   # the same word between span elements. 
   #
   util.timelog 'uniting split tokens'
-  
-  for t in [1..tokens.length-1] 
-    #if parseInt(tokens[t].page) is 1
-    a = tokens[t-1]      
-    b = tokens[t]
+  console.log 'tokens count before uniting tokens: ' + tokens.length  
+
+  iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'  # undelimited consecutive pair?
       if a.positionInfo.bottom is b.positionInfo.bottom     # on same row?
         if (a.finalStyles['font-size'] is b.finalStyles['font-size']) and
            (a.finalStyles['font-family'] is b.finalStyles['font-family']) # with same font?
 
           # Merge the two tokens 
-          if b.text is 'nding.' then console.log 'FOUND!!!'
           a.text = a.text.concat(b.text) 
-          b.delete = true
+          tokens.splice(index, 1)  # remove second element
+          return 0
+    return 1)  
 
-  console.log 'tokens count before uniting tokens: ' + tokens.length
-  tokens = tokens.filter((token) -> token.delete isnt true)
   console.log 'tokens count after uniting tokens:  ' + tokens.length
-
   util.timelog 'uniting split tokens'
 
   #

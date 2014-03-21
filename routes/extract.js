@@ -147,6 +147,11 @@ titleAndAbstract = function(tokens) {
       };
     }
   }
+  if (!sequence.endToken) {
+    sequence.endToken = firstPageEnd;
+    sequence.numOfTokens = sequence.endToken - sequence.startToken + 1;
+    sequences.push(sequence);
+  }
   sequences.sort(function(a, b) {
     return b.startBottom - a.startBottom;
   });
@@ -240,7 +245,7 @@ titleAndAbstract = function(tokens) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _results, _s, _t, _u, _v, _w, _x, _y, _z;
+  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _results, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog('Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
@@ -326,24 +331,18 @@ exports.go = function(req, name, res, docLogger) {
     }
   }
   util.timelog('uniting split tokens');
-  for (t = _p = 1, _ref1 = tokens.length - 1; 1 <= _ref1 ? _p <= _ref1 : _p >= _ref1; t = 1 <= _ref1 ? ++_p : --_p) {
-    a = tokens[t - 1];
-    b = tokens[t];
+  console.log('tokens count before uniting tokens: ' + tokens.length);
+  iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
       if (a.positionInfo.bottom === b.positionInfo.bottom) {
         if ((a.finalStyles['font-size'] === b.finalStyles['font-size']) && (a.finalStyles['font-family'] === b.finalStyles['font-family'])) {
-          if (b.text === 'nding.') {
-            console.log('FOUND!!!');
-          }
           a.text = a.text.concat(b.text);
-          b["delete"] = true;
+          tokens.splice(index, 1);
+          return 0;
         }
       }
     }
-  }
-  console.log('tokens count before uniting tokens: ' + tokens.length);
-  tokens = tokens.filter(function(token) {
-    return token["delete"] !== true;
+    return 1;
   });
   console.log('tokens count after uniting tokens:  ' + tokens.length);
   util.timelog('uniting split tokens');
@@ -375,10 +374,10 @@ exports.go = function(req, name, res, docLogger) {
     extreme: 100000
   };
   extremes = [top, bottom];
-  for (_q = 0, _len7 = extremes.length; _q < _len7; _q++) {
-    extreme = extremes[_q];
-    for (_r = 0, _len8 = tokens.length; _r < _len8; _r++) {
-      token = tokens[_r];
+  for (_p = 0, _len7 = extremes.length; _p < _len7; _p++) {
+    extreme = extremes[_p];
+    for (_q = 0, _len8 = tokens.length; _q < _len8; _q++) {
+      token = tokens[_q];
       position = parseInt(token.positionInfo.bottom);
       if (extreme.comparer(position, extreme.extreme)) {
         extreme.extreme = position;
@@ -393,10 +392,10 @@ exports.go = function(req, name, res, docLogger) {
         if (!(Math.abs(parseInt(b.positionInfo.bottom) - extreme.extreme) < 2)) {
           extremeSequences.push(extremeSequence);
           consoleMsg = (function() {
-            var _len9, _results, _s;
+            var _len9, _r, _results;
             _results = [];
-            for (_s = 0, _len9 = extremeSequence.length; _s < _len9; _s++) {
-              token = extremeSequence[_s];
+            for (_r = 0, _len9 = extremeSequence.length; _r < _len9; _r++) {
+              token = extremeSequence[_r];
               _results.push(token.text);
             }
             return _results;
@@ -406,21 +405,21 @@ exports.go = function(req, name, res, docLogger) {
       }
       return 1;
     });
-    for (physicalPageSide = _s = 0; _s <= 1; physicalPageSide = ++_s) {
+    for (physicalPageSide = _r = 0; _r <= 1; physicalPageSide = ++_r) {
       repeatSequence = 0;
-      for (i = _t = physicalPageSide, _ref2 = extremeSequences.length - 1 - 2; _t <= _ref2; i = _t += 2) {
+      for (i = _s = physicalPageSide, _ref1 = extremeSequences.length - 1 - 2; _s <= _ref1; i = _s += 2) {
         a = extremeSequences[i];
         b = extremeSequences[i + 2];
         repeat = true;
         if (a.length === b.length) {
-          for (t = _u = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _u <= _ref3 : _u >= _ref3; t = 0 <= _ref3 ? ++_u : --_u) {
+          for (t = _t = 0, _ref2 = a.length - 1; 0 <= _ref2 ? _t <= _ref2 : _t >= _ref2; t = 0 <= _ref2 ? ++_t : --_t) {
             if (!((b[t].text === a[t].text) || (Math.abs(parseInt(b[t].text) - parseInt(a[t].text)) === 2))) {
               repeat = false;
             }
           }
           if (repeat) {
             console.log('repeat header/footer:');
-            for (t = _v = 0, _ref4 = a.length - 1; 0 <= _ref4 ? _v <= _ref4 : _v >= _ref4; t = 0 <= _ref4 ? ++_v : --_v) {
+            for (t = _u = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _u <= _ref3 : _u >= _ref3; t = 0 <= _ref3 ? ++_u : --_u) {
               a[t].fluff = true;
               b[t].fluff = true;
             }
@@ -436,8 +435,8 @@ exports.go = function(req, name, res, docLogger) {
     }
   }
   console.log('bottom extreme is ' + bottom.extreme);
-  for (_w = 0, _len9 = tokens.length; _w < _len9; _w++) {
-    token = tokens[_w];
+  for (_v = 0, _len9 = tokens.length; _v < _len9; _v++) {
+    token = tokens[_v];
     if (parseInt(token.page) === 1) {
       if (Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2) {
         console.log('1st page non-repeat footer text detected: ' + token.text);
@@ -448,7 +447,7 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('detect and mark repeat headers and footers');
   titleAndAbstract(tokens);
   filtered = [];
-  for (t = _x = 0, _ref5 = tokens.length - 1; 0 <= _ref5 ? _x <= _ref5 : _x >= _ref5; t = 0 <= _ref5 ? ++_x : --_x) {
+  for (t = _w = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _w <= _ref4 : _w >= _ref4; t = 0 <= _ref4 ? ++_w : --_w) {
     if (tokens[t].fluff == null) {
       filtered.push(tokens[t]);
     } else {
@@ -467,7 +466,7 @@ exports.go = function(req, name, res, docLogger) {
   lineOpenersForStats = [];
   lineSpaces = [];
   util.first(tokens).lineLocation = 'opener';
-  for (i = _y = 1, _ref6 = tokens.length - 1; 1 <= _ref6 ? _y <= _ref6 : _y >= _ref6; i = 1 <= _ref6 ? ++_y : --_y) {
+  for (i = _x = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _x <= _ref5 : _x >= _ref5; i = 1 <= _ref5 ? ++_x : --_x) {
     a = tokens[i - 1];
     b = tokens[i];
     if (parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100) {
@@ -491,7 +490,7 @@ exports.go = function(req, name, res, docLogger) {
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
   console.log("ordinary new line space set to the document's most common line space of " + newLineThreshold);
   util.last(tokens).lineLocation = 'closer';
-  for (i = _z = 1, _ref7 = lineOpeners.length - 1 - 1; 1 <= _ref7 ? _z <= _ref7 : _z >= _ref7; i = 1 <= _ref7 ? ++_z : --_z) {
+  for (i = _y = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _y <= _ref6 : _y >= _ref6; i = 1 <= _ref6 ? ++_y : --_y) {
     currOpener = tokens[lineOpeners[i]];
     prevOpener = tokens[lineOpeners[i - 1]];
     nextOpener = tokens[lineOpeners[i + 1]];
@@ -518,7 +517,7 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('basic handle line and paragraph beginnings');
   lastOpenerIndex = 0;
   paragraphs = [];
-  for (i = _aa = 0, _ref8 = tokens.length - 1; 0 <= _ref8 ? _aa <= _ref8 : _aa >= _ref8; i = 0 <= _ref8 ? ++_aa : --_aa) {
+  for (i = _z = 0, _ref7 = tokens.length - 1; 0 <= _ref7 ? _z <= _ref7 : _z >= _ref7; i = 0 <= _ref7 ? ++_z : --_z) {
     if (tokens[i].paragraph === 'opener') {
       paragraphs.push({
         'length': i - lastOpenerIndex,
@@ -536,8 +535,8 @@ exports.go = function(req, name, res, docLogger) {
   console.log("paragraphs to pages ratio: " + paragraphsRatio);
   console.log("average paragraph length:  " + averageParagraphLength);
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats);
-  for (_ab = 0, _len10 = lineOpenersDistribution.length; _ab < _len10; _ab++) {
-    entry = lineOpenersDistribution[_ab];
+  for (_aa = 0, _len10 = lineOpenersDistribution.length; _aa < _len10; _aa++) {
+    entry = lineOpenersDistribution[_aa];
     console.log("line beginnings on left position " + entry.key + " - detected " + entry.val + " times");
   }
   /*
@@ -611,15 +610,15 @@ exports.go = function(req, name, res, docLogger) {
   util.timelog('Extraction from html stage A', docLogger);
   util.timelog('ID seeding');
   id = 0;
-  for (_ac = 0, _len11 = tokens.length; _ac < _len11; _ac++) {
-    token = tokens[_ac];
+  for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
+    token = tokens[_ab];
     token.id = id;
     id += 1;
   }
   util.timelog('ID seeding', docLogger);
   textIndex = [];
-  for (_ad = 0, _len12 = tokens.length; _ad < _len12; _ad++) {
-    token = tokens[_ad];
+  for (_ac = 0, _len12 = tokens.length; _ac < _len12; _ac++) {
+    token = tokens[_ac];
     if (token.metaType === 'regular') {
       textIndex.push({
         text: token.text,
@@ -674,8 +673,8 @@ exports.go = function(req, name, res, docLogger) {
   */
 
   docSieve = markers.createDocumentSieve(markers.baseSieve);
-  for (_ae = 0, _len13 = tokens.length; _ae < _len13; _ae++) {
-    token = tokens[_ae];
+  for (_ad = 0, _len13 = tokens.length; _ad < _len13; _ad++) {
+    token = tokens[_ad];
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
@@ -695,8 +694,8 @@ exports.go = function(req, name, res, docLogger) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (_af = 0, _len14 = tokens.length; _af < _len14; _af++) {
-    token = tokens[_af];
+  for (_ae = 0, _len14 = tokens.length; _ae < _len14; _ae++) {
+    token = tokens[_ae];
     if (token.metaType === 'regular') {
       connect_token_group({
         group: group,
@@ -722,15 +721,15 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _ag, _ah, _len15, _len16;
+    var marker, matchedMarkers, outputHtml, sentence, _af, _ag, _len15, _len16;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_ag = 0, _len15 = sentence.length; _ag < _len15; _ag++) {
-        token = sentence[_ag];
+      for (_af = 0, _len15 = sentence.length; _af < _len15; _af++) {
+        token = sentence[_af];
         if (token.metaType !== 'delimiter') {
-          for (_ah = 0, _len16 = docSieve.length; _ah < _len16; _ah++) {
-            marker = docSieve[_ah];
+          for (_ag = 0, _len16 = docSieve.length; _ag < _len16; _ag++) {
+            marker = docSieve[_ag];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {
@@ -788,8 +787,8 @@ exports.go = function(req, name, res, docLogger) {
   };
   markSentence(0);
   _results = [];
-  for (_ag = 0, _len15 = tokens.length; _ag < _len15; _ag++) {
-    token = tokens[_ag];
+  for (_af = 0, _len15 = tokens.length; _af < _len15; _af++) {
+    token = tokens[_af];
     if (token.page == null) {
       throw "Internal Error - token is missing page number";
     } else {

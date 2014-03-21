@@ -553,7 +553,6 @@ renderText = (tokens) ->
         #      titleText = titleText + deriveHtml(x) # add word space        
 
       when 'abstract'
-        console.log x
         switch x.metaType
           when 'regular'
             abstractText += deriveHtml(x, null, 'font-size')
