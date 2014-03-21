@@ -189,8 +189,10 @@ titleAndAbstract = (tokens) ->
       break
 
   if abstract?
+
     util.markTokens(tokens, abstract, 'abstract')
     util.simpleLogSequence(tokens, abstract, 'abstract')
+
   else 
     console.warn 'abstract not detected'
 
@@ -210,7 +212,7 @@ titleAndAbstract = (tokens) ->
 
   util.timelog('Title and abstract recognition')
 
-  util.timelog('handling of first page fluff')
+  util.timelog('initial handling of first page fluff')
 
   # Any sequence that starts higher than the abstract ends,
   # will be marked as fluff
@@ -222,9 +224,9 @@ titleAndAbstract = (tokens) ->
         for t in [sequence.startToken..sequence.endToken]
           tokens[t].fluff = true
 
-  util.timelog('handling of first page fluff')
+  util.timelog('initial handling of first page fluff')
 
-
+  return sequences
 
 #
 # Extract text content and styles from html
@@ -444,7 +446,9 @@ exports.go = (req, name, res ,docLogger) ->
   # handle title and abstract, and core text beginning detection
   # this also marks out most first page fluff
   #
-  titleAndAbstract(tokens)
+  sequences = titleAndAbstract(tokens)
+  for introduction in sequences     
+    console.log tokens[introduction.startToken].text
  
   #
   # Now effectively remove all identified fluff the identified repeat sequences
@@ -671,6 +675,38 @@ exports.go = (req, name, res ,docLogger) ->
     return 1)
 
   #docLogger.info(tokens.length)
+
+  util.timelog 'Filtering some more first page fluff'
+  #
+  # locate core article beginning
+  # for now, this will work only for articles 
+  # where the core follows an 'Introduction' labeled header
+  #
+  for introduction in sequences     
+    console.log tokens[introduction.startToken].text
+    if tokens[introduction.startToken].text in ['Introduction', '1. Introduction'] 
+      console.log 'IN INTRODUCTION'
+      # remove fluff to the left of introduction section on the first page -
+      # anything on the first page that is left (and not above) the introduction section
+      for sequence in sequences     
+        if parseFloat(sequence.startLeft) < parseFloat(introduction.startLeft)
+          if parseFloat(startBottom) <= parseFloat(introduction.startBottom)
+            # mark as fluff
+            for t in [sequence.startToken..sequence.endToken]
+              tokens[t].fluff = true
+
+  #
+  # Now effectively remove all identified fluff the identified repeat sequences
+  # Note: if traceability is not needed, tokens.filter((token) -> not token.fluff?) may be quicker
+  #
+  for t in [0..tokens.length-1]
+    unless tokens[t].fluff?
+      filtered.push(tokens[t])
+    else
+      console.log """filtered out token text: #{tokens[t].text}"""
+  tokens = filtered
+
+  util.timelog 'Filtering some more first page fluff'
 
   util.timelog 'Extraction from html stage A', docLogger
 
