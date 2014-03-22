@@ -14,20 +14,15 @@
        background: #999999;
       }
 
-      #page {
-      display: -webkit-flex;
-      display:         flex;
-      }
-
       #main {
        min-height: 800px;
        margin: 0px;
        padding: 0px;
-       -webkit-flex: 3 1 60%;
-               flex: 3 1 60%;
-       -webkit-order: 2;
-               order: 2;
-       }
+       display: -webkit-flex;
+       display:         flex;
+       -webkit-flex-flow: row;
+               flex-flow: row;
+      }
      
       #main > article {
        /* font-family: 'Roboto', sans-serif; */
@@ -37,6 +32,10 @@
        border: 4px solid #999999;
        border-radius: 12pt;
        background: #222222;
+       -webkit-flex: 1 6 60%;
+               flex: 1 6 60%;
+       -webkit-order: 2;
+               order: 2;
        }
       
       #main > nav {
@@ -72,12 +71,7 @@
        border: 1px solid #eebb55;
        border-radius: 7pt;
        background: #ffeebb;
-       -webkit-flex: 1 6 10%;
-               flex: 1 6 10%;
-       -webkit-order: 1;
-               order: 1;
-
-       }
+      }
      
       footer {
        display: block;
@@ -87,12 +81,7 @@
        border: 1px solid #eebb55;
        border-radius: 7pt;
        background: #ffeebb;
-       -webkit-flex: 1 6 10%;
-               flex: 1 6 10%;
-       -webkit-order: 3;
-               order: 3;
-
-       }
+      }
      
 
 
@@ -149,17 +138,18 @@
   </head>
 
   <body>
-    <div id='page'>
     <header id="header"
       onmouseover=
-        "console.log('showing button'); document.getElementById('buttons').style.display = 'inline-block';" /* show */
+        "console.log('showing button'); document.getElementById('buttons').style.display = 'block';
+         console.log('showing button'); document.getElementById('admin-buttons').style.display = 'block';" /* show */
       onmouseout=
-        "console.log('hiding button'); document.getElementById('buttons').style.display = 'none';"         /* hide */
+        "console.log('hiding button'); document.getElementById('buttons').style.display = 'none';
+         console.log('showing button'); document.getElementById('admin-buttons').style.display = 'none';"         /* hide */
     >
       <!-- a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a-->
-      <div id="buttons" class="btn-group" style="display: none">
-        <button id='connectFiles' class="btn btn-large pull-center">Connect another article</button>
-        <button id="IntermediaryForms" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+      <!--div id="admin-buttons" style="z-index:4; display: none;" >
+        <button id="IntermediaryForms" type="button" style="auto; display:block" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
           intermediary forms
           <span class="caret"></span>
         </button>
@@ -167,6 +157,10 @@
           <li><a href="/serveIntermediaryFile?type=pdf" target="_blank">Original PDF</a></li>
           <li><a href="/serveIntermediaryFile?type=html" target="_blank">Crude conversion</a></li>
         </ul>
+      </div-->
+
+      <div id="buttons" class="btn-group" style="margin-left: auto; margin-right: auto;" >
+        <button id='connectFiles' style="margin-left: auto; margin-right: auto; display:block" class="btn btn-large pull-center">Connect another article</button>
       </div>
     </header> 
 
@@ -204,6 +198,5 @@
       document.getElementById('buttons').setAttribute("style","display: none");
       require(['upload']);
     </script>
-  </div>
   </body>
 </html>

@@ -723,7 +723,7 @@ exports.go = function(req, name, res, docLogger) {
   console.dir(documentQuantifiers);
   util.timelog('Markers visualization');
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, outputHtml, sentence, _af, _ag, _len15, _len16;
+    var marker, matchedMarkers, sentence, _af, _ag, _len15, _len16;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
@@ -773,12 +773,8 @@ exports.go = function(req, name, res, docLogger) {
         });
       } else {
         util.timelog('Markers visualization', docLogger);
-        util.timelog('pickling');
-        req.session.tokens = JSON.stringify(tokens);
-        console.log(req.session.tokens.length);
-        util.timelog('pickling');
-        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger);
-        return output.serveOutput(outputHtml, name, res, docLogger);
+        req.session.tokens = tokens;
+        return output.serveOutput(name, res, docLogger);
       }
     } else {
       console.error('zero length sentence registered');

@@ -922,14 +922,13 @@ exports.go = (req, name, res ,docLogger) ->
         util.timelog 'Markers visualization', docLogger
 
         # Done. Send back response, after attaching the result data to the session
-        util.timelog 'pickling'
         #req.session.tokens = require('circular-json').stringify(tokens) # takes 100 times longer than JSON.stringify so can't afford it
-        req.session.tokens = JSON.stringify(tokens)
-        console.log req.session.tokens.length
-        util.timelog 'pickling'
+        
+        #req.session.tokensPickled = JSON.stringify(tokens)
         #console.log req.session.tokens
-        outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)        
-        output.serveOutput(outputHtml, name, res, docLogger)
+        #outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)        
+        req.session.tokens = tokens
+        output.serveOutput(name, res, docLogger)
 
     else
       console.error 'zero length sentence registered'

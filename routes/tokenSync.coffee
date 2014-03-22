@@ -5,7 +5,9 @@ css     = require '../css'
 exports.go = (req, res) ->
   unless req.session.tokens? then return # replace with further error handling and logging here
 
-  tokens = JSON.parse(req.session.tokens) 
+  util.timelog """handling client ajax request for #{req.session.name}"""
+
+  tokens = req.session.tokens 
 
   tokenSequence = []
   paragraphOpeningDelimitation = { metaType: 'paragraphBreak' }
@@ -19,5 +21,12 @@ exports.go = (req, res) ->
 
     tokenSequence.push(x)      
 
+  util.timelog 'pickling'
   tokenSequenceSerialized = JSON.stringify(tokenSequence)
+  util.timelog 'pickling'
+  console.log """#{tokens.length} tokens pickled into #{tokenSequenceSerialized.length} long bytes stream"""
+  console.log """pickled size to tokens ratio: #{parseFloat(tokenSequenceSerialized.length)/tokens.length}"""
+
   res.end(tokenSequenceSerialized)
+
+  util.timelog """handling client ajax request for #{req.session.name}"""

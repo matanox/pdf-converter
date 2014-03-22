@@ -12,7 +12,8 @@ exports.go = function(req, res) {
   if (req.session.tokens == null) {
     return;
   }
-  tokens = JSON.parse(req.session.tokens);
+  util.timelog("handling client ajax request for " + req.session.name);
+  tokens = req.session.tokens;
   tokenSequence = [];
   paragraphOpeningDelimitation = {
     metaType: 'paragraphBreak'
@@ -26,6 +27,11 @@ exports.go = function(req, res) {
     }
     tokenSequence.push(x);
   }
+  util.timelog('pickling');
   tokenSequenceSerialized = JSON.stringify(tokenSequence);
-  return res.end(tokenSequenceSerialized);
+  util.timelog('pickling');
+  console.log("" + tokens.length + " tokens pickled into " + tokenSequenceSerialized.length + " long bytes stream");
+  console.log("pickled size to tokens ratio: " + (parseFloat(tokenSequenceSerialized.length) / tokens.length));
+  res.end(tokenSequenceSerialized);
+  return util.timelog("handling client ajax request for " + req.session.name);
 };

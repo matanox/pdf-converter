@@ -15,7 +15,7 @@ hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' +
 
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
-exports.serveOutput = (html, name, res, docLogger) ->
+exports.serveOutput = (name, res, docLogger) ->
   #logging.log(html)
 
   util.timelog('Saving serialized output to file')  
