@@ -211,14 +211,15 @@ titleAndAbstract = (tokens) ->
     console.warn 'abstract not detected'
 
   #
-  # locate core article beginning
+  # locate core article beginning, and mark any sequence to it's left as fluff
+  #
   # for now, this will work only for articles 
   # where the core follows an 'Introduction' labeled header
   #
   for introduction in sequences     
     console.log tokens[introduction.startToken].text
     if ((tokens[introduction.startToken].text is 'Introduction') or
-        (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction')
+        (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction') or
         (tokens[introduction.startToken].text is '1'  and tokens[introduction.startToken+2].text is 'Introduction'))    
       console.log 'introduction detected'
       # remove fluff to the left of introduction section on the first page -

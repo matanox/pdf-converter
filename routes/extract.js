@@ -192,7 +192,7 @@ titleAndAbstract = function(tokens) {
   for (_p = 0, _len4 = sequences.length; _p < _len4; _p++) {
     introduction = sequences[_p];
     console.log(tokens[introduction.startToken].text);
-    if (((tokens[introduction.startToken].text === 'Introduction') || (tokens[introduction.startToken].text === '1.' && tokens[introduction.startToken + 2].text === 'Introduction'), tokens[introduction.startToken].text === '1' && tokens[introduction.startToken + 2].text === 'Introduction')) {
+    if ((tokens[introduction.startToken].text === 'Introduction') || (tokens[introduction.startToken].text === '1.' && tokens[introduction.startToken + 2].text === 'Introduction') || (tokens[introduction.startToken].text === '1' && tokens[introduction.startToken + 2].text === 'Introduction')) {
       console.log('introduction detected');
       for (_q = 0, _len5 = sequences.length; _q < _len5; _q++) {
         sequence = sequences[_q];

@@ -139,12 +139,10 @@
 
   <body>
     <header id="header"
-      onmouseover=
-        "console.log('showing button'); document.getElementById('buttons').style.display = 'block';
-         console.log('showing button'); document.getElementById('admin-buttons').style.display = 'block';" /* show */
-      onmouseout=
-        "console.log('hiding button'); document.getElementById('buttons').style.display = 'none';
-         console.log('showing button'); document.getElementById('admin-buttons').style.display = 'none';"         /* hide */
+      onmouseover= 
+        "console.log('showing button'); document.getElementById('buttons').style.display = 'block';"
+      onmouseout= 
+        "console.log('hiding button'); document.getElementById('buttons').style.display = 'none';"
     >
       <!-- a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a-->
 
@@ -159,8 +157,8 @@
         </ul>
       </div-->
 
-      <div id="buttons" class="btn-group" style="margin-left: auto; margin-right: auto;" >
-        <button id='connectFiles' style="margin-left: auto; margin-right: auto; display:block" class="btn btn-large pull-center">Connect another article</button>
+      <div id="buttons" class="btn-group" style="margin-left: auto; margin-right: auto; display: none;" >
+        <button id='connectFiles' style="margin-left: auto; margin-right: auto; display: block;" class="btn btn-large pull-center">Connect another article</button>
       </div>
     </header> 
 
