@@ -157,7 +157,7 @@ titleAndAbstract = (tokens) ->
   sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
 
   minAbstractTokensNum    = 50 
-  minTitleTokensNum       = 7
+  minTitleTokensNum       = 6
 
   #
   # Detect the title 
@@ -186,8 +186,9 @@ titleAndAbstract = (tokens) ->
       #util.simpleLogSequence(tokens, sequence, 'sequence')
       if parseFloat(sequence['font-size']) is fontSizesUnique[i]
         console.log sequence.numOfTokens
-        if sequence.numOfTokens > minTitleTokensNum
-          title = sequence
+        if sequence.startBottom > 500
+          if sequence.numOfTokens > minTitleTokensNum
+            title = sequence
 
     i += 1  # look for next largest font size sequence
 
@@ -217,7 +218,8 @@ titleAndAbstract = (tokens) ->
   for introduction in sequences     
     console.log tokens[introduction.startToken].text
     if ((tokens[introduction.startToken].text is 'Introduction') or
-        (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction'))
+        (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction')
+        (tokens[introduction.startToken].text is '1'  and tokens[introduction.startToken+2].text is 'Introduction'))    
       console.log 'introduction detected'
       # remove fluff to the left of introduction section on the first page -
       # anything on the first page that is left (and not above) the introduction section
