@@ -135,6 +135,7 @@ userEventMgmt = function() {
     var downMost, element, rectangle, topBorder, _i, _len;
     switch (state) {
       case 'show':
+        console.log('in show');
         if (fluffChooser != null) {
           fluffChooserDisplay('hide', elements);
         }

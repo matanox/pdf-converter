@@ -198,6 +198,7 @@ userEventMgmt = () ->
     #addElement(buttonHtml, 'top-bar', 'btn-group')
     switch state
       when 'show'
+        console.log 'in show'
         if fluffChooser?  # first off remove if already visible
           fluffChooserDisplay('hide', elements)
 

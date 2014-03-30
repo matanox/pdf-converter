@@ -145,18 +145,6 @@
         "console.log('hiding button'); document.getElementById('buttons').style.display = 'none';"
     >
       <!-- a class="simpleButton" onclick="window.location='/serveIntermediaryFile'">Adobe plugin view</a-->
-
-      <!--div id="admin-buttons" style="z-index:4; display: none;" >
-        <button id="IntermediaryForms" type="button" style="auto; display:block" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          intermediary forms
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupVerticalDrop4">
-          <li><a href="/serveIntermediaryFile?type=pdf" target="_blank">Original PDF</a></li>
-          <li><a href="/serveIntermediaryFile?type=html" target="_blank">Crude conversion</a></li>
-        </ul>
-      </div-->
-
       <div id="buttons" class="btn-group" style="margin-left: auto; margin-right: auto; display: none;" >
         <button id='connectFiles' style="margin-left: auto; margin-right: auto; display: block;" class="btn btn-large pull-center">Connect another article</button>
       </div>
@@ -179,7 +167,23 @@
       </article>
 
 
-      <nav id="left-col"></nav>
+      <nav id="left-col" 
+        onmouseover= 
+          "console.log('showing button'); document.getElementById('admin-buttons').style.display = 'block';"
+        onmouseout= 
+          "console.log('hiding button'); document.getElementById('admin-buttons').style.display = 'none';">
+        <div id="admin-buttons" style="display: none;" class="btn-group">
+          <button id="IntermediaryForms" type="button" style="auto; display:block" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            intermediary forms
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/serveIntermediaryFile?type=pdf" target="_blank">Original PDF</a></li>
+            <li><a href="/serveIntermediaryFile?type=html" target="_blank">Crude conversion</a></li>
+          </ul>
+        </div>
+
+      </nav>
 
       <aside></aside>
 
