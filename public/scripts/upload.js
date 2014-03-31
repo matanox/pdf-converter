@@ -2,7 +2,7 @@
 // Connects the button click to initating the upload dialog
 //
 
-require(['filePicker','jquery'], function() {
+require(['filePicker'], function() {
     //console.log('in upload');
     var targetButton = document.getElementById('connectFiles');
     targetButton.addEventListener('click', function(e) {

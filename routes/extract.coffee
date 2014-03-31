@@ -875,9 +875,15 @@ exports.go = (req, name, res ,docLogger) ->
   #
   util.timelog('Markers visualization') 
   
+  #
   # Rather than a loop (formerly: for sentence in groups),
   # iterate the sentences such that each sentence queues handling 
   # of the next one on the call stack. So that this cpu intensive bit doesn't block the process
+  #
+  # This needs to become Scala / Clojure or quicker language if it's the main bottleneck,
+  # or just a separate node.js process receiving requests from here...
+  # logging should be as unified as possible in any event.
+  #
   markSentence = (sentenceIdx) ->
     #docLogger.info(sentenceIdx)
     sentence = groups[sentenceIdx]
@@ -890,7 +896,7 @@ exports.go = (req, name, res ,docLogger) ->
             when 'regular' 
               
               if token.text is marker.markerTokens[marker.nextExpected].text
-                if marker.nextExpected is (marker.markerTokens.length - 1)     # is it the last token of the marker?
+                if marker.nextExpected is (marker.markerTokens.length - 1) # is it the last token of the marker?
                   #docLogger.info('whole marker matched: ' + console.dir(marker))
                   matchedMarkers.push(marker)
                   token.emphasis = true

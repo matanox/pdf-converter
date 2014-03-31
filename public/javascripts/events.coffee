@@ -36,6 +36,21 @@
 #   before making any incremental change or addition.
 #
 
+selection = null
+
+markRemove = () ->
+  console.log 'inside markRemove'
+  console.dir selection
+  if selection?
+    for id in selection
+      element = document.getElementById(id)
+      console.dir element
+      element.style.setProperty('text-decoration', 'line-through')
+      element.style.setProperty('background-color', '#333333')
+      element.style.setProperty('color', '#cc000010')
+      $('#popover').popover('hide') # must use jquery selector for this to work... go figure bootstrap
+  else
+    console.error 'selection missing for markRemove'
 
 remove = (node) ->
   node.parentNode.removeChild node
@@ -195,6 +210,41 @@ userEventMgmt = () ->
     newElem
 
   fluffChooserDisplay = (state, elements) ->
+    #addElement(buttonHtml, 'top-bar', 'btn-group')
+    switch state
+      when 'show'
+        console.log 'in show'
+        if fluffChooser?  # first off remove if already visible
+          fluffChooserDisplay('hide', elements)
+
+        injectionPoint = document.getElementById(elements[0]).previousElementSibling
+        console.dir injectionPoint
+        wrapper = document.createElement('a')
+
+
+        for element in elements # move each element under the new wrapper
+          elementNode = document.getElementById(element)
+          wrapper.appendChild(elementNode.parentNode.removeChild(elementNode))
+
+        #wrapper.setAttribute('data-toggle','popover')
+        
+        console.dir wrapper
+        selection = elements
+        injectionPoint.appendChild(wrapper) # add the wrapper to the document
+        popoverButton = '<button type="button" class="btn btn-warning" onclick="markRemove()">mark away</button>'
+        wrapper.setAttribute('id','popover')
+        $('#popover').popover({ content: popoverButton, html:true, placement:'top' }).popover('show') # must use jquery selector for this to work... go figure bootstrap
+
+      when 'hide'
+        fluffChooser.parentNode.removeChild(fluffChooser)
+        console.log 'removing fluffchooser'
+        fluffChooser = null
+      when 'verifyHidden'
+        if fluffChooser?
+          fluffChooserDisplay('hide')
+
+  
+  fluffChooserDisplayOld = (state, elements) ->
     #addElement(buttonHtml, 'top-bar', 'btn-group')
     switch state
       when 'show'
