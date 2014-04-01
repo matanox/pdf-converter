@@ -36,7 +36,37 @@
 #   before making any incremental change or addition.
 #
 
-selection = null
+selection = []
+
+selectionOptionsDisplay = (state) ->
+  #addElement(buttonHtml, 'top-bar', 'btn-group')
+  switch state
+    when 'show'
+      console.log 'in show'
+      #if fluffChooser?  # first off remove if already visible
+      #  selectionOptionsDisplay('hide')
+
+      injectionPoint = document.getElementById(selection[0]).previousElementSibling
+      console.dir injectionPoint
+      wrapper = document.createElement('a')
+
+      for element in selection # move each element under the new wrapper
+        elementNode = document.getElementById(element)
+        wrapper.appendChild(elementNode.parentNode.removeChild(elementNode))
+
+      console.dir wrapper
+      injectionPoint.appendChild(wrapper) # add the wrapper to the document
+      popoverButton = '<button type="button" class="btn btn-warning" onclick="markRemove()">click to mark away</button>'
+      wrapper.setAttribute('id','popover')
+      $('#popover').popover({ content: popoverButton, html:true, placement:'auto top', delay: {show: 200, hide:400} }).popover('show') # must use jquery selector for this to work... go figure bootstrap
+
+    when 'hide'
+      $('#popover').popover('destroy') # must use jquery selector for this to work... go figure bootstrap
+      document.getElementById('popover').removeAttribute('id')    
+
+    when 'verifyHidden'
+      if document.getElementById('popover')?
+        selectionOptionsDisplay('hide')     
 
 markRemove = () ->
   console.log 'inside markRemove'
@@ -44,11 +74,15 @@ markRemove = () ->
   if selection?
     for id in selection
       element = document.getElementById(id)
-      console.dir element
       element.style.setProperty('text-decoration', 'line-through')
-      element.style.setProperty('background-color', '#333333')
-      element.style.setProperty('color', '#cc000010')
-      $('#popover').popover('hide') # must use jquery selector for this to work... go figure bootstrap
+      element.style.setProperty('background-color', '#222222')
+      element.style.setProperty('color', '#666666')
+
+      tokenSequence[id].remove = true
+
+    selectionOptionsDisplay('hide')
+    selection = []
+
   else
     console.error 'selection missing for markRemove'
 
@@ -120,8 +154,6 @@ userEventMgmt = () ->
   inTouch     = false
   dragElements = new Array()  
 
-  fluffChooser = null
-
   logDrag = () -> 
     console.log leftDown
     console.log rightDown
@@ -148,6 +180,7 @@ userEventMgmt = () ->
       switch type
 
         when 'on'
+          selection.push(i)
           if currentColor.toCSSHex() is noColor.toCSSHex() 
             newColor = baseMarkColor
           else
@@ -155,6 +188,7 @@ userEventMgmt = () ->
           element.style.backgroundColor = newColor.toCSS()
 
         when 'off'
+          selection = []
           switch currentColor.toCSSHex() 
             when baseMarkColor.toCSSHex() 
               newColor = noColor
@@ -209,67 +243,6 @@ userEventMgmt = () ->
     injectionPoint.appendChild(newElem)  
     newElem
 
-  fluffChooserDisplay = (state, elements) ->
-    #addElement(buttonHtml, 'top-bar', 'btn-group')
-    switch state
-      when 'show'
-        console.log 'in show'
-        if fluffChooser?  # first off remove if already visible
-          fluffChooserDisplay('hide', elements)
-
-        injectionPoint = document.getElementById(elements[0]).previousElementSibling
-        console.dir injectionPoint
-        wrapper = document.createElement('a')
-
-
-        for element in elements # move each element under the new wrapper
-          elementNode = document.getElementById(element)
-          wrapper.appendChild(elementNode.parentNode.removeChild(elementNode))
-
-        #wrapper.setAttribute('data-toggle','popover')
-        
-        console.dir wrapper
-        selection = elements
-        injectionPoint.appendChild(wrapper) # add the wrapper to the document
-        popoverButton = '<button type="button" class="btn btn-warning" onclick="markRemove()">mark away</button>'
-        wrapper.setAttribute('id','popover')
-        $('#popover').popover({ content: popoverButton, html:true, placement:'top' }).popover('show') # must use jquery selector for this to work... go figure bootstrap
-
-      when 'hide'
-        fluffChooser.parentNode.removeChild(fluffChooser)
-        console.log 'removing fluffchooser'
-        fluffChooser = null
-      when 'verifyHidden'
-        if fluffChooser?
-          fluffChooserDisplay('hide')
-
-  
-  fluffChooserDisplayOld = (state, elements) ->
-    #addElement(buttonHtml, 'top-bar', 'btn-group')
-    switch state
-      when 'show'
-        console.log 'in show'
-        if fluffChooser?  # first off remove if already visible
-          fluffChooserDisplay('hide', elements)
-
-        downMost  = 100000
-        topBorder = 100000
-
-        for element in elements
-          rectangle = document.getElementById(element).getBoundingClientRect()
-          #console.log rectangle.top + window.scrollY
-          if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
-          if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
-          #console.log topBorder
-        fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder)
-      when 'hide'
-        fluffChooser.parentNode.removeChild(fluffChooser)
-        console.log 'removing fluffchooser'
-        fluffChooser = null
-      when 'verifyHidden'
-        if fluffChooser?
-          fluffChooserDisplay('hide')
-
   endDrag = ->
     container.removeEventListener "mousemove", mousemoveHandler, false
     #container.removeEventListener "touchmove", touchmoveHandler, false
@@ -285,13 +258,13 @@ userEventMgmt = () ->
       if inTouch
         inTouch = false
         mark(dragElements.unique(), 'on')
-        #fluffChooserDisplay('show', dragElements.unique())
+        #selectionOptionsDisplay('show', dragElements.unique())
         return       
 
       if leftDrag
         leftDrag = false
         mark(dragElements.unique(), 'on')
-        fluffChooserDisplay('show', dragElements.unique())
+        selectionOptionsDisplay('show', dragElements.unique())
 
       if rightDrag
         rightDrag = false
@@ -355,7 +328,7 @@ userEventMgmt = () ->
     event.stopImmediatePropagation()
     console.log "right-click event captured"
     console.log event.target
-    fluffChooserDisplay('verifyHidden')
+    selectionOptionsDisplay('verifyHidden')
 
     # We avoid taking action on the top element where the listener was registered.
     # target is the element invoked on, currentTarget is the element where the 
@@ -372,7 +345,7 @@ userEventMgmt = () ->
     event.stopPropagation()
     event.stopImmediatePropagation()
     console.log "click event captured"
-    fluffChooserDisplay('verifyHidden')
+    selectionOptionsDisplay('verifyHidden')
     
     #console.log(event.target)
     false
@@ -681,3 +654,29 @@ reload = () ->
 
 enableContext = () ->
   document.getElementById('core').removeEventListener("contextmenu", contextmenuHandler)
+
+ fluffChooserDisplayOld = (state, elements) ->
+    #addElement(buttonHtml, 'top-bar', 'btn-group')
+    switch state
+      when 'show'
+        console.log 'in show'
+        if fluffChooser?  # first off remove if already visible
+          fluffChooserDisplay('hide', elements)
+
+        downMost  = 100000
+        topBorder = 100000
+
+        for element in elements
+          rectangle = document.getElementById(element).getBoundingClientRect()
+          #console.log rectangle.top + window.scrollY
+          if rectangle.top + window.scrollY < topBorder then topBorder = rectangle.top + window.scrollY
+          if rectangle.bottom + window.scrollY < downMost then downMost = rectangle.bottom + window.scrollY      
+          #console.log topBorder
+        fluffChooser = addElement(buttonGroupHtml, 'left-col', topBorder)
+      when 'hide'
+        fluffChooser.parentNode.removeChild(fluffChooser)
+        console.log 'removing fluffchooser'
+        fluffChooser = null
+      when 'verifyHidden'
+        if fluffChooser?
+          selectionOptionsDisplay('hide')
