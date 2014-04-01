@@ -254,16 +254,17 @@ userEventMgmt = function() {
     event.stopImmediatePropagation();
     console.log("right-click event captured");
     console.log(event.target);
+    selection = [];
     selectionOptionsDisplay('verifyHidden');
     return false;
   };
   container.addEventListener("contextmenu", contextmenuHandler);
   container.onclick = function(event) {
+    console.log('mouse click');
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
     console.log("click event captured");
-    selectionOptionsDisplay('verifyHidden');
     return false;
   };
   container.ondblclick = function(event) {
@@ -309,6 +310,11 @@ userEventMgmt = function() {
     event.stopPropagation();
     event.stopImmediatePropagation();
     console.log("mouse-down event captured");
+    console.log(event.target.nodeName);
+    if (event.target.nodeName !== "BUTTON") {
+      selection = [];
+      selectionOptionsDisplay('verifyHidden');
+    }
     if (event.button === 0) {
       leftDown = true;
     } else {

@@ -66,7 +66,8 @@ selectionOptionsDisplay = (state) ->
 
     when 'verifyHidden'
       if document.getElementById('popover')?
-        selectionOptionsDisplay('hide')     
+        selectionOptionsDisplay('hide')   
+
 
 markRemove = () ->
   console.log 'inside markRemove'
@@ -328,6 +329,8 @@ userEventMgmt = () ->
     event.stopImmediatePropagation()
     console.log "right-click event captured"
     console.log event.target
+
+    selection = []
     selectionOptionsDisplay('verifyHidden')
 
     # We avoid taking action on the top element where the listener was registered.
@@ -341,11 +344,11 @@ userEventMgmt = () ->
   container.addEventListener("contextmenu", contextmenuHandler)
 
   container.onclick = (event) ->
+    console.log 'mouse click'
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
     console.log "click event captured"
-    selectionOptionsDisplay('verifyHidden')
     
     #console.log(event.target)
     false
@@ -396,6 +399,12 @@ userEventMgmt = () ->
     #console.log event.buttons
     #console.log event.target
     #console.log container
+
+    console.log event.target.nodeName
+    unless event.target.nodeName is "BUTTON"
+      selection = []
+      selectionOptionsDisplay('verifyHidden')
+
     if event.button is 0
       leftDown = true
     else
