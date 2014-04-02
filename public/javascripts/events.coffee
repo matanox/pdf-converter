@@ -47,9 +47,15 @@ selectionOptionsDisplay = (state) ->
       #  selectionOptionsDisplay('hide')
 
       injectionPoint = document.getElementById(selection[0]).previousElementSibling
+      unless injectionPoint 
+        injectionPoint = document.getElementById(selection[0]).parentNode
       console.dir injectionPoint
+
       wrapper = document.createElement('a')
 
+      #
+      # TODO: probably switch to https://developer.mozilla.org/en-US/docs/Web/API/Node.insertBefore
+      #
       for element in selection # move each element under the new wrapper
         elementNode = document.getElementById(element)
         wrapper.appendChild(elementNode.parentNode.removeChild(elementNode))
@@ -626,7 +632,7 @@ tokenSequence = {} # a global, so it can be queried from the browser console
 # 1. Report time breakdown back to server, or queue for next reporting tick
 # 2. Use same time logging utility function as server side
 #
-loadArticleText = () ->
+getTokens = () ->
   # Make ajax request to get article text tokens
   ajaxHost = location.protocol + '//' + location.hostname
   myAjax(ajaxHost + '/tokenSync', (tokenSequenceSerialized) ->  
@@ -641,9 +647,24 @@ loadArticleText = () ->
     console.log('starting event mgmt')
     userEventMgmt())
 
+sendTokens = () ->
+  ajaxHost = location.protocol + '//' + location.hostname
+  myAjax(ajaxHost + '/tokenSync', (tokenSequenceSerialized) ->  
+    # Convert tokens into dispay text
+    console.log(tokenSequenceSerialized.length)
+    console.time('unpickling')
+    #console.log tokenSequenceSerialized
+    tokenSequence = JSON.parse(tokenSequenceSerialized)
+    #console.dir tokenSequence
+    console.timeEnd('unpickling')
+    renderText(tokenSequence)
+    console.log('starting event mgmt')
+    userEventMgmt())
+
+
 go = () ->
   #window.onload = () -> userEventMgmt()
-  loadArticleText() 
+  getTokens() 
 
 startAfterPrerequisites()
 
