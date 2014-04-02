@@ -17,19 +17,20 @@ exports.store = (bucket, filename, fileContent, docLogger) ->
   util.timelog "storing file to clustered storage"
   
   riak.save(bucket, filename, fileContent, (error) -> 
-    util.timelog "storing file to clustered storage", docLogger
+    util.timelog "storing file to clustered storage"
     if error?
       docLogger.error("failed storing file to clustered storage"))
 
 exports.fetch = (bucket, filename, callback) ->
   util.timelog "fetching file from clustered storage"
   riak.get(bucket, filename, (error, fileContent) ->
+    util.timelog "fetching file from clustered storage"
     if error?
-      console.error("failed fetching file from clustered storage")
-      return false
+      #console.error("failed fetching file from clustered storage")
+      callback(false)
     else
-      util.timelog "fetching file from clustered storage"
-      console.log fileContent
+      #util.timelog "fetching file from clustered storage"
+      #console.log fileContent
       callback(fileContent))
 
 

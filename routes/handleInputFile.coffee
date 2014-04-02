@@ -52,6 +52,7 @@ initDocLogger = (name) ->
         timestamp: true
     ], exitOnError: false
   console.log('Logging handling of ' + name + ' in ' + docLoggerNameBase + '*')      
+
   docLogger
 
 exports.go = (req, res) -> 
@@ -64,6 +65,7 @@ exports.go = (req, res) ->
     baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '')
     docLogger = initDocLogger(baseFileName)
     docLogger.info('logger started')
+    req.session.docLogger = docLogger
 
     outFile = setOutFile(baseFileName)
     fetch(inkUrl, outFile, docLogger, req, res, convert.go)

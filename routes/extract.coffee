@@ -293,7 +293,7 @@ titleAndAbstract = (tokens) ->
 #
 # Extract text content and styles from html
 #
-exports.go = (req, name, res ,docLogger) ->
+generateFromHtml = (req, name, res ,docLogger) ->  
 
   util.timelog('Extraction from html stage A')
 
@@ -957,3 +957,23 @@ exports.go = (req, name, res ,docLogger) ->
   for token in tokens
     unless token.page? 
       throw "Internal Error - token is missing page number"
+
+storage = require '../storage'
+require 'stream'
+riak = require('riak-js').getClient({host: "localhost", port: "8098"})
+
+exports.go = (req, name, res ,docLogger) ->
+
+  util.timelog 'checking data store for cached tokens'
+  
+  storage.fetch('tokens', name, (cachedTokens) -> 
+    util.timelog 'checking data store for cached tokens'
+    if cachedTokens
+      # serve cached tokens
+      req.session.tokenSequenceSerialized = cachedTokens      
+      output.serveOutput(name, res, docLogger)
+    else
+      # not cached - perform the extraction
+      generateFromHtml(req, name, res ,docLogger) 
+  )
+

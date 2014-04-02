@@ -70,6 +70,7 @@ exports.go = function(req, res) {
     baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '');
     docLogger = initDocLogger(baseFileName);
     docLogger.info('logger started');
+    req.session.docLogger = docLogger;
     outFile = setOutFile(baseFileName);
     fetch(inkUrl, outFile, docLogger, req, res, convert.go);
   }

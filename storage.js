@@ -15,7 +15,7 @@ fs = require('fs');
 exports.store = function(bucket, filename, fileContent, docLogger) {
   util.timelog("storing file to clustered storage");
   return riak.save(bucket, filename, fileContent, function(error) {
-    util.timelog("storing file to clustered storage", docLogger);
+    util.timelog("storing file to clustered storage");
     if (error != null) {
       return docLogger.error("failed storing file to clustered storage");
     }
@@ -25,12 +25,10 @@ exports.store = function(bucket, filename, fileContent, docLogger) {
 exports.fetch = function(bucket, filename, callback) {
   util.timelog("fetching file from clustered storage");
   return riak.get(bucket, filename, function(error, fileContent) {
+    util.timelog("fetching file from clustered storage");
     if (error != null) {
-      console.error("failed fetching file from clustered storage");
-      return false;
+      return callback(false);
     } else {
-      util.timelog("fetching file from clustered storage");
-      console.log(fileContent);
       return callback(fileContent);
     }
   });
