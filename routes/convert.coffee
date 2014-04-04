@@ -39,7 +39,7 @@ exports.go = (localCopy, docLogger, req, res) ->
   # NOTE: if the actual local copy of the converstion outputs (at local-copies/html-converted/)
   #       has been cleared, an exception will be ultimately raised
   #
-  riak.head('html', hash, (error) ->  # test for cached version
+  riak.get('html', hash, (error, formerName) ->  # test for cached version
 
       if error?
         #
@@ -84,7 +84,7 @@ exports.go = (localCopy, docLogger, req, res) ->
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
             util.timelog "Conversion to html", docLogger
 
-            riak.save('html', hash, hash, (error) -> 
+            riak.save('html', hash, name, (error) -> 
               util.timelog "storing file hash to clustered storage", docLogger
               if error?
                 docLogger.error("failed storing file hash to clustered storage"))
@@ -97,7 +97,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       #
       else
         console.log('input file has already passed pdf2htmlEX conversion - skipping conversion')
-        require('./extract').go(req, name, res, docLogger)
+        require('./extract').go(req, formerName, res, docLogger)
     )
   
   

@@ -37,7 +37,7 @@ exports.go = function(localCopy, docLogger, req, res) {
   hash = hasher.digest('hex');
   util.timelog("hashing input file");
   console.log(hash);
-  return riak.head('html', hash, function(error) {
+  return riak.get('html', hash, function(error, formerName) {
     var execCommand, outFolder;
     if (error != null) {
       util.timelog("from upload to serving");
@@ -56,7 +56,7 @@ exports.go = function(localCopy, docLogger, req, res) {
           return docLogger.error(executable + "'sexec error: " + error);
         } else {
           util.timelog("Conversion to html", docLogger);
-          riak.save('html', hash, hash, function(error) {
+          riak.save('html', hash, name, function(error) {
             util.timelog("storing file hash to clustered storage", docLogger);
             if (error != null) {
               return docLogger.error("failed storing file hash to clustered storage");
@@ -67,7 +67,7 @@ exports.go = function(localCopy, docLogger, req, res) {
       });
     } else {
       console.log('input file has already passed pdf2htmlEX conversion - skipping conversion');
-      return require('./extract').go(req, name, res, docLogger);
+      return require('./extract').go(req, formerName, res, docLogger);
     }
   });
 };

@@ -43,12 +43,18 @@ selectionOptionsDisplay = (state) ->
   switch state
     when 'show'
       console.log 'in show'
-      #if fluffChooser?  # first off remove if already visible
-      #  selectionOptionsDisplay('hide')
 
-      injectionPoint = document.getElementById(selection[0]).previousElementSibling
-      unless injectionPoint 
-        injectionPoint = document.getElementById(selection[0]).parentNode
+      #
+      # To group the selected nodes and add a popover to them,
+      # we create a new element, under which we move the selected nodes,
+      # then stick that new element into the document, thus replacing
+      # the original nodes by a node node that includes them.
+      #
+      # See https://developer.mozilla.org/en-US/docs/Web/API/Node.insertBefore for the somewhat
+      # tricky insertBefore function.
+      #
+      placeholder = document.createElement('dummy')
+      injectionPoint = document.getElementById(selection[0]).parentNode.insertBefore(placeholder, document.getElementById(selection[0]))
       console.dir injectionPoint
 
       wrapper = document.createElement('a')
@@ -61,7 +67,9 @@ selectionOptionsDisplay = (state) ->
         wrapper.appendChild(elementNode.parentNode.removeChild(elementNode))
 
       console.dir wrapper
-      injectionPoint.appendChild(wrapper) # add the wrapper to the document
+      injectionPoint.parentNode.insertBefore(wrapper, injectionPoint) # add the wrapper to the document
+      injectionPoint.parentNode.removeChild(injectionPoint)
+
       popoverButton = '<button type="button" class="btn btn-warning" onclick="markRemove()">click to mark away</button>'
       wrapper.setAttribute('id','popover')
       $('#popover').popover({ content: popoverButton, html:true, placement:'auto top', delay: {show: 200, hide:400} }).popover('show') # must use jquery selector for this to work... go figure bootstrap

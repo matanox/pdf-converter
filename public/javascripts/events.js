@@ -4,14 +4,12 @@ var enableContext, fluffChooserDisplayOld, getTokens, go, markRemove, myAjax, re
 selection = [];
 
 selectionOptionsDisplay = function(state) {
-  var element, elementNode, injectionPoint, popoverButton, wrapper, _i, _len;
+  var element, elementNode, injectionPoint, placeholder, popoverButton, wrapper, _i, _len;
   switch (state) {
     case 'show':
       console.log('in show');
-      injectionPoint = document.getElementById(selection[0]).previousElementSibling;
-      if (!injectionPoint) {
-        injectionPoint = document.getElementById(selection[0]).parentNode;
-      }
+      placeholder = document.createElement('dummy');
+      injectionPoint = document.getElementById(selection[0]).parentNode.insertBefore(placeholder, document.getElementById(selection[0]));
       console.dir(injectionPoint);
       wrapper = document.createElement('a');
       for (_i = 0, _len = selection.length; _i < _len; _i++) {
@@ -20,7 +18,8 @@ selectionOptionsDisplay = function(state) {
         wrapper.appendChild(elementNode.parentNode.removeChild(elementNode));
       }
       console.dir(wrapper);
-      injectionPoint.appendChild(wrapper);
+      injectionPoint.parentNode.insertBefore(wrapper, injectionPoint);
+      injectionPoint.parentNode.removeChild(injectionPoint);
       popoverButton = '<button type="button" class="btn btn-warning" onclick="markRemove()">click to mark away</button>';
       wrapper.setAttribute('id', 'popover');
       return $('#popover').popover({
