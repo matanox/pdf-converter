@@ -170,3 +170,35 @@ exports.markTokens = (tokens, sequence, mark) ->
   for t in [sequence.startToken..sequence.endToken]
     token = tokens[t]
     token.meta = mark 
+
+exports.initDocLogger = (name) ->
+  #
+  # Initialize logger for this document
+  #
+  docLogger = new winston.Logger
+  now = new Date()
+  docLoggerNameBase = 'logs/' + name + '-' + now.toISOString() + '.log' 
+  
+  ###
+  docLogger.add(winston.transports.File, {
+    filename: docLoggerNameBase + '.json',
+    json: true
+    timestamp: true})
+  ###
+    
+  docLogger = new winston.Logger
+    transports: [
+      new winston.transports.File
+        name: 'file#json'
+        filename: docLoggerNameBase + '.json',
+        json: true
+        timestamp: true
+      new winston.transports.File
+        name: 'file#text'
+        filename: docLoggerNameBase,
+        json: false
+        timestamp: true
+    ], exitOnError: false
+  console.log('Logging handling of ' + name + ' in ' + docLoggerNameBase + '*')      
+
+  docLogger

@@ -97,7 +97,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       #
       else
         console.log('input file has already passed pdf2htmlEX conversion - skipping conversion')
-        require('./extract').go(req, formerName, res, docLogger)
+        require('./extract').go(req, formerName, res, docLogger, output.serveViewerTemplate)
     )
   
   

@@ -23,38 +23,6 @@ fetch = (inkUrl, outFile, docLogger, req, res, callOnSuccess) ->
 
 setOutFile = (baseFileName) -> "../local-copies/" + "pdf/" + baseFileName + ".pdf"
 
-initDocLogger = (name) ->
-  #
-  # Initialize logger for this document
-  #
-  docLogger = new winston.Logger
-  now = new Date()
-  docLoggerNameBase = 'logs/' + name + '-' + now.toISOString() + '.log' 
-  
-  ###
-  docLogger.add(winston.transports.File, {
-    filename: docLoggerNameBase + '.json',
-    json: true
-    timestamp: true})
-  ###
-    
-  docLogger = new winston.Logger
-    transports: [
-      new winston.transports.File
-        name: 'file#json'
-        filename: docLoggerNameBase + '.json',
-        json: true
-        timestamp: true
-      new winston.transports.File
-        name: 'file#text'
-        filename: docLoggerNameBase,
-        json: false
-        timestamp: true
-    ], exitOnError: false
-  console.log('Logging handling of ' + name + ' in ' + docLoggerNameBase + '*')      
-
-  docLogger
-
 exports.go = (req, res) -> 
   
   #
@@ -76,7 +44,7 @@ exports.go = (req, res) ->
   # 
   if req.query.localLocation?
     baseFileName = req.query.localLocation.replace('.pdf', '')
-    docLogger = initDocLogger(baseFileName)
+    docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')   
 
     outFile = setOutFile(baseFileName)

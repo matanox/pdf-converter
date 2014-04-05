@@ -372,7 +372,7 @@ myAjax = function(url, postData, callback) {
   };
   if (postData != null) {
     console.log('ajax request includes post data');
-    ajaxRequest.open('POST', url, true);
+    ajaxRequest.open('POST', url, false);
     ajaxRequest.setRequestHeader("Content-type", "application/json");
     return ajaxRequest.send(postData);
   } else {
@@ -498,10 +498,14 @@ renderText = function(tokens) {
 
 tokenSequence = {};
 
-getTokens = function() {
-  var ajaxHost;
+getTokens = function(regenerate) {
+  var ajaxHost, ajaxRequest;
   ajaxHost = location.protocol + '//' + location.hostname;
-  return myAjax(ajaxHost + '/tokenSync', null, function(tokenSequenceSerialized) {
+  ajaxRequest = ajaxHost + '/tokenSync';
+  if (regenerate) {
+    ajaxRequst += '?regenerate=true';
+  }
+  return myAjax(ajaxRequest, null, function(tokenSequenceSerialized) {
     console.log(tokenSequenceSerialized.length);
     console.time('unpickling');
     tokenSequence = JSON.parse(tokenSequenceSerialized);

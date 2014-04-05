@@ -2,19 +2,20 @@ util    = require './util'
 logging = require './logging' 
 fs = require 'fs'
 #require "jsdom"
-#textHookPoint = getElementByID(window.hookPoint)
-#textHookPoint.innerHTML = "aaaaa" 
 
+#
 # Load the output template only once
+#
 outputTemplate = fs.readFileSync('outputTemplate/template.html').toString() # this should be speedy and cached, sync won't hurt much
-# Locate to the text position (inside the designated html element), 
-# where the output should be inserted in the template. 
-# (that's one character after the '>' closing the marked element's opening tag)
-hookId = 'hookPoint'
-hookElementTextPos = outputTemplate.indexOf(">", outputTemplate.indexOf('id="' + hookId + '"')) + 1
 
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
+
+exports.serveViewerTemplate = () ->
+  docLogger.info('Sending response....')
+  util.timelog 'from upload to serving', docLogger
+  res.sendfile(template.html, {root: 'outputTemplate/'}) 
+  
 exports.serveOutput = (name, res, docLogger) ->
   #logging.log(html)
 
@@ -22,9 +23,6 @@ exports.serveOutput = (name, res, docLogger) ->
  
   outputFile = '../local-copies/' + 'output/' + name + '.html'
 
-  #Old paradigm
-  #outputHtml = outputTemplate.slice(0, hookElementTextPos).concat(html, outputTemplate.slice(hookElementTextPos))
-  
   outputHtml = outputTemplate
   fs.writeFile(outputFile, outputHtml, (err) -> 
   	

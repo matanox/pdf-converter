@@ -200,3 +200,35 @@ exports.markTokens = function(tokens, sequence, mark) {
   }
   return _results;
 };
+
+exports.initDocLogger = function(name) {
+  var docLogger, docLoggerNameBase, now;
+  docLogger = new winston.Logger;
+  now = new Date();
+  docLoggerNameBase = 'logs/' + name + '-' + now.toISOString() + '.log';
+  /*
+  docLogger.add(winston.transports.File, {
+    filename: docLoggerNameBase + '.json',
+    json: true
+    timestamp: true})
+  */
+
+  docLogger = new winston.Logger({
+    transports: [
+      new winston.transports.File({
+        name: 'file#json',
+        filename: docLoggerNameBase + '.json',
+        json: true,
+        timestamp: true
+      }), new winston.transports.File({
+        name: 'file#text',
+        filename: docLoggerNameBase,
+        json: false,
+        timestamp: true
+      })
+    ],
+    exitOnError: false
+  });
+  console.log('Logging handling of ' + name + ' in ' + docLoggerNameBase + '*');
+  return docLogger;
+};

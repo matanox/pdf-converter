@@ -498,7 +498,7 @@ myAjax = (url, postData, callback) ->
 
   if postData?  # http post request
     console.log('ajax request includes post data')
-    ajaxRequest.open('POST', url, true)
+    ajaxRequest.open('POST', url, false) # synchronous as we'd rather block the user while saving is in progress
     ajaxRequest.setRequestHeader("Content-type","application/json");
     ajaxRequest.send(postData)
   else          # http get request
@@ -644,10 +644,15 @@ tokenSequence = {} # a global, so it can be queried from the browser console
 # 1. Report time breakdown back to server, or queue for next reporting tick
 # 2. Use same time logging utility function as server side
 #
-getTokens = () ->
+getTokens = (regenerate) ->
   # Make ajax request to get article text tokens
-  ajaxHost = location.protocol + '//' + location.hostname
-  myAjax(ajaxHost + '/tokenSync', null, (tokenSequenceSerialized) ->  
+
+  ajaxHost    = location.protocol + '//' + location.hostname
+  ajaxRequest = ajaxHost + '/tokenSync'
+  if regenerate 
+    ajaxRequst += '?regenerate=true'
+
+  myAjax(ajaxRequest, null, (tokenSequenceSerialized) ->  
     # Convert tokens into dispay text
     console.log(tokenSequenceSerialized.length)
     console.time('unpickling')

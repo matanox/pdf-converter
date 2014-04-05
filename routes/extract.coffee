@@ -293,7 +293,7 @@ titleAndAbstract = (tokens) ->
 #
 # Extract text content and styles from html
 #
-generateFromHtml = (req, name, res ,docLogger) ->  
+generateFromHtml = (req, name, res ,docLogger, callback) ->  
 
   util.timelog('Extraction from html stage A')
 
@@ -935,7 +935,7 @@ generateFromHtml = (req, name, res ,docLogger) ->
         #console.log req.session.tokens
         #outputHtml = html.buildOutputHtml(tokens, inputStylesMap, docLogger)        
         req.session.tokens = tokens
-        output.serveOutput(name, res, docLogger)
+        callback()
 
     else
       console.error 'zero length sentence registered'
@@ -958,11 +958,13 @@ generateFromHtml = (req, name, res ,docLogger) ->
     unless token.page? 
       throw "Internal Error - token is missing page number"
 
-storage = require '../storage'
-require 'stream'
-riak = require('riak-js').getClient({host: "localhost", port: "8098"})
+exports.generateFromHtml = generateFromHtml
 
-exports.go = (req, name, res ,docLogger) ->
+exports.go = (req, name, res ,docLogger, callback) ->
+
+  storage = require '../storage'
+  require 'stream'
+  riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
   util.timelog 'checking data store for cached tokens'
   
@@ -971,9 +973,9 @@ exports.go = (req, name, res ,docLogger) ->
     if cachedTokens
       # serve cached tokens
       req.session.tokenSequenceSerialized = cachedTokens      
-      output.serveOutput(name, res, docLogger)
+      callback()
     else
       # not cached - perform the extraction
-      generateFromHtml(req, name, res ,docLogger) 
+      generateFromHtml(req, name, res ,docLogger, callback()) 
   )
 
