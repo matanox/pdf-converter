@@ -484,7 +484,7 @@ userEventMgmt = () ->
   #  container.oncontextmenu = eventCapture
   #
 
-myAjax = (url, callback) ->  
+myAjax = (url, postData, callback) ->  
   ajaxRequest = new XMLHttpRequest()
   console.log 'Making ajax call to ' + url
 
@@ -496,10 +496,14 @@ myAjax = (url, callback) ->
       else
         console.error 'Ajax call to ' + url + ' failed'
 
-  ajaxRequest.open('GET', url, true)
-  ajaxRequest.send(null)
-
-
+  if postData?  # http post request
+    console.log('ajax request includes post data')
+    ajaxRequest.open('POST', url, true)
+    ajaxRequest.setRequestHeader("Content-type","application/json");
+    ajaxRequest.send(postData)
+  else          # http get request
+    ajaxRequest.open('GET', url, true)
+    ajaxRequest.send(null)
     
 #
 # Build text html
@@ -643,7 +647,7 @@ tokenSequence = {} # a global, so it can be queried from the browser console
 getTokens = () ->
   # Make ajax request to get article text tokens
   ajaxHost = location.protocol + '//' + location.hostname
-  myAjax(ajaxHost + '/tokenSync', (tokenSequenceSerialized) ->  
+  myAjax(ajaxHost + '/tokenSync', null, (tokenSequenceSerialized) ->  
     # Convert tokens into dispay text
     console.log(tokenSequenceSerialized.length)
     console.time('unpickling')
@@ -656,19 +660,15 @@ getTokens = () ->
     userEventMgmt())
 
 sendTokens = () ->
-  ajaxHost = location.protocol + '//' + location.hostname
-  myAjax(ajaxHost + '/tokenSync', (tokenSequenceSerialized) ->  
-    # Convert tokens into dispay text
-    console.log(tokenSequenceSerialized.length)
-    console.time('unpickling')
-    #console.log tokenSequenceSerialized
-    tokenSequence = JSON.parse(tokenSequenceSerialized)
-    #console.dir tokenSequence
-    console.timeEnd('unpickling')
-    renderText(tokenSequence)
-    console.log('starting event mgmt')
-    userEventMgmt())
 
+  console.time('pickling')
+  tokenSequenceSerialized = JSON.stringify(tokenSequence)
+  console.timeEnd('pickling')
+  console.log(tokenSequenceSerialized.length)
+
+  ajaxHost = location.protocol + '//' + location.hostname
+  myAjax(ajaxHost + '/tokenSync', tokenSequenceSerialized, (response) ->  
+    if response then console.log response)
 
 go = () ->
   #window.onload = () -> userEventMgmt()

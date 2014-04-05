@@ -356,7 +356,7 @@ userEventMgmt = function() {
   };
 };
 
-myAjax = function(url, callback) {
+myAjax = function(url, postData, callback) {
   var ajaxRequest;
   ajaxRequest = new XMLHttpRequest();
   console.log('Making ajax call to ' + url);
@@ -370,8 +370,15 @@ myAjax = function(url, callback) {
       }
     }
   };
-  ajaxRequest.open('GET', url, true);
-  return ajaxRequest.send(null);
+  if (postData != null) {
+    console.log('ajax request includes post data');
+    ajaxRequest.open('POST', url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/json");
+    return ajaxRequest.send(postData);
+  } else {
+    ajaxRequest.open('GET', url, true);
+    return ajaxRequest.send(null);
+  }
 };
 
 renderText = function(tokens) {
@@ -494,7 +501,7 @@ tokenSequence = {};
 getTokens = function() {
   var ajaxHost;
   ajaxHost = location.protocol + '//' + location.hostname;
-  return myAjax(ajaxHost + '/tokenSync', function(tokenSequenceSerialized) {
+  return myAjax(ajaxHost + '/tokenSync', null, function(tokenSequenceSerialized) {
     console.log(tokenSequenceSerialized.length);
     console.time('unpickling');
     tokenSequence = JSON.parse(tokenSequenceSerialized);
@@ -506,16 +513,16 @@ getTokens = function() {
 };
 
 sendTokens = function() {
-  var ajaxHost;
+  var ajaxHost, tokenSequenceSerialized;
+  console.time('pickling');
+  tokenSequenceSerialized = JSON.stringify(tokenSequence);
+  console.timeEnd('pickling');
+  console.log(tokenSequenceSerialized.length);
   ajaxHost = location.protocol + '//' + location.hostname;
-  return myAjax(ajaxHost + '/tokenSync', function(tokenSequenceSerialized) {
-    console.log(tokenSequenceSerialized.length);
-    console.time('unpickling');
-    tokenSequence = JSON.parse(tokenSequenceSerialized);
-    console.timeEnd('unpickling');
-    renderText(tokenSequence);
-    console.log('starting event mgmt');
-    return userEventMgmt();
+  return myAjax(ajaxHost + '/tokenSync', tokenSequenceSerialized, function(response) {
+    if (response) {
+      return console.log(response);
+    }
   });
 };
 

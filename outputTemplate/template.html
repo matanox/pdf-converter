@@ -193,7 +193,15 @@
 
     </div>
 
-    <footer></footer>
+    <footer>
+      <div class="pagination-centered">
+      <div class="btn-group" style="margin-left: auto; margin-right: auto;" >
+        <button id='Reload' style="margin-left: auto; margin-right: auto; display: inline-block;" class="btn btn-large btn-danger pull-center" onclick="getTokens();">Discard and Reload</button>
+        <button id='Save' style="margin-left: auto; margin-right: auto; display: inline-block;" class="btn btn-large btn-warning pull-center" onclick="sendTokens();">Save</button>
+        <button id='Regenerate' style="margin-left: auto; margin-right: auto; display: inline-block;" class="btn btn-large btn-danger pull-center" onclick="getTokens();">Discard and Regenerate</button>
+      </div>
+      </div>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

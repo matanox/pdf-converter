@@ -64,6 +64,7 @@ else
   app.use express.logger('dev')        # dev is colorful (for a terminal) and not overly verbose
 
 app.use express.bodyParser()
+#app.use express.multipart()
 app.use express.methodOverride()
 app.use express.cookieParser('93AAAE3G205OI33')
 app.use express.session()
@@ -81,7 +82,9 @@ app.get '/', routes.index
 app.get '/users', user.list
 
 app.get '/handleInputFile', require('./routes/handleInputFile').go
-app.get '/tokenSync', require('./routes/tokenSync').go
+app.get  '/tokenSync', require('./routes/tokenSync').go
+app.post '/tokenSync', require('./routes/tokenSync').go
+
 app.get '/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go
 #app.get '/convert', convert.go
 #app.get '/extract', extract.go

@@ -19,34 +19,50 @@ riak = require('riak-js').getClient({
 exports.go = function(req, res) {
   var paragraphOpeningDelimitation, tokenSequence, tokenSequenceSerialized, tokens, x, _i, _len;
   util.timelog("handling client ajax request for " + req.session.name);
-  if (req.session.tokenSequenceSerialized != null) {
-    console.log('serving tokens from cache');
-    return res.end(req.session.tokenSequenceSerialized);
-  } else {
-    console.log('serving newly created tokens');
-    tokens = req.session.tokens;
-    tokenSequence = [];
-    paragraphOpeningDelimitation = {
-      metaType: 'paragraphBreak'
-    };
-    for (_i = 0, _len = tokens.length; _i < _len; _i++) {
-      x = tokens[_i];
-      if (x.metaType === 'regular') {
-        if (x.paragraph === 'opener') {
-          tokenSequence.push(paragraphOpeningDelimitation);
+  if (Object.keys(req.body).length === 0) {
+    if (req.session.tokenSequenceSerialized != null) {
+      console.log('serving tokens from cache');
+      console.log(req.session.tokenSequenceSerialized.length);
+      console.log(typeof req.session.tokenSequenceSerialized);
+      return res.end(req.session.tokenSequenceSerialized);
+    } else {
+      console.log('serving newly created tokens');
+      tokens = req.session.tokens;
+      tokenSequence = [];
+      paragraphOpeningDelimitation = {
+        metaType: 'paragraphBreak'
+      };
+      for (_i = 0, _len = tokens.length; _i < _len; _i++) {
+        x = tokens[_i];
+        if (x.metaType === 'regular') {
+          if (x.paragraph === 'opener') {
+            tokenSequence.push(paragraphOpeningDelimitation);
+          }
         }
+        tokenSequence.push(x);
       }
-      tokenSequence.push(x);
+      util.timelog('pickling');
+      tokenSequenceSerialized = JSON.stringify(tokenSequence);
+      util.timelog('pickling');
+      console.log("" + tokens.length + " tokens pickled into " + tokenSequenceSerialized.length + " long bytes stream");
+      console.log("pickled size to tokens ratio: " + (parseFloat(tokenSequenceSerialized.length) / tokens.length));
+      res.end(tokenSequenceSerialized);
+      util.timelog("handling client ajax request for " + req.session.name);
+      console.log('saving tokens to data store');
+      storage.store('tokens', req.session.name, tokenSequenceSerialized, req.session.docLogger);
+      return req.session.tokenSequenceSerialized = tokenSequenceSerialized;
     }
+  } else {
+    console.log("ajax request body length is " + req.body.length);
+    console.log('received updated tokens from client');
+    console.log('saving updated tokens to data store');
+    tokenSequence = req.body;
     util.timelog('pickling');
     tokenSequenceSerialized = JSON.stringify(tokenSequence);
     util.timelog('pickling');
-    console.log("" + tokens.length + " tokens pickled into " + tokenSequenceSerialized.length + " long bytes stream");
-    console.log("pickled size to tokens ratio: " + (parseFloat(tokenSequenceSerialized.length) / tokens.length));
-    res.end(tokenSequenceSerialized);
-    util.timelog("handling client ajax request for " + req.session.name);
-    console.log('saving tokens to data store');
     storage.store('tokens', req.session.name, tokenSequenceSerialized, req.session.docLogger);
-    return req.session.tokenSequenceSerialized = tokenSequenceSerialized;
+    req.session.tokenSequenceSerialized = tokenSequenceSerialized;
+    req.session.tokens = tokenSequence;
+    return res.end('success');
   }
 };
