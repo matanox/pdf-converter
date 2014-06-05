@@ -650,7 +650,7 @@ getTokens = (regenerate) ->
   ajaxHost    = location.protocol + '//' + location.hostname
   ajaxRequest = ajaxHost + '/tokenSync'
   if regenerate 
-    ajaxRequst += '?regenerate=true'
+    ajaxRequest += '?regenerate=true'
 
   myAjax(ajaxRequest, null, (tokenSequenceSerialized) ->  
     # Convert tokens into dispay text
@@ -661,8 +661,7 @@ getTokens = (regenerate) ->
     #console.dir tokenSequence
     console.timeEnd('unpickling')
     renderText(tokenSequence)
-    console.log('starting event mgmt')
-    userEventMgmt())
+    console.log('starting event mgmt'))
 
 sendTokens = () ->
 
@@ -677,6 +676,7 @@ sendTokens = () ->
 
 go = () ->
   #window.onload = () -> userEventMgmt()
+  userEventMgmt()
   getTokens() 
 
 startAfterPrerequisites()

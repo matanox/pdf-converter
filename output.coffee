@@ -11,10 +11,10 @@ outputTemplate = fs.readFileSync('outputTemplate/template.html').toString() # th
 # Serves the output after inserting the transformed content
 # into the designated insertion position in the template
 
-exports.serveViewerTemplate = () ->
+exports.serveViewerTemplate = (res, docLogger) ->
   docLogger.info('Sending response....')
   util.timelog 'from upload to serving', docLogger
-  res.sendfile(template.html, {root: 'outputTemplate/'}) 
+  res.sendfile('template.html', {root: 'outputTemplate/'}) 
   
 exports.serveOutput = (name, res, docLogger) ->
   #logging.log(html)

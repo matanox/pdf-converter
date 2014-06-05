@@ -1,4 +1,5 @@
-logging       = require './logging' 
+logging = require './logging' 
+winston = require 'winston'
 # crepl = require 'coffee-script/lib/coffee-script/repl'
 
 anySpaceChar = RegExp(/\s/)

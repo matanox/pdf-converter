@@ -9,10 +9,10 @@ fs = require('fs');
 
 outputTemplate = fs.readFileSync('outputTemplate/template.html').toString();
 
-exports.serveViewerTemplate = function() {
+exports.serveViewerTemplate = function(res, docLogger) {
   docLogger.info('Sending response....');
   util.timelog('from upload to serving', docLogger);
-  return res.sendfile(template.html, {
+  return res.sendfile('template.html', {
     root: 'outputTemplate/'
   });
 };

@@ -503,7 +503,7 @@ getTokens = function(regenerate) {
   ajaxHost = location.protocol + '//' + location.hostname;
   ajaxRequest = ajaxHost + '/tokenSync';
   if (regenerate) {
-    ajaxRequst += '?regenerate=true';
+    ajaxRequest += '?regenerate=true';
   }
   return myAjax(ajaxRequest, null, function(tokenSequenceSerialized) {
     console.log(tokenSequenceSerialized.length);
@@ -511,8 +511,7 @@ getTokens = function(regenerate) {
     tokenSequence = JSON.parse(tokenSequenceSerialized);
     console.timeEnd('unpickling');
     renderText(tokenSequence);
-    console.log('starting event mgmt');
-    return userEventMgmt();
+    return console.log('starting event mgmt');
   });
 };
 
@@ -531,6 +530,7 @@ sendTokens = function() {
 };
 
 go = function() {
+  userEventMgmt();
   return getTokens();
 };
 

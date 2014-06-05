@@ -7,6 +7,7 @@ exec   = require("child_process").exec
 riak   = require('riak-js').getClient({host: "localhost", port: "8098"})
 fs     = require 'fs'
 crypto = require 'crypto'
+output = require '../output'
 
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"
@@ -97,7 +98,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       #
       else
         console.log('input file has already passed pdf2htmlEX conversion - skipping conversion')
-        require('./extract').go(req, formerName, res, docLogger, output.serveViewerTemplate)
+        require('./extract').go(req, formerName, res, docLogger)
     )
   
   

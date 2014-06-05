@@ -31,7 +31,7 @@ exports.go = (req, res) ->
   if req.query.inkUrl?
     inkUrl = req.query.inkUrl
     baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '')
-    docLogger = initDocLogger(baseFileName)
+    docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')
     req.session.docLogger = docLogger
 

@@ -798,7 +798,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
 
 exports.generateFromHtml = generateFromHtml;
 
-exports.go = function(req, name, res, docLogger, callback) {
+exports.go = function(req, name, res, docLogger) {
   var riak, storage;
   storage = require('../storage');
   require('stream');
@@ -807,13 +807,15 @@ exports.go = function(req, name, res, docLogger, callback) {
     port: "8098"
   });
   util.timelog('checking data store for cached tokens');
-  return storage.fetch('tokens', name, function(cachedTokens) {
+  return storage.fetch('tokens', name, function(cachedSerializedTokens) {
     util.timelog('checking data store for cached tokens');
-    if (cachedTokens) {
-      req.session.tokenSequenceSerialized = cachedTokens;
-      return callback();
+    if (cachedSerializedTokens) {
+      req.session.serializedTokens = cachedSerializedTokens;
+      return output.serveViewerTemplate(res, docLogger);
     } else {
-      return generateFromHtml(req, name, res, docLogger, callback());
+      return generateFromHtml(req, name, res, docLogger, function() {
+        return output.serveViewerTemplate(res, docLogger);
+      });
     }
   });
 };

@@ -34,7 +34,8 @@
     "async": ">= 0.1.x",
     "node-uuid": ">= 0.0.x",
     "mkdirp": ">= 0.3.3",
-    "circular-json": "~0.1.5"
+    "circular-json": "~0.1.5",
+    "sync": "~0.2.2"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"

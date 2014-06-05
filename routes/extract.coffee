@@ -960,22 +960,21 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
 exports.generateFromHtml = generateFromHtml
 
-exports.go = (req, name, res ,docLogger, callback) ->
-
+exports.go = (req, name, res ,docLogger) ->
   storage = require '../storage'
   require 'stream'
   riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
   util.timelog 'checking data store for cached tokens'
   
-  storage.fetch('tokens', name, (cachedTokens) -> 
+  storage.fetch('tokens', name, (cachedSerializedTokens) -> 
     util.timelog 'checking data store for cached tokens'
-    if cachedTokens
+    if cachedSerializedTokens
       # serve cached tokens
-      req.session.tokenSequenceSerialized = cachedTokens      
-      callback()
+      req.session.serializedTokens = cachedSerializedTokens      
+      output.serveViewerTemplate(res, docLogger)
     else
       # not cached - perform the extraction
-      generateFromHtml(req, name, res ,docLogger, callback()) 
+      generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
