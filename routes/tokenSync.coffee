@@ -50,6 +50,11 @@ exports.go = (req, res) ->
     #
     if req.query.regenerate? or (not req.session.serializedTokens?)
       console.log 'generating tokens'
+      
+      # hack for self testing on startup
+      unless req.session.name?
+        req.session.name = 'LaeUusATIi5FHXHmF4hU'
+
       docLogger = util.initDocLogger(req.session.name)
       extract.generateFromHtml(req, req.session.name, res ,docLogger, () -> serveTokens(req, res)) 
       

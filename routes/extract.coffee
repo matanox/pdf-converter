@@ -534,7 +534,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # This function has few logical holes in it:
   #
   # Bug:  this code doesn't recognize a new paragraph beginning on
-  #       a first row of a new column.
+  #       a first row of a new column - fixed.
   #
   # TODO: parameterize direction to support RTL languages
   # TODO: this code assumes postions are given in .left and .bottom not .right and .top or other
@@ -568,6 +568,14 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   for i in [1..tokens.length-1]
     a = tokens[i-1]
     b = tokens[i]
+    
+    ###
+    if b.text is 'among' and not firstDebug?
+      'dumping bug'
+      console.dir a
+      console.dir b
+      firstDebug = true
+    ###
 
     # Identify and handle new text column, and thus identify a new line
     if parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100
@@ -599,7 +607,9 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   util.last(tokens).lineLocation = 'closer'
 
+  #
   # Based on the above, deduce paragraph splittings
+  #
 
   for i in [1..lineOpeners.length-1-1] 
 
@@ -623,18 +633,22 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
           # it's a paragraph beginning at the very top of a new column
           currOpener.paragraph = 'opener'   
           prevToken.paragraph = 'closer'
-          #console.log currOpener.text
+          #console.log 'new paragraph detected by rule 1:' + currOpener.text
 
       else
         # it's a paragraph beginning within the same column
         currOpener.paragraph = 'opener'   
         prevToken.paragraph = 'closer'
-        #console.log currOpener.text
+        #console.log 'new paragraph detected by rule 2:' + currOpener.text        
 
-    if parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) 
+    if parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) - 1  # -1 for tolerance 
       # it's a space signaled paragraph beginning
       currOpener.paragraph = 'opener'   
       prevToken.paragraph = 'closer'
+      console.log 'new paragraph detected by rule 3:' + currOpener.text        
+      console.log newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom) 
+      console.log parseFloat(currOpener.positionInfo.bottom) + newLineThreshold - parseFloat(prevOpener.positionInfo.bottom) 
+      console.log prevOpener.text + ' ' + currOpener.text
 
       #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
 
@@ -971,10 +985,12 @@ exports.go = (req, name, res ,docLogger) ->
     util.timelog 'checking data store for cached tokens'
     if cachedSerializedTokens
       # serve cached tokens
+      console.log 'cached tokens found in datastore'
       req.session.serializedTokens = cachedSerializedTokens      
       output.serveViewerTemplate(res, docLogger)
     else
       # not cached - perform the extraction
+      console.log 'no cached tokens found in datastore'
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 

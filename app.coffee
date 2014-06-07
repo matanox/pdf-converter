@@ -45,7 +45,7 @@ unless env is 'production'
 # Get-or-default basic networking config
 host = nconf.get 'host'
 logging.logGreen 'Using hostname ' + nconf.get('host')
-app.set 'port', process.env.PORT or 80
+app.set 'port', process.env.PORT or 3080
 logging.logGreen 'Using port ' + app.get('port')
 
 #
@@ -113,11 +113,12 @@ startServer = () ->
     #testFile = 'leZrsgpZQOSCCtS98bsu'
     #testUrl = 'http://localhost/extract?name=' + testFile
     #testFile = 'S7VUdDeES5O6Xby6xtc7'
-    testFile = 'rwUEzeLnRfKgNh23R82W'
+    testFile = 'LaeUusATIi5FHXHmF4hU'    # 'rwUEzeLnRfKgNh23R82W'
 
-    testUrl = 'http://localhost/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile
-    #http.get(testUrl, (res) ->
-    #  logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
+    #testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile
+    testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
+    http.get(testUrl, (res) ->
+      logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
 
   # Attach primus for development iterating, as long as it's convenient 
   unless env is 'production' then primus.start(server)

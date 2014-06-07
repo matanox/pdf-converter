@@ -54,6 +54,9 @@ exports.go = function(req, res) {
   if (Object.keys(req.body).length === 0) {
     if ((req.query.regenerate != null) || (req.session.serializedTokens == null)) {
       console.log('generating tokens');
+      if (req.session.name == null) {
+        req.session.name = 'LaeUusATIi5FHXHmF4hU';
+      }
       docLogger = util.initDocLogger(req.session.name);
       return extract.generateFromHtml(req, req.session.name, res, docLogger, function() {
         return serveTokens(req, res);

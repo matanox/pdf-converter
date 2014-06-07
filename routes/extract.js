@@ -471,6 +471,14 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   for (i = _x = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _x <= _ref5 : _x >= _ref5; i = 1 <= _ref5 ? ++_x : --_x) {
     a = tokens[i - 1];
     b = tokens[i];
+    /*
+    if b.text is 'among' and not firstDebug?
+      'dumping bug'
+      console.dir a
+      console.dir b
+      firstDebug = true
+    */
+
     if (parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100) {
       a.lineLocation = 'closer';
       b.lineLocation = 'opener';
@@ -511,9 +519,13 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
         prevToken.paragraph = 'closer';
       }
     }
-    if (parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom)) {
+    if (parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) - 1) {
       currOpener.paragraph = 'opener';
       prevToken.paragraph = 'closer';
+      console.log('new paragraph detected by rule 3:' + currOpener.text);
+      console.log(newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom));
+      console.log(parseFloat(currOpener.positionInfo.bottom) + newLineThreshold - parseFloat(prevOpener.positionInfo.bottom));
+      console.log(prevOpener.text + ' ' + currOpener.text);
     }
   }
   util.timelog('basic handle line and paragraph beginnings');
@@ -810,9 +822,11 @@ exports.go = function(req, name, res, docLogger) {
   return storage.fetch('tokens', name, function(cachedSerializedTokens) {
     util.timelog('checking data store for cached tokens');
     if (cachedSerializedTokens) {
+      console.log('cached tokens found in datastore');
       req.session.serializedTokens = cachedSerializedTokens;
       return output.serveViewerTemplate(res, docLogger);
     } else {
+      console.log('no cached tokens found in datastore');
       return generateFromHtml(req, name, res, docLogger, function() {
         return output.serveViewerTemplate(res, docLogger);
       });

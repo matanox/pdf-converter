@@ -50,7 +50,7 @@ host = nconf.get('host');
 
 logging.logGreen('Using hostname ' + nconf.get('host'));
 
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3080);
 
 logging.logGreen('Using port ' + app.get('port'));
 
@@ -102,8 +102,11 @@ startServer = function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
   if (env !== 'production') {
-    testFile = 'rwUEzeLnRfKgNh23R82W';
-    testUrl = 'http://localhost/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile;
+    testFile = 'LaeUusATIi5FHXHmF4hU';
+    testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true';
+    http.get(testUrl, function(res) {
+      return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
+    });
   }
   if (env !== 'production') {
     return primus.start(server);

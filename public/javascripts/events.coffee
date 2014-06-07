@@ -38,6 +38,8 @@
 
 selection = []
 
+port = 3080
+
 selectionOptionsDisplay = (state) ->
   #addElement(buttonHtml, 'top-bar', 'btn-group')
   switch state
@@ -647,7 +649,7 @@ tokenSequence = {} # a global, so it can be queried from the browser console
 getTokens = (regenerate) ->
   # Make ajax request to get article text tokens
 
-  ajaxHost    = location.protocol + '//' + location.hostname
+  ajaxHost    = location.protocol + '//' + location.hostname + ':' + port
   ajaxRequest = ajaxHost + '/tokenSync'
   if regenerate 
     ajaxRequest += '?regenerate=true'
@@ -670,7 +672,7 @@ sendTokens = () ->
   console.timeEnd('pickling')
   console.log(tokenSequenceSerialized.length)
 
-  ajaxHost = location.protocol + '//' + location.hostname
+  ajaxHost = location.protocol + '//' + location.hostname + ':' + port
   myAjax(ajaxHost + '/tokenSync', tokenSequenceSerialized, (response) ->  
     if response then console.log response)
 
