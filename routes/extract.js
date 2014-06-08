@@ -388,25 +388,17 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     extremeSequences = [];
     extremeSequence = [];
     iterator(tokens, function(a, b, i, tokens) {
-      var consoleMsg;
       if (Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2) {
         extremeSequence.push(a);
         if (!(Math.abs(parseInt(b.positionInfo.bottom) - extreme.extreme) < 2)) {
           extremeSequences.push(extremeSequence);
-          consoleMsg = (function() {
-            var _len9, _r, _results;
-            _results = [];
-            for (_r = 0, _len9 = extremeSequence.length; _r < _len9; _r++) {
-              token = extremeSequence[_r];
-              _results.push(token.text);
-            }
-            return _results;
-          })();
           extremeSequence = [];
         }
       }
       return 1;
     });
+    console.log('extreme sequences');
+    console.dir(extremeSequences);
     for (physicalPageSide = _r = 0; _r <= 1; physicalPageSide = ++_r) {
       repeatSequence = 0;
       for (i = _s = physicalPageSide, _ref1 = extremeSequences.length - 1 - 2; _s <= _ref1; i = _s += 2) {
@@ -522,10 +514,6 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     if (parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) - 1) {
       currOpener.paragraph = 'opener';
       prevToken.paragraph = 'closer';
-      console.log('new paragraph detected by rule 3:' + currOpener.text);
-      console.log(newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom));
-      console.log(parseFloat(currOpener.positionInfo.bottom) + newLineThreshold - parseFloat(prevOpener.positionInfo.bottom));
-      console.log(prevOpener.text + ' ' + currOpener.text);
     }
   }
   util.timelog('basic handle line and paragraph beginnings');

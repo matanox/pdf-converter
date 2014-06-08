@@ -458,16 +458,16 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     iterator(tokens, (a, b, i, tokens) ->
         if Math.abs(parseInt(a.positionInfo.bottom) - extreme.extreme) < 2  # grace variance
           extremeSequence.push(a)
-          #console.log 'extreme word: ' + a.text
           unless Math.abs(parseInt(b.positionInfo.bottom) - extreme.extreme) < 2 # same grace
-            # flush
             extremeSequences.push(extremeSequence)
-            consoleMsg = (token.text for token in extremeSequence)
+            #consoleMsg = (token.text for token in extremeSequence)
             #console.log consoleMsg
             extremeSequence = []
         return 1 # go one position forward
       ) 
 
+    console.log 'extreme sequences'
+    console.dir extremeSequences
     # Check that array for consecutive repeats, consecutively by a two page distance
     # because typically an article has repeat left-side headers/footers, 
     # and repeat right-hand headers/footers
@@ -531,10 +531,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
   #
-  # This function has few logical holes in it:
-  #
-  # Bug:  this code doesn't recognize a new paragraph beginning on
-  #       a first row of a new column - fixed.
+  # This function may have few logical holes in it:
   #
   # TODO: parameterize direction to support RTL languages
   # TODO: this code assumes postions are given in .left and .bottom not .right and .top or other
@@ -645,10 +642,11 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
       # it's a space signaled paragraph beginning
       currOpener.paragraph = 'opener'   
       prevToken.paragraph = 'closer'
-      console.log 'new paragraph detected by rule 3:' + currOpener.text        
-      console.log newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom) 
-      console.log parseFloat(currOpener.positionInfo.bottom) + newLineThreshold - parseFloat(prevOpener.positionInfo.bottom) 
-      console.log prevOpener.text + ' ' + currOpener.text
+      #console.log 'new paragraph detected by rule 3:' + currOpener.text        
+     
+      #console.log newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom) 
+      #console.log parseFloat(currOpener.positionInfo.bottom) + newLineThreshold - parseFloat(prevOpener.positionInfo.bottom) 
+      #console.log prevOpener.text + ' ' + currOpener.text
 
       #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
 
