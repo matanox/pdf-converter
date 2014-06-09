@@ -1,7 +1,3 @@
-#
-# Drive the rich tokenization of text from html input
-#
-
 fs       = require 'fs'
 util     = require '../util'
 logging  = require '../logging' 
@@ -15,33 +11,6 @@ markers  = require '../markers'
 analytic = require '../analytic'
 verbex   = require 'verbal-expressions'
 
-#
-# Code refactor aiding function that examines all elements in an array,
-# and returns the 'maximum' structure of an item of the array,
-# thus simplifying some kinds of refactoring
-#
-deriveStructure = (elements) ->
-
-  iterate = (element, maxStructure) ->
-    for key, val of element
-      unless maxStructure[key]?
-        switch typeof(val)
-          when "object"
-            maxStructure[key] = {}
-            iterate(val, maxStructure[key])
-          else
-            maxStructure[key] = val
-
-  maxStructure = {}
-  for element in elements
-    iterate(element, maxStructure)
-
-  console.log 'token structure:'
-  console.dir maxStructure
-
-#
-# Helper function for iterating token pairs
-#
 iterator = (tokens, iterationFunc) ->
   i = 1
   while i < tokens.length
@@ -49,8 +18,24 @@ iterator = (tokens, iterationFunc) ->
     b = tokens[i]
     i = i + iterationFunc(a, b, i, tokens) 
 
+isImage = (text) -> util.startsWith(text, "<img ")
+
+# Utility function for filtering out images
+# Can be rewriteen with a filter statement -- 
+# http://coffeescriptcookbook.com/chapters/arrays/filtering-arrays
+# http://arcturo.github.io/library/coffeescript/04_idioms.html
+filterImages = (ourDivRepresentation) ->
+  filtered = []
+  filtered.push(div) for div in ourDivRepresentation when not isImage(div.text)
+  filtered
+
+filterZeroLengthText = (ourDivRepresentation) ->
+  filtered = []
+  filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
+  filtered
+
 #
-# extract article title and abstract
+# handle article title and abstract
 #
 titleAndAbstract = (tokens) ->
 
@@ -82,7 +67,6 @@ titleAndAbstract = (tokens) ->
 
   fontSizesDistribution = analytic.generateDistribution(fontSizes)
 
-  console.log "distribution of input font sizes:"
   console.dir fontSizesDistribution
 
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
@@ -313,17 +297,12 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   util.timelog('Extraction from html stage A')
 
-  #
   # Read the input html 
-  #
-
   path = '../local-copies/' + 'html-converted/' 
+  #name = req.query.name
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
 
-  #
-  # Extract html css style info 
-  #
-
+  # Extract all style info 
   inputStylesMap = css.simpleFetchStyles(rawHtml ,path + name + '/') 
 
   htmlparser = require("htmlparser2");
@@ -337,14 +316,27 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   parser = new htmlparser.Parser(handler)
   parser.parseComplete(rawHtml)
   dom = handler.dom
+  #docLogger.info(dom)
   util.timelog 'htmlparser2', docLogger 
  
-  #
-  # Build tokens while preserving the original css styles
-  #
+  # Discard any divs that contain zero-length text
+  #nodesWithStyles = filterZeroLengthText(divsWithStyles)
+
+  #divsNum = divsWithStyles.length
+  # endsSpaceDelimited = 0
+  # If most divs end with a delimiting space character, then we don't need
+  # to implicitly infer a delimiter at the end of each div, otherwise we do.
+  # The use of a constant ratio test is extremely coarse and temporary,
+  # a refined solution should replace it.
+  #docLogger.info(endsSpaceDelimited)
+  #docLogger.info(endsSpaceDelimited / divsNum)
+  #if (endsSpaceDelimited / divsNum) < 0.3 then augmentEachDiv = true else augmentEachDiv = false
 
   nodesWithStyles = html.representNodes(dom)
+
   tokenArrays = (html.tokenize node for node in nodesWithStyles)
+
+  #docLogger.info(node)
 
   # Flatten to one-dimensional array of tokens...
   tokens = []
@@ -361,7 +353,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     return false
     #throw("No text was extracted from input")
 
-  # Smooth out styles such that each delimiter inherits the style of its preceding token. 
+  # Smooth out styles such that each delimiter 
+  # inherits the style of its preceding token. 
   # May belong either here or inside the core tokenization...
   tokens.reduce (x, y) -> 
     if y.metaType is 'delimiter' then y.stylesArray = x.stylesArray
@@ -374,17 +367,22 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   #
   # Read the css style definitions of the css classes assigned to a token, 
-  # and directly assign them to the token.
+  # and add them to the token.
   #
+  #docLogger.info(tokens)  
   for token in tokens 
+    #console.dir(token)
     token.finalStyles = {}
     token.positionInfo = {}
 
     for cssClasses in token.stylesArray  # cascade the styles from each parent node 
+      #docLogger.info cssClasses
       for cssClass in cssClasses         # iterate over each css class indicated for the token,
                                          # adding its final style definitions to the token
+        #docLogger.info cssClass                                         
         styles = css.getFinalStyles(cssClass, inputStylesMap)
         if styles? 
+          #docLogger.info(styles)
           for style in styles 
             if util.isAnyOf(style.property, css.positionData) # is position info? or is it real style?
               token.positionInfo[style.property] = style.value
@@ -423,7 +421,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   # Create page openers index
   #
-
   page = null
   pageOpeners = [util.first(tokens)]
   iterator(tokens, (a, b, i, tokens) ->
@@ -435,7 +432,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   # Detect repeat header and footer text
   # 
-
   util.timelog 'detect and mark repeat headers and footers'
 
   # Functional style setup
@@ -469,7 +465,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
         return 1 # go one position forward
       ) 
 
-    #console.dir extremeSequences
+    console.log 'extreme sequences'
+    console.dir extremeSequences
     # Check that array for consecutive repeats, consecutively by a two page distance
     # because typically an article has repeat left-side headers/footers, 
     # and repeat right-hand headers/footers
@@ -502,8 +499,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
         console.log repeatSequence + ' ' + 'repeat' + ' '+ extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' +  (if physicalPageSide is 0 then 'even pages' else 'odd pages')
 
   #
-  # Remove first page number footer even if it does not appear consistently  
-  # the same as in later pages repeat footers
+  # Remove first page number footer even if it does not appear consistently as 
+  # in later pages repeat footers
   #
   # TODO: consider grouping with elaborate fluff removal when implemented
   #
@@ -521,7 +518,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   # Now effectively remove all identified fluff the identified repeat sequences
   #
-
   filtered = []
   for t in [0..tokens.length-1]
     unless tokens[t].fluff?
@@ -531,7 +527,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   tokens = filtered
   
   #
-  # Detect row endings aand beginnings
+  # Mark tokens that begin or end their line 
   # and generally handle implications of row beginnings.
   #
   # This function may have few logical holes in it:
@@ -569,6 +565,14 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     a = tokens[i-1]
     b = tokens[i]
     
+    ###
+    if b.text is 'among' and not firstDebug?
+      'dumping bug'
+      console.dir a
+      console.dir b
+      firstDebug = true
+    ###
+
     # Identify and handle new text column, and thus identify a new line
     if parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100
       a.lineLocation = 'closer'       # a line closer       
@@ -590,7 +594,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces)
   
   #for entry in lineSpaceDistribution
-  #console.log """line space of #{entry.key} - detected #{entry.val} times"""
+  #  console.log """line space of #{entry.key} - detected #{entry.val} times"""
 
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1  # arbitrary grace interval to absorb
                                                                             # floating point calculation deviations 
@@ -648,9 +652,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   util.timelog 'basic handle line and paragraph beginnings'
 
   #
-  # Derive paragraph length and quantity statistics - can probably be moved outside the main flow
+  # Derive paragraph length and quantity statistics
   #
-
   lastOpenerIndex = 0
   paragraphs = []
   for i in [0..tokens.length-1] 
@@ -684,8 +687,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   #
   # Identify and handle superscript 
-  #
-  # while adding a delimiter so that the superscript token doesn't get combined with 
+  # While adding a delimiter so that the superscript token doesn't get combined with 
   # the token preceding it, thus losing its superscript property in the curernt algorithm
   # This can later be refined e.g. to reflect this is not a regular space delimiter,
   # as well as enable propagating the relative font size and height of the super/subscript, 
@@ -695,7 +697,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #       rather than be handled here 'in retrospect', or be extended
   #       to handling other formatting variances (?) not just superscript
   #
-
   addStyleSeparationDelimiter = (i, tokens) ->
 
     a = tokens[i]
@@ -721,11 +722,10 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     return b
 
   #
-  # Handle end-of-line tokenization aspects to complete the delimitation of the token sequence:
-  # 1. Add a delimiter if end of line didn't already include one
-  # 2. Uniting hyphen-split words (E.g. 'associa-', 'ted' -> 'associated') split at the end of a line
+  # Handle end-of-line tokenization aspects: 
+  # 1. Delimitation augmentation
+  # 2. Uniting hyphen-split words (E.g. 'associa-', 'ted' -> 'associated')
   #
-
   docLogger.info(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
     if b.lineLocation is 'opener'       
@@ -759,7 +759,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # Moved higher up in the pipeline, can probably be removed from here
   # as duplication
   #
-
   iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'
 
@@ -773,12 +772,10 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   #docLogger.info(tokens.length)
 
+
   util.timelog 'Extraction from html stage A', docLogger
 
-  #
-  # Add a running sequence id to the tokens (after all uniting of tokens already took place)
-  #
-
+  # Add unique ids to tokens - after all uniting of tokens already took place
   util.timelog('ID seeding')        
   id = 0
   for token in tokens
@@ -786,9 +783,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     id += 1
   util.timelog 'ID seeding', docLogger
 
-  #
-  # Create a sorted index - mapping from each word to the locations where it appears
-  #
+  # Create a sorted index
   textIndex = []
   for token in tokens when token.metaType is 'regular'
     textIndex.push({text: token.text, id: token.id})
@@ -838,11 +833,13 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #docLogger.info(testverbex.toRegExp().source)
     ###
 
+  docSieve = markers.createDocumentSieve(markers.baseSieve)
+  #util.logObject(docSieve)
+
   #
-  # Enrich tokens with computed style meta-data.
+  # Enrich with computes styles.
   # For now one enrichment type - whether the word is all uppercase.
   #
-
   for token in tokens
     if token.metaType is 'regular'
       token.calculatedProperties = []
@@ -857,7 +854,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # Temporary note: For now, each sentence will be tokenized to have its tokens become an array
   #                 inside the groups array. Later, there can be more types of groups etc..
   #
-
   util.timelog('Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
     group.push(token)
@@ -888,14 +884,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   # Adding marker highlighting
   #
-
   util.timelog('Markers visualization') 
-
-  docSieve = markers.createDocumentSieve(markers.baseSieve) # Derives the markers sieve for use for this document
-  #util.logObject(docSieve)  
   
-  #
-  # This bit will be moved to a CPU efficient language
   #
   # Rather than a loop (formerly: for sentence in groups),
   # iterate the sentences such that each sentence queues handling 
@@ -979,9 +969,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     unless token.page? 
       throw "Internal Error - token is missing page number"
 
-  deriveStructure(tokens)
-
-
 exports.generateFromHtml = generateFromHtml
 
 exports.go = (req, name, res ,docLogger) ->
@@ -1004,18 +991,3 @@ exports.go = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
-isImage = (text) -> util.startsWith(text, "<img ")
-
-# Utility function for filtering out images
-# Can be rewriteen with a filter statement -- 
-# http://coffeescriptcookbook.com/chapters/arrays/filtering-arrays
-# http://arcturo.github.io/library/coffeescript/04_idioms.html
-filterImages = (ourDivRepresentation) ->
-  filtered = []
-  filtered.push(div) for div in ourDivRepresentation when not isImage(div.text)
-  filtered
-
-filterZeroLengthText = (ourDivRepresentation) ->
-  filtered = []
-  filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
-  filtered

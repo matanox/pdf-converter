@@ -1,0 +1,36 @@
+language,filename,blank,comment,code,"http://cloc.sourceforge.net v 1.60  T=0.90 s (39.1 files/s, 4783.5 lines/s)"
+CoffeeScript,./routes/extract.coffee,164,310,520
+CoffeeScript,./public/javascripts/events.coffee,126,192,409
+HTML,./outputTemplate/template.html,39,15,162
+CoffeeScript,./html.coffee,68,86,158
+CoffeeScript,./util.coffee,46,34,125
+CoffeeScript,./markers.coffee,37,38,87
+CoffeeScript,./css.coffee,27,37,77
+CoffeeScript,./jsonStore.coffee,22,6,66
+CoffeeScript,./routes/tokenSync.coffee,20,26,61
+CoffeeScript,./app.coffee,27,45,61
+CoffeeScript,./routes/convert.coffee,21,35,59
+CoffeeScript,./analytic.coffee,13,17,50
+HTML,./outputTemplate/template.old-with-bootstrap.html,15,20,50
+CoffeeScript,./model.coffee,12,9,43
+CoffeeScript,./logging.coffee,18,26,42
+HTML,./public/landing.html,2,3,39
+CoffeeScript,./routes/serveIntermediaryFile.coffee,17,25,36
+HTML,./flextest.html,6,3,35
+CoffeeScript,./storage.coffee,11,19,32
+CoffeeScript,./selfMonitor.coffee,13,5,32
+CoffeeScript,./public/scripts/FitText.coffee,9,15,32
+CoffeeScript,./routes/handleInputFile.coffee,8,12,31
+CoffeeScript,./ctype.coffee,11,30,30
+CoffeeScript,./storage-purge.coffee,7,7,22
+CoffeeScript,./elasticsearch.coffee,9,16,22
+CoffeeScript,./output.coffee,11,8,20
+CoffeeScript,./primus.coffee,7,8,20
+CoffeeScript,./metaFluff.coffee,4,3,17
+CoffeeScript,./docMeta.coffee,10,2,15
+CoffeeScript,./authorization.coffee,3,21,12
+CoffeeScript,./errorHandling.coffee,4,8,10
+CoffeeScript,./buildPrimusClientLibrary.coffee,4,6,10
+CoffeeScript,./soup.coffee,2,1,7
+HTML,./Chrome pdf plugin test.html,0,0,5
+CoffeeScript,./timer.coffee,2,5,2
