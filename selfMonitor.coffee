@@ -1,3 +1,7 @@
+#
+# mildly intelligent self memory monitoring
+#
+
 logging = require './logging' 
 
 #

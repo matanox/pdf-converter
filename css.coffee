@@ -1,3 +1,7 @@
+#
+# Obtain the (relevant) css styles applying to the html text representation of the article
+#
+
 cssParser = require 'css-parse'
 util = require './util'
 fs = require 'fs'

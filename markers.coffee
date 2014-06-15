@@ -1,3 +1,7 @@
+#
+# reads input markers file, and gets things ready for searching them in the input document
+#
+
 util = require './util'
 logging = require './logging' 
 verbex = require 'verbal-expressions'

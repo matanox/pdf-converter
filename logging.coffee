@@ -1,3 +1,8 @@
+#
+# Some logging utilities, admiteddly not uniformly used across the project
+# Winston also breaks under load (messages vanish, so we'll if we keep it)
+#
+
 winston = require 'winston'
 
 log = (level, msgOrObj) -> winston.log(level, msgOrObj)

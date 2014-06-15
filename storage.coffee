@@ -1,3 +1,8 @@
+#
+# Interface to storage for storing large files rather than "data" -
+# used to store and retreive pdf, derived html, derived tokens after serializing them
+#
+
 util =    require './util'
 logging = require './logging' 
 riak =    require('riak-js').getClient({host: "localhost", port: "8098"})

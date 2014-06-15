@@ -1,3 +1,7 @@
+#
+# Get meta-data cotained in the pdf file, as much as any is contained
+#
+
 util = require './util'
 logging = require './logging' 
 exec = require('child_process').exec

@@ -1,3 +1,9 @@
+#
+# Syncronizes text tokens with the client - 
+# both delivering tokens for a processed input pdf, 
+# and updating the tokens after they were changed by the user
+#
+
 util    = require '../util'
 logging = require '../logging' 
 css     = require '../css'

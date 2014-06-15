@@ -1,3 +1,7 @@
+#
+# Serve non-final artifacts - an original pdf, or the html conversion of it. Mainly for debugs purposes.
+#
+
 util    = require '../util'
 storage = require '../storage'
 logging = require '../logging' 

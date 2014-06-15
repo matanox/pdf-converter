@@ -1,5 +1,3 @@
-logging = require './logging' 
-
 #
 # Express request error handler, 
 # to include details of the request that the error was thrown for,
@@ -8,6 +6,9 @@ logging = require './logging'
 #
 # (for guidance about express error handling, see http://expressjs.com/guide.html#error-handling)
 #
+
+logging = require './logging' 
+
 exports.errorHandler = (error, request, response, next) ->
   console.error 'Error thrown for request: ' + request.url
 

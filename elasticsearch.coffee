@@ -1,4 +1,9 @@
 #
+# elasticsearch connector.
+# elasticsearch can be used for storing log data for highly queryable and scalable reuse
+#
+
+#
 #  http://www.elasticsearch.org/guide/en/elasticsearch/client/javascript-api/master/api-reference.html
 #  http://www.elasticsearch.org/guide/en/elasticsearch/client/javascript-api/master/index.html
 #  http://www.elasticsearch.org/blog/client-for-node-js-and-the-browser/

@@ -1,3 +1,7 @@
+#
+# For rapid development - automatic client-side refresh during development
+#
+
 'use strict'
 logging = require './logging' 
 

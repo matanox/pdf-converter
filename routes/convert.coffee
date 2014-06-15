@@ -1,3 +1,7 @@
+#
+# Invokes pdf2htmlEX to convert a pdf to html
+#
+
 util    = require '../util'
 logging = require '../logging' 
 docMeta = require '../docMeta'

@@ -1,3 +1,10 @@
+#
+# tokenizes text from raw html
+# also attaches css styles as part of the tokenization
+#
+# (plus one or two other functions revolving around html)
+#
+
 util    = require('./util')
 logging = require './logging' 
 css     = require('./css')

@@ -1,3 +1,7 @@
+#
+# Not used (yet)
+#
+
 util = require './util'
 es   = require './elasticsearch'
 

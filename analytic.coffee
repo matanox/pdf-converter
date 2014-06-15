@@ -1,3 +1,7 @@
+#
+# Stuff for generating very naive distributions over simple data
+#
+
 logging = require './logging' 
 
 exports.generateDistribution = (array) ->

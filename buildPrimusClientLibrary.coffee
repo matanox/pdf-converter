@@ -1,3 +1,7 @@
+#
+# For rapid development - automatic client-side refresh during development
+#
+
 logging = require './logging' 
 #
 # This creates the client library that needs to be served

@@ -532,7 +532,6 @@ sendTokens = function() {
 };
 
 go = function() {
-  userEventMgmt();
   return getTokens();
 };
 

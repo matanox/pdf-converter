@@ -1,6 +1,8 @@
 #
 # Clean up the riak db
 #
+# A utility source file, not (currently) invoked by the application
+#
 # Usage (assunming this file compiled to .js): node storage-purge 
 # 
 # To view all buckets on the command line: curl -i http://localhost:8098/buckets?buckets=true

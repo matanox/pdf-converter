@@ -1,3 +1,7 @@
+#
+# Various utility functions (not all should necessarily stay here)
+#
+
 logging = require './logging' 
 winston = require 'winston'
 # crepl = require 'coffee-script/lib/coffee-script/repl'

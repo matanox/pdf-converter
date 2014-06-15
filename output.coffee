@@ -1,3 +1,7 @@
+#
+# Serve the output html template for the UI of this back-end centric project
+#
+
 util    = require './util'
 logging = require './logging' 
 fs = require 'fs'

@@ -1,3 +1,7 @@
+#
+# Some character centric utility functions
+#
+
 util    = require './util'
 logging = require './logging' 
 

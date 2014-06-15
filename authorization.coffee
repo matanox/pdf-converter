@@ -1,3 +1,8 @@
+#
+# Google authentication, hopefully this still works without necessary changes
+# should scale to also facebook (and others)
+#
+
 logging = require './logging' 
 # 
 # This won't work on a non public DNS server, 

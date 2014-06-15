@@ -1,3 +1,8 @@
+#
+# Fetch a file selected by the user user ink file picker (https://www.inkfilepicker.com/)
+# Can switch to uploadcare.com or roll own...
+#
+
 convert = require './convert'
 extract = require './extract'
 util    = require '../util'

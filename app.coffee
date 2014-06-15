@@ -1,3 +1,8 @@
+#
+# The service definition and bootstrap - 
+# quite a bag of code inline with express.js tradition
+#
+
 'use strict'
 
 # Get config (as much as it overides defaults)

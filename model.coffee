@@ -1,3 +1,7 @@
+#
+# Old take at object orienting the tokens... not that critical
+#
+
 util = require('./util')
 logging = require './logging' 
 

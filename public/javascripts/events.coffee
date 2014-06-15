@@ -678,7 +678,7 @@ sendTokens = () ->
 
 go = () ->
   #window.onload = () -> userEventMgmt()
-  userEventMgmt()
+  #userEventMgmt()
   getTokens() 
 
 startAfterPrerequisites()
