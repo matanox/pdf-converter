@@ -457,12 +457,21 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   console.log 'tokens count after uniting tokens:  ' + tokens.length
   util.timelog 'uniting split tokens'
 
-  callback()
-  return
+
+  #
+  # get an "aggregate token" that includes all properties in use
+  # in the tokens, all in one token, to help model the token.
+  #
+  deriveStructure(tokens)
+  deriveStructureWithValues(tokens)
+  callback(res, tokens)
+  return 
 
   #
   # From here down, logic that should move to Scala
   #
+
+
 
   #
   # Create page openers index
@@ -1023,12 +1032,19 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     unless token.page? 
       throw "Internal Error - token is missing page number"
 
+  #
+  # get an "aggregate token" that includes all properties in use
+  # in the tokens, all in one token, to help model the token.
+  #
   deriveStructure(tokens)
   deriveStructureWithValues(tokens)
 
 
 exports.generateFromHtml = generateFromHtml
 
+#
+# original version, of exports.go
+#
 exports.originalGo = (req, name, res ,docLogger) ->
   storage = require '../storage'
   require 'stream'
@@ -1049,25 +1065,22 @@ exports.originalGo = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
-done = () -> 
-  console.log 'finished generating tokens'
+respond = (res, tokens) -> 
+
+  if tokens? 
+    if tokens.length>0
+      util.timelog 'pickling'
+      serializedTokens = JSON.stringify(tokens)
+      console.log """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
+      console.log """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
+      util.timelog 'pickling'
+
+      res.end(serializedTokens)
+      return
+
+  res.send(500)  
 
 exports.go = (req, name, res ,docLogger) ->
   console.log "about to generate tokens"
-  generateFromHtml(req, name, res ,docLogger, done) 
+  generateFromHtml(req, name, res ,docLogger, respond) 
   
-isImage = (text) -> util.startsWith(text, "<img ")
-
-# Utility function for filtering out images
-# Can be rewriteen with a filter statement -- 
-# http://coffeescriptcookbook.com/chapters/arrays/filtering-arrays
-# http://arcturo.github.io/library/coffeescript/04_idioms.html
-filterImages = (ourDivRepresentation) ->
-  filtered = []
-  filtered.push(div) for div in ourDivRepresentation when not isImage(div.text)
-  filtered
-
-filterZeroLengthText = (ourDivRepresentation) ->
-  filtered = []
-  filtered.push(div) for div in ourDivRepresentation when not (div.text.length == 0)
-  filtered

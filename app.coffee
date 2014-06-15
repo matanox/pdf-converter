@@ -26,8 +26,8 @@ user    = require './routes/user'
 errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './logging' 
-markers       = require './markers'
-fluff         = require './metaFluff'
+#markers       = require './markers'
+#fluff         = require './metaFluff'
 
 #
 # Configure and start express
@@ -127,10 +127,6 @@ startServer = () ->
 
   # Attach primus for development iterating, as long as it's convenient 
   # unless env is 'production' then primus.start(server)
-
-#
-# Get data that can apply to any document
-#
 
 startServer()
 
