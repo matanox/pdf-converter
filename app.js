@@ -80,19 +80,7 @@ app.use(express["static"](path.join(__dirname, 'public')));
 
 app.use(errorHandling.errorHandler);
 
-app.get('/', routes.index);
-
-app.get('/users', user.list);
-
 app.get('/handleInputFile', require('./routes/handleInputFile').go);
-
-app.get('/tokenSync', require('./routes/tokenSync').go);
-
-app.post('/tokenSync', require('./routes/tokenSync').go);
-
-app.get('/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go);
-
-authorization.googleAuthSetup(app, host, routes);
 
 startServer = function() {
   var server, testFile, testUrl;
@@ -103,18 +91,13 @@ startServer = function() {
   });
   if (env !== 'production') {
     testFile = 'LaeUusATIi5FHXHmF4hU';
-    testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true';
-    http.get(testUrl, function(res) {
+    testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile;
+    return http.get(testUrl, function(res) {
       return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);
     });
   }
-  if (env !== 'production') {
-    return primus.start(server);
-  }
 };
 
-markers.load(startServer);
-
-fluff.load();
+startServer();
 
 selfMonitor = require('./selfMonitor').start();

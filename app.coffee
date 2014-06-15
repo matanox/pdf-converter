@@ -83,21 +83,21 @@ app.use errorHandling.errorHandler
 #
 # Setup some routing
 #
-app.get '/', routes.index
-app.get '/users', user.list
+#app.get '/', routes.index
+#app.get '/users', user.list
 
 app.get '/handleInputFile', require('./routes/handleInputFile').go
-app.get  '/tokenSync', require('./routes/tokenSync').go
-app.post '/tokenSync', require('./routes/tokenSync').go
+#app.get  '/tokenSync', require('./routes/tokenSync').go
+#app.post '/tokenSync', require('./routes/tokenSync').go
 
-app.get '/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go
+#app.get '/serveIntermediaryFile', require('./routes/serveIntermediaryFile').go
 #app.get '/convert', convert.go
 #app.get '/extract', extract.go
 
 #
 # Authorization
 #
-authorization.googleAuthSetup(app, host, routes)
+#authorization.googleAuthSetup(app, host, routes)
 
 startServer = () ->
   #
@@ -120,19 +120,18 @@ startServer = () ->
     #testFile = 'S7VUdDeES5O6Xby6xtc7'
     testFile = 'LaeUusATIi5FHXHmF4hU'    # 'rwUEzeLnRfKgNh23R82W'
 
-    #testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?inkUrl=https://www.filepicker.io/api/file/' + testFile
-    testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
+    testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile
+    #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
     http.get(testUrl, (res) ->
       logging.logBlue 'Server response to its own synthetic client is: ' + res.statusCode)
 
   # Attach primus for development iterating, as long as it's convenient 
-  unless env is 'production' then primus.start(server)
+  # unless env is 'production' then primus.start(server)
 
 #
 # Get data that can apply to any document
 #
 
-markers.load(startServer)
-fluff.load()
+startServer()
 
 selfMonitor = require('./selfMonitor').start()

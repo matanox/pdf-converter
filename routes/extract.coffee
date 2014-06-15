@@ -457,6 +457,13 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   console.log 'tokens count after uniting tokens:  ' + tokens.length
   util.timelog 'uniting split tokens'
 
+  callback()
+  return
+
+  #
+  # From here down, logic that should move to Scala
+  #
+
   #
   # Create page openers index
   #
@@ -1022,7 +1029,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
 exports.generateFromHtml = generateFromHtml
 
-exports.go = (req, name, res ,docLogger) ->
+exports.originalGo = (req, name, res ,docLogger) ->
   storage = require '../storage'
   require 'stream'
   riak = require('riak-js').getClient({host: "localhost", port: "8098"})
@@ -1042,6 +1049,13 @@ exports.go = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
+done = () -> 
+  console.log 'finished generating tokens'
+
+exports.go = (req, name, res ,docLogger) ->
+  console.log "about to generate tokens"
+  generateFromHtml(req, name, res ,docLogger, done) 
+  
 isImage = (text) -> util.startsWith(text, "<img ")
 
 # Utility function for filtering out images
