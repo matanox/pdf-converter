@@ -14,6 +14,7 @@ ctype    = require '../ctype'
 markers  = require '../markers'
 analytic = require '../analytic'
 verbex   = require 'verbal-expressions'
+assert   = require 'assert' 
 
 #
 # Code refactor aiding function that examines all elements in an array,
@@ -1067,6 +1068,19 @@ exports.originalGo = (req, name, res ,docLogger) ->
 
 respond = (res, tokens) -> 
 
+  chunkResponse = true
+
+  chunkRespond = (payload, res) ->
+    sentSize = 0
+    maxChunkSize = 65536 # 2^16
+    for i in [0..payload.length / maxChunkSize]
+      chunk = payload.substring(i*maxChunkSize, Math.min((i+1)*maxChunkSize, payload.length))
+      console.log """sending chunk of length #{chunk.length}"""
+      sentSize += chunk.length
+      res.write(chunk)
+    res.end()
+    assert.equal(sentSize, payload.length, "payload chunking did not send entire payload")
+
   if tokens? 
     if tokens.length>0
       util.timelog 'pickling'
@@ -1075,7 +1089,10 @@ respond = (res, tokens) ->
       console.log """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
       util.timelog 'pickling'
 
-      res.end(serializedTokens)
+      if chunkResponse
+        chunkRespond(serializedTokens, res)
+      else
+        res.end(serializedTokens)
       return
 
   res.send(500)  
