@@ -11,7 +11,7 @@ exports.storePdfMetaData = function(localCopy, docLogger) {
   var execCommand;
   util.timelog("Getting pdf file metadata using pdfinfo");
   execCommand = 'pdfinfo -meta' + ' ';
-  execCommand += localCopy;
+  execCommand += '"' + localCopy + '"';
   return exec(execCommand, function(error, stdout, stderr) {
     var meta;
     docLogger.info(execCommand + "'s stdout: " + stdout);

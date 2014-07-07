@@ -458,21 +458,22 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   console.log 'tokens count after uniting tokens:  ' + tokens.length
   util.timelog 'uniting split tokens'
 
-
   #
   # get an "aggregate token" that includes all properties in use
   # in the tokens, all in one token, to help model the token.
   #
   deriveStructure(tokens)
   deriveStructureWithValues(tokens)
+
+  #
+  # return the tokens to caller
+  #
   callback(res, tokens)
   return 
 
   #
   # From here down, logic that should move to Scala
   #
-
-
 
   #
   # Create page openers index

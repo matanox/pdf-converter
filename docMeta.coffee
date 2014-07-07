@@ -12,7 +12,7 @@ exports.storePdfMetaData = (localCopy, docLogger) ->
   util.timelog "Getting pdf file metadata using pdfinfo"
   
   execCommand = 'pdfinfo -meta' + ' '
-  execCommand += localCopy
+  execCommand += '"' + localCopy + '"'
   #logging.log 'issuing command ' + execCommand
 
   exec execCommand, (error, stdout, stderr) ->

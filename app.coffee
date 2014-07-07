@@ -118,7 +118,8 @@ startServer = () ->
     #testFile = 'leZrsgpZQOSCCtS98bsu'
     #testUrl = 'http://localhost/extract?name=' + testFile
     #testFile = 'S7VUdDeES5O6Xby6xtc7'
-    testFile = 'LaeUusATIi5FHXHmF4hU'    # 'rwUEzeLnRfKgNh23R82W'
+    #testFile = 'LaeUusATIi5FHXHmF4hU'    # 'rwUEzeLnRfKgNh23R82W'
+    testFile = 'To%20Belong%20or%20Not%20to%20Belong,%20That%20Is%20the%20Question'    
 
     testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile
     #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'

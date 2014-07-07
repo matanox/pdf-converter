@@ -23,6 +23,7 @@ exports.go = (localCopy, docLogger, req, res) ->
 
   name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
   req.session.name = name 
+  #console.log """About to convert file #{name} from pdf to html"""
 
   hasher = crypto.createHash('md5')
   fileContent = fs.readFileSync(localCopy)
@@ -76,7 +77,7 @@ exports.go = (localCopy, docLogger, req, res) ->
         execCommand = executable + " "
         
         outFolder = "../local-copies/" + "html-converted/"
-        execCommand += localCopy + " " + executalbeParams + " " + "--dest-dir=" + outFolder + "/" + name
+        execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"'
         docLogger.info execCommand
         exec execCommand, (error, stdout, stderr) ->
           docLogger.info executable + "'s stdout: " + stdout

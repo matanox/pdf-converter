@@ -49,7 +49,7 @@ exports.go = function(localCopy, docLogger, req, res) {
       docLogger.info("Starting the conversion from pdf to html");
       execCommand = executable + " ";
       outFolder = "../local-copies/" + "html-converted/";
-      execCommand += localCopy + " " + executalbeParams + " " + "--dest-dir=" + outFolder + "/" + name;
+      execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
       docLogger.info(execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
         docLogger.info(executable + "'s stdout: " + stdout);
