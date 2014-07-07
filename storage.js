@@ -17,7 +17,7 @@ exports.store = function(bucket, filename, fileContent, docLogger) {
   return riak.save(bucket, filename, fileContent, function(error) {
     util.timelog("storing file to clustered storage");
     if (error != null) {
-      return docLogger.error("failed storing file to clustered storage");
+      return docLogger.error("failed storing file to clustered storage, with error: " + error);
     }
   });
 };
