@@ -16,6 +16,9 @@ analytic = require '../analytic'
 verbex   = require 'verbal-expressions'
 assert   = require 'assert' 
 
+mode = 'basic'
+createIndex = false # no use for the words index here right now
+
 #
 # Code refactor aiding function that examines all elements in an array,
 # and returns the 'maximum' structure of an item of the array,
@@ -465,11 +468,12 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   deriveStructure(tokens)
   deriveStructureWithValues(tokens)
 
-  #
-  # return the tokens to caller
-  #
-  callback(res, tokens)
-  return 
+  if mode is 'bare'
+    #
+    # return the tokens to caller
+    #
+    callback(res, tokens)
+    return 
 
   #
   # From here down, logic that should move to Scala
@@ -841,20 +845,21 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     id += 1
   util.timelog 'ID seeding', docLogger
 
-  #
-  # Create a sorted index - mapping from each word to the locations where it appears
-  #
-  textIndex = []
-  for token in tokens when token.metaType is 'regular'
-    textIndex.push({text: token.text, id: token.id})
-  util.timelog('Index creation')    
-  textIndex.sort((a, b) ->  # simple sort by lexicographic order obliviously of the case of equality
-    if a.text > b.text
-      return 1
-    else
-      return -1)
-  util.timelog 'Index creation', docLogger      
-  #docLogger.info textIndex
+  if createIndex
+    #
+    # Create a sorted index - mapping from each word to the locations where it appears
+    #
+    textIndex = []
+    for token in tokens when token.metaType is 'regular'
+      textIndex.push({text: token.text, id: token.id})
+    util.timelog('Index creation')    
+    textIndex.sort((a, b) ->  # simple sort by lexicographic order obliviously of the case of equality
+      if a.text > b.text
+        return 1
+      else
+        return -1)
+    util.timelog 'Index creation', docLogger      
+    #docLogger.info textIndex
 
   ###
   markersRegex = ''
@@ -906,7 +911,6 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
       if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
         docLogger.info('Interspaced Title Word detected for word: ' + token.text)
 
-
   #
   # Create sentences sequence
   # Temporary note: For now, each sentence will be tokenized to have its tokens become an array
@@ -924,7 +928,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   for token in tokens
     if token.metaType is 'regular' 
       connect_token_group({group:group, token:token})
-      if token.text is '.'             # Is this a sentence splitter?
+      if util.endsWith(token.text,'.') # Is this a sentence ending?
         unless group.length > (1 + 1)  # One word and then a period are not a 'sentence', 
           abbreviations += 1           # likely it is an abbreviation. Not a sentence split..
         else
@@ -932,7 +936,30 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
           group = []
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
+
   util.timelog 'Sentence tokenizing', docLogger  
+
+  #
+  # log as sentences 
+  #
+
+  docLogger.info('--------------------')
+  docLogger.info('Tokenized sentences:')
+  
+  for group in groups
+    sentence = ''
+    for token in group
+      sentence += token.text + ' '
+    docLogger.info(sentence + '\n')
+ 
+  docLogger.info('--------------------')
+
+  if mode is 'basic'
+    #
+    # return the tokens to caller
+    #
+    callback(res, tokens)
+    return 
 
   # Log some statistics about sentences
   documentQuantifiers = {}
@@ -1040,6 +1067,13 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   deriveStructure(tokens)
   deriveStructureWithValues(tokens)
+
+  if mode is 'all'
+    #
+    # return the tokens to caller
+    #
+    callback(res, tokens)
+    return 
 
 
 exports.generateFromHtml = generateFromHtml
