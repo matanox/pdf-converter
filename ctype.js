@@ -21,6 +21,8 @@ isUpperCaseChar = function(char) {
   return !isLowerCaseChar(char);
 };
 
+exports.isUpperCaseChar = isUpperCaseChar;
+
 exports.testPureUpperCase = function(string) {
   var char, _i, _len, _ref;
   if (string.length < 3) {

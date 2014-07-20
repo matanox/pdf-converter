@@ -15,6 +15,7 @@ markers  = require '../markers'
 analytic = require '../analytic'
 verbex   = require 'verbal-expressions'
 assert   = require 'assert' 
+sentenceSplitter = require '../sentenceSplitter'
 
 mode = 'basic'
 createIndex = false # no use for the words index here right now
@@ -925,15 +926,12 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   abbreviations = 0
   groups = [] # sequence of all groups
   group = []  
-  for token in tokens
+  for token,t in tokens
     if token.metaType is 'regular' 
       connect_token_group({group:group, token:token})
-      if util.endsWith(token.text,'.') # Is this a sentence ending?
-        unless group.length > (1 + 1)  # One word and then a period are not a 'sentence', 
-          abbreviations += 1           # likely it is an abbreviation. Not a sentence split..
-        else
-          groups.push(group) # close off a 'sentence' group
-          group = []
+      if sentenceSplitter.endOfSentence(tokens, t) # Is this a sentence ending?
+        groups.push(group) # close off a 'sentence' group
+        group = []
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
 
@@ -942,17 +940,13 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #
   # log as sentences 
   #
-
-  docLogger.info('--------------------')
-  docLogger.info('Tokenized sentences:')
+  sentencesWriter = util.initDataWriter(name, 'sentences')
   
   for group in groups
     sentence = ''
     for token in group
       sentence += token.text + ' '
-    docLogger.info(sentence + '\n')
- 
-  docLogger.info('--------------------')
+    sentencesWriter.info(sentence)
 
   if mode is 'basic'
     #
