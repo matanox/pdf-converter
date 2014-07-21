@@ -13,7 +13,7 @@ lib-cov
 
 pids
 logs
-results
+docData
 
 node_modules
 
