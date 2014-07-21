@@ -948,6 +948,30 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
       sentence += token.text + ' '
     dataWriter.write(name, 'sentences', sentence)
  
+  #
+  # data-log all that has meta-tag
+  #
+  metaTypeLog = (type) ->
+    text = ''
+    for token in tokens
+      if token.meta is type
+        switch token.metaType 
+          when 'regular'
+            text += token.text + ' '
+
+    if text.length > 0
+      dataWriter.write(name, type, text)
+      return true
+
+    else
+      return false
+    
+  #
+  # data-log abstract, if abstract detected
+  #
+  metaTypeLog('abstract')
+  metaTypeLog('title')
+
   if mode is 'basic'
     #
     # return the tokens to caller

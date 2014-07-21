@@ -33,11 +33,8 @@ exports.write = (inputFileName, dataType, data) ->
   #
   # Initialize data writer if not already initialized
   #
+  unless writers[dataType]?
 
-  if writers[dataType]?
-    winstonWrite(writers[dataType], data)
-
-  else
     writer = new winston.Logger
     now = new Date()
 
@@ -49,7 +46,7 @@ exports.write = (inputFileName, dataType, data) ->
     catch err
       if err.code isnt 'EEXIST' # is the error code indicating the directory already exists? if so all is fine
         throw e                 # on different error, re-throw the error
- 
+
     nameBase = 'docData/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
     
     writer = new winston.Logger
@@ -65,6 +62,13 @@ exports.write = (inputFileName, dataType, data) ->
           json: false
           timestamp: false
       ], exitOnError: false
-    console.log("""Data writing for #{inputFileName}, #{dataType} is going to #{nameBase}""")
-  
+    console.log("""Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""")
+
     writers[dataType] = writer
+
+  #
+  # write the data
+  #
+  winstonWrite(writers[dataType], data)
+
+  return true
