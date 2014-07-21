@@ -1,5 +1,3 @@
-fs = require 'fs'
-
 #
 # Various utility functions (not all should necessarily stay here)
 #
@@ -210,37 +208,3 @@ exports.initDocLogger = (name) ->
 
   docLogger
 
-exports.initDataWriter = (dirName, fileName) ->
-  #
-  # Initialize data writer
-  #
-  docLogger = new winston.Logger
-  now = new Date()
-
-  #
-  # create the directory if it doesn't already exist
-  #
-  try 
-    fs.mkdirSync('outputs/' + dirName)
-  catch err
-    if err.code isnt 'EEXIST' # is the error code indicating the directory already exists? if so all is fine
-      throw e                 # on different error, re-throw the error
- 
-  nameBase = 'outputs/' + dirName + '/' + fileName + '-' + now.toISOString() + '.out' 
-  
-  docLogger = new winston.Logger
-    transports: [
-      new winston.transports.File
-        name: 'file#json'
-        filename: nameBase + '.json',
-        json: true
-        timestamp: true
-      new winston.transports.File
-        name: 'file#text'
-        filename: nameBase,
-        json: false
-        timestamp: true
-    ], exitOnError: false
-  #console.log('Logging handling of ' + dirName + ' in ' + nameBase + '*')      
-
-  docLogger

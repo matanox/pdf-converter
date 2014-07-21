@@ -1,4 +1,5 @@
 #
+# Main part of this application
 # Drive the rich tokenization of text from html input
 #
 
@@ -15,6 +16,7 @@ markers  = require '../markers'
 analytic = require '../analytic'
 verbex   = require 'verbal-expressions'
 assert   = require 'assert' 
+dataWriter = require '../dataWriter'
 sentenceSplitter = require '../sentenceSplitter'
 
 mode = 'basic'
@@ -41,8 +43,8 @@ deriveStructure = (elements) ->
   for element in elements
     iterate(element, maxStructure)
 
-  console.log 'token structure:'
-  console.dir maxStructure
+  logging.cond 'token structure:', 'refactor'
+  logging.cond maxStructure, 'refactor'
 
 #
 # Code refactor aiding function that examines all elements in an array,
@@ -77,8 +79,8 @@ deriveStructureWithValues = (elements, variationLimit) ->
   for element in elements
     iterate(element, maxStructure)
 
-  console.log """token structure with possible values (up to #{variationLimit} unique values per object node):"""
-  console.dir maxStructure
+  logging.cond """token structure with possible values (up to #{variationLimit} unique values per object node):""", 'refactor'
+  logging.cond maxStructure, 'refactor' 
 
 #
 # Helper function for iterating token pairs
@@ -275,7 +277,7 @@ titleAndAbstract = (tokens) ->
   # where the core follows an 'Introduction' labeled header
   #
   for introduction in sequences     
-    console.log tokens[introduction.startToken].text
+    #console.log tokens[introduction.startToken].text
     if ((tokens[introduction.startToken].text is 'Introduction') or
         (tokens[introduction.startToken].text is '1.' and tokens[introduction.startToken+2].text is 'Introduction') or
         (tokens[introduction.startToken].text is '1'  and tokens[introduction.startToken+2].text is 'Introduction'))    
@@ -729,12 +731,12 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   averageParagraphLength = analytic.average(paragraphs, (a) -> a.length)
   
-  console.log """paragraphs to pages ratio: #{paragraphsRatio}"""
-  console.log """average paragraph length:  #{averageParagraphLength}"""
+  logging.cond """paragraphs to pages ratio: #{paragraphsRatio}""", 'paragraphs'
+  logging.cond """average paragraph length:  #{averageParagraphLength}""", 'paragraphs'
 
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats)
   for entry in lineOpenersDistribution
-    console.log """line beginnings on left position #{entry.key} - detected #{entry.val} times"""
+    logging.cond """line beginnings on left position #{entry.key} - detected #{entry.val} times""", 'basicParse'
 
   ###
   paragraphLengthsDistribution = analytic.generateDistribution(paragraphLengths)
@@ -938,16 +940,14 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   util.timelog 'Sentence tokenizing', docLogger  
 
   #
-  # log as sentences 
+  # data-log all sentences 
   #
-  sentencesWriter = util.initDataWriter(name, 'sentences')
-  
   for group in groups
     sentence = ''
     for token in group
       sentence += token.text + ' '
-    sentencesWriter.info(sentence)
-
+    dataWriter.write(name, 'sentences', sentence)
+ 
   if mode is 'basic'
     #
     # return the tokens to caller
@@ -1104,7 +1104,7 @@ respond = (res, tokens) ->
     maxChunkSize = 65536 # 2^16
     for i in [0..payload.length / maxChunkSize]
       chunk = payload.substring(i*maxChunkSize, Math.min((i+1)*maxChunkSize, payload.length))
-      console.log """sending chunk of length #{chunk.length}"""
+      logging.cond """sending chunk of length #{chunk.length}""", 'communication'
       sentSize += chunk.length
       res.write(chunk)
     res.end()

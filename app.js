@@ -6,7 +6,9 @@ fs = require('fs');
 
 nconf = require('nconf');
 
-nconf.argv().env();
+nconf.argv().env().file({
+  file: 'loggingConf.json'
+});
 
 nconf.defaults({
   host: 'localhost'

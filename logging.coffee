@@ -3,6 +3,14 @@
 # Winston also breaks under load (messages vanish, so we'll if we keep it)
 #
 
+nconf = require('nconf')
+
+# conditional logging
+exports.cond = (message, tags) ->
+  enabledTags = nconf.get 'tagsEnabled'
+  if tags in enabledTags
+    console.log message
+
 winston = require 'winston'
 
 log = (level, msgOrObj) -> winston.log(level, msgOrObj)
