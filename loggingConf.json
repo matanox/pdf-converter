@@ -1,9 +1,17 @@
 {
   "tagsEnabled": [
-    "paragraphs"
+    "progress",
+    "paragraphs",
+    "hash",
+    "fileMgmt",
+    "stats",
+    "pdfToHtml"
   ],
   "tagsDisabled": [
     "communication",
-    "refactor"
+    "fonts",
+    "refactor",
+    "partDetection",
+    "dataWriter"
   ]
 }

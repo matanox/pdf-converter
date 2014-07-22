@@ -100,7 +100,7 @@ makeRequest = function(filename) {
   return http.get({
     host: host,
     port: port,
-    path: '/handleInputFile?' + 'localLocation=' + filename,
+    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename),
     method: 'GET'
   }, httpCallBack).on('error', function(e) {
     return console.log("Got error: " + e.message);

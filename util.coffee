@@ -4,6 +4,7 @@
 
 logging = require './logging' 
 winston = require 'winston'
+dataWriter = require './dataWriter'
 # crepl = require 'coffee-script/lib/coffee-script/repl'
 
 anySpaceChar = RegExp(/\s/)
@@ -100,7 +101,7 @@ exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2)
 #        both starting and ending a timer - just supply the same timer description string to both.
 #        The second call will log the time elapsed between the two. 
 #
-timelog = (timer, logger) ->
+timelog = (name, timer, logger) ->
   #timer = timer + ' took'                                    # the timer string is also the message 
                                                               # it will log to the console when it ends.
                                                              
@@ -110,10 +111,12 @@ timelog = (timer, logger) ->
     #console.timeEnd(timer)
     end = new Date()
     elapsed = (end.getTime() - timelog.timersLookup[timer])
+    timerText = timer + ' took: ' + elapsed + ' ms'
     if logger?
-      logger.info(timer + ' took: ' + elapsed + ' ms')
+      logger.info(timerText)
     else
-      logging.log(timer + ' took: ' + elapsed + ' ms')
+      dataWriter.write(name, 'timers', timerText)
+      logging.cond(timerText, 'timers')
 
     delete timelog.timersLookup[timer]
     return elapsed
@@ -204,7 +207,7 @@ exports.initDocLogger = (name) ->
         json: false
         timestamp: true
     ], exitOnError: false
-  console.log('Logging handling of ' + name + ' in ' + docLoggerNameBase + '*')      
+  console.log("""Logging handling of '#{name}'' in #{docLoggerNameBase}*""")      
 
   docLogger
 

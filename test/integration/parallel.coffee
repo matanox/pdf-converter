@@ -92,7 +92,7 @@ makeRequest = (filename) ->
   http.get 
     host: host
     port: port
-    path: '/handleInputFile?' + 'localLocation=' + filename
+    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename)
     method: 'GET',
     httpCallBack 
   .on('error', (e) ->

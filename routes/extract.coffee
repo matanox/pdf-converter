@@ -96,9 +96,9 @@ iterator = (tokens, iterationFunc) ->
 #
 # extract article title and abstract
 #
-titleAndAbstract = (tokens) ->
+titleAndAbstract = (name, tokens) ->
 
-  util.timelog('Title and abstract recognition')
+  util.timelog(name, 'Title and abstract recognition')
 
   firstPage = []
   for token in tokens
@@ -115,7 +115,7 @@ titleAndAbstract = (tokens) ->
   if not firstPageEnd?
     throw 'failed detecting end of first page'    
 
-  console.log 'first page is ' + firstPageEnd + ' tokens long'
+  dataWriter.write name, 'stats',  'first page is ' + firstPageEnd + ' tokens long'
 
   #
   # Calculate most common font sizes
@@ -126,8 +126,8 @@ titleAndAbstract = (tokens) ->
 
   fontSizesDistribution = analytic.generateDistribution(fontSizes)
 
-  console.log "distribution of input font sizes:"
-  console.dir fontSizesDistribution
+  logging.cond "distribution of input font sizes:", 'fonts'
+  logging.cond fontSizesDistribution, 'fonts'
 
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
 
@@ -245,7 +245,7 @@ titleAndAbstract = (tokens) ->
       #console.log sequence.startBottom
       #util.simpleLogSequence(tokens, sequence, 'sequence')
       if parseFloat(sequence['font-size']) is fontSizesUnique[i]
-        console.log sequence.numOfTokens
+        #console.log sequence.numOfTokens
         if sequence.startBottom > 500
           if sequence.numOfTokens > minTitleTokensNum
             title = sequence
@@ -334,9 +334,9 @@ titleAndAbstract = (tokens) ->
   # of the core text.
   #
 
-  util.timelog('Title and abstract recognition')
+  util.timelog(name, 'Title and abstract recognition')
 
-  util.timelog('initial handling of first page fluff')
+  util.timelog(name, 'initial handling of first page fluff')
 
   if abstract?
     # Any sequence that starts higher than the abstract ends,
@@ -349,14 +349,14 @@ titleAndAbstract = (tokens) ->
           for t in [sequence.startToken..sequence.endToken]
             tokens[t].fluff = true
 
-  util.timelog('initial handling of first page fluff')
+  util.timelog(name, 'initial handling of first page fluff')
 
 #
 # Extract text content and styles from html
 #
 generateFromHtml = (req, name, res ,docLogger, callback) ->  
 
-  util.timelog('Extraction from html stage A')
+  util.timelog(name, 'Extraction from html stage A')
 
   #
   # Read the input html 
@@ -372,7 +372,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   inputStylesMap = css.simpleFetchStyles(rawHtml ,path + name + '/') 
 
   htmlparser = require("htmlparser2");
-  util.timelog('htmlparser2') 
+  util.timelog(name, 'htmlparser2') 
   handler = new htmlparser.DomHandler((error, dom) ->
     if (error)
       docLogger.error('htmlparser2 failed loading document')
@@ -382,7 +382,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   parser = new htmlparser.Parser(handler)
   parser.parseComplete(rawHtml)
   dom = handler.dom
-  util.timelog 'htmlparser2', docLogger 
+  util.timelog name, 'htmlparser2'
  
   #
   # Build tokens while preserving the original css styles
@@ -447,8 +447,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # This is necessary for the cases where pdf2html splits parts of 
   # the same word between span elements. 
   #
-  util.timelog 'uniting split tokens'
-  console.log 'tokens count before uniting tokens: ' + tokens.length  
+  util.timelog name, 'uniting split tokens'
+  dataWriter.write name, 'stats', 'tokens count before uniting tokens: ' + tokens.length
 
   iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'  # undelimited consecutive pair?
@@ -462,8 +462,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
           return 0
     return 1)  
 
-  console.log 'tokens count after uniting tokens:  ' + tokens.length
-  util.timelog 'uniting split tokens'
+  dataWriter.write name, 'stats', 'tokens count after uniting tokens:  ' + tokens.length
+  util.timelog name, 'uniting split tokens'
 
   #
   # get an "aggregate token" that includes all properties in use
@@ -476,7 +476,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens)
+    callback(res, tokens, name)
     return 
 
   #
@@ -499,7 +499,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # Detect repeat header and footer text
   # 
 
-  util.timelog 'detect and mark repeat headers and footers'
+  util.timelog name, 'detect and mark repeat headers and footers'
 
   # Functional style setup
   GT  = (j, k) -> return j > k
@@ -551,7 +551,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
               
           # Mark the sequence as fluff in both 'consecutive' pages where it apperas
           if repeat 
-            console.log 'repeat header/footer:'
+            dataWriter.write name, 'partDetection', 'repeat header/footer:'
             for t in [0..a.length-1]
               a[t].fluff = true
               b[t].fluff = true
@@ -560,9 +560,11 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
           
       #console.log repeatSequence
       unless repeatSequence > 0 
-        console.log 'no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' for ' + (if physicalPageSide is 0 then 'even pages' else 'odd pages')
+        logging.cond 'no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' for ' + (if physicalPageSide is 0 then 'even pages' else 'odd pages'),
+                     'partDetection'
       else 
-        console.log repeatSequence + ' ' + 'repeat' + ' '+ extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' +  (if physicalPageSide is 0 then 'even pages' else 'odd pages')
+        logging.cond repeatSequence + ' ' + 'repeat' + ' '+ extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' +  (if physicalPageSide is 0 then 'even pages' else 'odd pages'),
+                     'partDetection'
 
   #
   # Remove first page number footer even if it does not appear consistently  
@@ -571,15 +573,15 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # TODO: consider grouping with elaborate fluff removal when implemented
   #
 
-  console.log 'bottom extreme is ' + bottom.extreme
+  dataWriter.write name, 'partDetection', 'bottom extreme is ' + bottom.extreme
   for token in tokens when parseInt(token.page) is 1
     if Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2 # same grace      
-      console.log '1st page non-repeat footer text detected: ' + token.text
+      dataWriter.write name, 'partDetection', '1st page non-repeat footer text detected: ' + token.text
       token.fluff = true
   
-  util.timelog 'detect and mark repeat headers and footers'
+  util.timelog name, 'detect and mark repeat headers and footers'
 
-  titleAndAbstract(tokens)
+  titleAndAbstract(name, tokens)
  
   #
   # Now effectively remove all identified fluff the identified repeat sequences
@@ -609,7 +611,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # handle title and abstract, and core text beginning detection
   # this also marks out most first page fluff
   #
-  util.timelog 'basic handle line and paragraph beginnings'
+  util.timelog name, 'basic handle line and paragraph beginnings'
 
   ###
   util.timelog 'making copy'
@@ -658,7 +660,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1  # arbitrary grace interval to absorb
                                                                             # floating point calculation deviations 
                                                                             # and document deviations 
-  console.log """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
+  dataWriter.write name, 'stats', """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
 
   util.last(tokens).lineLocation = 'closer'
 
@@ -708,7 +710,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
       #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
 
-  util.timelog 'basic handle line and paragraph beginnings'
+  util.timelog name, 'basic handle line and paragraph beginnings'
 
   #
   # Derive paragraph length and quantity statistics - can probably be moved outside the main flow
@@ -721,19 +723,19 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
       paragraphs.push {'length': i - lastOpenerIndex, 'opener': tokens[i]}
       lastOpenerIndex = i
 
-  console.log """detected #{paragraphs.length} paragraphs"""
+  dataWriter.write name, 'stats', """detected #{paragraphs.length} paragraphs"""
   #paragraphs.sort( (a, b) -> return parseInt(b.length) - parseInt(a.length) )
   
   #for paragraph in paragraphs
   #  console.log """beginning in page #{paragraph.opener.page}: paragraph of length #{paragraph.length}"""
 
-  console.log parseInt(util.last(tokens).page)
+  dataWriter.write name, 'stats', """number of pages in input document: #{parseInt(util.last(tokens).page)}"""
   paragraphsRatio = paragraphs.length / parseInt(util.last(tokens).page)
 
   averageParagraphLength = analytic.average(paragraphs, (a) -> a.length)
   
-  logging.cond """paragraphs to pages ratio: #{paragraphsRatio}""", 'paragraphs'
-  logging.cond """average paragraph length:  #{averageParagraphLength}""", 'paragraphs'
+  dataWriter.write name, 'stats', """paragraphs to pages ratio: #{paragraphsRatio}"""
+  dataWriter.write name, 'stats', """average paragraph length:  #{averageParagraphLength}"""
 
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats)
   for entry in lineOpenersDistribution
@@ -836,18 +838,18 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
 
   #docLogger.info(tokens.length)
 
-  util.timelog 'Extraction from html stage A', docLogger
+  util.timelog name, 'Extraction from html stage A'
 
   #
   # Add a running sequence id to the tokens (after all uniting of tokens already took place)
   #
 
-  util.timelog('ID seeding')        
+  util.timelog name, 'ID seeding'
   id = 0
   for token in tokens
     token.id = id
     id += 1
-  util.timelog 'ID seeding', docLogger
+  util.timelog name, 'ID seeding'
 
   if createIndex
     #
@@ -856,13 +858,13 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     textIndex = []
     for token in tokens when token.metaType is 'regular'
       textIndex.push({text: token.text, id: token.id})
-    util.timelog('Index creation')    
+    util.timelog(name, 'Index creation')    
     textIndex.sort((a, b) ->  # simple sort by lexicographic order obliviously of the case of equality
       if a.text > b.text
         return 1
       else
         return -1)
-    util.timelog 'Index creation', docLogger      
+    util.timelog name, 'Index creation'      
     #docLogger.info textIndex
 
   ###
@@ -895,7 +897,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     docLogger.info(markersRegex)
 
     
-    util.timelog('Markers visualization') 
+    util.timelog(name, 'Markers visualization') 
     #docLogger.info('Marker regex length is ' + markersRegex.toString().length)
     #docLogger.info(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
@@ -911,9 +913,9 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     if token.metaType is 'regular'
       token.calculatedProperties = []
       if util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
-        docLogger.info('All Caps Style detected for word: ' + token.text);
+        dataWriter.write name, 'partDetection', 'All Caps Style detected for word: ' + token.text
       if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
-        docLogger.info('Interspaced Title Word detected for word: ' + token.text)
+        dataWriter.write name, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
 
   #
   # Create sentences sequence
@@ -921,7 +923,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   #                 inside the groups array. Later, there can be more types of groups etc..
   #
 
-  util.timelog('Sentence tokenizing')
+  util.timelog(name, 'Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
     group.push(token)
     #token.partOf = group      
@@ -938,7 +940,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
 
-  util.timelog 'Sentence tokenizing', docLogger  
+  util.timelog name, 'Sentence tokenizing'  
 
   #
   # data-log all sentences 
@@ -978,7 +980,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens)
+    callback(res, tokens, name)
     return 
 
   # Log some statistics about sentences
@@ -991,7 +993,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   # Adding marker highlighting
   #
 
-  util.timelog('Markers visualization') 
+  util.timelog(name, 'Markers visualization') 
 
   docSieve = markers.createDocumentSieve(markers.baseSieve) # Derives the markers sieve for use for this document
   #util.logObject(docSieve)  
@@ -1049,7 +1051,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
         setImmediate(() -> markSentence(sentenceIdx)) # queue handling of the next sentence while 
                                                         # allowing IO to occur in between (http://nodejs.org/api/timers.html#timers_setimmediate_callback_arg)
       else 
-        util.timelog 'Markers visualization', docLogger
+        util.timelog name, 'Markers visualization'
 
         # Done. Send back response, after attaching the result data to the session
         #req.session.tokens = require('circular-json').stringify(tokens) # takes 100 times longer than JSON.stringify so can't afford it
@@ -1092,7 +1094,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens)
+    callback(res, tokens, name)
     return 
 
 
@@ -1106,10 +1108,10 @@ exports.originalGo = (req, name, res ,docLogger) ->
   require 'stream'
   riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
-  util.timelog 'checking data store for cached tokens'
+  util.timelog name, 'checking data store for cached tokens'
   
   storage.fetch('tokens', name, (cachedSerializedTokens) -> 
-    util.timelog 'checking data store for cached tokens'
+    util.timelog name, 'checking data store for cached tokens'
     if cachedSerializedTokens
       # serve cached tokens
       console.log 'cached tokens found in datastore'
@@ -1121,7 +1123,7 @@ exports.originalGo = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
-respond = (res, tokens) -> 
+respond = (res, tokens, name) -> 
 
   chunkResponse = true
 
@@ -1138,11 +1140,11 @@ respond = (res, tokens) ->
 
   if tokens? 
     if tokens.length>0
-      util.timelog 'pickling'
+      util.timelog name, 'pickling'
       serializedTokens = JSON.stringify(tokens)
-      console.log """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
-      console.log """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
-      util.timelog 'pickling'
+      dataWriter.write name, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
+      dataWriter.write name, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
+      util.timelog name, 'pickling'
 
       if chunkResponse
         chunkRespond(serializedTokens, res)
@@ -1153,6 +1155,6 @@ respond = (res, tokens) ->
   res.send(500)  
 
 exports.go = (req, name, res ,docLogger) ->
-  console.log "about to generate tokens"
+  logging.cond "about to generate tokens", 'progress'
   generateFromHtml(req, name, res ,docLogger, respond) 
   

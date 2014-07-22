@@ -4,10 +4,10 @@ var log, nconf, testGraylog2, testLogio, testWinstonLogstash, tty, winston,
 
 nconf = require('nconf');
 
-exports.cond = function(message, tags) {
+exports.cond = function(message, tag) {
   var enabledTags;
   enabledTags = nconf.get('tagsEnabled');
-  if (__indexOf.call(enabledTags, tags) >= 0) {
+  if (__indexOf.call(enabledTags, tag) >= 0) {
     return console.log(message);
   }
 };

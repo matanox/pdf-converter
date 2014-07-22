@@ -15,8 +15,9 @@
 # querying of the data through more than one type of data store.
 #
 
-fs = require 'fs'
+logging = require './logging' 
 winston = require 'winston'
+fs      = require 'fs'
 
 writers = {}
 
@@ -64,7 +65,7 @@ exports.write = (inputFileName, dataType, data) ->
           json: false
           timestamp: false
       ], exitOnError: false
-    console.log("""Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""")
+    logging.cond """Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""", 'dataWriter'
 
     writers[writerName] = writer
 

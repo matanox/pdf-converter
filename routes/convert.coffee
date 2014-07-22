@@ -12,6 +12,7 @@ riak   = require('riak-js').getClient({host: "localhost", port: "8098"})
 fs     = require 'fs'
 crypto = require 'crypto'
 output = require '../output'
+dataWriter = require '../dataWriter'
 
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"
@@ -28,11 +29,11 @@ exports.go = (localCopy, docLogger, req, res) ->
   hasher = crypto.createHash('md5')
   fileContent = fs.readFileSync(localCopy)
 
-  util.timelog "hashing input file"
+  util.timelog name, "hashing input file"
   hasher.update(fileContent)
   hash = hasher.digest('hex')
-  util.timelog "hashing input file"
-  console.log hash
+  util.timelog name, "hashing input file"
+  logging.cond """input file hash is: #{hash}""", "hash"
 
 
   #
@@ -51,13 +52,13 @@ exports.go = (localCopy, docLogger, req, res) ->
         #
         # not cached - perform the conversion and then pass to extraction
         #
-        util.timelog "from upload to serving"
+        util.timelog name, "from upload to serving"
 
         docMeta.storePdfMetaData localCopy, docLogger
         storage.store "pdf", name, fileContent, docLogger
 
-        util.timelog "Conversion to html"
-        docLogger.info "Starting the conversion from pdf to html"
+        util.timelog name, "Conversion to html"
+        logging.cond "Starting the conversion from pdf to html", 'progress'
 
         #docMeta.storePdfMetaData(name, localCopy)
         
@@ -78,22 +79,22 @@ exports.go = (localCopy, docLogger, req, res) ->
         
         outFolder = "../local-copies/" + "html-converted/"
         execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"'
-        docLogger.info execCommand
+        dataWriter.write name, 'pdfToHtml', execCommand
         exec execCommand, (error, stdout, stderr) ->
-          docLogger.info executable + "'s stdout: " + stdout
-          docLogger.info executable + "'s stderr: " + stderr
+          dataWriter.write name, 'pdfToHtml', executable + "'s stdout: " + stdout
+          dataWriter.write name, 'pdfToHtml', + "'s stderr: " + stderr
           if error isnt null
-            docLogger.error executable + "'sexec error: " + error
+            dataWriter.write name, 'pdfToHtml', executable + "'sexec error: " + error
           else
             
             # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
-            util.timelog "Conversion to html", docLogger
+            util.timelog name, "Conversion to html"
 
             riak.save('html', hash, name, (error) -> 
-              util.timelog "storing file hash to clustered storage", docLogger
+              util.timelog name, "storing file hash to clustered storage"
               if error?
-                docLogger.error("failed storing file hash to clustered storage"))
+                 dataWriter.write name, 'pdfToHtml', "failed storing file hash to clustered storage")
 
             require('./extract').go(req, name, res, docLogger)
             #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
@@ -102,7 +103,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       # cached - pass on to extraction as conversion has already taken place
       #
       else
-        console.log('input file has already passed pdf2htmlEX conversion - skipping conversion')
+        logging.cond 'input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt'
         require('./extract').go(req, formerName, res, docLogger)
     )
   

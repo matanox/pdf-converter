@@ -5,7 +5,7 @@ util = require('./util');
 
 ctype = require('./ctype');
 
-specialCaseWords = ['vs.', 'al.', 'cf.'];
+specialCaseWords = ['vs.', 'al.', 'cf.', 'st.'];
 
 acronym = function(string) {
   var firstIndex;

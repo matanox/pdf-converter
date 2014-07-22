@@ -6,9 +6,9 @@
 nconf = require('nconf')
 
 # conditional logging
-exports.cond = (message, tags) ->
+exports.cond = (message, tag) ->
   enabledTags = nconf.get 'tagsEnabled'
-  if tags in enabledTags
+  if tag in enabledTags
     console.log message
 
 winston = require 'winston'

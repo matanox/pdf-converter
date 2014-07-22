@@ -127,9 +127,9 @@ iterator = function(tokens, iterationFunc) {
   return _results;
 };
 
-titleAndAbstract = function(tokens) {
+titleAndAbstract = function(name, tokens) {
   var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t;
-  util.timelog('Title and abstract recognition');
+  util.timelog(name, 'Title and abstract recognition');
   firstPage = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     token = tokens[_i];
@@ -148,15 +148,15 @@ titleAndAbstract = function(tokens) {
   if (firstPageEnd == null) {
     throw 'failed detecting end of first page';
   }
-  console.log('first page is ' + firstPageEnd + ' tokens long');
+  dataWriter.write(name, 'stats', 'first page is ' + firstPageEnd + ' tokens long');
   fontSizes = [];
   for (_k = 0, _len1 = tokens.length; _k < _len1; _k++) {
     token = tokens[_k];
     fontSizes.push(parseFloat(token.finalStyles['font-size']));
   }
   fontSizesDistribution = analytic.generateDistribution(fontSizes);
-  console.log("distribution of input font sizes:");
-  console.dir(fontSizesDistribution);
+  logging.cond("distribution of input font sizes:", 'fonts');
+  logging.cond(fontSizesDistribution, 'fonts');
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key);
   lineOpeners = [];
   for (t = _l = 1, _ref1 = tokens.length - 1; 1 <= _ref1 ? _l <= _ref1 : _l >= _ref1; t = 1 <= _ref1 ? ++_l : --_l) {
@@ -229,7 +229,6 @@ titleAndAbstract = function(tokens) {
     for (_n = 0, _len2 = sequences.length; _n < _len2; _n++) {
       sequence = sequences[_n];
       if (parseFloat(sequence['font-size']) === fontSizesUnique[i]) {
-        console.log(sequence.numOfTokens);
         if (sequence.startBottom > 500) {
           if (sequence.numOfTokens > minTitleTokensNum) {
             title = sequence;
@@ -290,8 +289,8 @@ titleAndAbstract = function(tokens) {
   } else {
     console.warn('title not detected');
   }
-  util.timelog('Title and abstract recognition');
-  util.timelog('initial handling of first page fluff');
+  util.timelog(name, 'Title and abstract recognition');
+  util.timelog(name, 'initial handling of first page fluff');
   if (abstract != null) {
     abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
     for (_s = 0, _len6 = sequences.length; _s < _len6; _s++) {
@@ -305,17 +304,17 @@ titleAndAbstract = function(tokens) {
       }
     }
   }
-  return util.timelog('initial handling of first page fluff');
+  return util.timelog(name, 'initial handling of first page fluff');
 };
 
 generateFromHtml = function(req, name, res, docLogger, callback) {
   var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, path, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _s, _t, _u, _v, _w, _x, _y, _z;
-  util.timelog('Extraction from html stage A');
+  util.timelog(name, 'Extraction from html stage A');
   path = '../local-copies/' + 'html-converted/';
   rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, path + name + '/');
   htmlparser = require("htmlparser2");
-  util.timelog('htmlparser2');
+  util.timelog(name, 'htmlparser2');
   handler = new htmlparser.DomHandler(function(error, dom) {
     if (error) {
       return docLogger.error('htmlparser2 failed loading document');
@@ -326,7 +325,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   parser = new htmlparser.Parser(handler);
   parser.parseComplete(rawHtml);
   dom = handler.dom;
-  util.timelog('htmlparser2', docLogger);
+  util.timelog(name, 'htmlparser2');
   nodesWithStyles = html.representNodes(dom);
   tokenArrays = (function() {
     var _i, _len, _results;
@@ -394,8 +393,8 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
       docLogger.warn(token);
     }
   }
-  util.timelog('uniting split tokens');
-  console.log('tokens count before uniting tokens: ' + tokens.length);
+  util.timelog(name, 'uniting split tokens');
+  dataWriter.write(name, 'stats', 'tokens count before uniting tokens: ' + tokens.length);
   iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
       if (a.positionInfo.bottom === b.positionInfo.bottom) {
@@ -408,12 +407,12 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     }
     return 1;
   });
-  console.log('tokens count after uniting tokens:  ' + tokens.length);
-  util.timelog('uniting split tokens');
+  dataWriter.write(name, 'stats', 'tokens count after uniting tokens:  ' + tokens.length);
+  util.timelog(name, 'uniting split tokens');
   deriveStructure(tokens);
   deriveStructureWithValues(tokens);
   if (mode === 'bare') {
-    callback(res, tokens);
+    callback(res, tokens, name);
     return;
   }
   page = null;
@@ -424,7 +423,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     }
     return 1;
   });
-  util.timelog('detect and mark repeat headers and footers');
+  util.timelog(name, 'detect and mark repeat headers and footers');
   GT = function(j, k) {
     return j > k;
   };
@@ -478,7 +477,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
             }
           }
           if (repeat) {
-            console.log('repeat header/footer:');
+            dataWriter.write(name, 'partDetection', 'repeat header/footer:');
             for (t = _u = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _u <= _ref3 : _u >= _ref3; t = 0 <= _ref3 ? ++_u : --_u) {
               a[t].fluff = true;
               b[t].fluff = true;
@@ -488,24 +487,24 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
         }
       }
       if (!(repeatSequence > 0)) {
-        console.log('no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' for ' + (physicalPageSide === 0 ? 'even pages' : 'odd pages'));
+        logging.cond('no repeat ' + extreme.goalName + ' ' + 'detected in article' + ' ' + 'in pass' + ' for ' + (physicalPageSide === 0 ? 'even pages' : 'odd pages'), 'partDetection');
       } else {
-        console.log(repeatSequence + ' ' + 'repeat' + ' ' + extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + (physicalPageSide === 0 ? 'even pages' : 'odd pages'));
+        logging.cond(repeatSequence + ' ' + 'repeat' + ' ' + extreme.goalName + 's' + ' ' + 'detected in article' + ' ' + 'in pass' + ' ' + (physicalPageSide === 0 ? 'even pages' : 'odd pages'), 'partDetection');
       }
     }
   }
-  console.log('bottom extreme is ' + bottom.extreme);
+  dataWriter.write(name, 'partDetection', 'bottom extreme is ' + bottom.extreme);
   for (_v = 0, _len9 = tokens.length; _v < _len9; _v++) {
     token = tokens[_v];
     if (parseInt(token.page) === 1) {
       if (Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2) {
-        console.log('1st page non-repeat footer text detected: ' + token.text);
+        dataWriter.write(name, 'partDetection', '1st page non-repeat footer text detected: ' + token.text);
         token.fluff = true;
       }
     }
   }
-  util.timelog('detect and mark repeat headers and footers');
-  titleAndAbstract(tokens);
+  util.timelog(name, 'detect and mark repeat headers and footers');
+  titleAndAbstract(name, tokens);
   filtered = [];
   for (t = _w = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _w <= _ref4 : _w >= _ref4; t = 0 <= _ref4 ? ++_w : --_w) {
     if (tokens[t].fluff == null) {
@@ -515,7 +514,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     }
   }
   tokens = filtered;
-  util.timelog('basic handle line and paragraph beginnings');
+  util.timelog(name, 'basic handle line and paragraph beginnings');
   /*
   util.timelog 'making copy'
   tokens = JSON.parse(JSON.stringify(tokens))
@@ -548,7 +547,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   }
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces);
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
-  console.log("ordinary new line space set to the document's most common line space of " + newLineThreshold);
+  dataWriter.write(name, 'stats', "ordinary new line space set to the document's most common line space of " + newLineThreshold);
   util.last(tokens).lineLocation = 'closer';
   for (i = _y = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _y <= _ref6 : _y >= _ref6; i = 1 <= _ref6 ? ++_y : --_y) {
     currOpener = tokens[lineOpeners[i]];
@@ -574,7 +573,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
       prevToken.paragraph = 'closer';
     }
   }
-  util.timelog('basic handle line and paragraph beginnings');
+  util.timelog(name, 'basic handle line and paragraph beginnings');
   lastOpenerIndex = 0;
   paragraphs = [];
   for (i = _z = 0, _ref7 = tokens.length - 1; 0 <= _ref7 ? _z <= _ref7 : _z >= _ref7; i = 0 <= _ref7 ? ++_z : --_z) {
@@ -586,14 +585,14 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
       lastOpenerIndex = i;
     }
   }
-  console.log("detected " + paragraphs.length + " paragraphs");
-  console.log(parseInt(util.last(tokens).page));
+  dataWriter.write(name, 'stats', "detected " + paragraphs.length + " paragraphs");
+  dataWriter.write(name, 'stats', "number of pages in input document: " + (parseInt(util.last(tokens).page)));
   paragraphsRatio = paragraphs.length / parseInt(util.last(tokens).page);
   averageParagraphLength = analytic.average(paragraphs, function(a) {
     return a.length;
   });
-  logging.cond("paragraphs to pages ratio: " + paragraphsRatio, 'paragraphs');
-  logging.cond("average paragraph length:  " + averageParagraphLength, 'paragraphs');
+  dataWriter.write(name, 'stats', "paragraphs to pages ratio: " + paragraphsRatio);
+  dataWriter.write(name, 'stats', "average paragraph length:  " + averageParagraphLength);
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats);
   for (_aa = 0, _len10 = lineOpenersDistribution.length; _aa < _len10; _aa++) {
     entry = lineOpenersDistribution[_aa];
@@ -667,15 +666,15 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     }
     return 1;
   });
-  util.timelog('Extraction from html stage A', docLogger);
-  util.timelog('ID seeding');
+  util.timelog(name, 'Extraction from html stage A');
+  util.timelog(name, 'ID seeding');
   id = 0;
   for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
     token = tokens[_ab];
     token.id = id;
     id += 1;
   }
-  util.timelog('ID seeding', docLogger);
+  util.timelog(name, 'ID seeding');
   if (createIndex) {
     textIndex = [];
     for (_ac = 0, _len12 = tokens.length; _ac < _len12; _ac++) {
@@ -687,7 +686,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
         });
       }
     }
-    util.timelog('Index creation');
+    util.timelog(name, 'Index creation');
     textIndex.sort(function(a, b) {
       if (a.text > b.text) {
         return 1;
@@ -695,7 +694,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
         return -1;
       }
     });
-    util.timelog('Index creation', docLogger);
+    util.timelog(name, 'Index creation');
   }
   /*
   markersRegex = ''
@@ -727,7 +726,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     docLogger.info(markersRegex)
   
     
-    util.timelog('Markers visualization') 
+    util.timelog(name, 'Markers visualization') 
     #docLogger.info('Marker regex length is ' + markersRegex.toString().length)
     #docLogger.info(markersRegex.source)
     #testverbex = verbex().then("verbex testing sentence").or().then("and more")
@@ -739,14 +738,14 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
     if (token.metaType === 'regular') {
       token.calculatedProperties = [];
       if (util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))) {
-        docLogger.info('All Caps Style detected for word: ' + token.text);
+        dataWriter.write(name, 'partDetection', 'All Caps Style detected for word: ' + token.text);
       }
       if (util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))) {
-        docLogger.info('Interspaced Title Word detected for word: ' + token.text);
+        dataWriter.write(name, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text);
       }
     }
   }
-  util.timelog('Sentence tokenizing');
+  util.timelog(name, 'Sentence tokenizing');
   connect_token_group = function(_arg) {
     var group, token;
     group = _arg.group, token = _arg.token;
@@ -771,7 +770,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   if (group.length !== 0) {
     groups.push(group);
   }
-  util.timelog('Sentence tokenizing', docLogger);
+  util.timelog(name, 'Sentence tokenizing');
   for (_af = 0, _len15 = groups.length; _af < _len15; _af++) {
     group = groups[_af];
     sentence = '';
@@ -804,14 +803,14 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   metaTypeLog('abstract');
   metaTypeLog('title');
   if (mode === 'basic') {
-    callback(res, tokens);
+    callback(res, tokens, name);
     return;
   }
   documentQuantifiers = {};
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
-  util.timelog('Markers visualization');
+  util.timelog(name, 'Markers visualization');
   docSieve = markers.createDocumentSieve(markers.baseSieve);
   markSentence = function(sentenceIdx) {
     var marker, matchedMarkers, _ah, _ai, _len17, _len18;
@@ -863,7 +862,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
           return markSentence(sentenceIdx);
         });
       } else {
-        util.timelog('Markers visualization', docLogger);
+        util.timelog(name, 'Markers visualization');
         req.session.tokens = tokens;
         return callback();
       }
@@ -884,7 +883,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   deriveStructure(tokens);
   deriveStructureWithValues(tokens);
   if (mode === 'all') {
-    callback(res, tokens);
+    callback(res, tokens, name);
   }
 };
 
@@ -898,9 +897,9 @@ exports.originalGo = function(req, name, res, docLogger) {
     host: "localhost",
     port: "8098"
   });
-  util.timelog('checking data store for cached tokens');
+  util.timelog(name, 'checking data store for cached tokens');
   return storage.fetch('tokens', name, function(cachedSerializedTokens) {
-    util.timelog('checking data store for cached tokens');
+    util.timelog(name, 'checking data store for cached tokens');
     if (cachedSerializedTokens) {
       console.log('cached tokens found in datastore');
       req.session.serializedTokens = cachedSerializedTokens;
@@ -914,7 +913,7 @@ exports.originalGo = function(req, name, res, docLogger) {
   });
 };
 
-respond = function(res, tokens) {
+respond = function(res, tokens, name) {
   var chunkRespond, chunkResponse, serializedTokens;
   chunkResponse = true;
   chunkRespond = function(payload, res) {
@@ -932,11 +931,11 @@ respond = function(res, tokens) {
   };
   if (tokens != null) {
     if (tokens.length > 0) {
-      util.timelog('pickling');
+      util.timelog(name, 'pickling');
       serializedTokens = JSON.stringify(tokens);
-      console.log("" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
-      console.log("pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
-      util.timelog('pickling');
+      dataWriter.write(name, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
+      dataWriter.write(name, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
+      util.timelog(name, 'pickling');
       if (chunkResponse) {
         chunkRespond(serializedTokens, res);
       } else {
@@ -949,6 +948,6 @@ respond = function(res, tokens) {
 };
 
 exports.go = function(req, name, res, docLogger) {
-  console.log("about to generate tokens");
+  logging.cond("about to generate tokens", 'progress');
   return generateFromHtml(req, name, res, docLogger, respond);
 };
