@@ -1,1 +1,1 @@
-coffee test/integration/extract.coffee
+coffee test/integration/parallel.coffee

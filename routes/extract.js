@@ -248,7 +248,6 @@ titleAndAbstract = function(tokens) {
   }
   if (abstract != null) {
     util.markTokens(tokens, abstract, 'abstract');
-    util.simpleLogSequence(tokens, abstract, 'abstract');
   } else {
     console.warn('abstract not detected');
   }
@@ -288,19 +287,20 @@ titleAndAbstract = function(tokens) {
 
   if (title != null) {
     util.markTokens(tokens, title, 'title');
-    util.simpleLogSequence(tokens, title, 'title');
   } else {
     console.warn('title not detected');
   }
   util.timelog('Title and abstract recognition');
   util.timelog('initial handling of first page fluff');
-  abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
-  for (_s = 0, _len6 = sequences.length; _s < _len6; _s++) {
-    sequence = sequences[_s];
-    if (!(sequence === title || sequence === abstract)) {
-      if (parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)) {
-        for (t = _t = _ref4 = sequence.startToken, _ref5 = sequence.endToken; _ref4 <= _ref5 ? _t <= _ref5 : _t >= _ref5; t = _ref4 <= _ref5 ? ++_t : --_t) {
-          tokens[t].fluff = true;
+  if (abstract != null) {
+    abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
+    for (_s = 0, _len6 = sequences.length; _s < _len6; _s++) {
+      sequence = sequences[_s];
+      if (!(sequence === title || sequence === abstract)) {
+        if (parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)) {
+          for (t = _t = _ref4 = sequence.startToken, _ref5 = sequence.endToken; _ref4 <= _ref5 ? _t <= _ref5 : _t >= _ref5; t = _ref4 <= _ref5 ? ++_t : --_t) {
+            tokens[t].fluff = true;
+          }
         }
       }
     }
@@ -797,6 +797,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
       dataWriter.write(name, type, text);
       return true;
     } else {
+      console.warn("cannot data-write " + type + " because no tokens are marked as " + type);
       return false;
     }
   };

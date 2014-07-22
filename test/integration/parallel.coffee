@@ -5,7 +5,12 @@ util = require '../../util'
 logging = require '../../logging'
 
 nconf.argv().env()
-nconf.defaults host: "localhost", serial: false
+nconf.defaults host: "localhost", serial: true
+
+host = nconf.get 'host'
+logging.logGreen 'Using hostname ' + nconf.get('host')
+port = process.env.PORT or 3080
+logging.logGreen 'Using port ' + port
 
 serial = nconf.get "serial"
 switch serial
@@ -17,8 +22,7 @@ switch serial
     logging.logYellow "Invalid value supplied for the --serial argument, value can only be true or false"
     process.exit(0)
 
-host = nconf.get "host"  
-logging.logGreen 'Running against host: ' + host + '...'
+logging.logGreen """Running against host #{host}, port #{port} ..."""
 
 logging.logGreen ''
 
@@ -87,10 +91,13 @@ makeRequest = (filename) ->
   # Invoke api request
   http.get 
     host: host
-    port: 80
+    port: port
     path: '/handleInputFile?' + 'localLocation=' + filename
     method: 'GET',
     httpCallBack 
+  .on('error', (e) ->
+    console.log("Got error: " + e.message))
+
 
 util.timelog 'Overall'
 

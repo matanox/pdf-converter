@@ -12,8 +12,9 @@ winstonWrite = function(writer, data) {
 };
 
 exports.write = function(inputFileName, dataType, data) {
-  var err, nameBase, now, writer;
-  if (writers[dataType] == null) {
+  var err, nameBase, now, writer, writerName;
+  writerName = inputFileName + dataType;
+  if (writers[writerName] == null) {
     writer = new winston.Logger;
     now = new Date();
     try {
@@ -42,8 +43,8 @@ exports.write = function(inputFileName, dataType, data) {
       exitOnError: false
     });
     console.log("Data writing for [" + inputFileName + "], [" + dataType + "] is going to " + nameBase);
-    writers[dataType] = writer;
+    writers[writerName] = writer;
   }
-  winstonWrite(writers[dataType], data);
+  winstonWrite(writers[writerName], data);
   return true;
 };

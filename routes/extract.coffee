@@ -266,7 +266,7 @@ titleAndAbstract = (tokens) ->
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
-    util.simpleLogSequence(tokens, abstract, 'abstract')
+    #util.simpleLogSequence(tokens, abstract, 'abstract')
   else 
     console.warn 'abstract not detected'
 
@@ -322,7 +322,7 @@ titleAndAbstract = (tokens) ->
 
   if title?
     util.markTokens(tokens, title, 'title')  
-    util.simpleLogSequence(tokens, title, 'title')
+    #util.simpleLogSequence(tokens, title, 'title')
   else 
     console.warn 'title not detected'
 
@@ -338,15 +338,16 @@ titleAndAbstract = (tokens) ->
 
   util.timelog('initial handling of first page fluff')
 
-  # Any sequence that starts higher than the abstract ends,
-  # will be marked as fluff
-  abstractEnd = tokens[abstract.endToken].positionInfo.bottom    # get bottom of abstract
+  if abstract?
+    # Any sequence that starts higher than the abstract ends,
+    # will be marked as fluff
+    abstractEnd = tokens[abstract.endToken].positionInfo.bottom    # get bottom of abstract
 
-  for sequence in sequences 
-    unless (sequence is title or sequence is abstract)
-      if parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)  
-        for t in [sequence.startToken..sequence.endToken]
-          tokens[t].fluff = true
+    for sequence in sequences 
+      unless (sequence is title or sequence is abstract)
+        if parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)  
+          for t in [sequence.startToken..sequence.endToken]
+            tokens[t].fluff = true
 
   util.timelog('initial handling of first page fluff')
 
@@ -964,6 +965,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
       return true
 
     else
+      console.warn """cannot data-write #{type} because no tokens are marked as #{type}"""
       return false
     
   #

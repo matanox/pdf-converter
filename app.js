@@ -88,7 +88,7 @@ startServer = function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
   if (env !== 'production') {
-    testFile = 'To%20Belong%20or%20Not%20to%20Belong,%20That%20Is%20the%20Question';
+    testFile = 'To Belong or Not to Belong,%20That%20Is%20the%20Question';
     testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile;
     return http.get(testUrl, function(res) {
       return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);

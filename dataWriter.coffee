@@ -30,10 +30,12 @@ winstonWrite = (writer, data) ->
 #
 exports.write = (inputFileName, dataType, data) ->
   
+  writerName = inputFileName + dataType
+
   #
   # Initialize data writer if not already initialized
   #
-  unless writers[dataType]?
+  unless writers[writerName]?
 
     writer = new winston.Logger
     now = new Date()
@@ -64,11 +66,11 @@ exports.write = (inputFileName, dataType, data) ->
       ], exitOnError: false
     console.log("""Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""")
 
-    writers[dataType] = writer
+    writers[writerName] = writer
 
   #
   # write the data
   #
-  winstonWrite(writers[dataType], data)
+  winstonWrite(writers[writerName], data)
 
   return true

@@ -24,8 +24,8 @@ isLowerCaseChar = (char) ->
 exports.isLowerCaseChar = isLowerCaseChar
 
 isUpperCaseChar = (char) -> not isLowerCaseChar(char)
-exports.isUpperCaseChar = isUpperCaseChar
 
+exports.isUpperCaseChar = isUpperCaseChar
 #
 # Checks if a string is a purely alphabetic uppercase sequence.
 # 'purely alphabetic' means it's pure alphabet letters, no numbers, symbols, punctutaion...
