@@ -137,8 +137,12 @@ timelog = function(name, timer, logger) {
     if (logger != null) {
       logger.info(timerText);
     } else {
-      dataWriter.write(name, 'timers', timerText);
-      logging.cond(timerText, 'timers');
+      if (name != null) {
+        dataWriter.write(name, 'timers', timerText);
+        logging.cond(timerText, 'timers');
+      } else {
+        console.log(timerText);
+      }
     }
     delete timelog.timersLookup[timer];
     return elapsed;
@@ -235,6 +239,5 @@ exports.initDocLogger = function(name) {
     ],
     exitOnError: false
   });
-  console.log("Logging handling of '" + name + "'' in " + docLoggerNameBase + "*");
   return docLogger;
 };

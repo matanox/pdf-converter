@@ -941,9 +941,11 @@ respond = function(res, tokens, name) {
       } else {
         res.end(serializedTokens);
       }
+      dataWriter.close(name);
       return;
     }
   }
+  dataWriter.close(name);
   return res.send(500);
 };
 

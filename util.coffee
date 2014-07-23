@@ -115,8 +115,11 @@ timelog = (name, timer, logger) ->
     if logger?
       logger.info(timerText)
     else
-      dataWriter.write(name, 'timers', timerText)
-      logging.cond(timerText, 'timers')
+      if name?
+        dataWriter.write(name, 'timers', timerText)
+        logging.cond(timerText, 'timers')
+      else
+        console.log timerText
 
     delete timelog.timersLookup[timer]
     return elapsed
@@ -207,7 +210,6 @@ exports.initDocLogger = (name) ->
         json: false
         timestamp: true
     ], exitOnError: false
-  console.log("""Logging handling of '#{name}'' in #{docLoggerNameBase}*""")      
 
   docLogger
 

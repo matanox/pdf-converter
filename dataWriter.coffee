@@ -19,7 +19,7 @@ logging = require './logging'
 winston = require 'winston'
 fs      = require 'fs'
 
-writers = {}
+files = {} # dictionary for files that have writers
 
 # the actual writing
 winstonWrite = (writer, data) ->
@@ -31,12 +31,13 @@ winstonWrite = (writer, data) ->
 #
 exports.write = (inputFileName, dataType, data) ->
   
-  writerName = inputFileName + dataType
+  unless files[inputFileName]?
+    files[inputFileName] = {}
 
   #
   # Initialize data writer if not already initialized
   #
-  unless writers[writerName]?
+  unless files[inputFileName][dataType]?
 
     writer = new winston.Logger
     now = new Date()
@@ -67,11 +68,24 @@ exports.write = (inputFileName, dataType, data) ->
       ], exitOnError: false
     logging.cond """Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""", 'dataWriter'
 
-    writers[writerName] = writer
+    files[inputFileName][dataType] = writer
 
   #
   # write the data
   #
-  winstonWrite(writers[writerName], data)
+  winstonWrite(files[inputFileName][dataType], data)
 
   return true
+
+#
+# Close all writers related to a certain file
+#
+exports.close = (inputFileName) ->
+  for writer of files[inputFileName]
+    #console.log """closing writer #{files[inputFileName][writer]}"""
+    #files[inputFileName][writer].remove(winston.transports.File)
+    files[inputFileName][writer].close()
+    delete files[inputFileName][writer]
+
+  #console.dir files
+    

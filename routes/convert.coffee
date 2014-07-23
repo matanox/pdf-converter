@@ -54,11 +54,11 @@ exports.go = (localCopy, docLogger, req, res) ->
         #
         util.timelog name, "from upload to serving"
 
-        docMeta.storePdfMetaData localCopy, docLogger
+        docMeta.storePdfMetaData name, localCopy, docLogger
         storage.store "pdf", name, fileContent, docLogger
 
         util.timelog name, "Conversion to html"
-        logging.cond "Starting the conversion from pdf to html", 'progress'
+        logging.cond "starting the conversion from pdf to html", 'progress'
 
         #docMeta.storePdfMetaData(name, localCopy)
         
@@ -82,7 +82,7 @@ exports.go = (localCopy, docLogger, req, res) ->
         dataWriter.write name, 'pdfToHtml', execCommand
         exec execCommand, (error, stdout, stderr) ->
           dataWriter.write name, 'pdfToHtml', executable + "'s stdout: " + stdout
-          dataWriter.write name, 'pdfToHtml', + "'s stderr: " + stderr
+          dataWriter.write name, 'pdfToHtml', executable + "'s stderr: " + stderr
           if error isnt null
             dataWriter.write name, 'pdfToHtml', executable + "'sexec error: " + error
           else

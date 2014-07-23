@@ -79,11 +79,11 @@ makeRequest = function(filename) {
           }
         }
         console.log(responses + ' responses out of ' + requests + ' requests received thus far');
-        requestElapsedTime = util.timelog('Server response for ' + filename);
+        requestElapsedTime = util.timelog(null, 'Server response for ' + filename);
         aggregateWait += requestElapsedTime / 1000;
         if (responses === requests) {
           logging.logPerf('');
-          util.timelog('Overall');
+          util.timelog(null, 'Overall');
           logging.logPerf('');
           logging.logPerf('-----------------------------');
           logging.logPerf('Aggregate response await time');
@@ -96,7 +96,7 @@ makeRequest = function(filename) {
     };
   })(filename);
   console.log("Requesting " + directory + filename);
-  util.timelog('Server response for ' + filename);
+  util.timelog(null, 'Server response for ' + filename);
   return http.get({
     host: host,
     port: port,
@@ -107,7 +107,7 @@ makeRequest = function(filename) {
   });
 };
 
-util.timelog('Overall');
+util.timelog(null, 'Overall');
 
 toRequest = [];
 

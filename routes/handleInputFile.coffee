@@ -49,6 +49,7 @@ exports.go = (req, res) ->
   # 
   if req.query.localLocation?
     baseFileName = req.query.localLocation.replace('.pdf', '')
+    console.log("""started handling input file: #{baseFileName}""")      
     docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')   
 

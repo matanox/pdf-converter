@@ -68,14 +68,14 @@ makeRequest = (filename) ->
             makeRequest(toRequest[0])
 
         console.log responses + ' responses out of ' + requests + ' requests received thus far'
-        requestElapsedTime = util.timelog 'Server response for ' + filename
+        requestElapsedTime = util.timelog null, 'Server response for ' + filename
 
         # add up time waited for this request, to the overal wait impact metric
         aggregateWait += (requestElapsedTime / 1000)
 
         if responses is requests
           logging.logPerf ''
-          util.timelog 'Overall'
+          util.timelog null, 'Overall'
           logging.logPerf ''
           logging.logPerf '-----------------------------'
           logging.logPerf 'Aggregate response await time'
@@ -86,7 +86,7 @@ makeRequest = (filename) ->
           return)) (filename) # Callback application
 
   console.log "Requesting " + directory + filename
-  util.timelog 'Server response for ' + filename
+  util.timelog null, 'Server response for ' + filename
 
   # Invoke api request
   http.get 
@@ -99,7 +99,7 @@ makeRequest = (filename) ->
     console.log("Got error: " + e.message))
 
 
-util.timelog 'Overall'
+util.timelog null, 'Overall'
 
 toRequest = []
 for filename in fs.readdirSync(directory)

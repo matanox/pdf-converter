@@ -1150,8 +1150,13 @@ respond = (res, tokens, name) ->
         chunkRespond(serializedTokens, res)
       else
         res.end(serializedTokens)
+
+      dataWriter.close(name)
       return
 
+    # close dataWriters to avoid file descriptor leak
+
+  dataWriter.close(name)
   res.send(500)  
 
 exports.go = (req, name, res ,docLogger) ->

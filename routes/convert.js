@@ -45,17 +45,17 @@ exports.go = function(localCopy, docLogger, req, res) {
     var execCommand, outFolder;
     if (error != null) {
       util.timelog(name, "from upload to serving");
-      docMeta.storePdfMetaData(localCopy, docLogger);
+      docMeta.storePdfMetaData(name, localCopy, docLogger);
       storage.store("pdf", name, fileContent, docLogger);
       util.timelog(name, "Conversion to html");
-      logging.cond("Starting the conversion from pdf to html", 'progress');
+      logging.cond("starting the conversion from pdf to html", 'progress');
       execCommand = executable + " ";
       outFolder = "../local-copies/" + "html-converted/";
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
       dataWriter.write(name, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
         dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
-        dataWriter.write(name, 'pdfToHtml', +"'s stderr: " + stderr);
+        dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
           return dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
         } else {
