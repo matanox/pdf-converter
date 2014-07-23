@@ -86,6 +86,19 @@ exports.go = (localCopy, docLogger, req, res) ->
           if error isnt null
             dataWriter.write name, 'pdfToHtml', executable + "'sexec error: " + error
           else
+
+            extensionFilter = (filename) ->
+              extensions = ['html', 'htm', 'css', 'js']
+              for extension in extensions
+                if filename.indexOf(extesion) > -1
+                  return true                
+              return false
+
+            # save the converted-to html as data as well
+            for filename in fs.readdirSync(outFolder)
+              if fs.statSync(directory + filename).isFile() 
+                if extensionFilter(filename)
+                  fs.createReadStream(outFolder + '/' + filename).pipe(fs.createWriteStream(name + '/' + filename))
             
             # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)

@@ -54,11 +54,32 @@ exports.go = function(localCopy, docLogger, req, res) {
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
       dataWriter.write(name, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
+        var extensionFilter, filename, _i, _len, _ref;
         dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
         dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
           return dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
         } else {
+          extensionFilter = function(filename) {
+            var extension, extensions, _i, _len;
+            extensions = ['html', 'htm', 'css', 'js'];
+            for (_i = 0, _len = extensions.length; _i < _len; _i++) {
+              extension = extensions[_i];
+              if (filename.indexOf(extesion) > -1) {
+                return true;
+              }
+            }
+            return false;
+          };
+          _ref = fs.readdirSync(outFolder);
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            filename = _ref[_i];
+            if (fs.statSync(directory + filename).isFile()) {
+              if (extensionFilter(filename)) {
+                fs.createReadStream(outFolder + '/' + filename).pipe(fs.createWriteStream(name + '/' + filename));
+              }
+            }
+          }
           util.timelog(name, "Conversion to html");
           riak.save('html', hash, name, function(error) {
             util.timelog(name, "storing file hash to clustered storage");

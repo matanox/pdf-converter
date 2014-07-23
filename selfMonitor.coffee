@@ -1,5 +1,5 @@
 #
-# mildly intelligent self memory monitoring
+# mildly intelligent self memory (and open file descriptors) monitoring
 #
 
 logging = require './logging' 
@@ -20,6 +20,10 @@ percentThreshold = 10
 
 memCheckInterval = 1000           # milliseconds
 fDescriptorsCheckInterval = 10000 # milliseconds
+
+#
+# File descriptors monitoring
+#
 
 getMem = () ->
   mem = process.memoryUsage()  
@@ -68,7 +72,9 @@ getFileDescriptorsCount = (callback) ->
     else
       callback(parseInt(stdout))
 
-
+#
+# File descriptors monitoring
+#
 logFileDescriptorsCountIfChanged = () ->
   getFileDescriptorsCount((count) -> 
     laterFD = count
@@ -82,7 +88,9 @@ fileDescriptorsTracking = () ->
   getFileDescriptorsCount((count) -> laterFD = count)
   process.nextTick(() -> setInterval(logFileDescriptorsCountIfChanged, fDescriptorsCheckInterval)) # next-ticking it so initial logging would finish first
 
+#
+# Start
+#
 exports.start = () ->
   memTracking()
   fileDescriptorsTracking()
-
