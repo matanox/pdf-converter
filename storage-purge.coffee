@@ -10,6 +10,8 @@
 
 riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
+wait = 5
+
 delete_key = (bucket,key) ->
     riak.remove(bucket, key)
 
@@ -32,7 +34,7 @@ clean = () ->
   clearBucket('html')
 
 console.log ""
-console.log "ATTENTION!!! if not interupted the riak db will be cleaned up in 30 seconds"
+console.log """ATTENTION!!! if not interupted the riak db will be cleaned up in #{wait} seconds"""
 console.log ""
-setTimeout(clean, 30000)
+setTimeout(clean, wait * 1000)
 

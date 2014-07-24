@@ -54,29 +54,21 @@ exports.go = function(localCopy, docLogger, req, res) {
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
       dataWriter.write(name, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
-        var extensionFilter, filename, _i, _len, _ref;
+        var outFolderResult, resultFile, _i, _len, _ref;
         dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
         dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
           return dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
         } else {
-          extensionFilter = function(filename) {
-            var extension, extensions, _i, _len;
-            extensions = ['html', 'htm', 'css', 'js'];
-            for (_i = 0, _len = extensions.length; _i < _len; _i++) {
-              extension = extensions[_i];
-              if (filename.indexOf(extesion) > -1) {
-                return true;
-              }
-            }
-            return false;
-          };
-          _ref = fs.readdirSync(outFolder);
+          outFolderResult = outFolder + name + '/';
+          _ref = fs.readdirSync(outFolderResult);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            filename = _ref[_i];
-            if (fs.statSync(directory + filename).isFile()) {
-              if (extensionFilter(filename)) {
-                fs.createReadStream(outFolder + '/' + filename).pipe(fs.createWriteStream(name + '/' + filename));
+            resultFile = _ref[_i];
+            if (fs.statSync(outFolderResult + resultFile).isFile()) {
+              if (util.extensionFilter(resultFile)) {
+                util.mkdir(dataWriter.docDataDir, name);
+                util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted');
+                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + name + '/' + 'html-converted' + '/' + resultFile));
               }
             }
           }

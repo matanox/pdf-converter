@@ -17,7 +17,10 @@
 
 logging = require './logging' 
 winston = require 'winston'
-fs      = require 'fs'
+util    = require './util'
+
+docDataDir = 'docData/'
+exports.docDataDir = docDataDir
 
 files = {} # dictionary for files that have writers
 
@@ -30,7 +33,6 @@ winstonWrite = (writer, data) ->
 # (initializes a physical writer for the data type if not already initialized)
 #
 exports.write = (inputFileName, dataType, data) ->
-  
   unless files[inputFileName]?
     files[inputFileName] = {}
 
@@ -42,24 +44,19 @@ exports.write = (inputFileName, dataType, data) ->
     writer = new winston.Logger
     now = new Date()
 
-    #
-    # create the directory if it doesn't already exist
-    #
-    try 
-      fs.mkdirSync('docData/' + inputFileName)
-    catch err
-      if err.code isnt 'EEXIST' # is the error code indicating the directory already exists? if so all is fine
-        throw e                 # on different error, re-throw the error
+    console.log """opening writer for #{dataType}"""
 
-    nameBase = 'docData/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+    util.mkdir(docDataDir, inputFileName)
+    
+    nameBase = docDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
     
     writer = new winston.Logger
       transports: [
-        new winston.transports.File
-          name: 'file#json'
-          filename: nameBase + '.json',
-          json: true
-          timestamp: false
+        #new winston.transports.File
+        #  name: 'file#json'
+        #  filename: nameBase + '.json',
+        #  json: true
+        #  timestamp: false
         new winston.transports.File
           name: 'file#text'
           filename: nameBase,
@@ -73,6 +70,8 @@ exports.write = (inputFileName, dataType, data) ->
   #
   # write the data
   #
+  #console.log """writing to writer for #{dataType}"""
+  #unless files[inputFileName][dataType].transports['file#text'].opening then console.log 'not opening'
   winstonWrite(files[inputFileName][dataType], data)
 
   return true
@@ -80,12 +79,25 @@ exports.write = (inputFileName, dataType, data) ->
 #
 # Close all writers related to a certain file
 #
-exports.close = (inputFileName) ->
-  for writer of files[inputFileName]
-    #console.log """closing writer #{files[inputFileName][writer]}"""
-    #files[inputFileName][writer].remove(winston.transports.File)
-    files[inputFileName][writer].close()
-    delete files[inputFileName][writer]
+closer = (inputFileName) ->
+  console.log """closing writers for #{inputFileName}"""
 
-  #console.dir files
+  for writer of files[inputFileName]
+    if files[inputFileName][writer].transports['file#text'].opening
+      console.warn 'cannot close writer as it has not drained. queuing a retry.'
+      setTimeout((() -> closer(inputFileName)), 2000) # this is a workaround as otherwise the Winston file writers don't really close
+      return
+    else
+      #files[inputFileName][writer].clear() # should terminate all transports of the writer
+      files[inputFileName][writer].close()
+      delete files[inputFileName][writer]
+     
+  #if Object.keys(files[inputFileName]).length is 0
+  #  delete files[inputFileName]
+
+exports.close = (inputFileName) ->
+
+  setTimeout((() -> closer(inputFileName)), 2000) # this is a workaround as otherwise the Winston file writers don't really close
+
+
     

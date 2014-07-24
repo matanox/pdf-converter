@@ -412,7 +412,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   deriveStructure(tokens);
   deriveStructureWithValues(tokens);
   if (mode === 'bare') {
-    callback(res, tokens, name);
+    callback(res, tokens, name, docLogger);
     return;
   }
   page = null;
@@ -803,7 +803,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   metaTypeLog('abstract');
   metaTypeLog('title');
   if (mode === 'basic') {
-    callback(res, tokens, name);
+    callback(res, tokens, name, docLogger);
     return;
   }
   documentQuantifiers = {};
@@ -883,7 +883,7 @@ generateFromHtml = function(req, name, res, docLogger, callback) {
   deriveStructure(tokens);
   deriveStructureWithValues(tokens);
   if (mode === 'all') {
-    callback(res, tokens, name);
+    callback(res, tokens, name, docLogger);
   }
 };
 
@@ -913,7 +913,7 @@ exports.originalGo = function(req, name, res, docLogger) {
   });
 };
 
-respond = function(res, tokens, name) {
+respond = function(res, tokens, name, docLogger) {
   var chunkRespond, chunkResponse, serializedTokens;
   chunkResponse = true;
   chunkRespond = function(payload, res) {
@@ -941,10 +941,12 @@ respond = function(res, tokens, name) {
       } else {
         res.end(serializedTokens);
       }
+      util.closeDocLogger(docLogger);
       dataWriter.close(name);
       return;
     }
   }
+  util.closeDocLogger(docLogger);
   dataWriter.close(name);
   return res.send(500);
 };

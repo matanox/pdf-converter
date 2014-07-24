@@ -476,7 +476,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name)
+    callback(res, tokens, name, docLogger)
     return 
 
   #
@@ -980,7 +980,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name)
+    callback(res, tokens, name, docLogger)
     return 
 
   # Log some statistics about sentences
@@ -1094,7 +1094,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name)
+    callback(res, tokens, name, docLogger)
     return 
 
 
@@ -1123,7 +1123,7 @@ exports.originalGo = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
-respond = (res, tokens, name) -> 
+respond = (res, tokens, name, docLogger) -> 
 
   chunkResponse = true
 
@@ -1151,11 +1151,13 @@ respond = (res, tokens, name) ->
       else
         res.end(serializedTokens)
 
+      util.closeDocLogger(docLogger)
       dataWriter.close(name)
       return
 
     # close dataWriters to avoid file descriptor leak
 
+  util.closeDocLogger(docLogger)
   dataWriter.close(name)
   res.send(500)  
 

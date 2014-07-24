@@ -2,6 +2,6 @@
 
 test/
 recycle-bin/
-hadasino-server/
 public/
-
+docData/
+logs/

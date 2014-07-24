@@ -213,3 +213,23 @@ exports.initDocLogger = (name) ->
 
   docLogger
 
+exports.closeDocLogger = (docLogger) ->
+  docLogger.close()
+
+fs = require 'fs'
+#
+# create a directory in an existing subdirectory, if it doesn't already exist there
+#
+exports.mkdir = (path, subDir) ->
+  try 
+    fs.mkdirSync(path + '/' + subDir)
+  catch err
+    if err.code isnt 'EEXIST' # is the error code indicating the directory already exists? if so all is fine
+      throw err               # on different error, re-throw the error
+
+exports.extensionFilter = (filename) ->
+  extensions = ['html', 'htm', 'css', 'js']
+  for extension in extensions
+    if filename.indexOf('.' + extension) > -1
+      return true                
+  return false
