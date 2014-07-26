@@ -1,14 +1,27 @@
 #
 # non-blocking file writer
 #
+# TODO: creating a new buffer (which probably results in malloc) every time is entirely wasteful.
+#       should reuse some pre-allocated buffer, or switch to the appendFile api that accepts plain strings 
+#       and avoids the need to manage file closes.
+#
+#
+#
 
 fs = require 'fs'
+logging  = require './logging' 
+
+#
+# debug logging counters
+#
 opens = 0
 closes = 0
 requestCloses = 0
 
+#
+# The writer object prototype
+#
 writer = module.exports = (fileName) -> 
-
 
   self = this
 
@@ -35,7 +48,7 @@ writer = module.exports = (fileName) ->
 
   this.fd = fd
   this.opened = true 
-  console.log """opened file #{fileName}"""
+  logging.cond """opened data file #{fileName}""", 'dataWriter'
  
 writer.prototype._appendQueue = () ->
 
@@ -54,7 +67,7 @@ writer.prototype._appendQueue = () ->
       if self.pendingClose 
         closes +=1
         fs.closeSync(self.fd)
-        console.log """closes #{closes} : request closes #{requestCloses} : opens #{opens}"""
+        logging.cond """closes #{closes} : request closes #{requestCloses} : opens #{opens}""", 'dataWriter'
 
   toWrite = this.dataQueue.slice().join('')    # create copy of the queue, and flatten it
   buff = new Buffer(toWrite)
@@ -101,9 +114,7 @@ writer.prototype.close = () ->
 
       closes +=1
       fs.closeSync(this.fd)
-      console.log """closes #{closes} : request closes #{requestCloses} : opens #{opens}"""
+      logging.cond """data file closes #{closes} : request closes #{requestCloses} : opens #{opens}""", 'dataWriter'
 
     when true 
       this.pendingClose = true
-
-

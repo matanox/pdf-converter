@@ -18,7 +18,6 @@ express = require 'express'
 routes  = require './routes'
 http    = require 'http'
 path    = require 'path'
-user    = require './routes/user'
 
 # Regular module dependencies
 #convert       = require './routes/convert'

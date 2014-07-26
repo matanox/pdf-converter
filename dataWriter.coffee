@@ -1,7 +1,6 @@
 #
-# Abstraction enabling the storage of data created out of an input file, 
+# Abstraction enabling the storage of data created as the processing of an input file, 
 # such that it is left organized by data type, for an offline process or human to consume.
-#
 #
 # right now it does that by writing each data type to a file bearing the type's name.
 # I.e. the result of using this module should be a directory for the input file's data,
@@ -19,10 +18,10 @@ logging  = require './logging'
 myWriter = require './writer'
 util     = require './util'
 
-docDataDir = 'docData/'
+docDataDir = 'docData'
 exports.docDataDir = docDataDir
 
-files = {} # dictionary for files that have writers
+files = {} # dictionary to hinge writers used for each input pdf file
 
 #
 # The public writer interface of this module. Currently, Winston logger based.
@@ -30,14 +29,14 @@ files = {} # dictionary for files that have writers
 #
 exports.write = (inputFileName, dataType, data) ->
   unless files[inputFileName]?
-    files[inputFileName] = {}
+    files[inputFileName] = {} 
 
   #
   # Initialize data writer if not already initialized
   #
   unless files[inputFileName][dataType]?
 
-    console.log """opening writer for #{dataType}"""
+    logging.cond """opening writer for #{dataType}""", 'dataWriter'
 
     util.mkdir(docDataDir, inputFileName)
    
@@ -53,8 +52,6 @@ exports.write = (inputFileName, dataType, data) ->
   #
   # write the data
   #
-  #console.log """writing to writer for #{dataType}"""
-  #unless files[inputFileName][dataType].transports['file#text'].opening then console.log 'not opening'
   files[inputFileName][dataType].write(data)
 
   return true
@@ -63,29 +60,10 @@ exports.write = (inputFileName, dataType, data) ->
 # Close all writers related to a certain file
 #
 exports.close = (inputFileName) ->
-  console.log """closing writers for #{inputFileName}"""
+  logging.cond """closing writers for #{inputFileName}""", 'dataWriter'
 
   for writer of files[inputFileName]
-    console.log """writer to close: #{writer}"""
+    logging.cond """writer to close: #{writer}""", logging.cond
     files[inputFileName][writer].close()
     
-  delete files[inputFileName]
-    
-  ###
-  if files[inputFileName][writer].transports['file#text'].opening
-    console.warn 'cannot close writer as it has not drained. queuing a retry.'
-    console.dir files[inputFileName][writer].transports['file#text']
-    setTimeout((() -> closer(inputFileName)), 2000) # this is a workaround as otherwise the Winston file writers don't really close
-    return
-  else
-    #files[inputFileName][writer].clear() # should terminate all transports of the writer
-    files[inputFileName][writer].close()
-    delete files[inputFileName][writer]
-  ###
-     
-  #if Object.keys(files[inputFileName]).length is 0
-  #  delete files[inputFileName]
-
-  #setTimeout((() -> closer(inputFileName)), 2000) # this is a workaround as otherwise the Winston file writers don't really close
-
-    
+  delete files[inputFileName]  

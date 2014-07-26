@@ -7,7 +7,7 @@ myWriter = require('./writer');
 
 util = require('./util');
 
-docDataDir = 'docData/';
+docDataDir = 'docData';
 
 exports.docDataDir = docDataDir;
 
@@ -19,7 +19,7 @@ exports.write = function(inputFileName, dataType, data) {
     files[inputFileName] = {};
   }
   if (files[inputFileName][dataType] == null) {
-    console.log("opening writer for " + dataType);
+    logging.cond("opening writer for " + dataType, 'dataWriter');
     util.mkdir(docDataDir, inputFileName);
     now = new Date();
     nameBase = docDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out';
@@ -33,22 +33,10 @@ exports.write = function(inputFileName, dataType, data) {
 
 exports.close = function(inputFileName) {
   var writer;
-  console.log("closing writers for " + inputFileName);
+  logging.cond("closing writers for " + inputFileName, 'dataWriter');
   for (writer in files[inputFileName]) {
-    console.log("writer to close: " + writer);
+    logging.cond("writer to close: " + writer, logging.cond);
     files[inputFileName][writer].close();
   }
   return delete files[inputFileName];
-  /*
-  if files[inputFileName][writer].transports['file#text'].opening
-    console.warn 'cannot close writer as it has not drained. queuing a retry.'
-    console.dir files[inputFileName][writer].transports['file#text']
-    setTimeout((() -> closer(inputFileName)), 2000) # this is a workaround as otherwise the Winston file writers don't really close
-    return
-  else
-    #files[inputFileName][writer].clear() # should terminate all transports of the writer
-    files[inputFileName][writer].close()
-    delete files[inputFileName][writer]
-  */
-
 };
