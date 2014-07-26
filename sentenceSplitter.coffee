@@ -1,6 +1,6 @@
 util  = require './util'
 ctype = require './ctype'
-specialCaseWords = [ 'vs.', 'al.', 'cf.', 'st.' ]
+specialCaseWords = [ 'vs.', 'al.', 'cf.', 'st.' ,'Fig.', 'FIG.']
 
 # return wether current token is a period delimited acronym - e.g. "U.S.", "E.G.".
 acronym = (string) ->
