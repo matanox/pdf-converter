@@ -84,7 +84,7 @@ exports.go = function(localCopy, docLogger, req, res) {
       });
     } else {
       logging.cond('input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt');
-      return require('./extract').go(req, formerName, res, docLogger);
+      return require('./extract').go(req, name, res, docLogger);
     }
   });
 };

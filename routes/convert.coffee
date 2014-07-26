@@ -113,7 +113,7 @@ exports.go = (localCopy, docLogger, req, res) ->
       #
       else
         logging.cond 'input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt'
-        require('./extract').go(req, formerName, res, docLogger)
+        require('./extract').go(req, name, res, docLogger)
     )
   
   
