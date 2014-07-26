@@ -3,12 +3,12 @@
 # Can switch to uploadcare.com or roll own...
 #
 
-convert = require './convert'
-extract = require './extract'
-util    = require '../util'
+convert    = require './convert'
+extract    = require './extract'
+util       = require '../util'
 getFromUrl = require 'request'
-fs = require 'fs'
-winston = require 'winston'
+fs         = require 'fs'
+winston    = require 'winston'
 
 #
 # * Fetches the upload from Ink File Picker (writing it into local file).
@@ -50,6 +50,7 @@ exports.go = (req, res) ->
   if req.query.localLocation?
     baseFileName = req.query.localLocation.replace('.pdf', '')
     console.log("""started handling input file: #{baseFileName}""")      
+
     docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')   
 

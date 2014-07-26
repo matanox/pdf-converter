@@ -42,7 +42,7 @@ exports.go = function(localCopy, docLogger, req, res) {
   util.timelog(name, "hashing input file");
   logging.cond("input file hash is: " + hash, "hash");
   return riak.get('html', hash, function(error, formerName) {
-    var execCommand, outFolder;
+    var execCommand, input, outFolder, path;
     if (error != null) {
       util.timelog(name, "from upload to serving");
       docMeta.storePdfMetaData(name, localCopy, docLogger);
@@ -54,7 +54,7 @@ exports.go = function(localCopy, docLogger, req, res) {
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
       dataWriter.write(name, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
-        var outFolderResult, resultFile, _i, _len, _ref;
+        var input, outFolderResult, path, resultFile, _i, _len, _ref;
         dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
         dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
@@ -74,17 +74,28 @@ exports.go = function(localCopy, docLogger, req, res) {
           }
           util.timelog(name, "Conversion to html");
           riak.save('html', hash, name, function(error) {
-            util.timelog(name, "storing file hash to clustered storage");
             if (error != null) {
-              return dataWriter.write(name, 'pdfToHtml', "failed storing file hash to clustered storage");
+              return console.log('pdfToHtml', "failed storing file hash for " + name + " to clustered storage");
+            } else {
+
             }
           });
-          return require('./extract').go(req, name, res, docLogger);
+          path = outFolder;
+          input = {
+            'html': path + name + '/' + name + ".html",
+            'css': path + name + '/'
+          };
+          return require('./extract').go(req, name, input, res, docLogger);
         }
       });
     } else {
       logging.cond('input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt');
-      return require('./extract').go(req, name, res, docLogger);
+      path = '../local-copies/' + 'html-converted/';
+      input = {
+        'html': path + formerName + '/' + formerName + ".html",
+        'css': path + formerName + '/'
+      };
+      return require('./extract').go(req, name, input, res, docLogger);
     }
   });
 };

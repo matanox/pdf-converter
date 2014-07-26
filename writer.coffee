@@ -56,11 +56,17 @@ writer.prototype._appendQueue = () ->
         fs.closeSync(self.fd)
         console.log """closes #{closes} : request closes #{requestCloses} : opens #{opens}"""
 
-  toWrite = this.dataQueue.slice().join('\n')    # create copy of the queue, and flatten it
+  toWrite = this.dataQueue.slice().join('')    # create copy of the queue, and flatten it
   buff = new Buffer(toWrite)
   this.dataQueue = []                          # now clear the queue
   fs.write(this.fd, buff, 0, buff.length, null, this._writeDone)
 
+#
+# appends new line to a data row.
+# can later be used also for any formatting or normalization stage.
+#
+append = (queue, data) ->
+  queue.push data + '\n'
 
 #
 # Write or queue
@@ -72,14 +78,14 @@ writer.prototype.write = (data) ->
     return
 
   if not this.opened
-    this.dataQueue.push data
+    append this.dataQueue, data
   else
     if not this.writing 
       this.writing = true
-      this.dataQueue.push data
+      append this.dataQueue, data
       this._appendQueue()
     else
-      this.dataQueue.push data
+      append this.dataQueue, data
 
 writer.prototype.close = () ->
 

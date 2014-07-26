@@ -354,22 +354,22 @@ titleAndAbstract = (name, tokens) ->
 #
 # Extract text content and styles from html
 #
-generateFromHtml = (req, name, res ,docLogger, callback) ->  
-
+generateFromHtml = (req, name, input, res ,docLogger, callback) ->  
   util.timelog(name, 'Extraction from html stage A')
 
   #
   # Read the input html 
   #
 
-  path = '../local-copies/' + 'html-converted/' 
-  rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
-
+  #path = '../local-copies/' + 'html-converted/' 
+  #rawHtml = fs.readFileSync(path + name + '/' + name + ".html").toString()
+  rawHtml = fs.readFileSync(input.html).toString()
+  
   #
   # Extract html css style info 
   #
 
-  inputStylesMap = css.simpleFetchStyles(rawHtml ,path + name + '/') 
+  inputStylesMap = css.simpleFetchStyles(rawHtml, input.css) 
 
   htmlparser = require("htmlparser2");
   util.timelog(name, 'htmlparser2') 
@@ -402,6 +402,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     console.info("No text was extracted from input")
     error = 'We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.' 
     callback(error, res, tokens, name, docLogger)
+    return
     #throw("No text was extracted from input")
 
   # Smooth out styles such that each delimiter inherits the style of its preceding token. 
@@ -1173,7 +1174,7 @@ done = (error, res, tokens, name, docLogger) ->
   res.send(500)  
   shutdown()
 
-exports.go = (req, name, res ,docLogger) ->
+exports.go = (req, name, input, res ,docLogger) ->
   logging.cond "about to generate tokens", 'progress'
-  generateFromHtml(req, name, res ,docLogger, done) 
+  generateFromHtml(req, name, input, res ,docLogger, done) 
   

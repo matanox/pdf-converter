@@ -29,10 +29,10 @@ exports.go = (localCopy, docLogger, req, res) ->
   hasher = crypto.createHash('md5')
   fileContent = fs.readFileSync(localCopy)
 
-  util.timelog name, "hashing input file"
+  util.timelog name, "hashing input file" 
   hasher.update(fileContent)
   hash = hasher.digest('hex')
-  util.timelog name, "hashing input file"
+  util.timelog name, "hashing input file" 
   logging.cond """input file hash is: #{hash}""", "hash"
 
 
@@ -101,11 +101,19 @@ exports.go = (localCopy, docLogger, req, res) ->
             util.timelog name, "Conversion to html"
 
             riak.save('html', hash, name, (error) -> 
-              util.timelog name, "storing file hash to clustered storage"
+              # should not data write or time log here, as document handling shutdown() does not 
+              # wait for this async call to end (waiting for riak would seem nonsensical, i.e. what if 
+              # the call hangs? - not worth implementing a generic shutdown waitFor & timeouts mechanism right now.
               if error?
-                 dataWriter.write name, 'pdfToHtml', "failed storing file hash to clustered storage")
+                 console.log 'pdfToHtml', """failed storing file hash for #{name} to clustered storage"""
+              else
+            )
 
-            require('./extract').go(req, name, res, docLogger)
+            path = outFolder
+            input = 
+              'html' : path + name + '/' + name + ".html"
+              'css'  : path + name + '/'
+            require('./extract').go(req, name, input, res, docLogger)
             #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
 
       #
@@ -113,7 +121,12 @@ exports.go = (localCopy, docLogger, req, res) ->
       #
       else
         logging.cond 'input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt'
-        require('./extract').go(req, name, res, docLogger)
+
+        path = '../local-copies/' + 'html-converted/' 
+        input = 
+          'html' : path + formerName + '/' + formerName + ".html"
+          'css'  : path + formerName + '/'
+        require('./extract').go(req, name, input, res, docLogger)
     )
   
   
