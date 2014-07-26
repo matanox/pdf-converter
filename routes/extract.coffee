@@ -400,10 +400,8 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
   if tokens.length == 0
     docLogger.error("No text was extracted from input")
     console.info("No text was extracted from input")
-    res.writeHead 505
-    res.write 'We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.' 
-    res.end()
-    return false
+    error = 'We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.' 
+    callback(error, res, tokens, name, docLogger)
     #throw("No text was extracted from input")
 
   # Smooth out styles such that each delimiter inherits the style of its preceding token. 
@@ -476,7 +474,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name, docLogger)
+    callback(null, res, tokens, name, docLogger)
     return 
 
   #
@@ -980,7 +978,7 @@ generateFromHtml = (req, name, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name, docLogger)
+    callback(null, res, tokens, name, docLogger)
     return 
 
   # Log some statistics about sentences
@@ -1123,7 +1121,22 @@ exports.originalGo = (req, name, res ,docLogger) ->
       generateFromHtml(req, name, res ,docLogger, () -> output.serveViewerTemplate(res, docLogger)) 
   )
 
-respond = (res, tokens, name, docLogger) -> 
+#
+# send the output, 
+# and terminate resources used for handling the input file
+# 
+done = (error, res, tokens, name, docLogger) -> 
+
+  shutdown = () ->
+    util.closeDocLogger(docLogger)
+    dataWriter.close(name)
+
+  if error?
+    res.writeHead 505
+    res.write error
+    res.end()
+    shutdown()
+    return
 
   chunkResponse = true
 
@@ -1157,11 +1170,10 @@ respond = (res, tokens, name, docLogger) ->
 
     # close dataWriters to avoid file descriptor leak
 
-  util.closeDocLogger(docLogger)
-  dataWriter.close(name)
   res.send(500)  
+  shutdown()
 
 exports.go = (req, name, res ,docLogger) ->
   logging.cond "about to generate tokens", 'progress'
-  generateFromHtml(req, name, res ,docLogger, respond) 
+  generateFromHtml(req, name, res ,docLogger, done) 
   
