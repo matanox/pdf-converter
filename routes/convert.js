@@ -68,7 +68,7 @@ exports.go = function(localCopy, docLogger, req, res) {
               if (util.extensionFilter(resultFile)) {
                 util.mkdir(dataWriter.docDataDir, name);
                 util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted');
-                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + name + '/' + 'html-converted' + '/' + resultFile));
+                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile));
               }
             }
           }
