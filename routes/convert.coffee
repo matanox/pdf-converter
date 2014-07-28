@@ -81,20 +81,28 @@ exports.go = (localCopy, docLogger, req, res) ->
         execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"'
         dataWriter.write name, 'pdfToHtml', execCommand
         exec execCommand, (error, stdout, stderr) ->
+          logging.cond "finished the conversion from pdf to html", 'progress'
           dataWriter.write name, 'pdfToHtml', executable + "'s stdout: " + stdout
           dataWriter.write name, 'pdfToHtml', executable + "'s stderr: " + stderr
-          if error isnt null
+          if error isnt null 
             dataWriter.write name, 'pdfToHtml', executable + "'sexec error: " + error
+            console.error """pdf2Html for #{name} failed with error: \n #{error}"""
+
+            res.writeHead 505
+            res.write "We are sorry, an unexpected error has occured processing your document"
+            res.end()
+            #shutdown() # should call shutdown here to avoid leaking stuff
+
           else
 
             # save the converted-to html as data as well
             outFolderResult = outFolder + name + '/'
             for resultFile in fs.readdirSync(outFolderResult)
               if fs.statSync(outFolderResult + resultFile).isFile() 
-                if util.extensionFilter(resultFile)
-                  util.mkdir(dataWriter.docDataDir, name)
-                  util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted')
-                  fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile))
+                #if util.extensionFilter(resultFile)
+                util.mkdir(dataWriter.docDataDir, name)
+                util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted')
+                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile))
             
             # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)

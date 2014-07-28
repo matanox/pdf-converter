@@ -55,21 +55,24 @@ exports.go = function(localCopy, docLogger, req, res) {
       dataWriter.write(name, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
         var input, outFolderResult, path, resultFile, _i, _len, _ref;
+        logging.cond("finished the conversion from pdf to html", 'progress');
         dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
         dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
-          return dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
+          dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
+          console.error("pdf2Html for " + name + " failed with error: \n " + error);
+          res.writeHead(505);
+          res.write("We are sorry, an unexpected error has occured processing your document");
+          return res.end();
         } else {
           outFolderResult = outFolder + name + '/';
           _ref = fs.readdirSync(outFolderResult);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             resultFile = _ref[_i];
             if (fs.statSync(outFolderResult + resultFile).isFile()) {
-              if (util.extensionFilter(resultFile)) {
-                util.mkdir(dataWriter.docDataDir, name);
-                util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted');
-                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile));
-              }
+              util.mkdir(dataWriter.docDataDir, name);
+              util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted');
+              fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile));
             }
           }
           util.timelog(name, "Conversion to html");
