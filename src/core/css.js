@@ -3,7 +3,7 @@ var cssParser, extractCssFileNames, extractCssProperties, fs, positionData, rele
 
 cssParser = require('css-parse');
 
-util = require('./util/util');
+util = require('../util/util');
 
 fs = require('fs');
 

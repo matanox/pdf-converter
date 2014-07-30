@@ -2,7 +2,7 @@
 'use strict';
 var Primus, logging;
 
-logging = require('./util/logging');
+logging = require('../util/logging');
 
 Primus = require('primus');
 

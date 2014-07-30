@@ -4,15 +4,15 @@
 
 util    = require '../util/util'
 logging = require '../util/logging' 
-docMeta = require '../docMeta'
-storage = require '../storage'
+docMeta = require './docMeta'
+storage = require '../storage/storage'
 require 'stream'
 exec   = require("child_process").exec
 riak   = require('riak-js').getClient({host: "localhost", port: "8098"})
 fs     = require 'fs'
 crypto = require 'crypto'
-output = require '../output'
 dataWriter = require '../data/dataWriter'
+#output = require '../output'
 
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"

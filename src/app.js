@@ -39,7 +39,7 @@ logging.logGreen("Starting in mode " + env);
 logging.log('Starting in mode ' + env);
 
 if (env !== 'production') {
-  primus = require('./primus');
+  primus = require('./primus/primus');
 }
 
 host = nconf.get('host');

@@ -5,8 +5,8 @@
 # (plus one or two other functions revolving around html)
 #
 
-util    = require('./util/util')
-logging = require './util/logging' 
+util    = require('../util/util')
+logging = require '../util/logging' 
 css     = require('./css')
 
 parseCssClasses = (styleString) ->

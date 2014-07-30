@@ -3,7 +3,7 @@
 #
 
 'use strict'
-logging = require './util/logging' 
+logging = require '../util/logging' 
 
 #
 # Primus is an abstraction layer on top all prominent websocket implementation libraries.

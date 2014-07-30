@@ -20,11 +20,11 @@ http    = require 'http'
 path    = require 'path'
 
 # Regular module dependencies
-#convert       = require './routes/convert'
-#extract       = require './routes/extract'
 errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './util/logging' 
+#convert       = require './routes/convert'
+#extract       = require './routes/extract'
 #markers       = require './markers'
 #fluff         = require './metaFluff'
 
@@ -44,7 +44,7 @@ logging.log('Starting in mode ' + env)
 # Dev-environment-only stuff
 #
 unless env is 'production'
-  primus = require './primus' 
+  primus = require './primus/primus' 
 
 # Get-or-default basic networking config
 host = nconf.get 'host'

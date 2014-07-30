@@ -2,9 +2,9 @@
 # Get meta-data cotained in the pdf file, as much as any is contained
 #s./sta
 
-util = require './util/util'
-logging = require './util/logging' 
-dataWriter = require './data/dataWriter'
+util = require '../util/util'
+logging = require '../util/logging' 
+dataWriter = require '../data/dataWriter'
 exec = require('child_process').exec
 
 exports.storePdfMetaData = (name, localCopy, docLogger) ->

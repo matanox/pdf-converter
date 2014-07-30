@@ -3,8 +3,8 @@
 # used to store and retreive pdf, derived html, derived tokens after serializing them
 #
 
-util =    require './util/util'
-logging = require './util/logging' 
+util =    require '../util/util'
+logging = require '../util/logging' 
 riak =    require('riak-js').getClient({host: "localhost", port: "8098"})
 # alternative node riak client - https://github.com/nathanaschbacher/nodiak
 fs =      require 'fs'

@@ -3,7 +3,7 @@
 #
 
 cssParser = require 'css-parse'
-util = require './util/util'
+util = require '../util/util'
 fs = require 'fs'
 
 relevantStyles = [

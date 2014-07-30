@@ -2,8 +2,8 @@
 # reads input markers file, and gets things ready for searching them in the input document
 #
 
-util = require './util/util'
-logging = require './util/logging' 
+util = require '../util/util'
+logging = require '../util/logging' 
 verbex = require 'verbal-expressions'
 
 inputLang = {}

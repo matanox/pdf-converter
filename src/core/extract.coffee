@@ -8,18 +8,16 @@ fs       = require 'fs'
 util     = require '../util/util'
 logging  = require '../util/logging' 
 timer    = require '../util/timer'
-css      = require '../css'
-html     = require '../html'
-model    = require '../model'
-output   = require '../output'
+css      = require './css'
+html     = require './html'
 ctype    = require '../util/ctype'
-markers  = require '../markers'
+markers  = require './markers'
 verbex   = require 'verbal-expressions'
 assert   = require 'assert' 
 dataWriter = require '../data/dataWriter'
 sentenceSplitter = require './sentenceSplitter'
 refactorTools = require '../refactorTools'
-analytic = require '../analytic'
+analytic = require '../util/analytic'
 
 mode = 'basic'
 refactorMode = true
@@ -1036,7 +1034,7 @@ exports.go = (req, name, input, res ,docLogger) ->
 # original version, of exports.go - not in use
 #
 exports.originalGo = (req, name, res ,docLogger) ->
-  storage = require '../src/storage'
+  storage = require '../src/storage/storage'
   require 'stream'
   riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
