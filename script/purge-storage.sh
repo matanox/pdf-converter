@@ -1,1 +1,1 @@
-node storage-purge
+node src/storage/storage-purge

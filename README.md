@@ -7,8 +7,6 @@ This project has been forked, for the sake of running only core parts of the ini
 
 The idea is that this code will be invoked by Scala, along with some context, and return a collection of tokens that is the most primitive conversion of the original pdf into consequitive tokens. All fancy algorithm should be left for the more suitable Scala language.
 
-## As such, currently most of its included code is not being executed, and can at the right time be removed alltogether
-
 # Technical comments from the original project that mostly still hold follow.
 
 This is an [express](http://expressjs.com/faq.html) app. Express.js documentation is not stellar, 

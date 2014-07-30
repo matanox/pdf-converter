@@ -4,20 +4,20 @@
 # Extracts and normalizes text content from html (with css styles)
 #
 
-fs       = require 'fs'
-util     = require '../util/util'
-logging  = require '../util/logging' 
-timer    = require '../util/timer'
-css      = require './css'
-html     = require './html'
-ctype    = require '../util/ctype'
-markers  = require './markers'
-verbex   = require 'verbal-expressions'
-assert   = require 'assert' 
-dataWriter = require '../data/dataWriter'
+verbex           = require 'verbal-expressions'
+assert           = require 'assert' 
+fs               = require 'fs'
+css              = require './css'
+html             = require './html'
+util             = require '../util/util'
+logging          = require '../util/logging' 
+timer            = require '../util/timer'
+ctype            = require '../util/ctype'
+analytic         = require '../util/analytic'
+dataWriter       = require '../data/dataWriter'
 sentenceSplitter = require './sentenceSplitter'
-refactorTools = require '../refactorTools'
-analytic = require '../util/analytic'
+refactorTools    = require '../refactorTools'
+markers          = require './markers'
 
 mode = 'basic'
 refactorMode = true
