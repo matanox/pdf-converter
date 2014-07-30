@@ -4,10 +4,10 @@
 # and updating the tokens after they were changed by the user
 #
 
-util    = require '../util'
-logging = require '../logging' 
-css     = require '../css'
-storage = require '../storage'
+util    = require '../src/util'
+logging = require '../src/logging' 
+css     = require '../src/css'
+storage = require '../src/storage'
 require 'stream'
 riak    = require('riak-js').getClient({host: "localhost", port: "8098"})
 extract = require './extract'

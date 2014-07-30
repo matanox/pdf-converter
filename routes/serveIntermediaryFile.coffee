@@ -2,9 +2,9 @@
 # Serve non-final artifacts - an original pdf, or the html conversion of it. Mainly for debugs purposes.
 #
 
-util    = require '../util'
-storage = require '../storage'
-logging = require '../logging' 
+util    = require '../src/util'
+storage = require '../src/storage'
+logging = require '../src/logging' 
 fs = require 'fs'
 
 exports.go = (req, res) -> 
