@@ -35,7 +35,6 @@ app = express()
 env = app.get('env')
 
 logging.init()
-
 logging.logGreen "Starting in mode #{env}"
 
 logging.log('Starting in mode ' + env) 
@@ -120,7 +119,8 @@ startServer = () ->
     #testFile = 'LaeUusATIi5FHXHmF4hU'    # 'rwUEzeLnRfKgNh23R82W'
     #testFile = 'To%20Belong%20or%20Not%20to%20Belong,%20That%20Is%20the%20Question'    
     #testFile = 'To Belong or Not to Belong,%20That%20Is%20the%20Question'    
-    testFile = 'wauthier13'    
+    #testFile = 'wauthier13'    
+    testFile = '0h6yIy8ITd6gQdc1XDb4'    
 
     testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile
     #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'

@@ -9,15 +9,16 @@ assert           = require 'assert'
 fs               = require 'fs'
 css              = require './css'
 html             = require './html'
+sentenceSplitter = require './sentenceSplitter'
+markers          = require './markers'
 util             = require '../util/util'
 logging          = require '../util/logging' 
 timer            = require '../util/timer'
 ctype            = require '../util/ctype'
 analytic         = require '../util/analytic'
 dataWriter       = require '../data/dataWriter'
-sentenceSplitter = require './sentenceSplitter'
 refactorTools    = require '../refactorTools'
-markers          = require './markers'
+headers          = require './headers/headers'
 
 mode = 'basic'
 refactorMode = true
@@ -356,6 +357,20 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   # This is necessary for the cases where pdf2html splits parts of 
   # the same word between span elements. 
   #
+
+  #
+  # TODO:
+  # There is an intricacy here. Sometimes, within a large normal document (e.g. MP0Zuz0FSSIenFyeHONS) there are
+  # bits where there is a pair of attributes interacting in opposite directions around word continuity,
+  # making word-continuity not deducable from the mere order of html spans.
+  #
+  # Those attributes are:
+  # (a) letter-spacing and (b) a negative margin-left attribute. 
+  #
+  # computation evolving around those attributes directly applied to span elements and inherited, 
+  # would probably be able to pick up word breaks for these cases.
+  #
+
   util.timelog name, 'uniting split tokens'
   dataWriter.write name, 'stats', 'tokens count before uniting tokens: ' + tokens.length
 
@@ -491,6 +506,10 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       token.fluff = true
   
   util.timelog name, 'detect and mark repeat headers and footers'
+
+  #
+  #
+  #
 
   titleAndAbstract(name, tokens)
  
@@ -780,16 +799,27 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
   #
   # Enrich tokens with computed style meta-data.
-  # For now one enrichment type - whether the word is all uppercase.
+  # For now one enrichment type - capitalization type
   #
+
+  
 
   for token in tokens
     if token.metaType is 'regular'
-      token.calculatedProperties = []
-      if util.pushIfTrue(token.calculatedProperties, ctype.testPureUpperCase(token.text))
-        dataWriter.write name, 'partDetection', 'All Caps Style detected for word: ' + token.text
-      if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
-        dataWriter.write name, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
+      
+      token.case = 'undetermined'
+
+      if ctype.testWeakUpperCase(token.text)
+        token.case = 'upper'
+        #dataWriter.write name, 'partDetection', 'All Caps Style detected for word: ' + token.text
+      if ctype.isUpperCaseChar(token.text.charAt(0)) 
+        token.case = 'title'
+  
+      # TODO: interleave this check much much earlier on in the tokenization stage
+      # if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
+      #   dataWriter.write name, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
+  
+  headers(name, tokens)
 
   #
   # Create sentences sequence
@@ -845,7 +875,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       return false
     
   #
-  # data-log abstract, if abstract detected
+  # data-log abstract, title, if detected
   #
   metaTypeLog('abstract')
   metaTypeLog('title')
