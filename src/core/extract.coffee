@@ -847,12 +847,22 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   util.timelog name, 'Sentence tokenizing'  
 
   #
-  # data-log all sentences 
+  # data-log all sentences, with paragraph splits indicated as well (abstract excluded).
   #
   for group in groups
     sentence = ''
     for token in group
-      sentence += token.text + ' '
+
+      if token.meta in ['title', 'abstract']
+        continue
+
+      if token.meta isnt 'title' # skip over the title. 
+        sentence += token.text + ' '
+    
+    # mark end of paragraph in the data-writing
+    if group[group.length-1].paragraph is 'closer'
+      sentence += '\n'
+
     dataWriter.write(name, 'sentences', sentence)
  
   #

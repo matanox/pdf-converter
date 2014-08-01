@@ -3,8 +3,11 @@
 #
 
 dataWriter = require '../../data/dataWriter'
+logging    = require '../../util/logging' 
 
 expected   = require './expected'
+
+noHeadersDocs = 0
 
 #
 # Iterate the tokens array, having the previous, current and next item available to each pass
@@ -20,9 +23,34 @@ tripleIterator = (tokens, func) ->
 
     i = i + 1
 
+isTitleNumeral = (text) ->
+  if not isNaN(parseInt(text.charAt(0))) # is first char a digit?
+    return true
+
+  return false
+
+#
+# is the token distinct in font family, size, compared to its immediate environment?
+#
+separateness = (prev, curr) ->
+  logging.logYellow "separateness test"
+  logging.logYellow """size: #{curr.finalStyles['font-size']} font: #{curr.finalStyles['font-family']} v.s. 
+                       size: #{prev.finalStyles['font-size']} font: #{prev.finalStyles['font-family']} """
+
+  if curr.finalStyles['font-size'] isnt prev.finalStyles['font-size']
+    return true
+  if curr.finalStyles['font-family'] isnt prev.finalStyles['font-family']
+    return true
+
+
+  return false
+
+
 module.exports = (name, tokens) -> 
 
-  console.dir expected
+  #console.dir expected
+
+  anyFound = false
 
   headers = []
 
@@ -38,8 +66,23 @@ module.exports = (name, tokens) ->
       unless curr.case in ['upper', 'title']   
         return
 
-      dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text}"""
+      if curr.paragraph is 'opener'
+        if separateness(prev, curr)
+          anyFound = true
+          dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (paragraph opener)""", true
+          return
+
+      if isTitleNumeral(prev.text)
+        logging.logRed prev.paragraph
+        if prev.paragraph is 'opener'      
+          anyFound = true
+          dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (following numeral paragraph opener)""", true
+          return
     )
+
+  unless anyFound
+    logging.logRed """no headers detected for #{name} (#{noHeadersDocs} total)"""
+    noHeadersDocs += 1
 
 
 

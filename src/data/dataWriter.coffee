@@ -27,7 +27,7 @@ files = {} # dictionary to hinge writers used for each input pdf file
 # The public writer interface of this module. Currently, Winston logger based.
 # (initializes a physical writer for the data type if not already initialized)
 #
-exports.write = (inputFileName, dataType, data) ->
+exports.write = (inputFileName, dataType, data, cnsl) ->
   unless files[inputFileName]?
     files[inputFileName] = {} 
 
@@ -53,6 +53,12 @@ exports.write = (inputFileName, dataType, data) ->
   # write the data
   #
   files[inputFileName][dataType].write(data)
+
+  #
+  # mirror to console if requested
+  #
+  if cnsl?
+    logging.logBlue data
 
   return true
 

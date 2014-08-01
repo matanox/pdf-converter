@@ -13,7 +13,7 @@ exports.docDataDir = docDataDir;
 
 files = {};
 
-exports.write = function(inputFileName, dataType, data) {
+exports.write = function(inputFileName, dataType, data, cnsl) {
   var nameBase, now, writer;
   if (files[inputFileName] == null) {
     files[inputFileName] = {};
@@ -28,6 +28,9 @@ exports.write = function(inputFileName, dataType, data) {
     files[inputFileName][dataType] = writer;
   }
   files[inputFileName][dataType].write(data);
+  if (cnsl != null) {
+    logging.logBlue(data);
+  }
   return true;
 };
 

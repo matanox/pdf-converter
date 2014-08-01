@@ -7,9 +7,9 @@ fs = require('fs');
 
 nconf = require('nconf');
 
-util = require('../../util');
+util = require('../../src/util/util');
 
-logging = require('../../logging');
+logging = require('../../src/util/logging');
 
 nconf.argv().env();
 

@@ -1,8 +1,8 @@
 http = require 'http'
 fs = require 'fs'
 nconf = require 'nconf'
-util = require '../../util'
-logging = require '../../logging'
+util = require '../../src/util/util'
+logging = require '../../src/util/logging'
 
 nconf.argv().env()
 nconf.defaults host: "localhost", serial: true
