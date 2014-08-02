@@ -26,7 +26,7 @@ dataWriter = require('../data/dataWriter');
 
 executable = "pdf2htmlEX";
 
-executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0";
+executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1";
 
 exports.go = function(localCopy, docLogger, req, res) {
   var fileContent, hash, hasher, name;
@@ -44,6 +44,7 @@ exports.go = function(localCopy, docLogger, req, res) {
     if (error != null) {
       util.timelog(name, "from upload to serving");
       docMeta.storePdfMetaData(name, localCopy, docLogger);
+      docMeta.storePdfFontsSummary(name, localCopy, docLogger);
       storage.store("pdf", name, fileContent, docLogger);
       util.timelog(name, "Conversion to html");
       logging.cond("starting the conversion from pdf to html", 'progress');

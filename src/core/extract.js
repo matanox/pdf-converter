@@ -50,7 +50,7 @@ iterator = function(tokens, iterationFunc) {
 };
 
 titleAndAbstract = function(name, tokens) {
-  var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, sequence, sequences, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t;
+  var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, s, sequence, sequences, skipDelimiters, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t, _u;
   util.timelog(name, 'Title and abstract recognition');
   firstPage = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -127,6 +127,7 @@ titleAndAbstract = function(name, tokens) {
         'font-size': token.finalStyles['font-size'],
         'font-family': token.finalStyles['font-family'],
         'startToken': t,
+        'startText': token.text,
         'startLeft': parseFloat(token.positionInfo.left),
         'startBottom': parseFloat(token.positionInfo.bottom)
       };
@@ -138,6 +139,9 @@ titleAndAbstract = function(name, tokens) {
     sequences.push(sequence);
   }
   sequences.sort(function(a, b) {
+    if (b.startBottom === a.startBottom) {
+      return b.startLeft - a.startLeft;
+    }
     return b.startBottom - a.startBottom;
   });
   minAbstractTokensNum = 50;
@@ -160,11 +164,36 @@ titleAndAbstract = function(name, tokens) {
     }
     i += 1;
   }
-  for (_o = 0, _len3 = sequences.length; _o < _len3; _o++) {
-    sequence = sequences[_o];
-    if (sequence.numOfTokens > minAbstractTokensNum) {
-      abstract = sequence;
-      break;
+  skipDelimiters = function(tokens, startToken, endToken) {
+    var _o;
+    for (t = _o = startToken; startToken <= endToken ? _o <= endToken : _o >= endToken; t = startToken <= endToken ? ++_o : --_o) {
+      if (tokens[t].metaType === 'regular') {
+        return tokens[t];
+      }
+    }
+    return null;
+  };
+  for (s = _o = 0, _len3 = sequences.length; _o < _len3; s = ++_o) {
+    sequence = sequences[s];
+    token = skipDelimiters(tokens, sequence.startToken, sequence.endToken);
+    if (token != null) {
+      if (token.text.toUpperCase() === 'ABSTRACT') {
+        if (sequence.numOfTokens === 1) {
+          if (s < sequences.length - 1) {
+            abstract = sequences[s + 1];
+            break;
+          }
+        }
+      }
+    }
+  }
+  if (abstract == null) {
+    for (_p = 0, _len4 = sequences.length; _p < _len4; _p++) {
+      sequence = sequences[_p];
+      if (sequence.numOfTokens > minAbstractTokensNum) {
+        abstract = sequence;
+        break;
+      }
     }
   }
   if (abstract != null) {
@@ -172,15 +201,15 @@ titleAndAbstract = function(name, tokens) {
   } else {
     console.warn('abstract not detected');
   }
-  for (_p = 0, _len4 = sequences.length; _p < _len4; _p++) {
-    introduction = sequences[_p];
+  for (_q = 0, _len5 = sequences.length; _q < _len5; _q++) {
+    introduction = sequences[_q];
     if ((tokens[introduction.startToken].text === 'Introduction') || (tokens[introduction.startToken].text === '1.' && tokens[introduction.startToken + 2].text === 'Introduction') || (tokens[introduction.startToken].text === '1' && tokens[introduction.startToken + 2].text === 'Introduction')) {
       console.log('introduction detected');
-      for (_q = 0, _len5 = sequences.length; _q < _len5; _q++) {
-        sequence = sequences[_q];
+      for (_r = 0, _len6 = sequences.length; _r < _len6; _r++) {
+        sequence = sequences[_r];
         if (parseFloat(sequence.startLeft) < parseFloat(introduction.startLeft)) {
           if (parseFloat(sequence.startBottom) <= parseFloat(introduction.startBottom)) {
-            for (t = _r = _ref2 = sequence.startToken, _ref3 = sequence.endToken; _ref2 <= _ref3 ? _r <= _ref3 : _r >= _ref3; t = _ref2 <= _ref3 ? ++_r : --_r) {
+            for (t = _s = _ref2 = sequence.startToken, _ref3 = sequence.endToken; _ref2 <= _ref3 ? _s <= _ref3 : _s >= _ref3; t = _ref2 <= _ref3 ? ++_s : --_s) {
               tokens;
             }
           }
@@ -197,11 +226,11 @@ titleAndAbstract = function(name, tokens) {
   util.timelog(name, 'initial handling of first page fluff');
   if (abstract != null) {
     abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
-    for (_s = 0, _len6 = sequences.length; _s < _len6; _s++) {
-      sequence = sequences[_s];
+    for (_t = 0, _len7 = sequences.length; _t < _len7; _t++) {
+      sequence = sequences[_t];
       if (!(sequence === title || sequence === abstract)) {
         if (parseFloat(tokens[sequence.startToken].positionInfo.bottom) > parseFloat(abstractEnd)) {
-          for (t = _t = _ref4 = sequence.startToken, _ref5 = sequence.endToken; _ref4 <= _ref5 ? _t <= _ref5 : _t >= _ref5; t = _ref4 <= _ref5 ? ++_t : --_t) {
+          for (t = _u = _ref4 = sequence.startToken, _ref5 = sequence.endToken; _ref4 <= _ref5 ? _u <= _ref5 : _u >= _ref5; t = _ref4 <= _ref5 ? ++_u : --_u) {
             tokens[t].fluff = true;
           }
         }
@@ -225,7 +254,9 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       return docLogger.info('htmlparser2 loaded document');
     }
   });
-  parser = new htmlparser.Parser(handler);
+  parser = new htmlparser.Parser(handler, {
+    decodeEntities: true
+  });
   parser.parseComplete(rawHtml);
   dom = handler.dom;
   util.timelog(name, 'htmlparser2');
@@ -647,9 +678,10 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       if ((_ref8 = token.meta) === 'title' || _ref8 === 'abstract') {
         continue;
       }
-      if (token.meta !== 'title') {
-        sentence += token.text + ' ';
-      }
+      sentence += token.text + ' ';
+    }
+    if (sentence.length === 0) {
+      continue;
     }
     if (group[group.length - 1].paragraph === 'closer') {
       sentence += '\n';

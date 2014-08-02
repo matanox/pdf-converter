@@ -15,7 +15,7 @@ dataWriter = require '../data/dataWriter'
 #output = require '../output'
 
 executable = "pdf2htmlEX"
-executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0"
+executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1" 
 
 #
 # * Handles the conversion from pdf to html, and forwards to next stage.
@@ -54,7 +54,9 @@ exports.go = (localCopy, docLogger, req, res) ->
         #
         util.timelog name, "from upload to serving"
 
-        docMeta.storePdfMetaData name, localCopy, docLogger
+        docMeta.storePdfMetaData     name, localCopy, docLogger
+        docMeta.storePdfFontsSummary name, localCopy, docLogger
+
         storage.store "pdf", name, fileContent, docLogger
 
         util.timelog name, "Conversion to html"

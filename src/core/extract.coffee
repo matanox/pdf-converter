@@ -146,6 +146,7 @@ titleAndAbstract = (name, tokens) ->
         'font-size':   token.finalStyles['font-size'],
         'font-family': token.finalStyles['font-family'],
         'startToken':  t,
+        'startText':   token.text # for easing debug orientation
         'startLeft':   parseFloat(token.positionInfo.left),
         'startBottom': parseFloat(token.positionInfo.bottom)
  
@@ -155,8 +156,16 @@ titleAndAbstract = (name, tokens) ->
     sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
     sequences.push sequence
 
-  # sort sequences according to horizontal location - to simplify next steps
-  sequences.sort( (a, b) -> return b.startBottom - a.startBottom )
+  # sort sequences according from top left to bottom right - to simplify next steps
+  sequences.sort( 
+    (a, b) -> 
+      # is same vertical location, sort by horizontal location
+      if b.startBottom is a.startBottom # consider adding 'grace' variance here
+        return b.startLeft - a.startLeft
+
+      # sort by vertical location
+      return b.startBottom - a.startBottom 
+    )
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 6
@@ -195,16 +204,41 @@ titleAndAbstract = (name, tokens) ->
     i += 1  # look for next largest font size sequence
 
   #
+  # get abstract by looking for the header 'abstract'
+  #
+
+
+  skipDelimiters = (tokens, startToken, endToken) ->
+    for t in [startToken..endToken]
+      if tokens[t].metaType is 'regular'
+        return tokens[t]
+
+    return null
+
+  for sequence, s in sequences     
+    token = skipDelimiters(tokens, sequence.startToken, sequence.endToken)
+    if token?    
+      if token.text.toUpperCase() is 'ABSTRACT'
+        #logging.logRed 'abstract header found!!'
+        if sequence.numOfTokens is 1
+          #logging.logRed 'abstract header is part of sequence of length 1'
+          if s < sequences.length-1 # if not last detected sequence, although should be impossible anyway
+            #logging.logRed 'abstract header has section following it'
+            abstract = sequences[s+1]
+            break 
+
+  #
   # get abstract by the following criterion -
   # first 'long' sequence on first page
   #
   # bottom-wise first will be detected relying on the array having been sorted already
   #
 
-  for sequence in sequences     
-    if sequence.numOfTokens > minAbstractTokensNum
-      abstract = sequence
-      break
+  unless abstract?
+    for sequence in sequences     
+      if sequence.numOfTokens > minAbstractTokensNum
+        abstract = sequence
+        break
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
@@ -290,7 +324,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     else
       docLogger.info('htmlparser2 loaded document')
   )
-  parser = new htmlparser.Parser(handler)
+  parser = new htmlparser.Parser(handler, {decodeEntities: true})
   parser.parseComplete(rawHtml)
   dom = handler.dom
   util.timelog name, 'htmlparser2'
@@ -856,8 +890,10 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       if token.meta in ['title', 'abstract']
         continue
 
-      if token.meta isnt 'title' # skip over the title. 
-        sentence += token.text + ' '
+      sentence += token.text + ' '
+
+    if sentence.length is 0
+      continue
     
     # mark end of paragraph in the data-writing
     if group[group.length-1].paragraph is 'closer'
