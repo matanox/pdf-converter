@@ -13,7 +13,7 @@ lib-cov
 
 pids
 logs
-docData
+docData*
 annotated-test
 
 node_modules
