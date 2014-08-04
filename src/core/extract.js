@@ -88,8 +88,8 @@ titleAndAbstract = function(name, tokens) {
     a = tokens[t - 1];
     b = tokens[t];
     if (parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom)) {
-      a.lineLocation = 'closer';
-      b.lineLocation = 'opener';
+      a.lineCloser = true;
+      b.lineOpener = true;
       lineOpeners.push(t);
     }
   }
@@ -105,13 +105,13 @@ titleAndAbstract = function(name, tokens) {
     token = tokens[t];
     prev = tokens[t - 1];
     split = false;
-    if (token.lineLocation === 'opener') {
+    if (token.lineOpener === true) {
       rowLeftLast = rowLeftCurr;
       rowLeftCurr = parseFloat(token.positionInfo.left);
     }
     if ((token.finalStyles['font-size'] !== sequence['font-size']) || (token.finalStyles['font-family'] !== sequence['font-family'])) {
       if (token.positionInfo.bottom !== prev.positionInfo.bottom) {
-        if (!(token.lineLocation === 'opener' && Math.abs(rowLeftLast - rowLeftCurr) < 2)) {
+        if (!(token.lineOpener && Math.abs(rowLeftLast - rowLeftCurr) < 2)) {
           split = true;
         }
       }
@@ -459,36 +459,36 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   lineOpeners = [];
   lineOpenersForStats = [];
   lineSpaces = [];
-  util.first(tokens).lineLocation = 'opener';
+  util.first(tokens).lineOpener = true;
   for (i = _x = 1, _ref5 = tokens.length - 1; 1 <= _ref5 ? _x <= _ref5 : _x >= _ref5; i = 1 <= _ref5 ? ++_x : --_x) {
     a = tokens[i - 1];
     b = tokens[i];
     if (parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100) {
-      a.lineLocation = 'closer';
-      b.lineLocation = 'opener';
+      a.lineCloser = true;
+      b.lineOpener = true;
       a.columnCloser = true;
       b.columnOpener = true;
       lineOpeners.push(i);
       lineOpenersForStats.push(parseFloat(b.positionInfo.left));
     } else {
       if (parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom)) {
-        a.lineLocation = 'closer';
-        b.lineLocation = 'opener';
+        a.lineCloser = true;
+        b.lineOpener = true;
         lineOpeners.push(i);
         lineOpenersForStats.push(parseFloat(b.positionInfo.left));
         lineSpaces.push(parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom));
       }
     }
-    if (b.lineLocation === 'opener') {
+    if (b.lineOpener) {
       if (b.text === 'References') {
-        logging.logGreen("has indentation change and preceded by " + a.text + " which is a line " + a.lineLocation);
+        logging.logGreen("has indentation change and preceded by " + a.text);
       }
     }
   }
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces);
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
   dataWriter.write(name, 'stats', "ordinary new line space set to the document's most common line space of " + newLineThreshold);
-  util.last(tokens).lineLocation = 'closer';
+  util.last(tokens).lineCloser = true;
   for (i = _y = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _y <= _ref6 : _y >= _ref6; i = 1 <= _ref6 ? ++_y : --_y) {
     currOpener = tokens[lineOpeners[i]];
     prevOpener = tokens[lineOpeners[i - 1]];
@@ -502,7 +502,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
     if (parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)) {
       if (currOpener.text === 'References') {
-        logging.logYellow("has indentation change and preceded by " + prevToken.text + " which is a line " + prevToken.lineLocation + ". Metatypes are: " + currOpener.metaType + ", " + prevToken.metaType);
+        logging.logYellow("has indentation change and preceded by " + prevToken.text + ". Metatypes are: " + currOpener.metaType + ", " + prevToken.metaType);
       }
       if (currOpener.columnOpener) {
         if (parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)) {
@@ -566,7 +566,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     return tokens.splice(i, 0, newDelimiter);
   };
   tokens.reduce(function(a, b, i, tokens) {
-    if (a.lineLocation !== 'closer') {
+    if (!a.lineCloser) {
       switch (false) {
         case !(parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom)):
           b.superscript = true;
@@ -582,17 +582,17 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
     token = tokens[_ab];
     if (token.text === 'run.') {
-      logging.logYellow("run still here and is line " + token.lineLocation);
+      logging.logYellow("run still here");
     }
     if (token.text === 'References') {
-      logging.logYellow("Referencse still here and is line " + token.lineLocation);
+      logging.logYellow("Referencse still here");
     }
   }
   docLogger.info(tokens.length);
   iterator(tokens, function(a, b, i, tokens) {
     var newDelimiter;
-    if (b.lineLocation === 'opener') {
-      if (a.lineLocation === 'closer') {
+    if (b.lineOpener) {
+      if (a.lineCloser) {
         if (b.text === 'References') {
           logging.logYellow("@References");
         }

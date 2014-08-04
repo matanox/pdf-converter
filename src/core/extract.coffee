@@ -81,8 +81,8 @@ titleAndAbstract = (name, tokens) ->
     a = tokens[t-1]
     b = tokens[t]
     if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
-      a.lineLocation = 'closer'       # a line closer  
-      b.lineLocation = 'opener'       # a line opener    
+      a.lineCloser = true       # a line closer  
+      b.lineOpener = true       # a line opener    
       lineOpeners.push(t)  # pushes the index of b
 
   #
@@ -103,7 +103,7 @@ titleAndAbstract = (name, tokens) ->
     prev  = tokens[t-1]
     split = false
 
-    if token.lineLocation is 'opener' 
+    if token.lineOpener is true
       rowLeftLast = rowLeftCurr
       rowLeftCurr = parseFloat(token.positionInfo.left)
       #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
@@ -114,7 +114,7 @@ titleAndAbstract = (name, tokens) ->
       # Same row?
       unless token.positionInfo.bottom is prev.positionInfo.bottom
         # New row but same horizontal start location as previous row?
-        unless (token.lineLocation is 'opener' and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
+        unless (token.lineOpener and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
           split = true
 
     #
@@ -592,7 +592,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   lineOpenersForStats = []
   lineSpaces = []
 
-  util.first(tokens).lineLocation = 'opener'
+  util.first(tokens).lineOpener = true
 
   for i in [1..tokens.length-1]
     a = tokens[i-1]
@@ -600,8 +600,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     
     # Identify and handle new text column, and thus identify a new line
     if parseFloat(b.positionInfo.bottom) > parseFloat(a.positionInfo.bottom) + 100
-      a.lineLocation = 'closer'       # a line closer       
-      b.lineLocation = 'opener'       # a line opener 
+      a.lineCloser = true       # a line closer       
+      b.lineOpener = true       # a line opener 
       a.columnCloser = true           # a column closer
       b.columnOpener = true           # a column opener
       lineOpeners.push(i)  # pushes the index of b
@@ -610,14 +610,14 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     # Identify and handle a new line within same column
     else
       if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
-        a.lineLocation = 'closer'       # a line closer       
-        b.lineLocation = 'opener'       # a line opener       
+        a.lineCloser = true       # a line closer       
+        b.lineOpener = true       # a line opener       
         lineOpeners.push(i)  # pushes the index of b
         lineOpenersForStats.push parseFloat(b.positionInfo.left)
         lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom) 
 
-    if b.lineLocation is 'opener'
-      if b.text is 'References' then logging.logGreen """has indentation change and preceded by #{a.text} which is a line #{a.lineLocation}"""
+    if b.lineOpener
+      if b.text is 'References' then logging.logGreen """has indentation change and preceded by #{a.text}"""
 
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces)
   
@@ -629,7 +629,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
                                                                             # and document deviations 
   dataWriter.write name, 'stats', """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
 
-  util.last(tokens).lineLocation = 'closer'
+  util.last(tokens).lineCloser = true
 
   #
   # Based on the above, deduce paragraph splittings
@@ -652,7 +652,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
     # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
-      if currOpener.text is 'References' then logging.logYellow """has indentation change and preceded by #{prevToken.text} which is a line #{prevToken.lineLocation}. Metatypes are: #{currOpener.metaType}, #{prevToken.metaType}"""
+      if currOpener.text is 'References' then logging.logYellow """has indentation change and preceded by #{prevToken.text}. Metatypes are: #{currOpener.metaType}, #{prevToken.metaType}"""
 
       # is it a column transition?
       if currOpener.columnOpener
@@ -745,7 +745,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
   tokens.reduce (a, b, i, tokens) ->        
 
-    unless a.lineLocation is 'closer'
+    unless a.lineCloser
       switch
         when parseInt(b.positionInfo.bottom) > parseInt(a.positionInfo.bottom)
             b.superscript = true  
@@ -766,13 +766,13 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 #    if token.text is 'References' then logging.logYellow """References is #{token.paragraph} and #{tokens[t-1].text} is #{tokens[t-1].paragraph} """
 
   for token in tokens
-    if token.text is 'run.' then logging.logYellow "run still here and is line #{token.lineLocation}"
-    if token.text is 'References' then logging.logYellow "Referencse still here and is line #{token.lineLocation}"
+    if token.text is 'run.' then logging.logYellow "run still here"
+    if token.text is 'References' then logging.logYellow "Referencse still here"
 
   docLogger.info(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
-    if b.lineLocation is 'opener'       
-      if a.lineLocation is 'closer' 
+    if b.lineOpener
+      if a.lineCloser
         if b.text is 'References' then logging.logYellow "@References"
         if a.metaType is 'regular' # line didn't include an ending delimiter 
           #docLogger.info('undelimited end of line detected')
