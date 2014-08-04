@@ -658,21 +658,21 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       if currOpener.columnOpener
         if parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)
           # it's a paragraph beginning at the very top of a new column
-          currOpener.paragraph = 'opener'   
-          prevToken.paragraph = 'closer'
+          currOpener.paragraphOpener = true
+          prevToken.paragraphCloser = true
           #console.log 'new paragraph detected by rule 1:' + currOpener.text
 
       else
         if currOpener.text is 'References' then logging.logYellow "is paragraph opener"
         # it's a paragraph beginning within the same column
-        currOpener.paragraph = 'opener'   
-        prevToken.paragraph = 'closer'
+        currOpener.paragraphOpener = true  
+        prevToken.paragraphCloser = true
         #console.log 'new paragraph detected by rule 2:' + currOpener.text        
 
     if parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) - 1  # -1 for tolerance 
       # it's a space signaled paragraph beginning
-      currOpener.paragraph = 'opener'   
-      prevToken.paragraph = 'closer'
+      currOpener.paragraphOpener = true   
+      prevToken.paragraphCloser = true
       #console.log 'new paragraph detected by rule 3:' + currOpener.text        
      
       #console.log newLineThreshold + ' ' + parseFloat(currOpener.positionInfo.bottom) + ' ' + parseFloat(prevOpener.positionInfo.bottom) 
@@ -690,7 +690,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   lastOpenerIndex = 0
   paragraphs = []
   for i in [0..tokens.length-1] 
-    if tokens[i].paragraph is 'opener' 
+    if tokens[i].paragraphOpener
       paragraphs.push {'length': i - lastOpenerIndex, 'opener': tokens[i]}
       lastOpenerIndex = i
 
@@ -814,7 +814,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
       # Merge the two tokens - styles from first, paragraph status from second
       a.text = a.text.concat(b.text) # concatenate text of second element into first
-      a.paragraph = b.paragraph
+      a.paragraphOpener = b.paragraphOpener
+      a.paragraphCloser = b.paragraphCloser
 
       tokens.splice(index, 1)        # remove second element
       return 0
@@ -921,7 +922,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       continue
     
     # mark end of paragraph in the data-writing
-    if group[group.length-1].paragraph is 'closer'
+    if group[group.length-1].paragraphCloser
       sentence += '\n'
 
     dataWriter.write(name, 'sentences', sentence)

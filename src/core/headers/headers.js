@@ -57,10 +57,7 @@ module.exports = function(name, tokens) {
     if ((_ref = curr["case"]) !== 'upper' && _ref !== 'title') {
       return;
     }
-    if (curr.paragraph === 'opener') {
-      if (curr.text === 'References') {
-        logging.logGreen("@References is paragraph opener");
-      }
+    if (curr.paragraphOpener) {
       if (separateness(prev, curr)) {
         anyFound = true;
         dataWriter.write(name, 'headers', "token id " + curr.id + ": " + curr.text + " (paragraph opener)", true);
@@ -68,8 +65,7 @@ module.exports = function(name, tokens) {
       }
     }
     if (isTitleNumeral(prev.text)) {
-      logging.logRed(prev.paragraph);
-      if (prev.paragraph === 'opener') {
+      if (prev.paragraphOpener) {
         anyFound = true;
         dataWriter.write(name, 'headers', "token id " + curr.id + ": " + curr.text + " (following numeral paragraph opener)", true);
       }

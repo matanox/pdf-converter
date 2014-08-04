@@ -506,27 +506,27 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       }
       if (currOpener.columnOpener) {
         if (parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)) {
-          currOpener.paragraph = 'opener';
-          prevToken.paragraph = 'closer';
+          currOpener.paragraphOpener = true;
+          prevToken.paragraphCloser = true;
         }
       } else {
         if (currOpener.text === 'References') {
           logging.logYellow("is paragraph opener");
         }
-        currOpener.paragraph = 'opener';
-        prevToken.paragraph = 'closer';
+        currOpener.paragraphOpener = true;
+        prevToken.paragraphCloser = true;
       }
     }
     if (parseFloat(currOpener.positionInfo.bottom) + newLineThreshold < parseFloat(prevOpener.positionInfo.bottom) - 1) {
-      currOpener.paragraph = 'opener';
-      prevToken.paragraph = 'closer';
+      currOpener.paragraphOpener = true;
+      prevToken.paragraphCloser = true;
     }
   }
   util.timelog(name, 'basic handle line and paragraph beginnings');
   lastOpenerIndex = 0;
   paragraphs = [];
   for (i = _z = 0, _ref7 = tokens.length - 1; 0 <= _ref7 ? _z <= _ref7 : _z >= _ref7; i = 0 <= _ref7 ? ++_z : --_z) {
-    if (tokens[i].paragraph === 'opener') {
+    if (tokens[i].paragraphOpener) {
       paragraphs.push({
         'length': i - lastOpenerIndex,
         'opener': tokens[i]
@@ -624,7 +624,8 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
       a.text = a.text.concat(b.text);
-      a.paragraph = b.paragraph;
+      a.paragraphOpener = b.paragraphOpener;
+      a.paragraphCloser = b.paragraphCloser;
       tokens.splice(index, 1);
       return 0;
     }
@@ -721,7 +722,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     if (sentence.length === 0) {
       continue;
     }
-    if (group[group.length - 1].paragraph === 'closer') {
+    if (group[group.length - 1].paragraphCloser) {
       sentence += '\n';
     }
     dataWriter.write(name, 'sentences', sentence);

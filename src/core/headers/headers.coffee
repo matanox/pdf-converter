@@ -66,16 +66,15 @@ module.exports = (name, tokens) ->
       unless curr.case in ['upper', 'title']   
         return
 
-      if curr.paragraph is 'opener'
-        if curr.text is 'References' then logging.logGreen "@References is paragraph opener"
+      if curr.paragraphOpener
         if separateness(prev, curr)
           anyFound = true
           dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (paragraph opener)""", true
           return
 
       if isTitleNumeral(prev.text)
-        logging.logRed prev.paragraph
-        if prev.paragraph is 'opener'      
+        #logging.logRed prev.paragraph
+        if prev.paragraphOpener
           anyFound = true
           dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (following numeral paragraph opener)""", true
           return
