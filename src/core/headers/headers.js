@@ -58,6 +58,9 @@ module.exports = function(name, tokens) {
       return;
     }
     if (curr.paragraph === 'opener') {
+      if (curr.text === 'References') {
+        logging.logGreen("@References is paragraph opener");
+      }
       if (separateness(prev, curr)) {
         anyFound = true;
         dataWriter.write(name, 'headers', "token id " + curr.id + ": " + curr.text + " (paragraph opener)", true);

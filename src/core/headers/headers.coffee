@@ -67,6 +67,7 @@ module.exports = (name, tokens) ->
         return
 
       if curr.paragraph is 'opener'
+        if curr.text is 'References' then logging.logGreen "@References is paragraph opener"
         if separateness(prev, curr)
           anyFound = true
           dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (paragraph opener)""", true
