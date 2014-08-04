@@ -105,7 +105,7 @@ titleAndAbstract = function(name, tokens) {
     token = tokens[t];
     prev = tokens[t - 1];
     split = false;
-    if (token.lineOpener === true) {
+    if (token.lineOpener) {
       rowLeftLast = rowLeftCurr;
       rowLeftCurr = parseFloat(token.positionInfo.left);
     }

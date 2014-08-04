@@ -103,7 +103,7 @@ titleAndAbstract = (name, tokens) ->
     prev  = tokens[t-1]
     split = false
 
-    if token.lineOpener is true
+    if token.lineOpener
       rowLeftLast = rowLeftCurr
       rowLeftCurr = parseFloat(token.positionInfo.left)
       #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
