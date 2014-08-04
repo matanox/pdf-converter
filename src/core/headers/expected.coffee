@@ -8,6 +8,7 @@ expected =
   'Method',
   'Methodology'
   'Discussion',
+  'General Discussion'
   'Results',
   'Conclusion',
   'References'

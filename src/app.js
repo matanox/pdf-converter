@@ -86,7 +86,7 @@ startServer = function() {
     return logging.logGreen('Server listening on port ' + app.get('port') + '....');
   });
   if (env !== 'production') {
-    testFile = 'xt7duLM0Q3Ow2gIBOvED';
+    testFile = 'gender differences 2013';
     testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile;
     return http.get(testUrl, function(res) {
       return logging.logBlue('Server response to its own synthetic client is: ' + res.statusCode);

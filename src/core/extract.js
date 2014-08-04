@@ -241,7 +241,7 @@ titleAndAbstract = function(name, tokens) {
 };
 
 generateFromHtml = function(req, name, input, res, docLogger, callback) {
-  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
+  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
   util.timelog(name, 'Extraction from html stage A');
   rawHtml = fs.readFileSync(input.html).toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, input.css);
@@ -479,6 +479,11 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
         lineSpaces.push(parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom));
       }
     }
+    if (b.lineLocation === 'opener') {
+      if (b.text === 'References') {
+        logging.logGreen("has indentation change and preceded by " + a.text + " which is a line " + a.lineLocation);
+      }
+    }
   }
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces);
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
@@ -489,16 +494,25 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     prevOpener = tokens[lineOpeners[i - 1]];
     nextOpener = tokens[lineOpeners[i + 1]];
     prevToken = tokens[lineOpeners[i] - 1];
+    if (currOpener.text === 'References') {
+      logging.logYellow("REFERENCES");
+    }
     if (currOpener.meta === 'title') {
       continue;
     }
     if (parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)) {
+      if (currOpener.text === 'References') {
+        logging.logYellow("has indentation change and preceded by " + prevToken.text + " which is a line " + prevToken.lineLocation + ". Metatypes are: " + currOpener.metaType + ", " + prevToken.metaType);
+      }
       if (currOpener.columnOpener) {
         if (parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)) {
           currOpener.paragraph = 'opener';
           prevToken.paragraph = 'closer';
         }
       } else {
+        if (currOpener.text === 'References') {
+          logging.logYellow("is paragraph opener");
+        }
         currOpener.paragraph = 'opener';
         prevToken.paragraph = 'closer';
       }
@@ -565,11 +579,23 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
     return b;
   });
+  for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
+    token = tokens[_ab];
+    if (token.text === 'run.') {
+      logging.logYellow("run still here and is line " + token.lineLocation);
+    }
+    if (token.text === 'References') {
+      logging.logYellow("Referencse still here and is line " + token.lineLocation);
+    }
+  }
   docLogger.info(tokens.length);
   iterator(tokens, function(a, b, i, tokens) {
     var newDelimiter;
     if (b.lineLocation === 'opener') {
       if (a.lineLocation === 'closer') {
+        if (b.text === 'References') {
+          logging.logYellow("@References");
+        }
         if (a.metaType === 'regular') {
           if (util.endsWith(a.text, '-')) {
             a.text = a.text.slice(0, -1);
@@ -577,6 +603,9 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
             tokens.splice(i, 1);
             return 0;
           } else {
+            if (a.text === 'run.') {
+              logging.logYellow("not Hyphen");
+            }
             newDelimiter = {
               'metaType': 'delimiter'
             };
@@ -601,19 +630,25 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
     return 1;
   });
+  for (_ac = 0, _len12 = tokens.length; _ac < _len12; _ac++) {
+    token = tokens[_ac];
+    if (token.text === 'run.References') {
+      logging.logYellow("run. and References were united now");
+    }
+  }
   util.timelog(name, 'Extraction from html stage A');
   util.timelog(name, 'ID seeding');
   id = 0;
-  for (_ab = 0, _len11 = tokens.length; _ab < _len11; _ab++) {
-    token = tokens[_ab];
+  for (_ad = 0, _len13 = tokens.length; _ad < _len13; _ad++) {
+    token = tokens[_ad];
     token.id = id;
     id += 1;
   }
   util.timelog(name, 'ID seeding');
   if (createIndex) {
     textIndex = [];
-    for (_ac = 0, _len12 = tokens.length; _ac < _len12; _ac++) {
-      token = tokens[_ac];
+    for (_ae = 0, _len14 = tokens.length; _ae < _len14; _ae++) {
+      token = tokens[_ae];
       if (token.metaType === 'regular') {
         textIndex.push({
           text: token.text,
@@ -631,8 +666,8 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     });
     util.timelog(name, 'Index creation');
   }
-  for (_ad = 0, _len13 = tokens.length; _ad < _len13; _ad++) {
-    token = tokens[_ad];
+  for (_af = 0, _len15 = tokens.length; _af < _len15; _af++) {
+    token = tokens[_af];
     if (token.metaType === 'regular') {
       token["case"] = 'undetermined';
       if (ctype.testWeakUpperCase(token.text)) {
@@ -653,7 +688,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   abbreviations = 0;
   groups = [];
   group = [];
-  for (t = _ae = 0, _len14 = tokens.length; _ae < _len14; t = ++_ae) {
+  for (t = _ag = 0, _len16 = tokens.length; _ag < _len16; t = ++_ag) {
     token = tokens[t];
     if (token.metaType === 'regular') {
       connect_token_group({
@@ -670,11 +705,14 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     groups.push(group);
   }
   util.timelog(name, 'Sentence tokenizing');
-  for (_af = 0, _len15 = groups.length; _af < _len15; _af++) {
-    group = groups[_af];
+  for (_ah = 0, _len17 = groups.length; _ah < _len17; _ah++) {
+    group = groups[_ah];
     sentence = '';
-    for (_ag = 0, _len16 = group.length; _ag < _len16; _ag++) {
-      token = group[_ag];
+    for (_ai = 0, _len18 = group.length; _ai < _len18; _ai++) {
+      token = group[_ai];
+      if (token.text === 'run.References') {
+        logging.logYellow("REFERENCES IN SENTENCE");
+      }
       if ((_ref8 = token.meta) === 'title' || _ref8 === 'abstract') {
         continue;
       }
@@ -689,10 +727,10 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     dataWriter.write(name, 'sentences', sentence);
   }
   metaTypeLog = function(type) {
-    var text, _ah, _len17;
+    var text, _aj, _len19;
     text = '';
-    for (_ah = 0, _len17 = tokens.length; _ah < _len17; _ah++) {
-      token = tokens[_ah];
+    for (_aj = 0, _len19 = tokens.length; _aj < _len19; _aj++) {
+      token = tokens[_aj];
       if (token.meta === type) {
         switch (token.metaType) {
           case 'regular':
@@ -721,15 +759,15 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   util.timelog(name, 'Markers visualization');
   docSieve = markers.createDocumentSieve(markers.baseSieve);
   markSentence = function(sentenceIdx) {
-    var marker, matchedMarkers, _ah, _ai, _len17, _len18;
+    var marker, matchedMarkers, _aj, _ak, _len19, _len20;
     sentence = groups[sentenceIdx];
     matchedMarkers = [];
     if (sentence != null) {
-      for (_ah = 0, _len17 = sentence.length; _ah < _len17; _ah++) {
-        token = sentence[_ah];
+      for (_aj = 0, _len19 = sentence.length; _aj < _len19; _aj++) {
+        token = sentence[_aj];
         if (token.metaType !== 'delimiter') {
-          for (_ai = 0, _len18 = docSieve.length; _ai < _len18; _ai++) {
-            marker = docSieve[_ai];
+          for (_ak = 0, _len20 = docSieve.length; _ak < _len20; _ak++) {
+            marker = docSieve[_ak];
             switch (marker.markerTokens[marker.nextExpected].metaType) {
               case 'regular':
                 if (token.text === marker.markerTokens[marker.nextExpected].text) {
@@ -782,8 +820,8 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
   };
   markSentence(0);
-  for (_ah = 0, _len17 = tokens.length; _ah < _len17; _ah++) {
-    token = tokens[_ah];
+  for (_aj = 0, _len19 = tokens.length; _aj < _len19; _aj++) {
+    token = tokens[_aj];
     if (token.page == null) {
       throw "Internal Error - token is missing page number";
     }

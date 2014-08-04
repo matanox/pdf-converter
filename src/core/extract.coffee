@@ -611,10 +611,13 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     else
       if parseFloat(b.positionInfo.bottom) + 5 < parseFloat(a.positionInfo.bottom) 
         a.lineLocation = 'closer'       # a line closer       
-        b.lineLocation = 'opener'       # a line opener                         
+        b.lineLocation = 'opener'       # a line opener       
         lineOpeners.push(i)  # pushes the index of b
         lineOpenersForStats.push parseFloat(b.positionInfo.left)
         lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom) 
+
+    if b.lineLocation is 'opener'
+      if b.text is 'References' then logging.logGreen """has indentation change and preceded by #{a.text} which is a line #{a.lineLocation}"""
 
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces)
   
@@ -638,6 +641,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     prevOpener = tokens[lineOpeners[i-1]] # previous row opener  
     nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
     prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
+
+    if currOpener.text is 'References' then logging.logYellow "REFERENCES"
     
     # skip new paragraph recognition within the article title -
     # as titles tend to span few lines while being center justified,
@@ -647,7 +652,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
     # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
-      
+      if currOpener.text is 'References' then logging.logYellow """has indentation change and preceded by #{prevToken.text} which is a line #{prevToken.lineLocation}. Metatypes are: #{currOpener.metaType}, #{prevToken.metaType}"""
+
       # is it a column transition?
       if currOpener.columnOpener
         if parseInt(currOpener.positionInfo.left) > parseInt(nextOpener.positionInfo.left)
@@ -657,6 +663,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
           #console.log 'new paragraph detected by rule 1:' + currOpener.text
 
       else
+        if currOpener.text is 'References' then logging.logYellow "is paragraph opener"
         # it's a paragraph beginning within the same column
         currOpener.paragraph = 'opener'   
         prevToken.paragraph = 'closer'
@@ -755,22 +762,35 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   # 2. Uniting hyphen-split words (E.g. 'associa-', 'ted' -> 'associated') split at the end of a line
   #
 
+#  for token, t in tokens
+#    if token.text is 'References' then logging.logYellow """References is #{token.paragraph} and #{tokens[t-1].text} is #{tokens[t-1].paragraph} """
+
+  for token in tokens
+    if token.text is 'run.' then logging.logYellow "run still here and is line #{token.lineLocation}"
+    if token.text is 'References' then logging.logYellow "Referencse still here and is line #{token.lineLocation}"
+
   docLogger.info(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
     if b.lineLocation is 'opener'       
-      if a.lineLocation is 'closer'       
+      if a.lineLocation is 'closer' 
+        if b.text is 'References' then logging.logYellow "@References"
         if a.metaType is 'regular' # line didn't include an ending delimiter 
           #docLogger.info('undelimited end of line detected')
           # if detected, unite a line boundary 'hypen-split'
           if util.endsWith(a.text, '-')
             a.text = a.text.slice(0, -1)   # discard the hyphen
             a.text = a.text.concat(b.text) # concatenate text of second element into first
-            tokens.splice(i, 1)            # remove second element
+            #b.metaType is 'virtual'        # okay, this is a hack. we need this 
+                                            # so we maintain information about the line opening geometry
+                                            # (left position at least), but this is hackish as it mixes
+                                            # the content model with the geometric model too much
+            tokens.splice(i, 1)           # remove second element
             return 0
   
           # add a delimiter at the end of the line, unless a hyphen-split 
           # was just united, in which case it's not necessary
           else
+            if a.text is 'run.' then logging.logYellow "not Hyphen"
             newDelimiter = {'metaType': 'delimiter'}
             newDelimiter.styles = a.styles
             newDelimiter.finalStyles = a.finalStyles 
@@ -799,6 +819,9 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       tokens.splice(index, 1)        # remove second element
       return 0
     return 1)
+
+  for token in tokens
+    if token.text is 'run.References' then logging.logYellow "run. and References were united now"
 
   #docLogger.info(tokens.length)
 
@@ -886,6 +909,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   for group in groups
     sentence = ''
     for token in group
+
+      if token.text is 'run.References' then logging.logYellow "REFERENCES IN SENTENCE"
 
       if token.meta in ['title', 'abstract']
         continue

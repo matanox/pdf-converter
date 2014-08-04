@@ -33,8 +33,8 @@ isTitleNumeral = (text) ->
 # is the token distinct in font family, size, compared to its immediate environment?
 #
 separateness = (prev, curr) ->
-  logging.logYellow "separateness test"
-  logging.logYellow """size: #{curr.finalStyles['font-size']} font: #{curr.finalStyles['font-family']} v.s. 
+  logging.logBlue "separateness test"
+  logging.logBlue """size: #{curr.finalStyles['font-size']} font: #{curr.finalStyles['font-family']} v.s. 
                        size: #{prev.finalStyles['font-size']} font: #{prev.finalStyles['font-family']} """
 
   if curr.finalStyles['font-size'] isnt prev.finalStyles['font-size']

@@ -31,8 +31,8 @@ isTitleNumeral = function(text) {
 };
 
 separateness = function(prev, curr) {
-  logging.logYellow("separateness test");
-  logging.logYellow("size: " + curr.finalStyles['font-size'] + " font: " + curr.finalStyles['font-family'] + " v.s. \nsize: " + prev.finalStyles['font-size'] + " font: " + prev.finalStyles['font-family'] + " ");
+  logging.logBlue("separateness test");
+  logging.logBlue("size: " + curr.finalStyles['font-size'] + " font: " + curr.finalStyles['font-family'] + " v.s. \nsize: " + prev.finalStyles['font-size'] + " font: " + prev.finalStyles['font-family'] + " ");
   if (curr.finalStyles['font-size'] !== prev.finalStyles['font-size']) {
     return true;
   }

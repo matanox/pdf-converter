@@ -123,7 +123,8 @@ startServer = () ->
     #testFile = '0h6yIy8ITd6gQdc1XDb4'    
     #testFile = 'Can Nature Make Us More Caring'    
     #testFile = 'wauthier13'    
-    testFile = 'xt7duLM0Q3Ow2gIBOvED'    
+    #testFile = 'xt7duLM0Q3Ow2gIBOvED'    
+    testFile = 'gender differences 2013'    
 
     testUrl = 'http://localhost' + ':' + app.get('port') + '/handleInputFile?localLocation=' + testFile
     #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
