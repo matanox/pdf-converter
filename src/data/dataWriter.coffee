@@ -18,8 +18,8 @@ myWriter = require './writer'
 logging  = require '../util/logging' 
 util     = require '../util/util'
 
-docDataDir = 'docData'
-exports.docDataDir = docDataDir
+docsDataDir = 'docData'
+exports.docsDataDir = docsDataDir
 
 files = {} # dictionary to hinge writers used for each input pdf file
 
@@ -30,7 +30,7 @@ files = {} # dictionary to hinge writers used for each input pdf file
 exports.write = (inputFileName, dataType, data, cnsl) ->
   unless files[inputFileName]?
     files[inputFileName] = {} 
-    console.log """data directory link: file://#{process.cwd()}/#{docDataDir}/#{inputFileName}"""
+    console.log """data directory link: file://#{process.cwd()}/#{docsDataDir}/#{inputFileName}"""
 
   #
   # Initialize data writer if not already initialized
@@ -39,10 +39,10 @@ exports.write = (inputFileName, dataType, data, cnsl) ->
 
     logging.cond """opening writer for #{dataType}""", 'dataWriter'
 
-    util.mkdir(docDataDir, inputFileName)
+    util.mkdir(docsDataDir, inputFileName)
    
     now = new Date()
-    nameBase = docDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+    nameBase = docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
 
     writer = new myWriter(nameBase)
     

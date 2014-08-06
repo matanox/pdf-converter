@@ -1078,13 +1078,18 @@ exports.generateFromHtml = generateFromHtml
 
 #
 # send the output, 
-# and terminate resources used for handling the input file
+# terminate resources used for handling the input file
 # 
 done = (error, res, tokens, name, docLogger) -> 
 
+  # close dataWriters to avoid file descriptor leak
   shutdown = () ->
     util.closeDocLogger(docLogger)
     dataWriter.close(name)
+
+    compare = require '../compare/get'
+    #compare.diff(name, 'timers')
+    setTimeout((() -> compare.diff(name, 'timers')), 3000)
 
   if error?
     res.writeHead 505
@@ -1119,11 +1124,8 @@ done = (error, res, tokens, name, docLogger) ->
       else
         res.end(serializedTokens)
 
-      util.closeDocLogger(docLogger)
-      dataWriter.close(name)
+      shutdown()
       return
-
-    # close dataWriters to avoid file descriptor leak
 
   res.send(500)  
   shutdown()

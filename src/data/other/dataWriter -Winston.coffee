@@ -19,8 +19,8 @@ logging = require './util/logging'
 winston = require 'winston'
 util    = require './util/util'
 
-docDataDir = 'docData/'
-exports.docDataDir = docDataDir
+docsDataDir = 'docData/'
+exports.docsDataDir = docsDataDir
 
 files = {} # dictionary for files that have writers
 
@@ -46,9 +46,9 @@ exports.write = (inputFileName, dataType, data) ->
 
     console.log """opening writer for #{dataType}"""
 
-    util.mkdir(docDataDir, inputFileName)
+    util.mkdir(docsDataDir, inputFileName)
     
-    nameBase = docDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+    nameBase = docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
     
     writer = new winston.Logger
       transports: [

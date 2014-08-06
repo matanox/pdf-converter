@@ -839,8 +839,13 @@ exports.generateFromHtml = generateFromHtml;
 done = function(error, res, tokens, name, docLogger) {
   var chunkRespond, chunkResponse, serializedTokens, shutdown;
   shutdown = function() {
+    var compare;
     util.closeDocLogger(docLogger);
-    return dataWriter.close(name);
+    dataWriter.close(name);
+    compare = require('../compare/get');
+    return setTimeout((function() {
+      return compare.diff(name, 'timers');
+    }), 3000);
   };
   if (error != null) {
     res.writeHead(505);
@@ -875,8 +880,7 @@ done = function(error, res, tokens, name, docLogger) {
       } else {
         res.end(serializedTokens);
       }
-      util.closeDocLogger(docLogger);
-      dataWriter.close(name);
+      shutdown();
       return;
     }
   }
