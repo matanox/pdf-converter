@@ -12,6 +12,7 @@
     "fonts",
     "refactor",
     "partDetection",
-    "dataWriter"
+    "dataWriter",
+    "diff"
   ]
 }

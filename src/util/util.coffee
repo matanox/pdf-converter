@@ -7,22 +7,26 @@ winston = require 'winston'
 dataWriter = require '../data/dataWriter'
 # crepl = require 'coffee-script/lib/coffee-script/repl'
 
-anySpaceChar = RegExp(/\s/)
+exports.anySpaceChar = anySpaceChar = RegExp(/\s/)
 
 # Regexes for any html character reference. E.g. &amp &lt, etc.
 exports.htmlCharacterEntity = RegExp(/&.*\b;$/) # delimited with any non-word character (html 4)
 
-exports.anySpaceChar = anySpaceChar
-
-endsWith = (string, match) ->
+exports.endsWith = endsWith = (string, match) ->
   string.lastIndexOf(match) is string.length - match.length
 
-exports.endsWith = endsWith
+#
+# return suffix trimmed version of input string, if it ends with the specified suffix
+# e.g. remove trailing \n of a string.
+#
+exports.trimLast = trimLast = (string, match) ->
+  if endsWith(string, match)
+    return string.substr(0, string.length - match.length - 1)
+  else
+    return string
 
-startsWith = (string, match) ->
+exports.startsWith = startsWith = (string, match) ->
   string.indexOf(match) is 0
-
-exports.startsWith = startsWith
 
 contains = (string, match) ->
   string.indexOf(match) isnt -1
@@ -40,10 +44,8 @@ exports.strip = (string, prefix, suffix) ->
 
 # Utilty function for checking if a string matches any of a given set of strings.
 # Regex building could be an alternative implementation...
-isAnyOf = (string, matches) ->
+exports.isAnyOf = isAnyOf = (string, matches) ->
   matches.some((elem) -> elem.localeCompare(string, 'en-US') == 0)
-
-exports.isAnyOf = isAnyOf
 
 # return unique values of an input array
 exports.unique = (array, preserveFloat) ->
@@ -101,7 +103,7 @@ exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2)
 #        both starting and ending a timer - just supply the same timer description string to both.
 #        The second call will log the time elapsed between the two. 
 #
-timelog = (name, timer, logger) ->
+exports.timelog = timelog = (name, timer, logger) ->
   #timer = timer + ' took'                                    # the timer string is also the message 
                                                               # it will log to the console when it ends.
                                                              
@@ -133,8 +135,6 @@ timelog = (name, timer, logger) ->
   # We should later also send this data to an analytics engine or depo. 
   # or Apache Kafka or equivalents could be good for grabbing from the logs and/or queueing/transport
   
-exports.timelog = timelog
-
 exports.objectViolation = (errorMessage) ->
   error = new Error(errorMessage)
   logging.log(error.stack)
