@@ -36,7 +36,8 @@
     "mkdirp": ">= 0.3.3",
     "circular-json": "~0.1.5",
     "sync": "~0.2.2",
-    "diff": "~1.0.8"
+    "diff": "~1.0.8",
+    "dtl": "~0.2.0"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"

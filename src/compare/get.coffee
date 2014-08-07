@@ -53,14 +53,20 @@ intraLineFormat = (diffDescriptor) ->
   if (diffDescriptor.removed)
     return '<->' + diffDescriptor.value + '</->'
 
+replaceAll = (string, from, to) ->
+  if string.indexOf(from) isnt -1
+    return replaceAll(string.replace(from, to), from, to)
+  else 
+    return string
+
 #
 # Workaround function for making word diff treat line breaks ('\n') and extra spaces as differences rather than skip them as word delimiters
 #
 wrappedWordsDiff = (string1, string2) ->
 
   # replacement strings to use
-  spaceReplacer   = 'R!!space!!R' # highly unlikely string to use as placehoder
-  newlineReplacer = 'R!!newline!!R'  # highly unlikely string to use as placehoder
+  spaceReplacer   = 'R!!space!!R'        # highly unlikely string to use as placehoder
+  newlineReplacer = 'R!!newline!!R'      # highly unlikely string to use as placehoder
 
   # array of objects for reverting the replacement strings
   replacements  = 
@@ -74,17 +80,20 @@ wrappedWordsDiff = (string1, string2) ->
 
   replaceDoubleSpaces = (str) ->
     if str.indexOf('  ') > -1
-      return replaceDoubleSpaces(str.replace('  ', ' ' + spaceReplacer))
+      console.dir """***""" 
+      console.dir """*** double space at: #{str}""" 
+      console.dir """***""" 
+      return replaceDoubleSpaces(replaceAll(str, '  ', ' ' + spaceReplacer + ' '))
     else 
       return str
 
-  replace = (string) ->
+  transform = (string) ->
     returnStr = replaceDoubleSpaces(string)
-    returnStr.replace('\n', newlineReplacer, 'g')
+    replaceAll(returnStr, '\n', ' ' + newlineReplacer + ' ')
 
   # beef up original strings with replacement strings, to workaround the diff shortcomings
-  string1r = replace(string1)
-  string2r = replace(string2)
+  string1r = transform(string1)
+  string2r = transform(string2)
 
   # diff
   wordsDiff = jsdiff.diffWords(string1r, string2r)
@@ -92,7 +101,10 @@ wrappedWordsDiff = (string1, string2) ->
   # revert the replacement strings after the diff
   wordsDiff.forEach((diffDescriptor) ->
     replacements.forEach((replacer) ->
-      reverted = diffDescriptor.value.replace(replacer.to, replacer.orig, 'g')
+      reverted = replaceAll(diffDescriptor.value, replacer.to + ' ', replacer.orig)
+      if reverted.indexOf(replacer.to) isnt -1
+        logging.logRed "#{replacer.to}"
+        logging.logRed """bug produced: #{reverted}"""
       diffDescriptor.value = reverted
     )
   )
@@ -115,7 +127,7 @@ exports.diff = (inputFileName, dataType) ->
     linesDiff = jsdiff.diffLines(filesContent[0], filesContent[1]).filter((diffDescriptor) -> 
         diffDescriptor.added or diffDescriptor.removed) 
 
-    #console.dir linesDiff
+    console.dir linesDiff
 
     finalDiff = []
 
@@ -131,10 +143,12 @@ exports.diff = (inputFileName, dataType) ->
 
         wordsDiff = wrappedWordsDiff(curr.value, next.value)
 
-        console.dir wordsDiff
+        #console.dir wordsDiff
 
         logging.cond '==== diff ===', 'diff'
         logging.cond wordsDiff, 'diff'
+        console.log '====== wordsDiff ======'
+        console.log wordsDiff
         chunk = '*'
 
         # map by word diff descriptor

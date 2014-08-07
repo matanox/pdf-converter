@@ -1,3 +1,5 @@
+
+
 fs          = require 'fs'
 util        = require '../util/util'
 logging     = require '../util/logging' 
@@ -39,30 +41,35 @@ exports.diff = (inputFileName, dataType) ->
     console.log filesContent[0]
     console.log filesContent[1]
 
-    #paddedContent = filesContent.map(pad)
+    arrays = filesContent.map((content) -> util.trimLast(content, '\n').split('\n')) # separate by lines
 
-    # get differences
-    rawDiff = jsdiff.diffLines(filesContent[0], filesContent[1]).filter((diffDescriptor) -> 
-        diffDescriptor.added or diffDescriptor.removed) 
+    a = arrays[0]
+    b = arrays[1]
 
-    # expand diff entries that contain multiple lines, producing a finer diffs array
+    idx = 
+      a : 0
+      b : 0
 
-    console.dir rawDiff
+    console.dir arrays
 
-    diffs = []
-    rawDiff.forEach((diffDescriptor) -> 
-      # split while removing \n 
-      diffDescriptor.value = util.trim(diffDescriptor.value, '\n')
-      splits = diffDescriptor.value.split('\n')
-      splits.forEach((split) -> 
-        split.added   = diffDescriptor.added
-        split.removed = diffDescriptor.removed
-        diffs.push split
-      )
+    while idx.a < a.length and idx.b < b.length
+      aItem = a[idx.a]
+      bItem = b[idx.b]
+      
+      switch aItem is bItem
+        when true:
+          idx.a += 1
+          idx.b += 1
+        when false:
+          if similar(aItem, bItem)
+            idx.a += 1
+            idx.b += 1
+          else
+            
+
+
+
+
         
-    )
-
-    console.dir diffs
-
     logging.logYellow 'after diff'
 
