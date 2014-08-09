@@ -9,4 +9,4 @@ nconf.argv().env().file({
 
 compare = require('./compare/get');
 
-compare.diff('irrelevant', 'irrelevant');
+compare.diff('gender differences 2013', 'sentences');

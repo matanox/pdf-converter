@@ -61,9 +61,7 @@ replaceAll = (string, from, to) ->
     return string
 
 #
-# no longer in use -
-# Workaround function for making word diff treat line breaks ('\n') and 
-# extra spaces as differences rather than skip them as word delimiters
+# Workaround function for making word diff treat line breaks ('\n') and extra spaces as differences rather than skip them as word delimiters
 #
 wrappedWordsDiff = (string1, string2) ->
 
@@ -111,65 +109,22 @@ wrappedWordsDiff = (string1, string2) ->
 
   return wordsDiff
   
-#
-# tokenize string by a given delimieter, 
-# while KEEPING all occurences of the 
-# delimiter as a delimiting token
-#
-rsplit = (contentArray, delimiter) ->
-  newArray = []
-  contentArray.forEach((contentUnit) ->
-    if contentUnit.indexOf(delimiter) is -1
-      newArray.push contentUnit
-    else 
-      # turn each delimiter occurence to being its own array element
-      split = contentUnit.split(delimiter)
-      split.reduce((prev, curr) -> 
-        newArray.push prev, delimiter
-        return curr
-      )
-      newArray.push split[split.length-1]
-      newArray = newArray.filter((item) -> item isnt '')
-      #console.dir newArray
-  )
-  return newArray
 
 exports.diff = (inputFileName, dataType) ->
 
   logging.logYellow 'before diff'
 
-  pair = getPair(inputFileName, dataType)
-  #pair = ['/home/matan/ingi/repos/back-end-js/tmp/1.out', '/home/matan/ingi/repos/back-end-js/tmp/2.out']
+  #pair = getPair(inputFileName, dataType)
+  pair = ['/home/matan/ingi/repos/back-end-js/tmp/1.out', '/home/matan/ingi/repos/back-end-js/tmp/2.out']
   #pair = ['/home/matan/ingi/repos/back-end-js/tmp/2.out', '/home/matan/ingi/repos/back-end-js/tmp/1.out']
   if pair?
     filesContent = pair.map((file) -> 
       fs.readFileSync(file, {encoding: 'utf8'}))
 
-    contentArrays = filesContent.map((content) -> rsplit([content], ' '))
-
-    beefedArrays = contentArrays.map((contentArray) -> rsplit(contentArray, '\n'))
-
     # get differences
-    #linesDiff = jsdiff.diffWords(filesContent[0], filesContent[1]).filter((diffDescriptor) -> 
-    #    diffDescriptor.added or diffDescriptor.removed) 
+    linesDiff = jsdiff.diffWords(filesContent[0], filesContent[1]).filter((diffDescriptor) -> 
+        diffDescriptor.added or diffDescriptor.removed) 
 
-    # get differences
-    differ = new dtldiff.Diff(beefedArrays[0], beefedArrays[1])
-    differ.compose()
-
-    #console.log('  header1'.split(' '))
-
-    marks = 
-      'add'    : '+',
-      'del'    : '-',
-      'common' : 'C'
-
-    diff = differ.ses(marks)
-    diffFiltered = diff.filter((diffDescriptor) -> not diffDescriptor['C']?)
-
-    console.log diffFiltered
-
-    ###
     console.dir linesDiff
 
     finalDiff = []
@@ -181,6 +136,5 @@ exports.diff = (inputFileName, dataType) ->
     logging.logGreen output
 
     console.log finalDiff.join('\n')
-    ###
     logging.logYellow 'after diff'
 

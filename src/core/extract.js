@@ -843,6 +843,7 @@ done = function(error, res, tokens, name, docLogger) {
     util.closeDocLogger(docLogger);
     dataWriter.close(name);
     compare = require('../compare/get');
+    compare.diff(name, 'timers');
     return setTimeout((function() {
       return compare.diff(name, 'timers');
     }), 3000);

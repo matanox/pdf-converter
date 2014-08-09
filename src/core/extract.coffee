@@ -1088,7 +1088,7 @@ done = (error, res, tokens, name, docLogger) ->
     dataWriter.close(name)
 
     compare = require '../compare/get'
-    #compare.diff(name, 'timers')
+    compare.diff(name, 'timers')
     setTimeout((() -> compare.diff(name, 'timers')), 3000)
 
   if error?
