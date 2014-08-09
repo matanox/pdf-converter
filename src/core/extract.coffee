@@ -1088,8 +1088,11 @@ done = (error, res, tokens, name, docLogger) ->
     dataWriter.close(name)
 
     compare = require '../compare/get'
-    compare.diff(name, 'timers')
-    setTimeout((() -> compare.diff(name, 'timers')), 3000)
+    #compare.diff(name, 'headers')
+    setTimeout((() -> 
+        compare.diff(name, 'sentences')
+        compare.diff(name, 'headers')), 
+      3000)
 
   if error?
     res.writeHead 505

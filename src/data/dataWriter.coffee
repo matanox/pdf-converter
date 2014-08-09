@@ -30,7 +30,7 @@ files = {} # dictionary to hinge writers used for each input pdf file
 exports.write = (inputFileName, dataType, data, cnsl) ->
   unless files[inputFileName]?
     files[inputFileName] = {} 
-    console.log """data directory link: file://#{process.cwd()}/#{docsDataDir}/#{inputFileName}"""
+    console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent?(inputFileName)
 
   #
   # Initialize data writer if not already initialized

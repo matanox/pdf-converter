@@ -17,7 +17,7 @@ exports.write = function(inputFileName, dataType, data, cnsl) {
   var nameBase, now, writer;
   if (files[inputFileName] == null) {
     files[inputFileName] = {};
-    console.log("data directory link: file://" + (process.cwd()) + "/" + docsDataDir + "/" + inputFileName);
+    console.log("clickable data directory link: " + ("file://" + (process.cwd()) + "/" + docsDataDir + "/") + (typeof encodeURIComponent === "function" ? encodeURIComponent(inputFileName) : void 0));
   }
   if (files[inputFileName][dataType] == null) {
     logging.cond("opening writer for " + dataType, 'dataWriter');
