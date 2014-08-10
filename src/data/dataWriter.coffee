@@ -27,10 +27,20 @@ files = {} # dictionary to hinge writers used for each input pdf file
 # The public writer interface of this module. Currently, Winston logger based.
 # (initializes a physical writer for the data type if not already initialized)
 #
+
+#
+# Returns a filename to use.
+# If necessary, creates the underlying directory.
+#
+exports.getReadyName = getReadyName = (inputFileName, dataType) ->
+  util.mkdir(docsDataDir, inputFileName)
+  now = new Date()
+  return docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+
 exports.write = (inputFileName, dataType, data, cnsl) ->
   unless files[inputFileName]?
     files[inputFileName] = {} 
-    console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent?(inputFileName)
+    console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent(inputFileName)
 
   #
   # Initialize data writer if not already initialized
@@ -39,14 +49,11 @@ exports.write = (inputFileName, dataType, data, cnsl) ->
 
     logging.cond """opening writer for #{dataType}""", 'dataWriter'
 
-    util.mkdir(docsDataDir, inputFileName)
-   
-    now = new Date()
-    nameBase = docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+    dataFile = getReadyName(inputFileName, dataType)
 
-    writer = new myWriter(nameBase)
+    writer = new myWriter(dataFile)
     
-    logging.cond """Data writing for [#{inputFileName}], [#{dataType}] is going to #{nameBase}""", 'dataWriter'
+    logging.cond """Data writing for [#{inputFileName}], [#{dataType}] is going to #{dataFile}""", 'dataWriter'
 
     files[inputFileName][dataType] = writer
 

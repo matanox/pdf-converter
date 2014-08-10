@@ -15,7 +15,6 @@ docsDataDir = dataWriter.docsDataDir;
 
 getPair = function(inputFileName, dataType) {
   var docDataDir, relevantDataFiles;
-  console.dir(dataType);
   docDataDir = docsDataDir + '/' + inputFileName + '/';
   relevantDataFiles = fs.readdirSync(docDataDir).filter(function(dataFileName) {
     return dataFileName.indexOf(dataType) === 0;
@@ -52,59 +51,66 @@ rsplit = function(contentArray, delimiter) {
 };
 
 exports.diff = function(inputFileName, dataType) {
-  var beefedArrays, contentArrays, diff, diffentry, differ, filesContent, marks, pair, rawDiff, result, sequence, type, val, _i, _len;
+  var beefedArrays, contentArrays, dataFile, diff, diffentry, differ, editDistance, filesContent, marks, pair, rawDiff, result, sequence, type, val, _i, _len;
   pair = getPair(inputFileName, dataType);
-  if (pair != null) {
-    logging.logYellow("comparing " + (pair.join(', ')));
+  if (pair == null) {
+    return logging.logYellow("skipping diff for " + inputFileName + " as diff pair not well defined (could not select document pair)");
+  } else {
     filesContent = pair.map(function(file) {
       return fs.readFileSync(file, {
         encoding: 'utf8'
       });
     });
-    contentArrays = filesContent.map(function(content) {
-      return rsplit([content], ' ');
-    });
-    beefedArrays = contentArrays.map(function(contentArray) {
-      return rsplit(contentArray, '\n');
-    });
-    differ = new dtldiff.Diff(beefedArrays[0], beefedArrays[1]);
-    differ.compose();
-    marks = {
-      'add': '+',
-      'del': '-',
-      'common': 'C'
-    };
-    logging.logYellow("edit distance is " + (differ.editdistance()));
-    rawDiff = differ.ses(marks);
-    diff = [];
-    sequence = {
-      type: null
-    };
-    for (_i = 0, _len = rawDiff.length; _i < _len; _i++) {
-      diffentry = rawDiff[_i];
-      type = (Object.keys(diffentry))[0];
-      val = diffentry[type];
-      if (type === sequence.type) {
-        sequence.vals.push(val);
-      } else {
-        if (sequence.type !== null) {
-          diff.push(sequence);
-        }
-        sequence = {
-          type: type,
-          vals: [val]
-        };
-      }
-    }
-    diff.push(sequence);
     result = "Shortest edit path \nfrom: " + pair[0] + "\nto:   " + pair[1] + "\n\n";
-    diff.filter(function(d) {
-      return d.type !== 'C';
-    }).forEach(function(d) {
-      return result += d.type + d.vals.join('') + '\n';
-    });
-    dataWriter.write(inputFileName, "diff-" + dataType, result);
-    dataWriter.close(inputFileName);
-    return logging.logYellow("done comparing " + (pair.join(', ')));
+    if (filesContent[0] === filesContent[1]) {
+      editDistance = 0;
+    } else {
+      contentArrays = filesContent.map(function(content) {
+        return rsplit([content], ' ');
+      });
+      beefedArrays = contentArrays.map(function(contentArray) {
+        return rsplit(contentArray, '\n');
+      });
+      differ = new dtldiff.Diff(beefedArrays[0], beefedArrays[1]);
+      differ.compose();
+      marks = {
+        'add': '+',
+        'del': '-',
+        'common': 'C'
+      };
+      editDistance = differ.editdistance();
+      rawDiff = differ.ses(marks);
+      diff = [];
+      sequence = {
+        type: null
+      };
+      for (_i = 0, _len = rawDiff.length; _i < _len; _i++) {
+        diffentry = rawDiff[_i];
+        type = (Object.keys(diffentry))[0];
+        val = diffentry[type];
+        if (type === sequence.type) {
+          sequence.vals.push(val);
+        } else {
+          if (sequence.type !== null) {
+            diff.push(sequence);
+          }
+          sequence = {
+            type: type,
+            vals: [val]
+          };
+        }
+      }
+      diff.push(sequence);
+      diff.filter(function(d) {
+        return d.type !== 'C';
+      }).forEach(function(d) {
+        return result += d.type + d.vals.join('') + '\n';
+      });
+    }
+    dataFile = dataWriter.getReadyName(inputFileName, "diff-" + dataType);
+    fs.writeFile(dataFile, result);
+    console.log("\nComparing the following " + (logging.italics(dataType)) + " output pair found " + (logging.italics('edit distance of ' + editDistance)));
+    console.log("" + (pair.map(util.terminalClickableFileLink).join('\n')));
+    return console.log("details at: " + (util.terminalClickableFileLink(dataFile)));
   }
 };

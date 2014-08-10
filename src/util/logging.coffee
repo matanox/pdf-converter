@@ -36,14 +36,29 @@ tty = {
   yellow:   '\x1b[33m'  
   blue:     '\x1b[36m'  
   magenta:  '\x1b[35m'
-  endColor: '\x1b[0m'
+  bold:     '\x1b[1m'
+  italics:  '\x1b[3m'
+  end:      '\x1b[0m'
 }
 
-exports.logGreen  = (text) -> console.log(tty.green + text + tty.endColor)
-exports.logYellow = (text) -> console.log(tty.yellow + text + tty.endColor)
-exports.logRed    = (text) -> console.log(tty.red + text + tty.endColor)
-exports.logBlue   = (text) -> console.log(tty.blue + text + tty.endColor)
-exports.logPerf   = (text) -> console.log(tty.magenta + text + tty.endColor)
+exports.bold = (text) ->
+  tty.bold + text + tty.end
+
+exports.italics = (text) ->
+  tty.italics + text + tty.end
+
+exports.logBold  = (text) -> 
+  console.log(tty.bold + text + tty.end)
+
+exports.logGreen  = (text, bold) -> 
+  if bold?
+    console.log(tty.green + tty.bold + text + tty.end)
+  else
+    console.log(tty.green + text + tty.end)
+exports.logYellow = (text) -> console.log(tty.yellow + text + tty.end)
+exports.logRed    = (text) -> console.log(tty.red + text + tty.end)
+exports.logBlue   = (text) -> console.log(tty.blue + text + tty.end)
+exports.logPerf   = (text) -> console.log(tty.magenta + text + tty.end)
 
 # Color codes at http://telepathy.freedesktop.org/doc/telepathy-glib/telepathy-glib-debug-ansi.html
 # See more terminal codes at if in need of more styles:

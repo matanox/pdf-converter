@@ -233,3 +233,19 @@ exports.extensionFilter = (filename) ->
     if filename.indexOf('.' + extension) > -1
       return true                
   return false
+
+#
+# replace all occurences inside a string, when you don't want to use regex.... because node.js doesn't respect the non-standardized 'g' for non-regex
+#
+exports.replaceAll = replaceAll = (string, from, to) ->
+  if string.indexOf(from) isnt -1
+    return replaceAll(string.replace(from, to), from, to)
+  else 
+    return string
+
+#
+# Returns a linux terminal clickable file link.
+# The trick is to avoid spaces (and to not introduce other escape characters such as %2F via full URI encoding)
+#
+exports.terminalClickableFileLink = (string) ->
+  return """file://#{process.cwd()}/#{replaceAll(string, ' ', '%20')}"""

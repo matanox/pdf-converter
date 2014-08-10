@@ -12,8 +12,6 @@ docsDataDir = dataWriter.docsDataDir
 #
 getPair = (inputFileName, dataType) ->
 
-  console.dir dataType
-
   docDataDir = docsDataDir + '/' + inputFileName + '/'
 
   relevantDataFiles = fs.readdirSync(docDataDir).filter((dataFileName) -> dataFileName.indexOf(dataType) is 0)
@@ -53,62 +51,73 @@ exports.diff = (inputFileName, dataType) ->
   #pair = ['/home/matan/ingi/repos/back-end-js/tmp/1.out', '/home/matan/ingi/repos/back-end-js/tmp/2.out']
   #pair = ['/home/matan/ingi/repos/back-end-js/tmp/2.out', '/home/matan/ingi/repos/back-end-js/tmp/1.out']
   pair = getPair(inputFileName, dataType)
-  if pair?
 
-    logging.logYellow """comparing #{pair.join(', ')}"""
+  unless pair?
+    logging.logYellow """skipping diff for #{inputFileName} as diff pair not well defined (could not select document pair)"""
+  else
+    #logging.logYellow """comparing #{pair.map(util.terminalClickableFileLink).join(' to ')}...""" 
 
     filesContent = pair.map((file) -> 
       fs.readFileSync(file, {encoding: 'utf8'}))
 
-    contentArrays = filesContent.map((content) -> rsplit([content], ' '))
-
-    beefedArrays = contentArrays.map((contentArray) -> rsplit(contentArray, '\n'))
-
-    # get differences
-    differ = new dtldiff.Diff(beefedArrays[0], beefedArrays[1])
-    differ.compose()
-
-    marks = 
-      'add'    : '+',
-      'del'    : '-',
-      'common' : 'C'
-
-    logging.logYellow """edit distance is #{differ.editdistance()}"""
-
-    rawDiff = differ.ses(marks)
-
-    diff = []
-
-    sequence =
-      type : null
-
-    for diffentry in rawDiff
-      type = (Object.keys diffentry)[0]
-      val  = diffentry[type]
-
-      # if we are inside a "sequence"
-      if type is sequence.type
-        sequence.vals.push val
-      # if sequence finished, flush it and start new one
-      else
-        if sequence.type isnt null 
-          diff.push sequence
-        sequence = 
-          type : type,
-          vals : [val]
-
-    diff.push sequence # flush last sequence
-
+    # set output prefix 
     result = """Shortest edit path \nfrom: #{pair[0]}\nto:   #{pair[1]}\n\n"""
 
-    diff.filter((d) -> d.type isnt 'C') # skip sequences of no diff
-        .forEach((d) -> result += d.type + d.vals.join('') + '\n')
+    # skip detailed comparison if files content is equal
+    if filesContent[0] is filesContent[1] 
+      editDistance = 0
+    else
+
+      contentArrays = filesContent.map((content) -> rsplit([content], ' '))
+
+      beefedArrays = contentArrays.map((contentArray) -> rsplit(contentArray, '\n'))
+
+      # get differences
+      differ = new dtldiff.Diff(beefedArrays[0], beefedArrays[1])
+      differ.compose()
+
+      marks = 
+        'add'    : '+',
+        'del'    : '-',
+        'common' : 'C'
+
+      editDistance = differ.editdistance()
+
+      rawDiff = differ.ses(marks)
+
+      diff = []
+
+      sequence =
+        type : null
+
+      for diffentry in rawDiff
+        type = (Object.keys diffentry)[0]
+        val  = diffentry[type]
+
+        # if we are inside a "sequence"
+        if type is sequence.type
+          sequence.vals.push val
+        # if sequence finished, flush it and start new one
+        else
+          if sequence.type isnt null 
+            diff.push sequence
+          sequence = 
+            type : type,
+            vals : [val]
+
+      diff.push sequence # flush last sequence
+
+      diff.filter((d) -> d.type isnt 'C') # skip sequences of no diff
+          .forEach((d) -> result += d.type + d.vals.join('') + '\n')
 
     #console.log result
 
-    dataWriter.write(inputFileName, """diff-#{dataType}""", result)
-    dataWriter.close(inputFileName)
+    dataFile = dataWriter.getReadyName(inputFileName, """diff-#{dataType}""")
+
+    fs.writeFile(dataFile, result)
 
     #util.timelog inputFileName, 'diff'
-    logging.logYellow """done comparing #{pair.join(', ')}""" 
+    console.log """\nComparing the following #{logging.italics(dataType)} output pair found #{logging.italics('edit distance of ' + editDistance)}"""
+    console.log """#{pair.map(util.terminalClickableFileLink).join('\n')}"""
+    console.log """details at: #{util.terminalClickableFileLink(dataFile)}"""
 

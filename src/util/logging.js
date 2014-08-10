@@ -38,27 +38,45 @@ tty = {
   yellow: '\x1b[33m',
   blue: '\x1b[36m',
   magenta: '\x1b[35m',
-  endColor: '\x1b[0m'
+  bold: '\x1b[1m',
+  italics: '\x1b[3m',
+  end: '\x1b[0m'
 };
 
-exports.logGreen = function(text) {
-  return console.log(tty.green + text + tty.endColor);
+exports.bold = function(text) {
+  return tty.bold + text + tty.end;
+};
+
+exports.italics = function(text) {
+  return tty.italics + text + tty.end;
+};
+
+exports.logBold = function(text) {
+  return console.log(tty.bold + text + tty.end);
+};
+
+exports.logGreen = function(text, bold) {
+  if (bold != null) {
+    return console.log(tty.green + tty.bold + text + tty.end);
+  } else {
+    return console.log(tty.green + text + tty.end);
+  }
 };
 
 exports.logYellow = function(text) {
-  return console.log(tty.yellow + text + tty.endColor);
+  return console.log(tty.yellow + text + tty.end);
 };
 
 exports.logRed = function(text) {
-  return console.log(tty.red + text + tty.endColor);
+  return console.log(tty.red + text + tty.end);
 };
 
 exports.logBlue = function(text) {
-  return console.log(tty.blue + text + tty.endColor);
+  return console.log(tty.blue + text + tty.end);
 };
 
 exports.logPerf = function(text) {
-  return console.log(tty.magenta + text + tty.endColor);
+  return console.log(tty.magenta + text + tty.end);
 };
 
 testLogio = function() {
