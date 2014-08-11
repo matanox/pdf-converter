@@ -43,7 +43,7 @@ numCPUs = require('os').cpus().length;
 
 spawnClusterWorkers = function() {
   var cpu, firstFork, workers, _i;
-  workers = numCPUs;
+  workers = 2;
   logging.logGreen("" + numCPUs + " CPUs detected on host");
   logging.logGreen("Spawning " + workers + " cluster workers...");
   firstFork = true;

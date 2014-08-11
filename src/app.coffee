@@ -24,7 +24,7 @@ nconf.defaults
   env:  'development'
 
 #
-# Express module dependencies.
+# Express module dependencies
 #
 express = require 'express'
 routes  = require '../routes'
@@ -43,7 +43,7 @@ host = nconf.get 'host'
 port = process.env.PORT or 3080
 env = nconf.get 'env' # previously express app.get
 
-# Node.js cluster stuff
+# Node.js cluster modules
 cluster = require('cluster');
 numCPUs = require('os').cpus().length;
 
@@ -51,11 +51,11 @@ numCPUs = require('os').cpus().length;
 # Spawn cluster workers
 #
 spawnClusterWorkers = () ->
-  workers = numCPUs
+  workers = 2
   logging.logGreen """#{numCPUs} CPUs detected on host"""
   logging.logGreen """Spawning #{workers} cluster workers..."""
 
-  firstFork = true
+  firstFork = true # for doing something on on the first fork only
   for cpu in [1..workers]
     cluster.fork()
 
