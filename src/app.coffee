@@ -9,6 +9,7 @@ fs = require('fs')
 nconf = require('nconf')
 nconf.argv().env().file({file: 'loggingConf.json'})
 nconf.defaults host: 'localhost'
+nconf.defaults end:  'development'
 
 #
 # Express module dependencies.
@@ -26,24 +27,27 @@ logging       = require './util/logging'
 logging = require './util/logging' 
 
 # Get-or-default basic networking config
+localCluster = nconf.get 'localCluster'
 host = nconf.get 'host'
 port = process.env.PORT or 3080
+env = nconf.get 'env' # app.get
 
 # Node.js cluster stuff
 cluster = require('cluster');
 numCPUs = require('os').cpus().length;
 
 forkClusterWorkers = () ->
-  logging.logGreen """#{numCPUs} CPUs detected on host"""
   workers = numCPUs
-  logging.logGreen """Spawn #{workers} cluster workers..."""
+  logging.logGreen """#{numCPUs} CPUs detected on host"""
+  logging.logGreen """Spawning #{workers} cluster workers..."""
+
+  firstFork = true
   for cpu in [1..workers]
     cluster.fork()
 
-  firstFork = true
-
   cluster.on('listening', (worker, address) -> 
   # In dev mode, self-test on startup, just once
+    logging.logGreen """Cluster worker #{worker.id} now sharing on #{address.address}:#{address.port} (pid #{worker.process.pid})"""
     unless env is 'production' 
       #testFile = 'AzPP5D8IS0GDeeC1hFxs'
       #testFile = 'xt7duLM0Q3Ow2gIBOvED'
@@ -59,7 +63,6 @@ forkClusterWorkers = () ->
       #testFile = 'wauthier13'    
       #testFile = 'xt7duLM0Q3Ow2gIBOvED'    
       testFile = 'gender differences 2013'    
-      logging.logGreen """node.js cluster worker #{worker.id} now sharing on cluster listening port (pid #{worker.process.pid})"""
 
       # fire self test only for self cluster worker coming to life
       if firstFork
@@ -71,10 +74,11 @@ forkClusterWorkers = () ->
   ) 
 
   cluster.on('exit', (worker, code, signal) -> 
-    logging.logRed """node.js cluster worker #{worker.id} exited (pid #{worker.process.pid})"""
+    logging.logRed """Cluster worker #{worker.id} exited (pid #{worker.process.pid})"""
   )
 
 if cluster.isMaster
+
   logging.logGreen "Local cluster starting in mode #{env}"
   logging.logGreen 'Using hostname ' + nconf.get('host')
   logging.logGreen 'Using port ' + port
@@ -85,17 +89,8 @@ else
   #
   # Configure and start express
   #
-  app = express()
-  env = app.get('env')
-
   logging.init()
-
-  #
-  # Dev-environment-only stuff
-  #
-  unless env is 'production'
-    primus = require './primus/primus' 
-
+  app = express()
   app.set 'port', port
 
   #
@@ -127,6 +122,14 @@ else
 
   app.get '/handleInputFile', require('../src/core/handleInputFile').go
 
+  #
+  # Dev-environment-only stuff
+  #
+  unless env is 'production'
+    primus = require './primus/primus' 
+    # Attach primus for development iterating, as long as it's convenient 
+    # primus.start(server)
+
   startServer = () ->
     #
     # Start the server
@@ -135,12 +138,8 @@ else
 
     server.timeout = 0
 
-    server.listen app.get('port'), ->
-      logging.logGreen 'cluster worker listening on port ' + app.get('port') + '....'
-
-    # Attach primus for development iterating, as long as it's convenient 
-    # unless env is 'production' then primus.start(server)
+    server.listen app.get('port') # , -> logging.logGreen 'cluster worker listening on port ' + app.get('port') + '....'
 
   startServer()
 
-  selfMonitor = require('./selfMonitor').start()
+selfMonitor = require('./selfMonitor').start()
