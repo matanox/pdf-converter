@@ -102,9 +102,9 @@ exports.go = (localCopy, docLogger, req, res) ->
             for resultFile in fs.readdirSync(outFolderResult)
               if fs.statSync(outFolderResult + resultFile).isFile() 
                 #if util.extensionFilter(resultFile)
-                util.mkdir(dataWriter.docDataDir, name)
-                util.mkdir(dataWriter.docDataDir + '/' + name, 'html-converted')
-                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile))
+                util.mkdir(dataWriter.docsDataDir, name)
+                util.mkdir(dataWriter.docsDataDir + '/' + name, 'html-converted')
+                fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docsDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile))
             
             # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
