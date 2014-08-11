@@ -1,15 +1,27 @@
 #
 # The service definition and bootstrap - 
 # quite a bag of code inline with express.js tradition
+# now working as a node.js cluster 
+#
+# See - http://nodejs.org/api/cluster.html#cluster_how_it_works
+#
+# Note: given the forked type of node.js clustering, 
+#       don't execute too much stuff before forking, 
+#       to avoid unintended duplication of memory
+#       and pointers to shared resources
 #
 
 'use strict'
-# Get config (as much as it overides defaults)
+
+#
+# Get some configuration - using nconf for forward flexibility
+#
 fs = require('fs')
 nconf = require('nconf')
 nconf.argv().env().file({file: 'loggingConf.json'})
-nconf.defaults host: 'localhost'
-nconf.defaults end:  'development'
+nconf.defaults 
+  host: 'localhost'
+  env:  'development'
 
 #
 # Express module dependencies.
@@ -27,16 +39,18 @@ logging       = require './util/logging'
 logging = require './util/logging' 
 
 # Get-or-default basic networking config
-localCluster = nconf.get 'localCluster'
 host = nconf.get 'host'
 port = process.env.PORT or 3080
-env = nconf.get 'env' # app.get
+env = nconf.get 'env' # previously express app.get
 
 # Node.js cluster stuff
 cluster = require('cluster');
 numCPUs = require('os').cpus().length;
 
-forkClusterWorkers = () ->
+#
+# Spawn cluster workers
+#
+spawnClusterWorkers = () ->
   workers = numCPUs
   logging.logGreen """#{numCPUs} CPUs detected on host"""
   logging.logGreen """Spawning #{workers} cluster workers..."""
@@ -48,6 +62,7 @@ forkClusterWorkers = () ->
   cluster.on('listening', (worker, address) -> 
   # In dev mode, self-test on startup, just once
     logging.logGreen """Cluster worker #{worker.id} now sharing on #{address.address}:#{address.port} (pid #{worker.process.pid})"""
+    selfMonitor = require('./selfMonitor').start('worker ' + worker.id)    
     unless env is 'production' 
       #testFile = 'AzPP5D8IS0GDeeC1hFxs'
       #testFile = 'xt7duLM0Q3Ow2gIBOvED'
@@ -77,12 +92,16 @@ forkClusterWorkers = () ->
     logging.logRed """Cluster worker #{worker.id} exited (pid #{worker.process.pid})"""
   )
 
+#
+# Start cluster master and cluster workers
+#
 if cluster.isMaster
 
   logging.logGreen "Local cluster starting in mode #{env}"
   logging.logGreen 'Using hostname ' + nconf.get('host')
   logging.logGreen 'Using port ' + port
-  forkClusterWorkers()
+  spawnClusterWorkers()
+  selfMonitor = require('./selfMonitor').start('master')    
 
 else
 
@@ -135,11 +154,7 @@ else
     # Start the server
     #
     server = http.createServer(app)
-
     server.timeout = 0
-
     server.listen app.get('port') # , -> logging.logGreen 'cluster worker listening on port ' + app.get('port') + '....'
 
   startServer()
-
-selfMonitor = require('./selfMonitor').start()

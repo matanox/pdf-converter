@@ -21,76 +21,80 @@ percentThreshold = 10
 memCheckInterval = 1000           # milliseconds
 fDescriptorsCheckInterval = 10000 # milliseconds
 
-#
-# File descriptors monitoring
-#
+exports.start = (node) ->
 
-getMem = () ->
-  mem = process.memoryUsage()  
-  mem.heapPercent = mem.heapUsed / mem.heapTotal * 100 # enrich with calculated value
-  mem
+  #
+  # function definitions, "inheriting" the monitored node name by closure
+  #
 
-logMemUsage = (mem, verb) -> 
-  logging.logPerf('v8 heap usage ' + verb + ' ' + parseInt(mem.heapUsed/1024/1024) + 'MB' + ' ' + 
-  	              '(now comprising ' + parseInt(mem.heapPercent) + '% of heap)')
+  getMem = () ->
+    mem = process.memoryUsage()  
+    mem.heapPercent = mem.heapUsed / mem.heapTotal * 100 # enrich with calculated value
+    mem
 
-logHeapSize = (mem, verb) -> 
-  logging.logPerf('v8 heap ' + verb + ' ' + parseInt(mem.heapTotal/1024/1024) + 'MB')
+  logMemUsage = (mem, verb) -> 
+    logging.logPerf('Cluster ' + node + ' v8 heap usage ' + verb + ' ' + parseInt(mem.heapUsed/1024/1024) + 'MB' + ' ' + 
+                    '(now comprising ' + parseInt(mem.heapPercent) + '% of heap)')
 
-logMemUsageIfChanged = () ->
+  logHeapSize = (mem, verb) -> 
+    logging.logPerf('Cluster ' + node + ' v8 heap ' + verb + ' ' + parseInt(mem.heapTotal/1024/1024) + 'MB')
 
-  laterMem = getMem()
+  logMemUsageIfChanged = () ->
 
-  if (Math.abs(laterMem.heapTotal - formerMem.heapTotal) / formerMem.heapTotal) > (percentThreshold/100)
-  	if laterMem.heapTotal > formerMem.heapTotal
-  	  logHeapSize(laterMem, 'grew to')
-  	else 
-  	  logHeapSize(laterMem, 'shrank to')
+    laterMem = getMem()
 
-  if (Math.abs(laterMem.heapPercent - formerMem.heapPercent) / formerMem.heapPercent) > (percentThreshold/100)
-  	if laterMem.heapUsed > formerMem.heapUsed
-  	  logMemUsage(laterMem, 'increased to')
-  	else 
-  	  logMemUsage(laterMem, 'decreased to')
+    if (Math.abs(laterMem.heapTotal - formerMem.heapTotal) / formerMem.heapTotal) > (percentThreshold/100)
+      if laterMem.heapTotal > formerMem.heapTotal
+        logHeapSize(laterMem, 'grew to')
+      else 
+        logHeapSize(laterMem, 'shrank to')
 
-  #logging.logPerf('on memCheckInterval')
-  formerMem = laterMem
+    if (Math.abs(laterMem.heapPercent - formerMem.heapPercent) / formerMem.heapPercent) > (percentThreshold/100)
+      if laterMem.heapUsed > formerMem.heapUsed
+        logMemUsage(laterMem, 'increased to')
+      else 
+        logMemUsage(laterMem, 'decreased to')
 
-memTracking = () ->
-  formerMem = getMem()
-  logHeapSize(formerMem, 'is')
-  logMemUsage(formerMem, 'is')
+    #logging.logPerf('on memCheckInterval')
+    formerMem = laterMem
 
-  process.nextTick(() -> setInterval(logMemUsageIfChanged, memCheckInterval)) # next-ticking it so initial logging would finish first
+  memTracking = () ->
+    formerMem = getMem()
+    logHeapSize(formerMem, 'is')
+    logMemUsage(formerMem, 'is')
 
-getFileDescriptorsCount = (callback) ->
-  execCommand = """lsof -p #{process.pid} | wc -l""" # get number of file descriptors assigned by this node.js process
-  exec execCommand, (error, stdout, stderr) ->
-    if error isnt null
-      console.warn 'could not use lsof to determine number of file descriptors'
-      callback(null)
-    else
-      callback(parseInt(stdout))
+    process.nextTick(() -> setInterval(logMemUsageIfChanged, memCheckInterval)) # next-ticking it so initial logging would finish first
 
-#
-# File descriptors monitoring
-#
-logFileDescriptorsCountIfChanged = () ->
-  getFileDescriptorsCount((count) -> 
-    laterFD = count
-    if (Math.abs(laterFD - formerFD) / formerFD) > (percentThreshold/100)
-      logging.logPerf("""this node.js process is currently using #{laterFD} file descriptors""")
+  #
+  # File descriptors monitoring
+  #
+  getFileDescriptorsCount = (callback) ->
+    execCommand = """lsof -p #{process.pid} | wc -l""" # get number of file descriptors assigned by this node.js process
+    exec execCommand, (error, stdout, stderr) ->
+      if error isnt null
+        console.warn 'could not use lsof to determine number of file descriptors'
+        callback(null)
+      else
+        callback(parseInt(stdout))
 
-    formerFD = laterFD
-  )
+  #
+  # File descriptors monitoring
+  #
+  logFileDescriptorsCountIfChanged = () ->
+    getFileDescriptorsCount((count) -> 
+      laterFD = count
+      if (Math.abs(laterFD - formerFD) / formerFD) > (percentThreshold/100)
+        logging.logPerf("""Cluster #{node} is currently using #{laterFD} file descriptors""")
 
-fileDescriptorsTracking = () ->
-  getFileDescriptorsCount((count) -> laterFD = count)
-  process.nextTick(() -> setInterval(logFileDescriptorsCountIfChanged, fDescriptorsCheckInterval)) # next-ticking it so initial logging would finish first
+      formerFD = laterFD
+    )
 
-#
-# Start
-#
-exports.start = () ->
+  fileDescriptorsTracking = () ->
+    getFileDescriptorsCount((count) -> laterFD = count)
+    process.nextTick(() -> setInterval(logFileDescriptorsCountIfChanged, fDescriptorsCheckInterval)) # next-ticking it so initial logging would finish first
+
+  #
+  # Start the monitoring
+  #
   memTracking()
   fileDescriptorsTracking()
