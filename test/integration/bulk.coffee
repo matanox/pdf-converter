@@ -9,8 +9,12 @@ nconf.defaults
   host        : "localhost"
   directory   : '../local-copies/pdf/'
   flood       : false
-  parallelism : 4
+  parallelism : 2
+  maxFiles    : 10
 
+#
+# log the configuration
+#
 host = nconf.get 'host'
 port = process.env.PORT or 3080
 logging.logGreen 'Using hostname ' + nconf.get('host')
@@ -19,23 +23,23 @@ logging.logGreen 'Using port ' + port
 directory = nconf.get 'directory' # input directory 
 logging.logGreen 'Invoking over input files from ' + util.terminalClickableFileLink(directory)
 
-parallelism = nconf.get 'parallelism'
-logging.logGreen """Parallelism degree: #{parallelism}"""
-
-logging.logGreen ''
-
-#
-# header logging
-#
 flood = nconf.get 'flood'
 switch flood
   when true
-    logging.logGreen 'Running in flood mode'
+    logging.logPerf 'Running in flood mode'
   when false
-    logging.logGreen 'Running in controlled load mode' 
+    logging.logPerf 'Running in controlled load mode' 
   else
     logging.logYellow 'Invalid value for the flood argument'
     process.exit(0)
+    
+parallelism = nconf.get 'parallelism'
+logging.logPerf """Degree of parallelism: #{parallelism}"""
+
+maxFiles = nconf.get 'maxFiles'
+
+logging.logGreen ''
+
 
 #logging.logGreen """Running against host #{host}, port #{port} ..."""
 
@@ -50,7 +54,7 @@ http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses 
 
 requests = 0
 responses = 0
-aggregateWait = 0 #  aggregation of overall response await time
+aggregateRequestsWait = 0 # summed requests wait time 
 
 makeRequest = (filename) ->
 
@@ -58,7 +62,7 @@ makeRequest = (filename) ->
   httpCallBack = ((filename) -> 
     (res) ->
 
-      responses +=1
+      responses += 1
 
       # get the server response data
       responseBody = ''
@@ -73,24 +77,26 @@ makeRequest = (filename) ->
 
         unless flood
           # Invoke next request unless all requests already made
-          toRequest.shift()
-          if toRequest.length > 0 
-            makeRequest(toRequest[0])
+          if toRequest.length > 0
+            makeRequest(toRequest.shift())
 
         console.log responses + ' responses out of ' + requests + ' requests received thus far'
         requestElapsedTime = util.timelog null, 'Server response for ' + filename
 
         # add up time waited for this request, to the overal wait impact metric
-        aggregateWait += (requestElapsedTime / 1000)
+        aggregateRequestsWait += (requestElapsedTime)
 
         if responses is requests
           overall = util.timelog null, 'Overall'
           logging.logPerf ''
-          logging.logPerf '================================='
+          logging.logPerf ' Timing:'
           logging.logPerf ''
-          logging.logPerf 'Overall time to get all responses'
-          logging.logPerf 'time:       ' + overall / 1000 + ' secs'
-          logging.logPerf 'normalized: ' + (overall / 1000 / responses) + ' (average sec/request)'
+          logging.logPerf ' elapsed   ' + overall / 1000 + ' secs'
+          logging.logPerf ' averaged  ' + overall / 1000 / responses + ' (sec/request)'
+          logging.logPerf ' wait time ' + aggregateRequestsWait / 1000 + ' secs (typically more than elapsed time'
+          logging.logPerf ' averaged  ' + aggregateRequestsWait / 1000 / responses + ' (sec/request)'
+          logging.logPerf ''
+          logging.logPerf """ Parallelism degree employed was #{parallelism}"""
           logging.logPerf ''
           process.exit(0) 
           return)) (filename) # Callback application
@@ -116,8 +122,11 @@ util.timelog null, 'Overall'
 toRequest = []
 for filename in fs.readdirSync(directory)
   if fs.statSync(directory + filename).isFile() 
-    if filename != '.gitignore'
-      toRequest.push(filename)
+    if filename isnt '.gitignore'
+      #console.log toRequest.length
+      #console.log maxFiles
+      if toRequest.length < maxFiles
+        toRequest.push(filename)
     else
       console.log 'Skipping .gitignore' 
   else
@@ -126,10 +135,13 @@ for filename in fs.readdirSync(directory)
 #
 # start the requests
 #
-if toRequest.length > 0
+if toRequest.length > 0 
   unless flood
+    if parallelism > toRequest.length
+      logging.logYellow 'Note: specified degree of parallelism is greater than number of files to process'    
     for i in [1..parallelism]
-      makeRequest(toRequest[0])
+      if toRequest.length > 0
+        makeRequest(toRequest.shift()) # remove bottom of queue and issue request for it
   else
     for filename in toRequest
       makeRequest(filename)
