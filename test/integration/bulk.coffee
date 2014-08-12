@@ -86,6 +86,9 @@ makeRequest = (filename) ->
         # add up time waited for this request, to the overal wait impact metric
         aggregateRequestsWait += (requestElapsedTime)
 
+        # 
+        # done. output timing statistics and wrap up
+        #
         if responses is requests
           overall = util.timelog null, 'Overall'
           logging.logPerf ''
@@ -104,7 +107,9 @@ makeRequest = (filename) ->
   console.log "Requesting " + directory + filename
   util.timelog null, 'Server response for ' + filename
 
-  # Invoke api request
+  #
+  # Make the actual http request
+  #
   http.get 
     host: host
     port: port

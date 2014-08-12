@@ -72,7 +72,7 @@ writer.prototype._appendQueue = () ->
   toWrite = this.dataQueue.slice().join('')    # create copy of the queue, and flatten it
   buff = new Buffer(toWrite)
   this.dataQueue = []                          # now clear the queue
-  fs.write(this.fd, buff, 0, buff.length, null, this._writeDone)
+  fs.write(this.fd, toWrite, 0, toWrite.length, null, this._writeDone)
 
 #
 # appends new line to a data row.

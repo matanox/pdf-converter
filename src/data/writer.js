@@ -55,7 +55,7 @@ writer.prototype._appendQueue = function() {
   toWrite = this.dataQueue.slice().join('');
   buff = new Buffer(toWrite);
   this.dataQueue = [];
-  return fs.write(this.fd, buff, 0, buff.length, null, this._writeDone);
+  return fs.write(this.fd, toWrite, 0, toWrite.length, null, this._writeDone);
 };
 
 append = function(queue, data) {
