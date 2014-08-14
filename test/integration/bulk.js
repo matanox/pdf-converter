@@ -18,7 +18,7 @@ nconf.defaults({
   directory: '../local-copies/pdf/',
   flood: false,
   parallelism: 2,
-  maxFiles: 10
+  maxFiles: 10000
 });
 
 host = nconf.get('host');
@@ -96,7 +96,7 @@ makeRequest = function(filename) {
           logging.logPerf('');
           logging.logPerf(' elapsed   ' + overall / 1000 + ' secs');
           logging.logPerf(' averaged  ' + overall / 1000 / responses + ' (sec/request)');
-          logging.logPerf(' wait time ' + aggregateRequestsWait / 1000 + ' secs (typically more than elapsed time');
+          logging.logPerf(' wait time ' + aggregateRequestsWait / 1000 + ' secs (typically more than elapsed time)');
           logging.logPerf(' averaged  ' + aggregateRequestsWait / 1000 / responses + ' (sec/request)');
           logging.logPerf('');
           logging.logPerf(" Parallelism degree employed was " + parallelism);

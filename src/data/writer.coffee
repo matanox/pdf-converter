@@ -3,9 +3,9 @@
 #
 # TODO: creating a new buffer (which probably results in malloc) every time is entirely wasteful.
 #       should reuse some pre-allocated buffer, or switch to the appendFile api that accepts plain strings 
-#       and avoids the need to manage file closes.
+#       and avoids the need to manage file closes, at the cost of possibly re-opening the file many times.
 #
-#
+# partly inspired by the failure of Winston https://github.com/flatiron/winston/issues/423 to do the job
 #
 
 fs = require 'fs'
@@ -72,7 +72,7 @@ writer.prototype._appendQueue = () ->
   toWrite = this.dataQueue.slice().join('')    # create copy of the queue, and flatten it
   buff = new Buffer(toWrite)
   this.dataQueue = []                          # now clear the queue
-  fs.write(this.fd, toWrite, 0, toWrite.length, null, this._writeDone)
+  fs.write(this.fd, buff, 0, buff.length, null, this._writeDone)
 
 #
 # appends new line to a data row.

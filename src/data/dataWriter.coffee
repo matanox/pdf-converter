@@ -40,7 +40,7 @@ exports.getReadyName = getReadyName = (inputFileName, dataType) ->
 exports.write = (inputFileName, dataType, data, cnsl) ->
   unless files[inputFileName]?
     files[inputFileName] = {} 
-    console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent(inputFileName)
+    console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent(inputFileName) + '/'
 
   #
   # Initialize data writer if not already initialized
