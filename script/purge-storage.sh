@@ -1,1 +1,1 @@
-node src/storage/storage-purge
+node src/storage/riak-purge

@@ -1,3 +1,4 @@
+ulimit -n 4096
 riak start
 echo "listing all buckets"
 curl -i http://localhost:8098/riak?buckets=true

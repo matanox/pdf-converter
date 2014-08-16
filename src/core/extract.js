@@ -895,13 +895,9 @@ exports.go = function(req, name, input, res, docLogger) {
 };
 
 exports.originalGo = function(req, name, res, docLogger) {
-  var riak, storage;
+  var storage;
   storage = require('../src/storage/storage');
   require('stream');
-  riak = require('riak-js').getClient({
-    host: "localhost",
-    port: "8098"
-  });
   util.timelog(name, 'checking data store for cached tokens');
   return storage.fetch('tokens', name, function(cachedSerializedTokens) {
     util.timelog(name, 'checking data store for cached tokens');

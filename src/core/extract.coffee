@@ -1143,7 +1143,7 @@ exports.go = (req, name, input, res ,docLogger) ->
 exports.originalGo = (req, name, res ,docLogger) ->
   storage = require '../src/storage/storage'
   require 'stream'
-  riak = require('riak-js').getClient({host: "localhost", port: "8098"})
+  #riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
   util.timelog name, 'checking data store for cached tokens'
   
