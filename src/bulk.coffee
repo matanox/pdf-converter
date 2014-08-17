@@ -1,9 +1,19 @@
+#
+# Bulk activation, with controls over degree of parallelism
+#
+# Note: make sure to check on the degree of parallelism of app.coffee
+#       to get a well thought of run (number of cluster workers in app.coffee)
+#
+
 http    = require 'http'
 fs      = require 'fs'
 nconf   = require 'nconf'
 util    = require '../../src/util/util'
 logging = require '../../src/util/logging'
 
+#
+# configruation
+#
 nconf.argv().env()
 nconf.defaults 
   host        : "localhost"
@@ -17,8 +27,7 @@ nconf.defaults
 #
 host = nconf.get 'host'
 port = process.env.PORT or 3080
-logging.logGreen 'Using hostname ' + nconf.get('host')
-logging.logGreen 'Using port ' + port
+logging.logGreen """Connecting to hostname #{nconf.get('host')}, port #{port}"""
 
 directory = nconf.get 'directory' # input directory 
 logging.logGreen 'Invoking over input files from ' + util.terminalClickableFileLink(directory)
@@ -40,9 +49,13 @@ maxFiles = nconf.get 'maxFiles'
 
 logging.logGreen ''
 
-
-#logging.logGreen """Running against host #{host}, port #{port} ..."""
-
+#
+# establish a unique run id, to be used in logging and data writing by the main app called by this script
+#
+hostname = require 'os'.hostname()
+timeISO = now.toISOString()
+batchRunID = hostname + '-' + timeISO
+logging.logGreen 'Using run ID ' + batchRunID
 
 http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses after the 5 first client-side
                                    # node.js requests that saturate the client agent pool (per current default), 
@@ -50,7 +63,9 @@ http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses 
                                    # and practically take whole minutes to execute..... 
                                    # This definition removes this concurrency limitation from the client-side.
 
-
+#
+# Request invoker adhering to specified load strategy
+#
 
 requests = 0
 responses = 0
@@ -113,7 +128,7 @@ makeRequest = (filename) ->
   http.get 
     host: host
     port: port
-    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename)
+    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename) + '&runID?=' + batchRunID
     method: 'GET',
     httpCallBack 
   .on('error', (e) ->

@@ -10,8 +10,6 @@
 
 riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
-wait = 5
-
 delete_key = (bucket,key) ->
     riak.remove(bucket, key)
 
@@ -27,14 +25,15 @@ clearBucket = (bucket) ->
     .on('end', () -> null)
     .start()
 
-clean = () ->
+purge = () ->
   console.log 'storage purge starting...'
   clearBucket('tokens')
   clearBucket('pdf')
   clearBucket('html')
 
+wait = 5
 console.log ""
-console.log """ATTENTION!!! if not interupted the riak db will be cleaned up in #{wait} seconds"""
+console.log """ATTENTION!!! if not interupted cached data for pdf, html, and tokens will be purged in #{wait} seconds"""
 console.log ""
-setTimeout(clean, wait * 1000)
+setTimeout(purge, wait * 1000)
 

@@ -82,7 +82,7 @@ spawnClusterWorkers = () ->
       # fire self test only for self cluster worker coming to life
       if firstFork
         firstFork = false
-        testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile
+        testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=none'
         #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
         http.get(testUrl, (res) ->
           logging.logBlue 'Cluster response to its own synthetic client is: ' + res.statusCode)

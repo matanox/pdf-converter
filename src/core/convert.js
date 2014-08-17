@@ -7,7 +7,7 @@ logging = require('../util/logging');
 
 docMeta = require('./docMeta');
 
-storage = require('../storage/storage');
+storage = require('../storage/simple/storage');
 
 require('stream');
 

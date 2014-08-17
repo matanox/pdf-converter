@@ -9,6 +9,7 @@ util       = require '../util/util'
 getFromUrl = require 'request'
 fs         = require 'fs'
 winston    = require 'winston'
+logging    = require '../util/logging' 
 
 #
 # * Fetches the upload from Ink File Picker (writing it into local file).
@@ -32,6 +33,7 @@ exports.go = (req, res) ->
   
   #
   # Handle api request for inkUrl file (fetch the upload and pass on to conversion)
+  # inkUrl would be replaced by that other competing better service
   #
   if req.query.inkUrl?
     inkUrl = req.query.inkUrl
@@ -48,8 +50,12 @@ exports.go = (req, res) ->
   # This api is for testing without hitting inkUrl
   # 
   if req.query.localLocation?
+
+    req.session.runID = req.query.runID
+
     baseFileName = req.query.localLocation.replace('.pdf', '')
-    console.log("""started handling input file: #{baseFileName}""")      
+
+    logging.logGreen("""Started handling input file: #{baseFileName}. Given run id is: #{req.session.runID}""")      
 
     docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')   

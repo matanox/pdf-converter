@@ -1141,7 +1141,7 @@ exports.go = (req, name, input, res ,docLogger) ->
 # original version, of exports.go - not in use
 #
 exports.originalGo = (req, name, res ,docLogger) ->
-  storage = require '../src/storage/storage'
+  storage = require '../src/storage/simple/storage'
   require 'stream'
   #riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 

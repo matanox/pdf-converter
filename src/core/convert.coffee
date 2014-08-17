@@ -5,7 +5,7 @@
 util    = require '../util/util'
 logging = require '../util/logging' 
 docMeta = require './docMeta'
-storage = require '../storage/storage'
+storage = require '../storage/simple/storage'
 require 'stream'
 exec   = require("child_process").exec
 riak   = require('riak-js').getClient({host: "localhost", port: "8098"})
@@ -24,6 +24,7 @@ exports.go = (localCopy, docLogger, req, res) ->
 
   name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
   req.session.name = name 
+
   #console.log """About to convert file #{name} from pdf to html"""
 
   hasher = crypto.createHash('md5')

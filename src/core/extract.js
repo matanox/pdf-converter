@@ -896,7 +896,7 @@ exports.go = function(req, name, input, res, docLogger) {
 
 exports.originalGo = function(req, name, res, docLogger) {
   var storage;
-  storage = require('../src/storage/storage');
+  storage = require('../src/storage/simple/storage');
   require('stream');
   util.timelog(name, 'checking data store for cached tokens');
   return storage.fetch('tokens', name, function(cachedSerializedTokens) {
