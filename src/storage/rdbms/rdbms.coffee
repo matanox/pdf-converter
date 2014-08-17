@@ -1,20 +1,43 @@
 # https://github.com/tgriesser/knex
 # to open a mysql prompt from the terminal: mysql -u root -p
 
-exec = require '../../util/exec'
+logging = require '../../util/logging' 
+exec    = require '../../util/exec'
 
 #
 # Tables definition
 #
-docTables = [
-              name: 'sentences'
-             ,
-              name: 'headers'
-            ]
+docTables = 
+  [
+    name: 'sentences'
+    fields:
+      sentence: 'long-string'
+   ,
+    name: 'headers'
+    fields:
+      header: 'short-string' 
+      level:  'natural-number'
+   ,
+    name: 'abstract'
+    fields:
+      abstract: 'long-string'
+   ,
+    name: 'title'
+    fields:
+      title: 'short-string' 
+      
+  ]
 
 docTables.forEach((table) -> table.type = 'docTable')
 
 tables = docTables
+
+tables.forEach((table) ->
+  switch table.type 
+    when 'docTable' 
+      table.fields.docName = 'short-string'
+      table.fields.runID   = 'short-string'
+)
 
 #
 # database specific settings
@@ -56,16 +79,24 @@ init = () ->
   conn = connect()
 
   for table in tables
+    
     conn.schema.createTable(table.name, (newTable) ->
-      newTable.increments('id')  # auto-incrementing id field
-      if table.type is 'docTable' 
-        newTable.string('docName')
-        newTable.string('text', maxDbStrLength)
-        newTable.string('runID')
-    ).catch((error) -> 
-        console.error error
-        console.error 'database reinitialization failed')
+      for field of table.fields
+        type = table.fields[field]
+        switch type
+          when 'short-string'
+            newTable.string(field)
+          when 'long-string'
+            newTable.string(field, maxDbStrLength)
+          when 'natural-number'
+            newTable.integer(field)
+          else
+            logging.logRed """unidentified field type #{field}"""
 
+    ).catch((error) -> 
+        logging.logRed error
+        logging.logRed 'database reinitialization failed'
+        return false)
 
   console.log 'database ready for action'
 
@@ -76,7 +107,7 @@ init = () ->
 exports.reinit = reinit = () ->
   exec('src/storage/rdbms/rdbms-recreate.sh', null, (success) -> 
     if success 
-      console.log 'database and database user clean and ready'
+      console.log 'database definition and database user clean and ready'
       init()
     else 
       console.error 'database reinitialization failed - could not recreate database or database user'

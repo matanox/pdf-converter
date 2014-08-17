@@ -7,7 +7,7 @@ purge = function() {
   return r.reinit();
 };
 
-wait = 5;
+wait = 0;
 
 console.log("");
 
