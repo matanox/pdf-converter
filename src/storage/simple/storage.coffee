@@ -9,7 +9,8 @@ riak =    require('riak-js').getClient({host: "localhost", port: "8098"})
 # alternative node riak client - https://github.com/nathanaschbacher/nodiak
 fs =      require 'fs'
 
-exports.store = (bucket, filename, fileContent, docLogger) ->
+exports.store = (context, bucket, fileContent, docLogger) ->
+  filename = context.name
   #
   # TODO: handle case that file already exists
   # TODO: handle riak error (winston email notifying of it etc.)

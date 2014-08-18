@@ -28,10 +28,9 @@ executable = "pdf2htmlEX";
 
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1";
 
-exports.go = function(localCopy, docLogger, req, res) {
+exports.go = function(context, localCopy, docLogger, req, res) {
   var fileContent, hash, hasher, name;
-  name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
-  req.session.name = name;
+  context.name = name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
   hasher = crypto.createHash('md5');
   fileContent = fs.readFileSync(localCopy);
   util.timelog(name, "hashing input file");
@@ -43,22 +42,22 @@ exports.go = function(localCopy, docLogger, req, res) {
     var execCommand, input, outFolder, path;
     if (error != null) {
       util.timelog(name, "from upload to serving");
-      docMeta.storePdfMetaData(name, localCopy, docLogger);
-      docMeta.storePdfFontsSummary(name, localCopy, docLogger);
-      storage.store("pdf", name, fileContent, docLogger);
+      docMeta.storePdfMetaData(context, localCopy, docLogger);
+      docMeta.storePdfFontsSummary(context, localCopy, docLogger);
+      storage.store(context, "pdf", fileContent, docLogger);
       util.timelog(name, "Conversion to html");
       logging.cond("starting the conversion from pdf to html", 'progress');
       execCommand = executable + " ";
       outFolder = "../local-copies/" + "html-converted/";
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
-      dataWriter.write(name, 'pdfToHtml', execCommand);
+      dataWriter.write(context, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
         var input, outFolderResult, path, resultFile, _i, _len, _ref;
         logging.cond("finished the conversion from pdf to html", 'progress');
-        dataWriter.write(name, 'pdfToHtml', executable + "'s stdout: " + stdout);
-        dataWriter.write(name, 'pdfToHtml', executable + "'s stderr: " + stderr);
+        dataWriter.write(context, 'pdfToHtml', executable + "'s stdout: " + stdout);
+        dataWriter.write(context, 'pdfToHtml', executable + "'s stderr: " + stderr);
         if (error !== null) {
-          dataWriter.write(name, 'pdfToHtml', executable + "'sexec error: " + error);
+          dataWriter.write(context, 'pdfToHtml', executable + "'sexec error: " + error);
           console.error("pdf2Html for " + name + " failed with error: \n " + error);
           res.writeHead(505);
           res.write("We are sorry, an unexpected error has occured processing your document");
@@ -87,7 +86,7 @@ exports.go = function(localCopy, docLogger, req, res) {
             'html': path + name + '/' + name + ".html",
             'css': path + name + '/'
           };
-          return require('./extract').go(req, name, input, res, docLogger);
+          return require('./extract').go(context, req, input, res, docLogger);
         }
       });
     } else {
@@ -97,7 +96,7 @@ exports.go = function(localCopy, docLogger, req, res) {
         'html': path + formerName + '/' + formerName + ".html",
         'css': path + formerName + '/'
       };
-      return require('./extract').go(req, name, input, res, docLogger);
+      return require('./extract').go(context, req, input, res, docLogger);
     }
   });
 };

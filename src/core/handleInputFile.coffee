@@ -51,7 +51,9 @@ exports.go = (req, res) ->
   # 
   if req.query.localLocation?
 
-    req.session.runID = req.query.runID
+    # initialize a context object, to be passed around
+    context = 
+      runID : req.query.runID
 
     baseFileName = req.query.localLocation.replace('.pdf', '')
 
@@ -61,4 +63,4 @@ exports.go = (req, res) ->
     docLogger.info('logger started')   
 
     outFile = setOutFile(baseFileName)
-    convert.go(outFile, docLogger, req, res)
+    convert.go(context, outFile, docLogger, req, res)

@@ -49,8 +49,9 @@ iterator = function(tokens, iterationFunc) {
   return _results;
 };
 
-titleAndAbstract = function(name, tokens) {
-  var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, prev, rowLeftCurr, rowLeftLast, s, sequence, sequences, skipDelimiters, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t, _u;
+titleAndAbstract = function(context, tokens) {
+  var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, name, prev, rowLeftCurr, rowLeftLast, s, sequence, sequences, skipDelimiters, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t, _u;
+  name = context.name;
   util.timelog(name, 'Title and abstract recognition');
   firstPage = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
@@ -70,7 +71,7 @@ titleAndAbstract = function(name, tokens) {
   if (firstPageEnd == null) {
     throw 'failed detecting end of first page';
   }
-  dataWriter.write(name, 'stats', 'first page is ' + firstPageEnd + ' tokens long');
+  dataWriter.write(context, 'stats', 'first page is ' + firstPageEnd + ' tokens long');
   fontSizes = [];
   for (_k = 0, _len1 = tokens.length; _k < _len1; _k++) {
     token = tokens[_k];
@@ -240,8 +241,11 @@ titleAndAbstract = function(name, tokens) {
   return util.timelog(name, 'initial handling of first page fluff');
 };
 
-generateFromHtml = function(req, name, input, res, docLogger, callback) {
-  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
+generateFromHtml = function(context, req, input, res, docLogger, callback) {
+  var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, name, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, sentences, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
+  name = context.name;
+  logging.logYellow("generateFromHTML");
+  console.dir(context);
   util.timelog(name, 'Extraction from html stage A');
   rawHtml = fs.readFileSync(input.html).toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, input.css);
@@ -282,7 +286,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     docLogger.error("No text was extracted from input");
     console.info("No text was extracted from input");
     error = 'We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.';
-    callback(error, res, tokens, name, docLogger);
+    callback(error, res, tokens, context, docLogger);
     return;
   }
   tokens.reduce(function(x, y) {
@@ -327,7 +331,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
   }
   util.timelog(name, 'uniting split tokens');
-  dataWriter.write(name, 'stats', 'tokens count before uniting tokens: ' + tokens.length);
+  dataWriter.write(context, 'stats', 'tokens count before uniting tokens: ' + tokens.length);
   iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
       if (a.positionInfo.bottom === b.positionInfo.bottom) {
@@ -340,14 +344,14 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
     return 1;
   });
-  dataWriter.write(name, 'stats', 'tokens count after uniting tokens:  ' + tokens.length);
+  dataWriter.write(context, 'stats', 'tokens count after uniting tokens:  ' + tokens.length);
   util.timelog(name, 'uniting split tokens');
   if (refactorMode) {
     refactorTools.deriveStructure(tokens);
     refactorTools.deriveStructureWithValues(tokens);
   }
   if (mode === 'bare') {
-    callback(null, res, tokens, name, docLogger);
+    callback(null, res, tokens, context, docLogger);
     return;
   }
   page = null;
@@ -412,7 +416,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
             }
           }
           if (repeat) {
-            dataWriter.write(name, 'partDetection', 'repeat header/footer:');
+            dataWriter.write(context, 'partDetection', 'repeat header/footer:');
             for (t = _u = 0, _ref3 = a.length - 1; 0 <= _ref3 ? _u <= _ref3 : _u >= _ref3; t = 0 <= _ref3 ? ++_u : --_u) {
               a[t].fluff = true;
               b[t].fluff = true;
@@ -428,18 +432,18 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       }
     }
   }
-  dataWriter.write(name, 'partDetection', 'bottom extreme is ' + bottom.extreme);
+  dataWriter.write(context, 'partDetection', 'bottom extreme is ' + bottom.extreme);
   for (_v = 0, _len9 = tokens.length; _v < _len9; _v++) {
     token = tokens[_v];
     if (parseInt(token.page) === 1) {
       if (Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2) {
-        dataWriter.write(name, 'partDetection', '1st page non-repeat footer text detected: ' + token.text);
+        dataWriter.write(context, 'partDetection', '1st page non-repeat footer text detected: ' + token.text);
         token.fluff = true;
       }
     }
   }
   util.timelog(name, 'detect and mark repeat headers and footers');
-  titleAndAbstract(name, tokens);
+  titleAndAbstract(context, tokens);
   filtered = [];
   for (t = _w = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _w <= _ref4 : _w >= _ref4; t = 0 <= _ref4 ? ++_w : --_w) {
     if (tokens[t].fluff == null) {
@@ -487,7 +491,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   }
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces);
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1;
-  dataWriter.write(name, 'stats', "ordinary new line space set to the document's most common line space of " + newLineThreshold);
+  dataWriter.write(context, 'stats', "ordinary new line space set to the document's most common line space of " + newLineThreshold);
   util.last(tokens).lineCloser = true;
   for (i = _y = 1, _ref6 = lineOpeners.length - 1 - 1; 1 <= _ref6 ? _y <= _ref6 : _y >= _ref6; i = 1 <= _ref6 ? ++_y : --_y) {
     currOpener = tokens[lineOpeners[i]];
@@ -534,14 +538,14 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       lastOpenerIndex = i;
     }
   }
-  dataWriter.write(name, 'stats', "detected " + paragraphs.length + " paragraphs");
-  dataWriter.write(name, 'stats', "number of pages in input document: " + (parseInt(util.last(tokens).page)));
+  dataWriter.write(context, 'stats', "detected " + paragraphs.length + " paragraphs");
+  dataWriter.write(context, 'stats', "number of pages in input document: " + (parseInt(util.last(tokens).page)));
   paragraphsRatio = paragraphs.length / parseInt(util.last(tokens).page);
   averageParagraphLength = analytic.average(paragraphs, function(a) {
     return a.length;
   });
-  dataWriter.write(name, 'stats', "paragraphs to pages ratio: " + paragraphsRatio);
-  dataWriter.write(name, 'stats', "average paragraph length:  " + averageParagraphLength);
+  dataWriter.write(context, 'stats', "paragraphs to pages ratio: " + paragraphsRatio);
+  dataWriter.write(context, 'stats', "average paragraph length:  " + averageParagraphLength);
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats);
   for (_aa = 0, _len10 = lineOpenersDistribution.length; _aa < _len10; _aa++) {
     entry = lineOpenersDistribution[_aa];
@@ -679,7 +683,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       }
     }
   }
-  headers(name, tokens);
+  headers(context, tokens);
   util.timelog(name, 'Sentence tokenizing');
   connect_token_group = function(_arg) {
     var group, token;
@@ -706,6 +710,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     groups.push(group);
   }
   util.timelog(name, 'Sentence tokenizing');
+  sentences = [];
   for (_ah = 0, _len17 = groups.length; _ah < _len17; _ah++) {
     group = groups[_ah];
     sentence = '';
@@ -724,8 +729,9 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
     }
     if (group[group.length - 1].paragraphCloser) {
       sentence += '\n';
+      sentences.push(sentence);
+      dataWriter.write(context, 'sentences', sentence);
     }
-    dataWriter.write(name, 'sentences', sentence);
   }
   metaTypeLog = function(type) {
     var text, _aj, _len19;
@@ -740,7 +746,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
       }
     }
     if (text.length > 0) {
-      dataWriter.write(name, type, text);
+      dataWriter.write(context, type, text);
       return true;
     } else {
       console.warn("cannot data-write " + type + " because no tokens are marked as " + type);
@@ -750,7 +756,7 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   metaTypeLog('abstract');
   metaTypeLog('title');
   if (mode === 'basic') {
-    callback(null, res, tokens, name, docLogger);
+    callback(null, res, tokens, context, docLogger);
     return;
   }
   documentQuantifiers = {};
@@ -830,14 +836,15 @@ generateFromHtml = function(req, name, input, res, docLogger, callback) {
   deriveStructure(tokens);
   deriveStructureWithValues(tokens);
   if (mode === 'all') {
-    callback(res, tokens, name, docLogger);
+    callback(null, res, tokens, context, docLogger);
   }
 };
 
 exports.generateFromHtml = generateFromHtml;
 
-done = function(error, res, tokens, name, docLogger) {
-  var chunkRespond, chunkResponse, serializedTokens, shutdown;
+done = function(error, res, tokens, context, docLogger) {
+  var chunkRespond, chunkResponse, name, serializedTokens, shutdown;
+  name = context.name;
   shutdown = function() {
     var compare;
     util.closeDocLogger(docLogger);
@@ -873,8 +880,8 @@ done = function(error, res, tokens, name, docLogger) {
     if (tokens.length > 0) {
       util.timelog(name, 'pickling');
       serializedTokens = JSON.stringify(tokens);
-      dataWriter.write(name, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
-      dataWriter.write(name, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
+      dataWriter.write(context, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
+      dataWriter.write(context, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
       util.timelog(name, 'pickling');
       if (chunkResponse) {
         chunkRespond(serializedTokens, res);
@@ -889,9 +896,11 @@ done = function(error, res, tokens, name, docLogger) {
   return shutdown();
 };
 
-exports.go = function(req, name, input, res, docLogger) {
+exports.go = function(context, req, input, res, docLogger) {
+  var name;
+  name = context.name;
   logging.cond("about to generate tokens", 'progress');
-  return generateFromHtml(req, name, input, res, docLogger, done);
+  return generateFromHtml(context, req, input, res, docLogger, done);
 };
 
 exports.originalGo = function(req, name, res, docLogger) {

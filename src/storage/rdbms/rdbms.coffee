@@ -3,11 +3,12 @@
 
 logging = require '../../util/logging' 
 exec    = require '../../util/exec'
+Promise = require 'bluebird'
 
 #
 # Tables definition
 #
-docTables = 
+docTablesDefinition = 
   [
     name: 'sentences'
     fields:
@@ -28,11 +29,10 @@ docTables =
       
   ]
 
-docTables.forEach((table) -> table.type = 'docTable')
+docTablesDefinition.forEach((table) -> table.type = 'docTable')
 
-tables = docTables
-
-tables.forEach((table) ->
+tableDefs = docTablesDefinition
+tableDefs.forEach((table) ->
   switch table.type 
     when 'docTable' 
       table.fields.docName = 'short-string'
@@ -42,7 +42,6 @@ tables.forEach((table) ->
 #
 # database specific settings
 #
-maxDbStrLength = 20000 # the mysql limitation
 
 connection =
   host:     'localhost'
@@ -50,9 +49,17 @@ connection =
   database: 'articlio'
   charset:  'utf8'
 
+maxDbStrLength = 20000 # the mysql-specific limitation
 
 #
-# Returns a connection to the database.
+# mysql connection pool definition
+#
+knex = require("knex")(
+  dialect: "mysql"
+  connection: process.env.DB_CONNECTION_STRING or connection)
+
+#
+# Returns a connection to the database - bypassing the global knex connection pooling. Not in use.
 #
 exports.connect = connect = () ->
   knex = require("knex")(
@@ -60,15 +67,56 @@ exports.connect = connect = () ->
     connection: process.env.DB_CONNECTION_STRING or connection
   )
 
+reqCounter   = 0
+successCount = 0
+error        = false
+
+writeSentences = (context, dataType, data) ->
+  
+  reqCounter += 1
+  #logging.logYellow reqCounter
+
+  # map from CoffeeScript variable names to table field names
+  mapping =
+    sentence : data
+    docName  : context.name
+    runID    : context.runID
+
+  if error 
+    logging.logRed 'rdbms writing failed, now skipping all forthcoming rdbms writes.'
+    return
+
+  knex.insert(mapping).into(dataType)
+    .catch((error) -> 
+      logging.logRed error
+      console.dir error
+      logging.logRed """writing to rdbms for data type #{dataType} failed"""
+      error = true
+      return false
+    )
+    .then((rows) -> 
+      successCount += 1
+      #logging.logGreen successCount
+    )
+
+  return true
+
+exports.write = (context, dataType, data) ->
+  inputFileName = context
+
+  switch dataType
+    when 'sentences'
+      writeSentences(context, dataType, data)       
+    else 
+      return
+  
 #
 # Purge database tables. Not currently in use, as we just remove the entire database to purge it
 #
 purge = () ->
 
-  conn = connect()
-
-  tables.forEach((table) -> 
-    conn.schema.dropTableIfExists(table.name)
+  tableDefs.forEach((table) -> 
+    knex.schema.dropTableIfExists(table.name)
   )
 
 #
@@ -76,29 +124,38 @@ purge = () ->
 #
 init = () ->
 
-  conn = connect()
+  # as per knex api, a callback function to create table columns for a table already just created
+  tableHandler = (tableDef, table) ->
+    for field of tableDef.fields
+      type = tableDef.fields[field]
+      switch type
+        when 'short-string'
+          table.string(field)
+        when 'long-string'
+          table.string(field, maxDbStrLength)
+        when 'natural-number'
+          table.integer(field)
+        else
+          error = """unidentified field type #{field} specified in table definition of table #{tableDef.name}"""
+          logging.logRed error
+          throw error
 
-  for table in tables
-    
-    conn.schema.createTable(table.name, (newTable) ->
-      for field of table.fields
-        type = table.fields[field]
-        switch type
-          when 'short-string'
-            newTable.string(field)
-          when 'long-string'
-            newTable.string(field, maxDbStrLength)
-          when 'natural-number'
-            newTable.integer(field)
-          else
-            logging.logRed """unidentified field type #{field}"""
+    return true
 
-    ).catch((error) -> 
-        logging.logRed error
-        logging.logRed 'database reinitialization failed'
-        return false)
+  #conn = connect()
 
-  console.log 'database ready for action'
+  tablesCreated = tableDefs.map((tableDef) ->
+      boundTableHandler = tableHandler.bind(undefined, tableDef)        # early bound derivation for callback
+      return knex.schema.createTable(tableDef.name, boundTableHandler)  # callback will be called when table has been created
+    )
+
+  Promise.all(tablesCreated).then(() -> # all promises successfully fulfilled
+                               knex.destroy(()->)
+                               console.log 'database ready for action')
+                            .catch((error) -> # if there was an error on any of the promises
+                               logging.logRed 'database reinitialization failed'
+                               return false)
+
 
 #
 # initialize the database from A to Z.

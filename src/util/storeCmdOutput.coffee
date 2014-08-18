@@ -7,7 +7,8 @@ logging = require './logging'
 dataWriter = require '../data/dataWriter'
 exec = require('child_process').exec
 
-module.exports = (name, localCopy, docLogger, params) ->
+module.exports = (context, localCopy, docLogger, params) ->
+  name = context.name
   
   execCommand = params.execCommand
   writerType  = params.writerType
@@ -21,10 +22,10 @@ module.exports = (name, localCopy, docLogger, params) ->
   #logging.log 'issuing command ' + execCommand
 
   exec execCommand, (error, stdout, stderr) ->
-    dataWriter.write name, writerType, execCommand + "'s stdout: \n" + stdout
-    dataWriter.write name, writerType, execCommand + "'s stderr: \n" + stderr
+    dataWriter.write context, writerType, execCommand + "'s stdout: \n" + stdout
+    dataWriter.write context, writerType, execCommand + "'s stderr: \n" + stderr
     if error isnt null
-      dataWriter.write name, writerType, execCommand + "'sexec error: " + error
+      dataWriter.write context, writerType, execCommand + "'sexec error: " + error
     else
       util.timelog name, description
       meta = {'raw': stdout, 'stderr': stderr}

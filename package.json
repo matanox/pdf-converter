@@ -39,7 +39,8 @@
     "diff": "~1.0.8",
     "dtl": "~0.2.0",
     "knex": "~0.6.22",
-    "mysql": "~2.4.2"
+    "mysql": "~2.4.2",
+    "bluebird": "~2.3.0"
   },
   "devDependencies": {
     "coffee-trace": "~1.4.0"

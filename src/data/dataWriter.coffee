@@ -16,7 +16,8 @@
 
 myWriter = require './writer'
 logging  = require '../util/logging' 
-util     = require '../util/util'
+util  = require '../util/util'
+rdbms = require '../storage/rdbms/rdbms' 
 
 docsDataDir = 'docData'
 exports.docsDataDir = docsDataDir
@@ -37,7 +38,15 @@ exports.getReadyName = getReadyName = (inputFileName, dataType) ->
   now = new Date()
   return docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
 
-exports.write = (inputFileName, dataType, data, cnsl) ->
+rdbmsWrite = (context, dataType, data, cnsl) ->
+  rdbms.write(context, dataType, data)
+
+exports.write = (context, dataType, data, cnsl) ->
+  
+  inputFileName = context.name
+
+  rdbmsWrite(context, dataType, data, cnsl)
+
   unless files[inputFileName]?
     files[inputFileName] = {} 
     console.log """clickable data directory link: """ + """file://#{process.cwd()}/#{docsDataDir}/""" + encodeURIComponent(inputFileName) + '/'

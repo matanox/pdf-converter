@@ -38,7 +38,8 @@ iterator = (tokens, iterationFunc) ->
 #
 # extract article title and abstract
 #
-titleAndAbstract = (name, tokens) ->
+titleAndAbstract = (context, tokens) ->
+  name = context.name
 
   util.timelog(name, 'Title and abstract recognition')
 
@@ -57,7 +58,7 @@ titleAndAbstract = (name, tokens) ->
   if not firstPageEnd?
     throw 'failed detecting end of first page'    
 
-  dataWriter.write name, 'stats',  'first page is ' + firstPageEnd + ' tokens long'
+  dataWriter.write context, 'stats',  'first page is ' + firstPageEnd + ' tokens long'
 
   #
   # Calculate most common font sizes
@@ -301,7 +302,10 @@ titleAndAbstract = (name, tokens) ->
 #
 # Core of this module
 #
-generateFromHtml = (req, name, input, res ,docLogger, callback) ->  
+generateFromHtml = (context, req, input, res ,docLogger, callback) ->  
+  name = context.name
+  logging.logYellow "generateFromHTML"
+  console.dir context
   util.timelog(name, 'Extraction from html stage A')
 
   #
@@ -346,7 +350,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     docLogger.error("No text was extracted from input")
     console.info("No text was extracted from input")
     error = 'We are sorry but the pdf you uploaded ' + '(' + name + ')' + ' cannot be processed. We are working on finding a better copy of the same article and will get back to you with it.' 
-    callback(error, res, tokens, name, docLogger)
+    callback(error, res, tokens, context, docLogger)
     return
     #throw("No text was extracted from input")
 
@@ -406,7 +410,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   #
 
   util.timelog name, 'uniting split tokens'
-  dataWriter.write name, 'stats', 'tokens count before uniting tokens: ' + tokens.length
+  dataWriter.write context, 'stats', 'tokens count before uniting tokens: ' + tokens.length
 
   iterator(tokens, (a, b, index, tokens) -> 
     if a.metaType is 'regular' and b.metaType is 'regular'  # undelimited consecutive pair?
@@ -420,7 +424,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
           return 0
     return 1)  
 
-  dataWriter.write name, 'stats', 'tokens count after uniting tokens:  ' + tokens.length
+  dataWriter.write context, 'stats', 'tokens count after uniting tokens:  ' + tokens.length
   util.timelog name, 'uniting split tokens'
 
   #
@@ -435,7 +439,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(null, res, tokens, name, docLogger)
+    callback(null, res, tokens, context, docLogger)
     return 
 
   #
@@ -511,7 +515,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
               
           # Mark the sequence as fluff in both 'consecutive' pages where it apperas
           if repeat 
-            dataWriter.write name, 'partDetection', 'repeat header/footer:'
+            dataWriter.write context, 'partDetection', 'repeat header/footer:'
             for t in [0..a.length-1]
               a[t].fluff = true
               b[t].fluff = true
@@ -533,10 +537,10 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   # TODO: consider grouping with elaborate fluff removal when implemented
   #
 
-  dataWriter.write name, 'partDetection', 'bottom extreme is ' + bottom.extreme
+  dataWriter.write context, 'partDetection', 'bottom extreme is ' + bottom.extreme
   for token in tokens when parseInt(token.page) is 1
     if Math.abs(parseInt(token.positionInfo.bottom) - bottom.extreme) < 2 # same grace      
-      dataWriter.write name, 'partDetection', '1st page non-repeat footer text detected: ' + token.text
+      dataWriter.write context, 'partDetection', '1st page non-repeat footer text detected: ' + token.text
       token.fluff = true
   
   util.timelog name, 'detect and mark repeat headers and footers'
@@ -545,7 +549,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   #
   #
 
-  titleAndAbstract(name, tokens)
+  titleAndAbstract(context, tokens)
  
   #
   # Now effectively remove all identified fluff the identified repeat sequences
@@ -627,7 +631,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   newLineThreshold = parseFloat(util.first(lineSpaceDistribution).key) + 1  # arbitrary grace interval to absorb
                                                                             # floating point calculation deviations 
                                                                             # and document deviations 
-  dataWriter.write name, 'stats', """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
+  dataWriter.write context, 'stats', """ordinary new line space set to the document's most common line space of #{newLineThreshold}"""
 
   util.last(tokens).lineCloser = true
 
@@ -694,19 +698,19 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
       paragraphs.push {'length': i - lastOpenerIndex, 'opener': tokens[i]}
       lastOpenerIndex = i
 
-  dataWriter.write name, 'stats', """detected #{paragraphs.length} paragraphs"""
+  dataWriter.write context, 'stats', """detected #{paragraphs.length} paragraphs"""
   #paragraphs.sort( (a, b) -> return parseInt(b.length) - parseInt(a.length) )
   
   #for paragraph in paragraphs
   #  console.log """beginning in page #{paragraph.opener.page}: paragraph of length #{paragraph.length}"""
 
-  dataWriter.write name, 'stats', """number of pages in input document: #{parseInt(util.last(tokens).page)}"""
+  dataWriter.write context, 'stats', """number of pages in input document: #{parseInt(util.last(tokens).page)}"""
   paragraphsRatio = paragraphs.length / parseInt(util.last(tokens).page)
 
   averageParagraphLength = analytic.average(paragraphs, (a) -> a.length)
   
-  dataWriter.write name, 'stats', """paragraphs to pages ratio: #{paragraphsRatio}"""
-  dataWriter.write name, 'stats', """average paragraph length:  #{averageParagraphLength}"""
+  dataWriter.write context, 'stats', """paragraphs to pages ratio: #{paragraphsRatio}"""
+  dataWriter.write context, 'stats', """average paragraph length:  #{averageParagraphLength}"""
 
   lineOpenersDistribution = analytic.generateDistribution(lineOpenersForStats)
   for entry in lineOpenersDistribution
@@ -869,15 +873,15 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
 
       if ctype.testWeakUpperCase(token.text)
         token.case = 'upper'
-        #dataWriter.write name, 'partDetection', 'All Caps Style detected for word: ' + token.text
+        #dataWriter.write context, 'partDetection', 'All Caps Style detected for word: ' + token.text
       if ctype.isUpperCaseChar(token.text.charAt(0)) 
         token.case = 'title'
   
       # TODO: interleave this check much much earlier on in the tokenization stage
       # if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
-      #   dataWriter.write name, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
+      #   dataWriter.write context, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
   
-  headers(name, tokens)
+  headers(context, tokens)
 
   #
   # Create sentences sequence
@@ -907,6 +911,9 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
   #
   # data-log all sentences, with paragraph splits indicated as well (abstract excluded).
   #
+
+  sentences = []
+
   for group in groups
     sentence = ''
     for token in group
@@ -924,8 +931,9 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     # mark end of paragraph in the data-writing
     if group[group.length-1].paragraphCloser
       sentence += '\n'
+      sentences.push sentence
+      dataWriter.write context, 'sentences', sentence
 
-    dataWriter.write(name, 'sentences', sentence)
  
   #
   # data-log all that has meta-tag
@@ -939,7 +947,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
             text += token.text + ' '
 
     if text.length > 0
-      dataWriter.write(name, type, text)
+      dataWriter.write context, type, text
       return true
 
     else
@@ -956,7 +964,8 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(null, res, tokens, name, docLogger)
+    callback(null, res, tokens, context, docLogger)
+
     return 
 
   # Log some statistics about sentences
@@ -1070,7 +1079,7 @@ generateFromHtml = (req, name, input, res ,docLogger, callback) ->
     #
     # return the tokens to caller
     #
-    callback(res, tokens, name, docLogger)
+    callback(null, res, tokens, context, docLogger)
     return 
 
 
@@ -1080,7 +1089,9 @@ exports.generateFromHtml = generateFromHtml
 # send the output, 
 # terminate resources used for handling the input file
 # 
-done = (error, res, tokens, name, docLogger) -> 
+done = (error, res, tokens, context, docLogger) -> 
+
+  name = context.name
 
   # close dataWriters to avoid file descriptor leak
   shutdown = () ->
@@ -1118,8 +1129,8 @@ done = (error, res, tokens, name, docLogger) ->
     if tokens.length>0
       util.timelog name, 'pickling'
       serializedTokens = JSON.stringify(tokens)
-      dataWriter.write name, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
-      dataWriter.write name, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
+      dataWriter.write context, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
+      dataWriter.write context, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
       util.timelog name, 'pickling'
 
       if chunkResponse
@@ -1133,14 +1144,17 @@ done = (error, res, tokens, name, docLogger) ->
   res.send(500)  
   shutdown()
 
-exports.go = (req, name, input, res ,docLogger) ->
+exports.go = (context, req, input, res ,docLogger) ->
+  name = context.name
+
   logging.cond "about to generate tokens", 'progress'
-  generateFromHtml(req, name, input, res ,docLogger, done) 
+  generateFromHtml(context, req, input, res ,docLogger, done) 
   
 #
 # original version, of exports.go - not in use
 #
 exports.originalGo = (req, name, res ,docLogger) ->
+ 
   storage = require '../src/storage/simple/storage'
   require 'stream'
   #riak = require('riak-js').getClient({host: "localhost", port: "8098"})

@@ -34,7 +34,7 @@ setOutFile = function(baseFileName) {
 };
 
 exports.go = function(req, res) {
-  var baseFileName, docLogger, inkUrl, outFile;
+  var baseFileName, context, docLogger, inkUrl, outFile;
   if (req.query.inkUrl != null) {
     inkUrl = req.query.inkUrl;
     baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '');
@@ -45,12 +45,14 @@ exports.go = function(req, res) {
     fetch(inkUrl, outFile, docLogger, req, res, convert.go);
   }
   if (req.query.localLocation != null) {
-    req.session.runID = req.query.runID;
+    context = {
+      runID: req.query.runID
+    };
     baseFileName = req.query.localLocation.replace('.pdf', '');
     logging.logGreen("Started handling input file: " + baseFileName + ". Given run id is: " + req.session.runID);
     docLogger = util.initDocLogger(baseFileName);
     docLogger.info('logger started');
     outFile = setOutFile(baseFileName);
-    return convert.go(outFile, docLogger, req, res);
+    return convert.go(context, outFile, docLogger, req, res);
   }
 };

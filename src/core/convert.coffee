@@ -20,10 +20,9 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 #
 # * Handles the conversion from pdf to html, and forwards to next stage.
 # 
-exports.go = (localCopy, docLogger, req, res) ->
+exports.go = (context, localCopy, docLogger, req, res) ->
 
-  name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
-  req.session.name = name 
+  context.name = name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
 
   #console.log """About to convert file #{name} from pdf to html"""
 
@@ -55,10 +54,10 @@ exports.go = (localCopy, docLogger, req, res) ->
         #
         util.timelog name, "from upload to serving"
 
-        docMeta.storePdfMetaData     name, localCopy, docLogger
-        docMeta.storePdfFontsSummary name, localCopy, docLogger
+        docMeta.storePdfMetaData     context, localCopy, docLogger
+        docMeta.storePdfFontsSummary context, localCopy, docLogger
 
-        storage.store "pdf", name, fileContent, docLogger
+        storage.store context, "pdf", fileContent, docLogger
 
         util.timelog name, "Conversion to html"
         logging.cond "starting the conversion from pdf to html", 'progress'
@@ -82,13 +81,13 @@ exports.go = (localCopy, docLogger, req, res) ->
         
         outFolder = "../local-copies/" + "html-converted/"
         execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"'
-        dataWriter.write name, 'pdfToHtml', execCommand
+        dataWriter.write context, 'pdfToHtml', execCommand
         exec execCommand, (error, stdout, stderr) ->
           logging.cond "finished the conversion from pdf to html", 'progress'
-          dataWriter.write name, 'pdfToHtml', executable + "'s stdout: " + stdout
-          dataWriter.write name, 'pdfToHtml', executable + "'s stderr: " + stderr
+          dataWriter.write context, 'pdfToHtml', executable + "'s stdout: " + stdout
+          dataWriter.write context, 'pdfToHtml', executable + "'s stderr: " + stderr
           if error isnt null 
-            dataWriter.write name, 'pdfToHtml', executable + "'sexec error: " + error
+            dataWriter.write context, 'pdfToHtml', executable + "'sexec error: " + error
             console.error """pdf2Html for #{name} failed with error: \n #{error}"""
 
             res.writeHead 505
@@ -124,7 +123,7 @@ exports.go = (localCopy, docLogger, req, res) ->
             input = 
               'html' : path + name + '/' + name + ".html"
               'css'  : path + name + '/'
-            require('./extract').go(req, name, input, res, docLogger)
+            require('./extract').go(context, req, input, res, docLogger)
             #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger
 
       #
@@ -137,7 +136,7 @@ exports.go = (localCopy, docLogger, req, res) ->
         input = 
           'html' : path + formerName + '/' + formerName + ".html"
           'css'  : path + formerName + '/'
-        require('./extract').go(req, name, input, res, docLogger)
+        require('./extract').go(context, req, input, res, docLogger)
     )
   
   

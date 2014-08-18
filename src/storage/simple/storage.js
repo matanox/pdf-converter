@@ -12,7 +12,9 @@ riak = require('riak-js').getClient({
 
 fs = require('fs');
 
-exports.store = function(bucket, filename, fileContent, docLogger) {
+exports.store = function(context, bucket, fileContent, docLogger) {
+  var filename;
+  filename = context.name;
   util.timelog(filename, "storing file to clustered storage");
   return riak.save(bucket, filename, fileContent, function(error) {
     util.timelog(filename, "storing file to clustered storage");

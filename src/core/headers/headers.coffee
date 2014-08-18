@@ -46,7 +46,8 @@ separateness = (prev, curr) ->
   return false
 
 
-module.exports = (name, tokens) -> 
+module.exports = (context, tokens) -> 
+  name = context.name
 
   #console.dir expected
 
@@ -69,14 +70,14 @@ module.exports = (name, tokens) ->
       if curr.paragraphOpener
         if separateness(prev, curr)
           anyFound = true
-          dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (paragraph opener)""", true
+          dataWriter.write context, 'headers', """token id #{curr.id}: #{curr.text} (paragraph opener)""", true
           return
 
       if isTitleNumeral(prev.text)
         #logging.logRed prev.paragraph
         if prev.paragraphOpener
           anyFound = true
-          dataWriter.write name, 'headers', """token id #{curr.id}: #{curr.text} (following numeral paragraph opener)""", true
+          dataWriter.write context, 'headers', """token id #{curr.id}: #{curr.text} (following numeral paragraph opener)""", true
           return
     )
 

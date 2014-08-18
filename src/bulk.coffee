@@ -8,8 +8,8 @@
 http    = require 'http'
 fs      = require 'fs'
 nconf   = require 'nconf'
-util    = require '../../src/util/util'
-logging = require '../../src/util/logging'
+util    = require './util/util'
+logging = require './util/logging'
 
 #
 # configruation
@@ -52,7 +52,9 @@ logging.logGreen ''
 #
 # establish a unique run id, to be used in logging and data writing by the main app called by this script
 #
-hostname = require 'os'.hostname()
+
+hostname = require('os').hostname()
+now = new Date()
 timeISO = now.toISOString()
 batchRunID = hostname + '-' + timeISO
 logging.logGreen 'Using run ID ' + batchRunID
@@ -128,7 +130,7 @@ makeRequest = (filename) ->
   http.get 
     host: host
     port: port
-    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename) + '&runID?=' + batchRunID
+    path: '/handleInputFile?' + 'localLocation=' + encodeURIComponent(filename) + '&runID=' + batchRunID
     method: 'GET',
     httpCallBack 
   .on('error', (e) ->

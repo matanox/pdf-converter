@@ -3,28 +3,28 @@ var storeCmdOutput;
 
 storeCmdOutput = require('../util/storeCmdOutput');
 
-exports.storePdfMetaData = function(name, localCopy, docLogger) {
+exports.storePdfMetaData = function(context, localCopy, docLogger) {
   var params;
   params = {
     execCommand: 'pdfinfo -meta',
     writerType: 'pdfMeta',
     description: 'Getting pdf file metadata using pdfinfo'
   };
-  return storeCmdOutput(name, localCopy, docLogger, params);
+  return storeCmdOutput(context, localCopy, docLogger, params);
 };
 
-exports.storePdfFontsSummary = function(name, localCopy, docLogger) {
+exports.storePdfFontsSummary = function(context, localCopy, docLogger) {
   var params;
   params = {
     execCommand: 'pdffonts',
     writerType: 'pdfFonts',
     description: 'Getting pdf fonts summary using pdffonts (1 of 2)'
   };
-  storeCmdOutput(name, localCopy, docLogger, params);
+  storeCmdOutput(context, localCopy, docLogger, params);
   params = {
     execCommand: 'pdffonts -subst',
     writerType: 'pdfFonts',
     description: 'Getting pdf fonts summary using pdffonts (2 of 2)'
   };
-  return storeCmdOutput(name, localCopy, docLogger, params);
+  return storeCmdOutput(context, localCopy, docLogger, params);
 };

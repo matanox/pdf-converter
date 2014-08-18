@@ -42,8 +42,9 @@ separateness = function(prev, curr) {
   return false;
 };
 
-module.exports = function(name, tokens) {
-  var anyFound, headers, regularTokens;
+module.exports = function(context, tokens) {
+  var anyFound, headers, name, regularTokens;
+  name = context.name;
   anyFound = false;
   headers = [];
   regularTokens = tokens.filter(function(token) {
@@ -60,14 +61,14 @@ module.exports = function(name, tokens) {
     if (curr.paragraphOpener) {
       if (separateness(prev, curr)) {
         anyFound = true;
-        dataWriter.write(name, 'headers', "token id " + curr.id + ": " + curr.text + " (paragraph opener)", true);
+        dataWriter.write(context, 'headers', "token id " + curr.id + ": " + curr.text + " (paragraph opener)", true);
         return;
       }
     }
     if (isTitleNumeral(prev.text)) {
       if (prev.paragraphOpener) {
         anyFound = true;
-        dataWriter.write(name, 'headers', "token id " + curr.id + ": " + curr.text + " (following numeral paragraph opener)", true);
+        dataWriter.write(context, 'headers', "token id " + curr.id + ": " + curr.text + " (following numeral paragraph opener)", true);
       }
     }
   });
