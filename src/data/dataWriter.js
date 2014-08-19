@@ -27,9 +27,18 @@ rdbmsWrite = function(context, dataType, data, cnsl) {
 };
 
 exports.write = function(context, dataType, data, cnsl) {
-  var dataFile, inputFileName, writer;
+  var dataFile, dataSerialized, inputFileName, writer;
   inputFileName = context.name;
   rdbmsWrite(context, dataType, data, cnsl);
+  if (typeof data === 'object') {
+    dataSerialized = Object.keys(data).map(function(key) {
+      return "" + key + ": " + data[key];
+    }).join(', ');
+    data = dataSerialized;
+  }
+  if (cnsl != null) {
+    logging.logBlue(data);
+  }
   if (files[inputFileName] == null) {
     files[inputFileName] = {};
     console.log("clickable data directory link: " + ("file://" + (process.cwd()) + "/" + docsDataDir + "/") + encodeURIComponent(inputFileName) + '/');
@@ -42,9 +51,6 @@ exports.write = function(context, dataType, data, cnsl) {
     files[inputFileName][dataType] = writer;
   }
   files[inputFileName][dataType].write(data);
-  if (cnsl != null) {
-    logging.logBlue(data);
-  }
   return true;
 };
 

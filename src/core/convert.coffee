@@ -57,6 +57,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
         docMeta.storePdfMetaData     context, localCopy, docLogger
         docMeta.storePdfFontsSummary context, localCopy, docLogger
 
+        #logging.logRed fileContent.length
         storage.store context, "pdf", fileContent, docLogger
 
         util.timelog name, "Conversion to html"

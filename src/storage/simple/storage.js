@@ -16,10 +16,10 @@ exports.store = function(context, bucket, fileContent, docLogger) {
   var filename;
   filename = context.name;
   util.timelog(filename, "storing file to clustered storage");
-  return riak.save(bucket, filename, fileContent, function(error) {
+  return riak.save(bucket, encodeURIComponent(filename), fileContent, function(error) {
     util.timelog(filename, "storing file to clustered storage");
     if (error != null) {
-      return console.error("failed storing file " + filename + " to clustered storage, with error: " + error);
+      return logging.logRed("failed storing file " + filename + " to clustered storage bucket " + bucket + ", with error: " + error);
     }
   });
 };

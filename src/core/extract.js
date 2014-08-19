@@ -244,8 +244,6 @@ titleAndAbstract = function(context, tokens) {
 generateFromHtml = function(context, req, input, res, docLogger, callback) {
   var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, name, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, sentences, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
   name = context.name;
-  logging.logYellow("generateFromHTML");
-  console.dir(context);
   util.timelog(name, 'Extraction from html stage A');
   rawHtml = fs.readFileSync(input.html).toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, input.css);

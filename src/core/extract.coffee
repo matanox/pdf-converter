@@ -304,8 +304,7 @@ titleAndAbstract = (context, tokens) ->
 #
 generateFromHtml = (context, req, input, res ,docLogger, callback) ->  
   name = context.name
-  logging.logYellow "generateFromHTML"
-  console.dir context
+
   util.timelog(name, 'Extraction from html stage A')
 
   #

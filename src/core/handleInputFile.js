@@ -49,7 +49,7 @@ exports.go = function(req, res) {
       runID: req.query.runID
     };
     baseFileName = req.query.localLocation.replace('.pdf', '');
-    logging.logGreen("Started handling input file: " + baseFileName + ". Given run id is: " + req.session.runID);
+    logging.logGreen("Started handling input file: " + baseFileName + ". Given run id is: " + context.runID);
     docLogger = util.initDocLogger(baseFileName);
     docLogger.info('logger started');
     outFile = setOutFile(baseFileName);

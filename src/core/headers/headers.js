@@ -61,14 +61,24 @@ module.exports = function(context, tokens) {
     if (curr.paragraphOpener) {
       if (separateness(prev, curr)) {
         anyFound = true;
-        dataWriter.write(context, 'headers', "token id " + curr.id + ": " + curr.text + " (paragraph opener)", true);
+        dataWriter.write(context, 'headers', {
+          tokenId: curr.id,
+          header: curr.text,
+          level: 1,
+          detectionComment: 'paragraph opener'
+        }, true);
         return;
       }
     }
     if (isTitleNumeral(prev.text)) {
       if (prev.paragraphOpener) {
         anyFound = true;
-        dataWriter.write(context, 'headers', "token id " + curr.id + ": " + curr.text + " (following numeral paragraph opener)", true);
+        dataWriter.write(context, 'headers', {
+          tokenId: curr.id,
+          header: curr.text,
+          level: 1,
+          detectionComment: 'following numeral paragraph opener'
+        }, true);
       }
     }
   });

@@ -38,6 +38,8 @@ exports.getReadyName = getReadyName = (inputFileName, dataType) ->
   now = new Date()
   return docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
 
+
+
 rdbmsWrite = (context, dataType, data, cnsl) ->
   rdbms.write(context, dataType, data)
 
@@ -46,6 +48,16 @@ exports.write = (context, dataType, data, cnsl) ->
   inputFileName = context.name
 
   rdbmsWrite(context, dataType, data, cnsl)
+
+  if typeof data is 'object'
+    dataSerialized = Object.keys(data).map((key) -> """#{key}: #{data[key]}""").join(', ')
+    data = dataSerialized
+
+  #
+  # mirror to console if requested
+  #
+  if cnsl?
+    logging.logBlue data
 
   unless files[inputFileName]?
     files[inputFileName] = {} 
@@ -70,12 +82,6 @@ exports.write = (context, dataType, data, cnsl) ->
   # write the data
   #
   files[inputFileName][dataType].write(data)
-
-  #
-  # mirror to console if requested
-  #
-  if cnsl?
-    logging.logBlue data
 
   return true
 

@@ -8,16 +8,12 @@ Promise = require 'bluebird'
 #
 # Tables definition
 #
+
 docTablesDefinition = 
   [
     name: 'sentences'
     fields:
       sentence: 'long-string'
-   ,
-    name: 'headers'
-    fields:
-      header: 'short-string' 
-      level:  'natural-number'
    ,
     name: 'abstract'
     fields:
@@ -26,7 +22,13 @@ docTablesDefinition =
     name: 'title'
     fields:
       title: 'short-string' 
-      
+   ,
+    name: 'headers'
+    fields:
+      level:            'natural-number'
+      tokenId:          'natural-number'
+      header:           'short-string'
+      detectionComment: 'short-string'
   ]
 
 docTablesDefinition.forEach((table) -> table.type = 'docTable')
@@ -71,16 +73,13 @@ reqCounter   = 0
 successCount = 0
 error        = false
 
-writeSentences = (context, dataType, data) ->
+#
+# Writing data to the rdbms
+#
+write = (context, dataType, mapping, data) ->
   
   reqCounter += 1
   #logging.logYellow reqCounter
-
-  # map from CoffeeScript variable names to table field names
-  mapping =
-    sentence : data
-    docName  : context.name
-    runID    : context.runID
 
   if error 
     logging.logRed 'rdbms writing failed, now skipping all forthcoming rdbms writes.'
@@ -101,12 +100,48 @@ writeSentences = (context, dataType, data) ->
 
   return true
 
+#
+# Maps data to the correct table field/s, and send off to actual writing
+#
 exports.write = (context, dataType, data) ->
   inputFileName = context
 
   switch dataType
     when 'sentences'
-      writeSentences(context, dataType, data)       
+
+      mapping = # map from CoffeeScript variable names to table field names
+        sentence : data
+        docName  : context.name
+        runID    : context.runID
+
+      write(context, dataType, mapping, data)       
+
+    when 'abstract'
+      mapping = # map from CoffeeScript variable names to table field names
+        abstract : data
+        docName  : context.name
+        runID    : context.runID
+      write(context, dataType, mapping, data)       
+      
+    when 'title'
+      mapping = # map from CoffeeScript variable names to table field names
+        title    : data
+        docName  : context.name
+        runID    : context.runID
+      write(context, dataType, mapping, data)       
+      
+    when 'headers'
+      mapping = # map from CoffeeScript variable names to table field names
+        docName  : context.name
+        runID    : context.runID
+
+      for key of data
+        mapping[key] = data[key]
+
+      console.dir mapping
+
+      write(context, dataType, mapping, data)
+
     else 
       return
   
