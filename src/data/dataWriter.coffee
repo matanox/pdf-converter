@@ -19,8 +19,7 @@ logging  = require '../util/logging'
 util  = require '../util/util'
 rdbms = require '../storage/rdbms/rdbms' 
 
-docsDataDir = 'docData'
-exports.docsDataDir = docsDataDir
+exports.docsDataDir = docsDataDir = 'docData'
 
 files = {} # dictionary to hinge writers used for each input pdf file
 

@@ -9,9 +9,7 @@ util = require('../util/util');
 
 rdbms = require('../storage/rdbms/rdbms');
 
-docsDataDir = 'docData';
-
-exports.docsDataDir = docsDataDir;
+exports.docsDataDir = docsDataDir = 'docData';
 
 files = {};
 
