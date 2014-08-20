@@ -5,7 +5,6 @@
 #
 
 exec        = require '../util/execOsCommand'
-Promise     = require 'bluebird'
 wait        = 2
 
 purge = () -> 
