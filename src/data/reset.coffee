@@ -1,3 +1,9 @@
+#
+# Purges the local data files repository.
+# Note: since the repository may be created with some special settings for performace optimization,
+#       we don't delete the directory itself, only its content (for now)
+#
+
 exec        = require '../util/execOsCommand'
 Promise     = require 'bluebird'
 wait        = 2
@@ -20,8 +26,6 @@ waitAndGo = (docsDataDir) ->
 #
 # Check the folder. If appropriate initiate its purge.
 #
-
-return
 
 docsDataDir = require('../data/dataWriter').docsDataDir
 

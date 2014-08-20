@@ -23,8 +23,6 @@ waitAndGo = function(docsDataDir) {
   return setTimeout(purge, wait * 1000);
 };
 
-return;
-
 docsDataDir = require('../data/dataWriter').docsDataDir;
 
 if (docsDataDir.length < 3) {
