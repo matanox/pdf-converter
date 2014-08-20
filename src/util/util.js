@@ -125,7 +125,7 @@ exports.logObject = function(obj) {
   return logging.log(JSON.stringify(obj, null, 2));
 };
 
-exports.timelog = timelog = function(name, timer, logger) {
+exports.timelog = timelog = function(context, timer, logger) {
   var elapsed, end, start, timerText;
   if (timelog.timersLookup == null) {
     timelog.timersLookup = {};
@@ -137,9 +137,9 @@ exports.timelog = timelog = function(name, timer, logger) {
     if (logger != null) {
       logger.info(timerText);
     } else {
-      if (name != null) {
-        dataWriter.write(name, 'timers', timerText);
+      if (context != null) {
         logging.cond(timerText, 'timers');
+        dataWriter.write(context, 'timers', timerText);
       } else {
         console.log(timerText);
       }

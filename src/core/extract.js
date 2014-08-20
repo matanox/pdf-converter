@@ -52,7 +52,7 @@ iterator = function(tokens, iterationFunc) {
 titleAndAbstract = function(context, tokens) {
   var a, abstract, abstractEnd, b, firstPage, firstPageEnd, fontSizes, fontSizesDistribution, fontSizesUnique, i, introduction, lineOpeners, mainFontSize, minAbstractTokensNum, minTitleTokensNum, name, prev, rowLeftCurr, rowLeftLast, s, sequence, sequences, skipDelimiters, split, t, title, token, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t, _u;
   name = context.name;
-  util.timelog(name, 'Title and abstract recognition');
+  util.timelog(context, 'Title and abstract recognition');
   firstPage = [];
   for (_i = 0, _len = tokens.length; _i < _len; _i++) {
     token = tokens[_i];
@@ -223,8 +223,8 @@ titleAndAbstract = function(context, tokens) {
   } else {
     console.warn('title not detected');
   }
-  util.timelog(name, 'Title and abstract recognition');
-  util.timelog(name, 'initial handling of first page fluff');
+  util.timelog(context, 'Title and abstract recognition');
+  util.timelog(context, 'initial handling of first page fluff');
   if (abstract != null) {
     abstractEnd = tokens[abstract.endToken].positionInfo.bottom;
     for (_t = 0, _len7 = sequences.length; _t < _len7; _t++) {
@@ -238,17 +238,17 @@ titleAndAbstract = function(context, tokens) {
       }
     }
   }
-  return util.timelog(name, 'initial handling of first page fluff');
+  return util.timelog(context, 'initial handling of first page fluff');
 };
 
 generateFromHtml = function(context, req, input, res, docLogger, callback) {
   var GT, ST, a, abbreviations, addStyleSeparationDelimiter, averageParagraphLength, b, bottom, connect_token_group, cssClass, cssClasses, currOpener, docSieve, documentQuantifiers, dom, entry, error, extreme, extremeSequence, extremeSequences, extremes, filtered, group, groups, handler, htmlparser, i, id, inputStylesMap, lastOpenerIndex, lineOpeners, lineOpenersDistribution, lineOpenersForStats, lineSpaceDistribution, lineSpaces, markSentence, metaTypeLog, name, newLineThreshold, nextOpener, node, nodesWithStyles, page, pageOpeners, paragraphs, paragraphsRatio, parser, physicalPageSide, position, prevOpener, prevToken, rawHtml, repeat, repeatSequence, sentence, sentences, style, styles, t, textIndex, token, tokenArray, tokenArrays, tokens, top, _aa, _ab, _ac, _ad, _ae, _af, _ag, _ah, _ai, _aj, _i, _j, _k, _l, _len, _len1, _len10, _len11, _len12, _len13, _len14, _len15, _len16, _len17, _len18, _len19, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _s, _t, _u, _v, _w, _x, _y, _z;
   name = context.name;
-  util.timelog(name, 'Extraction from html stage A');
+  util.timelog(context, 'Extraction from html stage A');
   rawHtml = fs.readFileSync(input.html).toString();
   inputStylesMap = css.simpleFetchStyles(rawHtml, input.css);
   htmlparser = require("htmlparser2");
-  util.timelog(name, 'htmlparser2');
+  util.timelog(context, 'htmlparser2');
   handler = new htmlparser.DomHandler(function(error, dom) {
     if (error) {
       return docLogger.error('htmlparser2 failed loading document');
@@ -261,7 +261,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
   });
   parser.parseComplete(rawHtml);
   dom = handler.dom;
-  util.timelog(name, 'htmlparser2');
+  util.timelog(context, 'htmlparser2');
   nodesWithStyles = html.representNodes(dom);
   tokenArrays = (function() {
     var _i, _len, _results;
@@ -328,7 +328,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
       docLogger.warn(token);
     }
   }
-  util.timelog(name, 'uniting split tokens');
+  util.timelog(context, 'uniting split tokens');
   dataWriter.write(context, 'stats', 'tokens count before uniting tokens: ' + tokens.length);
   iterator(tokens, function(a, b, index, tokens) {
     if (a.metaType === 'regular' && b.metaType === 'regular') {
@@ -343,7 +343,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     return 1;
   });
   dataWriter.write(context, 'stats', 'tokens count after uniting tokens:  ' + tokens.length);
-  util.timelog(name, 'uniting split tokens');
+  util.timelog(context, 'uniting split tokens');
   if (refactorMode) {
     refactorTools.deriveStructure(tokens);
     refactorTools.deriveStructureWithValues(tokens);
@@ -360,7 +360,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     }
     return 1;
   });
-  util.timelog(name, 'detect and mark repeat headers and footers');
+  util.timelog(context, 'detect and mark repeat headers and footers');
   GT = function(j, k) {
     return j > k;
   };
@@ -440,7 +440,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
       }
     }
   }
-  util.timelog(name, 'detect and mark repeat headers and footers');
+  util.timelog(context, 'detect and mark repeat headers and footers');
   titleAndAbstract(context, tokens);
   filtered = [];
   for (t = _w = 0, _ref4 = tokens.length - 1; 0 <= _ref4 ? _w <= _ref4 : _w >= _ref4; t = 0 <= _ref4 ? ++_w : --_w) {
@@ -451,7 +451,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     }
   }
   tokens = filtered;
-  util.timelog(name, 'basic handle line and paragraph beginnings');
+  util.timelog(context, 'basic handle line and paragraph beginnings');
   /*
   util.timelog 'making copy'
   tokens = JSON.parse(JSON.stringify(tokens))
@@ -524,7 +524,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
       prevToken.paragraphCloser = true;
     }
   }
-  util.timelog(name, 'basic handle line and paragraph beginnings');
+  util.timelog(context, 'basic handle line and paragraph beginnings');
   lastOpenerIndex = 0;
   paragraphs = [];
   for (i = _z = 0, _ref7 = tokens.length - 1; 0 <= _ref7 ? _z <= _ref7 : _z >= _ref7; i = 0 <= _ref7 ? ++_z : --_z) {
@@ -639,15 +639,15 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
       logging.logYellow("run. and References were united now");
     }
   }
-  util.timelog(name, 'Extraction from html stage A');
-  util.timelog(name, 'ID seeding');
+  util.timelog(context, 'Extraction from html stage A');
+  util.timelog(context, 'ID seeding');
   id = 0;
   for (_ad = 0, _len13 = tokens.length; _ad < _len13; _ad++) {
     token = tokens[_ad];
     token.id = id;
     id += 1;
   }
-  util.timelog(name, 'ID seeding');
+  util.timelog(context, 'ID seeding');
   if (createIndex) {
     textIndex = [];
     for (_ae = 0, _len14 = tokens.length; _ae < _len14; _ae++) {
@@ -659,7 +659,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
         });
       }
     }
-    util.timelog(name, 'Index creation');
+    util.timelog(context, 'Index creation');
     textIndex.sort(function(a, b) {
       if (a.text > b.text) {
         return 1;
@@ -667,7 +667,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
         return -1;
       }
     });
-    util.timelog(name, 'Index creation');
+    util.timelog(context, 'Index creation');
   }
   for (_af = 0, _len15 = tokens.length; _af < _len15; _af++) {
     token = tokens[_af];
@@ -682,7 +682,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     }
   }
   headers(context, tokens);
-  util.timelog(name, 'Sentence tokenizing');
+  util.timelog(context, 'Sentence tokenizing');
   connect_token_group = function(_arg) {
     var group, token;
     group = _arg.group, token = _arg.token;
@@ -707,7 +707,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
   if (group.length !== 0) {
     groups.push(group);
   }
-  util.timelog(name, 'Sentence tokenizing');
+  util.timelog(context, 'Sentence tokenizing');
   sentences = [];
   for (_ah = 0, _len17 = groups.length; _ah < _len17; _ah++) {
     group = groups[_ah];
@@ -761,7 +761,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
   documentQuantifiers['sentences'] = groups.length;
   documentQuantifiers['period-trailed-abbreviations'] = abbreviations;
   console.dir(documentQuantifiers);
-  util.timelog(name, 'Markers visualization');
+  util.timelog(context, 'Markers visualization');
   docSieve = markers.createDocumentSieve(markers.baseSieve);
   markSentence = function(sentenceIdx) {
     var marker, matchedMarkers, _aj, _ak, _len19, _len20;
@@ -813,7 +813,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
           return markSentence(sentenceIdx);
         });
       } else {
-        util.timelog(name, 'Markers visualization');
+        util.timelog(context, 'Markers visualization');
         req.session.tokens = tokens;
         return callback();
       }
@@ -876,11 +876,11 @@ done = function(error, res, tokens, context, docLogger) {
   };
   if (tokens != null) {
     if (tokens.length > 0) {
-      util.timelog(name, 'pickling');
+      util.timelog(context, 'pickling');
       serializedTokens = JSON.stringify(tokens);
       dataWriter.write(context, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
       dataWriter.write(context, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
-      util.timelog(name, 'pickling');
+      util.timelog(context, 'pickling');
       if (chunkResponse) {
         chunkRespond(serializedTokens, res);
       } else {
@@ -905,9 +905,9 @@ exports.originalGo = function(req, name, res, docLogger) {
   var storage;
   storage = require('../src/storage/simple/storage');
   require('stream');
-  util.timelog(name, 'checking data store for cached tokens');
+  util.timelog(context, 'checking data store for cached tokens');
   return storage.fetch('tokens', name, function(cachedSerializedTokens) {
-    util.timelog(name, 'checking data store for cached tokens');
+    util.timelog(context, 'checking data store for cached tokens');
     if (cachedSerializedTokens) {
       console.log('cached tokens found in datastore');
       req.session.serializedTokens = cachedSerializedTokens;

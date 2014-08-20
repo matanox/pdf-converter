@@ -15,9 +15,9 @@ fs = require('fs');
 exports.store = function(context, bucket, fileContent, docLogger) {
   var filename;
   filename = context.name;
-  util.timelog(filename, "storing file to clustered storage");
+  util.timelog(context, "storing file to clustered storage");
   return riak.save(bucket, encodeURIComponent(filename), fileContent, function(error) {
-    util.timelog(filename, "storing file to clustered storage");
+    util.timelog(context, "storing file to clustered storage");
     if (error != null) {
       return logging.logRed("failed storing file " + filename + " to clustered storage bucket " + bucket + ", with error: " + error);
     }
@@ -27,7 +27,7 @@ exports.store = function(context, bucket, fileContent, docLogger) {
 exports.fetch = function(bucket, filename, callback) {
   util.timelog("fetching file from clustered storage");
   return riak.get(bucket, filename, function(error, fileContent) {
-    util.timelog(filename, "fetching file from clustered storage");
+    util.timelog(context, "fetching file from clustered storage");
     if (error != null) {
       return callback(false);
     } else {

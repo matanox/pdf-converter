@@ -31,21 +31,22 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 exports.go = function(context, localCopy, docLogger, req, res) {
   var fileContent, hash, hasher, name;
   context.name = name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
+  logging.logGreen(context.name);
   hasher = crypto.createHash('md5');
   fileContent = fs.readFileSync(localCopy);
-  util.timelog(name, "hashing input file");
+  util.timelog(context, "hashing input file");
   hasher.update(fileContent);
   hash = hasher.digest('hex');
-  util.timelog(name, "hashing input file");
+  util.timelog(context, "hashing input file");
   logging.cond("input file hash is: " + hash, "hash");
   return riak.get('html', hash, function(error, formerName) {
     var execCommand, input, outFolder, path;
     if (error != null) {
-      util.timelog(name, "from upload to serving");
+      util.timelog(context, "from upload to serving");
       docMeta.storePdfMetaData(context, localCopy, docLogger);
       docMeta.storePdfFontsSummary(context, localCopy, docLogger);
       storage.store(context, "pdf", fileContent, docLogger);
-      util.timelog(name, "Conversion to html");
+      util.timelog(context, "Conversion to html");
       logging.cond("starting the conversion from pdf to html", 'progress');
       execCommand = executable + " ";
       outFolder = "../local-copies/" + "html-converted/";
@@ -73,7 +74,7 @@ exports.go = function(context, localCopy, docLogger, req, res) {
               fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docsDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile));
             }
           }
-          util.timelog(name, "Conversion to html");
+          util.timelog(context, "Conversion to html");
           riak.save('html', hash, name, function(error) {
             if (error != null) {
               return console.log('pdfToHtml', "failed storing file hash for " + name + " to clustered storage");

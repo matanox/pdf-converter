@@ -103,7 +103,7 @@ exports.logObject = (obj) -> logging.log(JSON.stringify obj, null, 2)
 #        both starting and ending a timer - just supply the same timer description string to both.
 #        The second call will log the time elapsed between the two. 
 #
-exports.timelog = timelog = (name, timer, logger) ->
+exports.timelog = timelog = (context, timer, logger) ->
   #timer = timer + ' took'                                    # the timer string is also the message 
                                                               # it will log to the console when it ends.
                                                              
@@ -117,9 +117,9 @@ exports.timelog = timelog = (name, timer, logger) ->
     if logger?
       logger.info(timerText)
     else
-      if name?
-        dataWriter.write(name, 'timers', timerText)
+      if context?
         logging.cond(timerText, 'timers')
+        dataWriter.write(context, 'timers', timerText)
       else
         console.log timerText
 

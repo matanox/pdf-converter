@@ -41,7 +41,7 @@ iterator = (tokens, iterationFunc) ->
 titleAndAbstract = (context, tokens) ->
   name = context.name
 
-  util.timelog(name, 'Title and abstract recognition')
+  util.timelog(context, 'Title and abstract recognition')
 
   firstPage = []
   for token in tokens
@@ -282,9 +282,9 @@ titleAndAbstract = (context, tokens) ->
   # of the core text.
   #
 
-  util.timelog(name, 'Title and abstract recognition')
+  util.timelog(context, 'Title and abstract recognition')
 
-  util.timelog(name, 'initial handling of first page fluff')
+  util.timelog(context, 'initial handling of first page fluff')
 
   if abstract?
     # Any sequence that starts higher than the abstract ends,
@@ -297,7 +297,7 @@ titleAndAbstract = (context, tokens) ->
           for t in [sequence.startToken..sequence.endToken]
             tokens[t].fluff = true
 
-  util.timelog(name, 'initial handling of first page fluff')
+  util.timelog(context, 'initial handling of first page fluff')
 
 #
 # Core of this module
@@ -305,7 +305,7 @@ titleAndAbstract = (context, tokens) ->
 generateFromHtml = (context, req, input, res ,docLogger, callback) ->  
   name = context.name
 
-  util.timelog(name, 'Extraction from html stage A')
+  util.timelog(context, 'Extraction from html stage A')
 
   #
   # Read the input html 
@@ -320,7 +320,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   inputStylesMap = css.simpleFetchStyles(rawHtml, input.css) 
 
   htmlparser = require("htmlparser2");
-  util.timelog(name, 'htmlparser2') 
+  util.timelog(context, 'htmlparser2') 
   handler = new htmlparser.DomHandler((error, dom) ->
     if (error)
       docLogger.error('htmlparser2 failed loading document')
@@ -330,7 +330,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   parser = new htmlparser.Parser(handler, {decodeEntities: true})
   parser.parseComplete(rawHtml)
   dom = handler.dom
-  util.timelog name, 'htmlparser2'
+  util.timelog context, 'htmlparser2'
  
   #
   # Build tokens while preserving the original css styles
@@ -408,7 +408,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   # would probably be able to pick up word breaks for these cases.
   #
 
-  util.timelog name, 'uniting split tokens'
+  util.timelog context, 'uniting split tokens'
   dataWriter.write context, 'stats', 'tokens count before uniting tokens: ' + tokens.length
 
   iterator(tokens, (a, b, index, tokens) -> 
@@ -424,7 +424,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     return 1)  
 
   dataWriter.write context, 'stats', 'tokens count after uniting tokens:  ' + tokens.length
-  util.timelog name, 'uniting split tokens'
+  util.timelog context, 'uniting split tokens'
 
   #
   # get an "aggregate token" that includes all properties in use
@@ -461,7 +461,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   # Detect repeat header and footer text
   # 
 
-  util.timelog name, 'detect and mark repeat headers and footers'
+  util.timelog context, 'detect and mark repeat headers and footers'
 
   # Functional style setup
   GT  = (j, k) -> return j > k
@@ -542,7 +542,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       dataWriter.write context, 'partDetection', '1st page non-repeat footer text detected: ' + token.text
       token.fluff = true
   
-  util.timelog name, 'detect and mark repeat headers and footers'
+  util.timelog context, 'detect and mark repeat headers and footers'
 
   #
   #
@@ -578,7 +578,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   # handle title and abstract, and core text beginning detection
   # this also marks out most first page fluff
   #
-  util.timelog name, 'basic handle line and paragraph beginnings'
+  util.timelog context, 'basic handle line and paragraph beginnings'
 
   ###
   util.timelog 'making copy'
@@ -684,7 +684,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
       #console.log """detected space delimited paragraph beginning: #{currOpener.text}"""
 
-  util.timelog name, 'basic handle line and paragraph beginnings'
+  util.timelog context, 'basic handle line and paragraph beginnings'
 
   #
   # Derive paragraph length and quantity statistics - should probably be moved
@@ -829,18 +829,18 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
   #docLogger.info(tokens.length)
 
-  util.timelog name, 'Extraction from html stage A'
+  util.timelog context, 'Extraction from html stage A'
 
   #
   # Add a running sequence id to the tokens (after all uniting of tokens already took place)
   #
 
-  util.timelog name, 'ID seeding'
+  util.timelog context, 'ID seeding'
   id = 0
   for token in tokens
     token.id = id
     id += 1
-  util.timelog name, 'ID seeding'
+  util.timelog context, 'ID seeding'
 
   if createIndex
     #
@@ -849,13 +849,13 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     textIndex = []
     for token in tokens when token.metaType is 'regular'
       textIndex.push({text: token.text, id: token.id})
-    util.timelog(name, 'Index creation')    
+    util.timelog(context, 'Index creation')    
     textIndex.sort((a, b) ->  # simple sort by lexicographic order obliviously of the case of equality
       if a.text > b.text
         return 1
       else
         return -1)
-    util.timelog name, 'Index creation'      
+    util.timelog context, 'Index creation'      
     #docLogger.info textIndex
 
   #
@@ -888,7 +888,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   #                 inside the groups array. Later, there can be more types of groups etc..
   #
 
-  util.timelog(name, 'Sentence tokenizing')
+  util.timelog(context, 'Sentence tokenizing')
   connect_token_group = ({group, token}) ->   # using named arguments here..
     group.push(token)
     #token.partOf = group      
@@ -905,7 +905,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   unless group.length is 0  # Close off trailing bits of text if any, 
     groups.push(group)      # as a group, whatever they are. For now.
 
-  util.timelog name, 'Sentence tokenizing'  
+  util.timelog context, 'Sentence tokenizing'  
 
   #
   # data-log all sentences, with paragraph splits indicated as well (abstract excluded).
@@ -977,7 +977,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   # Adding marker highlighting
   #
 
-  util.timelog(name, 'Markers visualization') 
+  util.timelog(context, 'Markers visualization') 
 
   docSieve = markers.createDocumentSieve(markers.baseSieve) # Derives the markers sieve for use for this document
   #util.logObject(docSieve)  
@@ -1035,7 +1035,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
         setImmediate(() -> markSentence(sentenceIdx)) # queue handling of the next sentence while 
                                                         # allowing IO to occur in between (http://nodejs.org/api/timers.html#timers_setimmediate_callback_arg)
       else 
-        util.timelog name, 'Markers visualization'
+        util.timelog context, 'Markers visualization'
 
         # Done. Send back response, after attaching the result data to the session
         #req.session.tokens = require('circular-json').stringify(tokens) # takes 100 times longer than JSON.stringify so can't afford it
@@ -1126,11 +1126,11 @@ done = (error, res, tokens, context, docLogger) ->
 
   if tokens? 
     if tokens.length>0
-      util.timelog name, 'pickling'
+      util.timelog context, 'pickling'
       serializedTokens = JSON.stringify(tokens)
       dataWriter.write context, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
       dataWriter.write context, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
-      util.timelog name, 'pickling'
+      util.timelog context, 'pickling'
 
       if chunkResponse
         chunkRespond(serializedTokens, res)
@@ -1158,10 +1158,10 @@ exports.originalGo = (req, name, res ,docLogger) ->
   require 'stream'
   #riak = require('riak-js').getClient({host: "localhost", port: "8098"})
 
-  util.timelog name, 'checking data store for cached tokens'
+  util.timelog context, 'checking data store for cached tokens'
   
   storage.fetch('tokens', name, (cachedSerializedTokens) -> 
-    util.timelog name, 'checking data store for cached tokens'
+    util.timelog context, 'checking data store for cached tokens'
     if cachedSerializedTokens
       # serve cached tokens
       console.log 'cached tokens found in datastore'

@@ -20,20 +20,20 @@ exports.store = (context, bucket, fileContent, docLogger) ->
   # Optional: check out availability of riak cloud service
   #
 
-  util.timelog filename, "storing file to clustered storage"
+  util.timelog context, "storing file to clustered storage"
   
   # The riak driver apparently uses the http riak api, which fails if not URI encoded -
   # so we URI encode to pass safely through http. Riak seems to unencode before storing the key,
   # so this is just for passing safely through the api, and not being stored URI encoded.
   riak.save(bucket, encodeURIComponent(filename), fileContent, (error) -> 
-    util.timelog filename, "storing file to clustered storage"
+    util.timelog context, "storing file to clustered storage"
     if error?
       logging.logRed "failed storing file #{filename} to clustered storage bucket #{bucket}, with error: #{error}")
 
 exports.fetch = (bucket, filename, callback) ->
   util.timelog "fetching file from clustered storage"
   riak.get(bucket, filename, (error, fileContent) ->
-    util.timelog filename, "fetching file from clustered storage"
+    util.timelog context, "fetching file from clustered storage"
     if error?
       #console.error("failed fetching file from clustered storage")
       callback(false)

@@ -10,12 +10,11 @@ dataWriter = require('../data/dataWriter');
 exec = require('child_process').exec;
 
 module.exports = function(context, localCopy, docLogger, params) {
-  var description, execCommand, name, writerType;
-  name = context.name;
+  var description, execCommand, writerType;
   execCommand = params.execCommand;
   writerType = params.writerType;
   description = params.description;
-  util.timelog(name, description);
+  util.timelog(context, description);
   execCommand += ' ' + '"' + localCopy + '"';
   return exec(execCommand, function(error, stdout, stderr) {
     var meta;
@@ -24,7 +23,7 @@ module.exports = function(context, localCopy, docLogger, params) {
     if (error !== null) {
       return dataWriter.write(context, writerType, execCommand + "'sexec error: " + error);
     } else {
-      util.timelog(name, description);
+      util.timelog(context, description);
       return meta = {
         'raw': stdout,
         'stderr': stderr

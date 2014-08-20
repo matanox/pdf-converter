@@ -23,16 +23,16 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 exports.go = (context, localCopy, docLogger, req, res) ->
 
   context.name = name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "") # extract the file name
-
+  logging.logGreen(context.name)
   #console.log """About to convert file #{name} from pdf to html"""
 
   hasher = crypto.createHash('md5')
   fileContent = fs.readFileSync(localCopy)
 
-  util.timelog name, "hashing input file" 
+  util.timelog context, "hashing input file" 
   hasher.update(fileContent)
   hash = hasher.digest('hex')
-  util.timelog name, "hashing input file" 
+  util.timelog context, "hashing input file" 
   logging.cond """input file hash is: #{hash}""", "hash"
 
 
@@ -52,7 +52,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
         #
         # not cached - perform the conversion and then pass to extraction
         #
-        util.timelog name, "from upload to serving"
+        util.timelog context, "from upload to serving"
 
         docMeta.storePdfMetaData     context, localCopy, docLogger
         docMeta.storePdfFontsSummary context, localCopy, docLogger
@@ -60,7 +60,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
         #logging.logRed fileContent.length
         storage.store context, "pdf", fileContent, docLogger
 
-        util.timelog name, "Conversion to html"
+        util.timelog context, "Conversion to html"
         logging.cond "starting the conversion from pdf to html", 'progress'
 
         #docMeta.storePdfMetaData(name, localCopy)
@@ -109,7 +109,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
             
             # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
             # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
-            util.timelog name, "Conversion to html"
+            util.timelog context, "Conversion to html"
 
             riak.save('html', hash, name, (error) -> 
               # should not data write or time log here, as document handling shutdown() does not 

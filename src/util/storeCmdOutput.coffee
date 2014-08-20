@@ -8,14 +8,13 @@ dataWriter = require '../data/dataWriter'
 exec = require('child_process').exec
 
 module.exports = (context, localCopy, docLogger, params) ->
-  name = context.name
   
   execCommand = params.execCommand
   writerType  = params.writerType
   description = params.description
 
   #logging.log "Getting pdf file metadata using pdfinfo"
-  util.timelog name, description
+  util.timelog context, description
   
 
   execCommand +=  ' ' + '"' + localCopy + '"'
@@ -27,7 +26,7 @@ module.exports = (context, localCopy, docLogger, params) ->
     if error isnt null
       dataWriter.write context, writerType, execCommand + "'sexec error: " + error
     else
-      util.timelog name, description
+      util.timelog context, description
       meta = {'raw': stdout, 'stderr': stderr}
       
 

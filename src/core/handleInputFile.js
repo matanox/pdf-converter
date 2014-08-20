@@ -35,15 +35,6 @@ setOutFile = function(baseFileName) {
 
 exports.go = function(req, res) {
   var baseFileName, context, docLogger, inkUrl, outFile;
-  if (req.query.inkUrl != null) {
-    inkUrl = req.query.inkUrl;
-    baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '');
-    docLogger = util.initDocLogger(baseFileName);
-    docLogger.info('logger started');
-    req.session.docLogger = docLogger;
-    outFile = setOutFile(baseFileName);
-    fetch(inkUrl, outFile, docLogger, req, res, convert.go);
-  }
   if (req.query.localLocation != null) {
     context = {
       runID: req.query.runID
@@ -53,6 +44,15 @@ exports.go = function(req, res) {
     docLogger = util.initDocLogger(baseFileName);
     docLogger.info('logger started');
     outFile = setOutFile(baseFileName);
-    return convert.go(context, outFile, docLogger, req, res);
+    convert.go(context, outFile, docLogger, req, res);
+  }
+  if (req.query.inkUrl != null) {
+    inkUrl = req.query.inkUrl;
+    baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '');
+    docLogger = util.initDocLogger(baseFileName);
+    docLogger.info('logger started');
+    req.session.docLogger = docLogger;
+    outFile = setOutFile(baseFileName);
+    return fetch(inkUrl, outFile, docLogger, req, res, convert.go);
   }
 };

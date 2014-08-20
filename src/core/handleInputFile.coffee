@@ -32,20 +32,6 @@ setOutFile = (baseFileName) -> "../local-copies/" + "pdf/" + baseFileName + ".pd
 exports.go = (req, res) -> 
   
   #
-  # Handle api request for inkUrl file (fetch the upload and pass on to conversion)
-  # inkUrl would be replaced by that other competing better service
-  #
-  if req.query.inkUrl?
-    inkUrl = req.query.inkUrl
-    baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '')
-    docLogger = util.initDocLogger(baseFileName)
-    docLogger.info('logger started')
-    req.session.docLogger = docLogger
-
-    outFile = setOutFile(baseFileName)
-    fetch(inkUrl, outFile, docLogger, req, res, convert.go)
-
-  #
   # Handle api request for local file
   # This api is for testing without hitting inkUrl
   # 
@@ -64,3 +50,18 @@ exports.go = (req, res) ->
 
     outFile = setOutFile(baseFileName)
     convert.go(context, outFile, docLogger, req, res)
+
+  #
+  # Handle api request for inkUrl file (fetch the upload and pass on to conversion)
+  # inkUrl would be replaced by that other competing better service
+  #
+  if req.query.inkUrl?
+    inkUrl = req.query.inkUrl
+    baseFileName = inkUrl.replace('https://www.filepicker.io/api/file/', '')
+    docLogger = util.initDocLogger(baseFileName)
+    docLogger.info('logger started')
+    req.session.docLogger = docLogger
+
+    outFile = setOutFile(baseFileName)
+    fetch(inkUrl, outFile, docLogger, req, res, convert.go)
+
