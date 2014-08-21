@@ -108,7 +108,7 @@ exports.diff = function(context, dataType) {
         return result += d.type + d.vals.join('') + '\n';
       });
     }
-    SES = dataWriter.getReadyName(inputFileName, "diff-" + dataType);
+    SES = dataWriter.getReadyName(context, "diff-" + dataType);
     fs.writeFile(SES, result);
     dataWriter.write(context, 'diffs', {
       docName: context.name,

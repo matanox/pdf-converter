@@ -847,10 +847,10 @@ done = function(error, res, tokens, context, docLogger) {
     var compare;
     util.closeDocLogger(docLogger);
     dataWriter.close(name);
-    compare = require('../compare/get');
+    compare = require('../compare/compare');
     return setTimeout((function() {
-      compare.diff(name, 'sentences');
-      return compare.diff(name, 'headers');
+      compare.diff(context, 'sentences');
+      return compare.diff(context, 'headers');
     }), 3000);
   };
   if (error != null) {

@@ -1097,11 +1097,11 @@ done = (error, res, tokens, context, docLogger) ->
     util.closeDocLogger(docLogger)
     dataWriter.close(name)
 
-    compare = require '../compare/get'
+    compare = require '../compare/compare'
     #compare.diff(name, 'headers')
     setTimeout((() -> 
-        compare.diff(name, 'sentences')
-        compare.diff(name, 'headers')), 
+        compare.diff(context, 'sentences')
+        compare.diff(context, 'headers')), 
       3000)
 
   if error?

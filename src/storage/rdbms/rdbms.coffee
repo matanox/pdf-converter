@@ -29,11 +29,31 @@ docTablesDefinition =
       tokenId:          'natural-number'
       header:           'short-string'
       detectionComment: 'short-string'
+   ,
+    name  : 'properties'
+    fields: 
+      propName:  'short-string'
+      propValue: 'short-string'
   ]
 
 docTablesDefinition.forEach((table) -> table.type = 'docTable')
 
-tableDefs = docTablesDefinition
+diffsTable = 
+  [
+    type: 'diffs'
+    name: 'diffs'
+    fields:
+      docName:      'short-string'
+      dataType:     'short-string'
+      editDistance: 'natural-number'
+      SESlink:      'short-string'
+      run1ID:       'short-string'
+      run2ID:       'short-string'
+      run1link:     'short-string'
+      run2link:     'short-string'
+  ]
+
+tableDefs = docTablesDefinition.concat diffsTable
 tableDefs.forEach((table) ->
   switch table.type 
     when 'docTable' 
@@ -138,7 +158,12 @@ exports.write = (context, dataType, data) ->
       for key of data
         mapping[key] = data[key]
 
-      console.dir mapping
+      write(context, dataType, mapping, data)
+
+    when 'diffs'
+      mapping = {}
+      for key of data
+        mapping[key] = data[key]
 
       write(context, dataType, mapping, data)
 

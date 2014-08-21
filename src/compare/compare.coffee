@@ -14,17 +14,17 @@ getPair = (inputFileName, dataType) ->
 
   docDataDir = docsDataDir + '/' + inputFileName + '/'
 
-  relevantDataFiles = fs.readdirSync(docDataDir).filter((dataFileName) -> dataFileName.indexOf(dataType) is 0)
+  relevantSESs = fs.readdirSync(docDataDir).filter((SESName) -> SESName.indexOf(dataType) is 0)
 
-  if relevantDataFiles.length > 1
-    relevantDataFiles.sort().reverse() 
-    return relevantDataFiles.slice(0, 2).map((dataFileName) -> docDataDir + dataFileName) # slice first two items, create full path
+  if relevantSESs.length > 1
+    relevantSESs.sort().reverse() 
+    return relevantSESs.slice(0, 2).map((SESName) -> docDataDir + SESName) # slice first two items, create full path
 
   return undefined
 
 #
-# tokenize string by a given delimieter, while turning all occurences of the 
-# delimiter into delimiting *tokens* in the same result array sequence.
+# tokenize string by a given delimiter (while preserving all occurences of the 
+# delimiter as delimiting *tokens* in the output).
 #
 rsplit = (contentArray, delimiter) ->
   newArray = []
@@ -44,7 +44,8 @@ rsplit = (contentArray, delimiter) ->
   )
   return newArray
 
-exports.diff = (inputFileName, dataType) ->
+exports.diff = (context, dataType) ->
+  inputFileName = context.name
 
   #util.timelog inputFileName, 'diff'
 
@@ -53,7 +54,7 @@ exports.diff = (inputFileName, dataType) ->
   pair = getPair(inputFileName, dataType)
 
   unless pair?
-    logging.logYellow """skipping diff for #{inputFileName} as diff pair not well defined (could not select document pair)"""
+    logging.logYellow """skipping diff for #{inputFileName}, #{dataType}, as could not figure or find document pair to diff"""
   else
     #logging.logYellow """comparing #{pair.map(util.terminalClickableFileLink).join(' to ')}...""" 
 
@@ -112,12 +113,22 @@ exports.diff = (inputFileName, dataType) ->
 
     #console.log result
 
-    dataFile = dataWriter.getReadyName(inputFileName, """diff-#{dataType}""")
+    SES = dataWriter.getReadyName(context, """diff-#{dataType}""")
+    fs.writeFile(SES, result)
 
-    fs.writeFile(dataFile, result)
+    dataWriter.write context, 'diffs', {
+        docName:      context.name
+        dataType:     dataType
+        run1ID:       'TBD'
+        run2ID:       'TBD'
+        run1link:     util.terminalClickableFileLink(pair[0])
+        run2link:     util.terminalClickableFileLink(pair[0])
+        editDistance: editDistance
+        SESlink:      util.terminalClickableFileLink(SES)
+      }
 
     #util.timelog inputFileName, 'diff'
     console.log """\nComparing the following #{logging.italics(dataType)} output pair found #{logging.italics('edit distance of ' + editDistance)}"""
     console.log """#{pair.map(util.terminalClickableFileLink).join('\n')}"""
-    console.log """details at: #{util.terminalClickableFileLink(dataFile)}"""
+    console.log """details at: #{util.terminalClickableFileLink(SES)}"""
 

@@ -13,11 +13,11 @@ exports.docsDataDir = docsDataDir = 'docData';
 
 files = {};
 
-exports.getReadyName = getReadyName = function(inputFileName, dataType) {
-  var now;
+exports.getReadyName = getReadyName = function(context, dataType) {
+  var inputFileName;
+  inputFileName = context.name;
   util.mkdir(docsDataDir, inputFileName);
-  now = new Date();
-  return docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out';
+  return docsDataDir + '/' + inputFileName + '/' + dataType + '@' + context.runID + '.out';
 };
 
 rdbmsWrite = function(context, dataType, data, cnsl) {
@@ -43,7 +43,7 @@ exports.write = function(context, dataType, data, cnsl) {
   }
   if (files[inputFileName][dataType] == null) {
     logging.cond("opening writer for " + dataType, 'dataWriter');
-    dataFile = getReadyName(inputFileName, dataType);
+    dataFile = getReadyName(context, dataType);
     writer = new myWriter(dataFile);
     logging.cond("Data writing for [" + inputFileName + "], [" + dataType + "] is going to " + dataFile, 'dataWriter');
     files[inputFileName][dataType] = writer;

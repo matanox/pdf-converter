@@ -32,10 +32,11 @@ files = {} # dictionary to hinge writers used for each input pdf file
 # Returns a filename to use.
 # If necessary, creates the underlying directory.
 #
-exports.getReadyName = getReadyName = (inputFileName, dataType) ->
+exports.getReadyName = getReadyName = (context, dataType) ->
+  inputFileName = context.name
   util.mkdir(docsDataDir, inputFileName)
-  now = new Date()
-  return docsDataDir + '/' + inputFileName + '/' + dataType + '-' + now.toISOString() + '.out' 
+  #now = new Date()
+  return docsDataDir + '/' + inputFileName + '/' + dataType + '@' + context.runID + '.out' 
 
 
 
@@ -69,7 +70,7 @@ exports.write = (context, dataType, data, cnsl) ->
 
     logging.cond """opening writer for #{dataType}""", 'dataWriter'
 
-    dataFile = getReadyName(inputFileName, dataType)
+    dataFile = getReadyName(context, dataType)
 
     writer = new myWriter(dataFile)
     

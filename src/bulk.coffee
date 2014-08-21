@@ -53,10 +53,7 @@ logging.logGreen ''
 # establish a unique run id, to be used in logging and data writing by the main app called by this script
 #
 
-hostname = require('os').hostname()
-now = new Date()
-timeISO = now.toISOString()
-batchRunID = hostname + '-' + timeISO
+batchRunID = util.simpleGenerateRunID()
 logging.logGreen 'Using run ID ' + batchRunID
 
 http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses after the 5 first client-side

@@ -249,3 +249,10 @@ exports.replaceAll = replaceAll = (string, from, to) ->
 #
 exports.terminalClickableFileLink = (string) ->
   return """file://#{process.cwd()}/#{replaceAll(string, ' ', '%20')}"""
+
+os = require 'os'
+exports.simpleGenerateRunID = () -> 
+  hostname = os.hostname()
+  now = new Date()
+  timeISO = now.toISOString()
+  return hostname + '-' + timeISO
