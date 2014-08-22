@@ -5,11 +5,13 @@
 #       to get a well thought of run (number of cluster workers in app.coffee)
 #
 
-http    = require 'http'
-fs      = require 'fs'
-nconf   = require 'nconf'
-util    = require './util/util'
-logging = require './util/logging'
+http       = require 'http'
+fs         = require 'fs'
+nconf      = require 'nconf'
+util       = require './util/util'
+logging    = require './util/logging'
+rdbms      = require './storage/rdbms/rdbms' 
+#dataWriter = require './data/dataWriter'
 
 #
 # configruation
@@ -20,7 +22,7 @@ nconf.defaults
   directory   : '../local-copies/pdf/'
   flood       : false
   parallelism : 2
-  maxFiles    : 10000
+  maxFiles    : 3
 
 #
 # log the configuration
@@ -55,6 +57,10 @@ logging.logGreen ''
 
 batchRunID = util.simpleGenerateRunID()
 logging.logGreen 'Using run ID ' + batchRunID
+
+rdbms.write null, 'bulkRuns', {
+    runID: batchRunID
+  }
 
 http.globalAgent.maxSockets = 1000 # omitting this, and this client-side pauses after the 5 first client-side
                                    # node.js requests that saturate the client agent pool (per current default), 

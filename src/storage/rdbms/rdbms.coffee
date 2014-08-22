@@ -38,6 +38,9 @@ docTablesDefinition =
 
 docTablesDefinition.forEach((table) -> table.type = 'docTable')
 
+#
+# Table storing diff results
+#
 diffsTable = 
   [
     type: 'diffs'
@@ -53,7 +56,16 @@ diffsTable =
       run2link:     'short-string'
   ]
 
-tableDefs = docTablesDefinition.concat diffsTable
+bulkRunsTableDef =
+  [
+    type: 'bulkRuns'
+    name: 'bulkRuns'
+    fields:
+      order: 'auto-increment'
+      runID: 'short-string'
+  ]
+
+tableDefs = docTablesDefinition.concat diffsTable, bulkRunsTableDef
 tableDefs.forEach((table) ->
   switch table.type 
     when 'docTable' 
@@ -164,6 +176,14 @@ dataMap = (context, dataType, data) ->
         mapping[key] = data[key]
 
       return mapping
+      
+    when 'bulkRuns'
+      console.dir data
+      mapping = {}
+      for key of data
+        mapping[key] = data[key]
+
+      return mapping
 
     else 
       #logging.logYellow """some data was not successfully mapped and could not be persisted for #{context.name}, #{dataType} - no mapping for #{dataType}"""
@@ -193,6 +213,7 @@ purge = () ->
 
 #
 # Initialize the database tables (after the database and database user have already been initialized)
+# http://knexjs.org/#Builder lists the datatypes currently being mapped to.
 #
 init = () ->
 
@@ -200,6 +221,7 @@ init = () ->
   tableHandler = (tableDef, table) ->
     for field of tableDef.fields
       type = tableDef.fields[field]
+      logging.logYellow """field: #{field} | type: #{type}"""
       switch type
         when 'short-string'
           table.string(field)
@@ -207,6 +229,8 @@ init = () ->
           table.string(field, maxDbStrLength)
         when 'natural-number'
           table.integer(field)
+        when 'auto-increment'
+          table.increments(field)
         else
           error = """unidentified field type #{field} specified in table definition of table #{tableDef.name}"""
           logging.logRed error
@@ -223,10 +247,13 @@ init = () ->
 
   Promise.all(tablesCreated).then(() -> # all promises successfully fulfilled
                                knex.destroy(()->)
+                               console.log 'database tables created'
                                console.log 'database ready for action')
                             .catch((error) -> # if there was an error on any of the promises
+                               logging.logRed 'tables creation failed'
                                logging.logRed 'database reinitialization failed'
-                               return false)
+                               throw error
+                              )
 
 
 #
@@ -241,3 +268,9 @@ exports.reinit = reinit = () ->
     else 
       console.error 'database reinitialization failed - could not recreate database or database user'
   )
+
+#
+#
+#
+#exports.query = () ->
+#  knex.select()

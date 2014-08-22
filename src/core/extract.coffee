@@ -4,7 +4,7 @@
 # Extracts and normalizes text content from html (with css styles)
 #
 
-verbex           = require 'verbal-expressions'
+#verbex           = require 'verbal-expressions'
 assert           = require 'assert' 
 fs               = require 'fs'
 css              = require './css'
@@ -926,7 +926,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
     if sentence.length is 0
       continue
-      
+
     sentences.push sentence
     
     # mark end of paragraph in the data-writing
