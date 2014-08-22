@@ -96,7 +96,7 @@ error        = false
 #
 # Writing data to the rdbms
 #
-write = (context, dataType, mapping, data) ->
+write = (context, dataType, mapping) ->
   
   reqCounter += 1
   #logging.logYellow reqCounter
@@ -123,9 +123,7 @@ write = (context, dataType, mapping, data) ->
 #
 # Maps data to the correct table field/s, and send off to actual writing
 #
-exports.write = (context, dataType, data) ->
-  inputFileName = context
-
+dataMap = (context, dataType, data) ->
   switch dataType
     when 'sentences'
 
@@ -134,21 +132,21 @@ exports.write = (context, dataType, data) ->
         docName  : context.name
         runID    : context.runID
 
-      write(context, dataType, mapping, data)       
+      return mapping
 
     when 'abstract'
       mapping = # map from CoffeeScript variable names to table field names
         abstract : data
         docName  : context.name
         runID    : context.runID
-      write(context, dataType, mapping, data)       
+      return mapping
       
     when 'title'
       mapping = # map from CoffeeScript variable names to table field names
         title    : data
         docName  : context.name
         runID    : context.runID
-      write(context, dataType, mapping, data)       
+      return mapping
       
     when 'headers'
       mapping = # map from CoffeeScript variable names to table field names
@@ -158,18 +156,32 @@ exports.write = (context, dataType, data) ->
       for key of data
         mapping[key] = data[key]
 
-      write(context, dataType, mapping, data)
+      return mapping
 
     when 'diffs'
       mapping = {}
       for key of data
         mapping[key] = data[key]
 
-      write(context, dataType, mapping, data)
+      return mapping
 
     else 
-      return
+      #logging.logYellow """some data was not successfully mapped and could not be persisted for #{context.name}, #{dataType} - no mapping for #{dataType}"""
+      return undefined
+
+
+exports.write = (context, dataType, data) ->
+  inputFileName = context
+
+  if Array.isArray(data)
+    dataArray = data
+    mapping = dataArray.map((data) -> dataMap(context, dataType, data))
+  else
+    mapping = dataMap(context, dataType)
   
+  if mapping?
+    write(context, dataType, mapping)       
+    
 #
 # Purge database tables. Not currently in use, as we just remove the entire database to purge it
 #

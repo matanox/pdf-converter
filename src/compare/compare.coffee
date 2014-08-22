@@ -116,13 +116,16 @@ exports.diff = (context, dataType) ->
     SES = dataWriter.getReadyName(context, """diff-#{dataType}""")
     fs.writeFile(SES, result)
 
+    # for now, recover the run IDs from the file paths
+    runIDs = pair.map((filepath) -> filepath.replace(docsDataDir + '/' + inputFileName + '/' + dataType + '*', ''))
+
     dataWriter.write context, 'diffs', {
         docName:      context.name
         dataType:     dataType
-        run1ID:       'TBD'
-        run2ID:       'TBD'
+        run1ID:       runIDs[0]
+        run2ID:       runIDs[1]
         run1link:     util.terminalClickableFileLink(pair[0])
-        run2link:     util.terminalClickableFileLink(pair[0])
+        run2link:     util.terminalClickableFileLink(pair[1])
         editDistance: editDistance
         SESlink:      util.terminalClickableFileLink(SES)
       }

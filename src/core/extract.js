@@ -725,12 +725,12 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     if (sentence.length === 0) {
       continue;
     }
+    sentences.push(sentence);
     if (group[group.length - 1].paragraphCloser) {
       sentence += '\n';
-      sentences.push(sentence);
-      dataWriter.write(context, 'sentences', sentence);
     }
   }
+  dataWriter.writeArray(context, 'sentences', sentences);
   metaTypeLog = function(type) {
     var text, _aj, _len19;
     text = '';

@@ -926,12 +926,15 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
     if sentence.length is 0
       continue
+      
+    sentences.push sentence
     
     # mark end of paragraph in the data-writing
     if group[group.length-1].paragraphCloser
       sentence += '\n'
-      sentences.push sentence
-      dataWriter.write context, 'sentences', sentence
+      #dataWriter.write context, 'sentences', sentence
+
+  dataWriter.writeArray context, 'sentences', sentences
 
  
   #

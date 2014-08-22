@@ -60,7 +60,7 @@ spawnClusterWorkers = function() {
       testFile = 'gender differences 2013';
       if (firstFork) {
         firstFork = false;
-        testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup@' + util.simpleGenerateRunID();
+        testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID();
         return http.get(testUrl, function(res) {
           return logging.logBlue('Cluster response to its own synthetic client is: ' + res.statusCode);
         });

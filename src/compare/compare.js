@@ -51,7 +51,7 @@ rsplit = function(contentArray, delimiter) {
 };
 
 exports.diff = function(context, dataType) {
-  var SES, beefedArrays, contentArrays, diff, diffentry, differ, editDistance, filesContent, inputFileName, marks, pair, rawDiff, result, sequence, type, val, _i, _len;
+  var SES, beefedArrays, contentArrays, diff, diffentry, differ, editDistance, filesContent, inputFileName, marks, pair, rawDiff, result, runIDs, sequence, type, val, _i, _len;
   inputFileName = context.name;
   pair = getPair(inputFileName, dataType);
   if (pair == null) {
@@ -110,13 +110,16 @@ exports.diff = function(context, dataType) {
     }
     SES = dataWriter.getReadyName(context, "diff-" + dataType);
     fs.writeFile(SES, result);
+    runIDs = pair.map(function(filepath) {
+      return filepath.replace(docsDataDir + '/' + inputFileName + '/' + dataType + '*', '');
+    });
     dataWriter.write(context, 'diffs', {
       docName: context.name,
       dataType: dataType,
-      run1ID: 'TBD',
-      run2ID: 'TBD',
+      run1ID: runIDs[0],
+      run2ID: runIDs[1],
       run1link: util.terminalClickableFileLink(pair[0]),
-      run2link: util.terminalClickableFileLink(pair[0]),
+      run2link: util.terminalClickableFileLink(pair[1]),
       editDistance: editDistance,
       SESlink: util.terminalClickableFileLink(SES)
     });

@@ -1,0 +1,65 @@
+[32mLocal cluster starting in mode development[0m
+[32mUsing hostname localhost[0m
+[32mUsing port 3080[0m
+[32m4 CPUs detected on host[0m
+[32mSpawning 2 cluster workers...[0m
+[35mCluster master v8 heap is 48MB[0m
+[35mCluster master v8 heap usage is 14MB (now comprising 28% of heap)[0m
+[32mCluster worker 2 now sharing on 0.0.0.0:3080 (pid 12532)[0m
+[35mCluster worker 2 v8 heap is 48MB[0m
+[35mCluster worker 2 v8 heap usage is 14MB (now comprising 29% of heap)[0m
+[32mCluster worker 1 now sharing on 0.0.0.0:3080 (pid 12531)[0m
+[35mCluster worker 1 v8 heap is 48MB[0m
+[35mCluster worker 1 v8 heap usage is 14MB (now comprising 30% of heap)[0m
+[32mStarted handling input file: gender differences 2013. Given run id is: self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z[0m
+[32mgender differences 2013[0m
+clickable data directory link: file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/
+input file hash is: c50ec12e3356a4fbb46037ebcaa163c7
+input file has already passed pdf2htmlEX conversion - skipping conversion
+about to generate tokens
+[32mhas indentation change and preceded by run.[0m
+[33mREFERENCES[0m
+[33mhas indentation change and preceded by run.. Metatypes are: regular, regular[0m
+[33mis paragraph opener[0m
+[33mrun still here[0m
+[33mReferencse still here[0m
+[33m@References[0m
+[33mnot Hyphen[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff1 [0m
+[36mtokenId: 6018, header: Results, level: 1, detectionComment: paragraph opener[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff1 [0m
+[36mtokenId: 8298, header: Results, level: 1, detectionComment: paragraph opener[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff2 [0m
+[36mtokenId: 10086, header: Results, level: 1, detectionComment: paragraph opener[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff2 [0m
+[36mtokenId: 12164, header: Results, level: 1, detectionComment: paragraph opener[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff1 [0m
+[36mtokenId: 15662, header: Results, level: 1, detectionComment: paragraph opener[0m
+[36mseparateness test[0m
+[36msize: 40.000000px font: ff3 v.s. 
+size: 36.000000px font: ff1 [0m
+[36mtokenId: 21560, header: References, level: 1, detectionComment: paragraph opener[0m
+[36mCluster response to its own synthetic client is: 200[0m
+[90mGET /handleInputFile?localLocation=gender%20differences%202013&runID=self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z [32m200 [90m2237ms[0m
+clickable data directory link: file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/
+
+Comparing the following [3msentences[0m output pair found [3medit distance of 0[0m
+file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/sentences*self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z.out
+file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/sentences*self-test-on-startup*ubuntu-2014-08-22T19:19:26.620Z.out
+details at: file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/diff-sentences*self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z.out
+
+Comparing the following [3mheaders[0m output pair found [3medit distance of 0[0m
+file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/headers*self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z.out
+file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/headers*self-test-on-startup*ubuntu-2014-08-22T19:19:26.620Z.out
+details at: file:///home/matan/ingi/repos/back-end-js/docData/gender%20differences%202013/diff-headers*self-test-on-startup*ubuntu-2014-08-22T19:20:03.027Z.out
+[35mCluster master is currently using 32 file descriptors[0m
