@@ -169,7 +169,7 @@ exports.write = function(context, dataType, data) {
       return dataMap(context, dataType, data);
     });
   } else {
-    mapping = dataMap(context, dataType);
+    mapping = dataMap(context, dataType, data);
   }
   if (mapping != null) {
     return write(context, dataType, mapping);

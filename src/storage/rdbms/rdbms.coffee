@@ -177,7 +177,7 @@ exports.write = (context, dataType, data) ->
     dataArray = data
     mapping = dataArray.map((data) -> dataMap(context, dataType, data))
   else
-    mapping = dataMap(context, dataType)
+    mapping = dataMap(context, dataType, data)
   
   if mapping?
     write(context, dataType, mapping)       
