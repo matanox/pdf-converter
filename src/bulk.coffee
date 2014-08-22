@@ -22,7 +22,7 @@ nconf.defaults
   directory   : '../local-copies/pdf/'
   flood       : false
   parallelism : 2
-  maxFiles    : 3
+  maxFiles    : 10000
 
 #
 # log the configuration
@@ -58,7 +58,7 @@ logging.logGreen ''
 batchRunID = util.simpleGenerateRunID()
 logging.logGreen 'Using run ID ' + batchRunID
 
-rdbms.write null, 'bulkRuns', {
+rdbms.write null, 'runIDs', {
     runID: batchRunID
   }
 
@@ -92,8 +92,19 @@ makeRequest = (filename) ->
       res.on('end', () -> 
         if res.statusCode is 200
           logging.logGreen 'Server response for ' + filename + ' is:   ' + res.statusCode
+          rdbms.write null, 'runs', {
+              docName: filename.replace('.pdf','') # just the file name, without its suffix
+              runID:   batchRunID
+              status:  'success'
+            }
         else 
           logging.logYellow 'Server response for ' + filename + ' is:   ' + res.statusCode + ', ' + responseBody
+          rdbms.write null, 'runs', {
+              docName:      filename.replace('.pdf','') # just the file name, without its suffix
+              runID:        batchRunID
+              status:       'failed'
+              statusDetail: responseBody
+            }
 
         unless flood
           # Invoke next request unless all requests already made
@@ -121,7 +132,8 @@ makeRequest = (filename) ->
           logging.logPerf ''
           logging.logPerf """ Parallelism degree employed was #{parallelism}"""
           logging.logPerf ''
-          process.exit(0) 
+          setTimeout((()->process.exit(0)), 3000) 
+          #process.exit(0) 
           return)) (filename) # Callback application
 
   console.log "Requesting " + directory + filename

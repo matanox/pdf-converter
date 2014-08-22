@@ -56,16 +56,27 @@ diffsTable =
       run2link:     'short-string'
   ]
 
-bulkRunsTableDef =
+runIDsTableDef =
   [
-    type: 'bulkRuns'
-    name: 'bulkRuns'
+    type: 'runIDs'
+    name: 'runIDs'
     fields:
       order: 'auto-increment'
       runID: 'short-string'
   ]
 
-tableDefs = docTablesDefinition.concat diffsTable, bulkRunsTableDef
+runsTableDef = 
+  [
+    type: 'runs'
+    name: 'runs'
+    fields:
+      docName:      'short-string'
+      runID:        'short-string'
+      status:       'short-string'
+      statusDetail: 'short-string'
+  ]
+
+tableDefs = docTablesDefinition.concat diffsTable, runIDsTableDef, runsTableDef
 tableDefs.forEach((table) ->
   switch table.type 
     when 'docTable' 
@@ -113,9 +124,11 @@ write = (context, dataType, mapping) ->
   reqCounter += 1
   #logging.logYellow reqCounter
 
+  ###
   if error 
     logging.logRed 'rdbms writing failed, now skipping all forthcoming rdbms writes.'
     return
+  ###
 
   knex.insert(mapping).into(dataType)
     .catch((error) -> 
@@ -170,24 +183,36 @@ dataMap = (context, dataType, data) ->
 
       return mapping
 
+    #
+    # just pass along the data object given by the caller,
+    # without any addition or modification.
+    #
+    else
+      mapping = {}
+      for key of data
+        mapping[key] = data[key]
+
+      return mapping
+ 
+###
     when 'diffs'
       mapping = {}
       for key of data
         mapping[key] = data[key]
 
       return mapping
-      
+
     when 'bulkRuns'
-      console.dir data
       mapping = {}
       for key of data
         mapping[key] = data[key]
 
       return mapping
+###
 
-    else 
+    #else 
       #logging.logYellow """some data was not successfully mapped and could not be persisted for #{context.name}, #{dataType} - no mapping for #{dataType}"""
-      return undefined
+      #return undefined
 
 
 exports.write = (context, dataType, data) ->
@@ -272,5 +297,13 @@ exports.reinit = reinit = () ->
 #
 #
 #
-#exports.query = () ->
-#  knex.select()
+exports.query = () ->
+  knex('bulkRuns').max('order')
+    .then((lastBulkRun) ->
+      knex.select('runID').from('bulkRuns').where({order: lastBulkRun}))
+    .then((runID) ->
+  knex.select('sentence').from('sentences').where({docID: docID}))
+    .then()
+
+
+

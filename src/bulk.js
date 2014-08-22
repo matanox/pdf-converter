@@ -20,7 +20,7 @@ nconf.defaults({
   directory: '../local-copies/pdf/',
   flood: false,
   parallelism: 2,
-  maxFiles: 3
+  maxFiles: 10000
 });
 
 host = nconf.get('host');
@@ -59,7 +59,7 @@ batchRunID = util.simpleGenerateRunID();
 
 logging.logGreen('Using run ID ' + batchRunID);
 
-rdbms.write(null, 'bulkRuns', {
+rdbms.write(null, 'runIDs', {
   runID: batchRunID
 });
 
@@ -86,8 +86,19 @@ makeRequest = function(filename) {
         var overall, requestElapsedTime;
         if (res.statusCode === 200) {
           logging.logGreen('Server response for ' + filename + ' is:   ' + res.statusCode);
+          rdbms.write(null, 'runs', {
+            docName: filename.replace('.pdf', ''),
+            runID: batchRunID,
+            status: 'success'
+          });
         } else {
           logging.logYellow('Server response for ' + filename + ' is:   ' + res.statusCode + ', ' + responseBody);
+          rdbms.write(null, 'runs', {
+            docName: filename.replace('.pdf', ''),
+            runID: batchRunID,
+            status: 'failed',
+            statusDetail: responseBody
+          });
         }
         if (!flood) {
           if (toRequest.length > 0) {
@@ -109,7 +120,9 @@ makeRequest = function(filename) {
           logging.logPerf('');
           logging.logPerf(" Parallelism degree employed was " + parallelism);
           logging.logPerf('');
-          process.exit(0);
+          setTimeout((function() {
+            return process.exit(0);
+          }), 3000);
         }
       });
     };
