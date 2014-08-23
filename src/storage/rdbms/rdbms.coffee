@@ -294,16 +294,39 @@ exports.reinit = reinit = () ->
       console.error 'database reinitialization failed - could not recreate database or database user'
   )
 
+
+getSqlSingleResult = (resultArray) ->
+  
+  if resultArray.length is 1
+    resultObj = resultArray[0]
+    return resultObj[Object.keys(resultObj)[0]]
+  
+  else throw """query intended to result in one item resulted in #{resultArray.length}"""
+
 #
 #
 #
 exports.query = () ->
-  knex('bulkRuns').max('order')
-    .then((lastBulkRun) ->
-      knex.select('runID').from('bulkRuns').where({order: lastBulkRun}))
-    .then((runID) ->
-  knex.select('sentence').from('sentences').where({docID: docID}))
-    .then()
-
+  runID = null
+  knex('runIDs').max('order')
+    .then((result) ->
+      lastRunID = getSqlSingleResult(result)
+      #console.log lastRunID
+      knex.select('runID').from('runIDs').where({order: lastRunID})
+    )
+    .then((result) ->
+      runID = getSqlSingleResult(result)
+      #console.log runID
+      knex.select('docName').from('runs').where({runID: runID})
+    )
+    .map((result) -> 
+      docName = result.docName
+      #console.log docName
+      knex.select('sentence').from('sentences').where({runID: runID, docName: docName})
+        .then((result) -> 
+          console.log docName
+          console.log result.length
+      )    
+    )
 
 
