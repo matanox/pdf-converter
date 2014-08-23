@@ -28,9 +28,9 @@ getQuerySingleResult = function(resultArray) {
   return null;
 };
 
-serveInEditor = function(docName, dataArray) {
+serveInEditor = function(docName, dataArray, dataType) {
   var tmpFile;
-  tmpFile = "" + tmpDir + "/" + docName;
+  tmpFile = "" + tmpDir + "/" + docName + "(" + dataType + ")";
   fs.writeFileSync(tmpFile, dataArray.join('\n'));
   return exec('subl', [tmpFile]);
 };
@@ -60,9 +60,13 @@ query = function(dataType, field) {
       runID: runID,
       docName: docName
     }).pluck(field).then(function(result) {
-      return serveInEditor(docName, result);
+      return serveInEditor(docName, result, dataType);
     });
+  }).then(function() {
+    return true;
   });
 };
 
-query('sentences', 'sentence').then(query('abstract', 'abstract'));
+query('sentences', 'sentence').then(function(rc) {
+  return query('abstract', 'abstract');
+});

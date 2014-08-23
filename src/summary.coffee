@@ -23,8 +23,11 @@ getQuerySingleResult = (resultArray) ->
   return null  
   #else throw """query intended to result in one item resulted in #{resultArray.length}"""
 
-serveInEditor = (docName, dataArray) ->
-  tmpFile = """#{tmpDir}/#{docName}"""
+#
+# Open result as a sublime view, relying on a temp file (which will be rewritten if already exists)
+#
+serveInEditor = (docName, dataArray, dataType) ->
+  tmpFile = """#{tmpDir}/#{docName}(#{dataType})""" 
   fs.writeFileSync(tmpFile, dataArray.join('\n'))
   exec('subl', [tmpFile])
 
@@ -49,6 +52,7 @@ query = (dataType, field) ->
       #console.log runID
       exec('subl', ['-n'])
       .then((execReturn) ->
+        #console.log execReturn
         knex.select('docName').from('runs').where({runID: runID}).pluck('docName'))
     )
     # act for each such document
@@ -58,12 +62,12 @@ query = (dataType, field) ->
         .then((result) -> 
           #console.log docName
           #console.log result
-          serveInEditor(docName, result)
+          serveInEditor(docName, result, dataType)
       )    
-    )
+    ).then(() -> return true)
 
 query('sentences', 'sentence')
-.then(
+.then((rc) ->
   query('abstract', 'abstract')
   #setTimeout((()->query('abstract', 'abstract')), 500)
 )
