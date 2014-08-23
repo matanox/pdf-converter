@@ -20,7 +20,7 @@ nconf.defaults({
   directory: '../local-copies/pdf/',
   flood: false,
   parallelism: 2,
-  maxFiles: 10000
+  maxFiles: process.argv[2] || 10000
 });
 
 host = nconf.get('host');
@@ -163,6 +163,7 @@ if (toRequest.length > 0) {
   if (!flood) {
     if (parallelism > toRequest.length) {
       logging.logYellow('Note: specified degree of parallelism is greater than number of files to process');
+      parallelism = toRequest.length;
     }
     for (i = _j = 1; 1 <= parallelism ? _j <= parallelism : _j >= parallelism; i = 1 <= parallelism ? ++_j : --_j) {
       if (toRequest.length > 0) {

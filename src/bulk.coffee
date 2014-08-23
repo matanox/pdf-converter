@@ -22,7 +22,7 @@ nconf.defaults
   directory   : '../local-copies/pdf/'
   flood       : false
   parallelism : 2
-  maxFiles    : 10000
+  maxFiles    : process.argv[2] or 10000  # first command-line argument if any
 
 #
 # log the configuration
@@ -176,6 +176,7 @@ if toRequest.length > 0
   unless flood
     if parallelism > toRequest.length
       logging.logYellow 'Note: specified degree of parallelism is greater than number of files to process'    
+      parallelism = toRequest.length
     for i in [1..parallelism]
       if toRequest.length > 0
         makeRequest(toRequest.shift()) # remove bottom of queue and issue request for it

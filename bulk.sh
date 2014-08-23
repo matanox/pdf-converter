@@ -1,1 +1,1 @@
-coffee src/bulk.coffee
+coffee src/bulk.coffee $1
