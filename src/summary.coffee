@@ -1,3 +1,7 @@
+#
+# Retreive data from the last run, and display it in sublime text
+#
+
 assert           = require 'assert' 
 util             = require './util/util'
 logging          = require './util/logging' 
@@ -7,7 +11,8 @@ rdbms            = require './storage/rdbms/rdbms'
 
 tmpDir          = require('os').tmpdir()
 fs              = require 'fs'
-exec            = require './util/exec'
+Promise         = require 'bluebird'
+exec            = Promise.promisify(require './util/exec')
 
 getQuerySingleResult = (resultArray) ->
   
@@ -21,14 +26,15 @@ getQuerySingleResult = (resultArray) ->
 serveInEditor = (docName, dataArray) ->
   tmpFile = """#{tmpDir}/#{docName}"""
   fs.writeFileSync(tmpFile, dataArray.join('\n'))
-  exec('subl', [tmpFile], ()->)
+  exec('subl', [tmpFile])
 
 #
+# Query the rdbms, and display results in sublime text
 #
-#
-query = () ->
+query = (dataType, field) ->
   knex = rdbms.knex
   runID = null
+  # get the chronologically last runID
   knex('runIDs').max('order')
     .then((result) ->
       lastRun = getQuerySingleResult(result)
@@ -37,15 +43,18 @@ query = () ->
       #console.log lastRun
       knex.select('runID').from('runIDs').where({order: lastRun})
     )
+    # get all docs handled in that run 
     .then((result) ->
       runID = getQuerySingleResult(result)
-      console.log runID
-      exec('subl', ['-n'], ()->)
-      knex.select('docName').from('runs').where({runID: runID}).pluck('docName')
+      #console.log runID
+      exec('subl', ['-n'])
+      .then((execReturn) ->
+        knex.select('docName').from('runs').where({runID: runID}).pluck('docName'))
     )
+    # act for each such document
     .map((docName) -> 
       #console.log docName
-      knex.select('sentence').from('sentences').where({runID: runID, docName: docName}).pluck('sentence')
+      knex.select(field).from(dataType).where({runID: runID, docName: docName}).pluck(field)
         .then((result) -> 
           #console.log docName
           #console.log result
@@ -53,4 +62,8 @@ query = () ->
       )    
     )
 
-query()
+query('sentences', 'sentence')
+.then(
+  query('abstract', 'abstract')
+  #setTimeout((()->query('abstract', 'abstract')), 500)
+)

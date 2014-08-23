@@ -15,9 +15,10 @@ module.exports = function(executable, executalbeParams, callback) {
       console.log("stderr: " + stderr);
     }
     if (error !== null) {
-      console.error("execution of binary/shell file " + executable + " failed with error: \n " + error);
-      callback(false);
+      error = "execution of binary/shell file " + executable + " failed with error: \n " + error;
+      console.error;
+      callback(error, null);
     }
-    return callback(true);
+    callback(null, true);
   });
 };
