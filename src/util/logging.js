@@ -30,17 +30,48 @@ exports.error = function(msgOrObj) {
   return log('error', msgOrObj);
 };
 
-exports.init = function() {};
-
 tty = {
-  green: '\x1b[32m',
   red: '\x1b[31m',
+  green: '\x1b[32m',
   yellow: '\x1b[33m',
-  blue: '\x1b[36m',
   magenta: '\x1b[35m',
+  blue: '\x1b[36m',
+  gray: '\x1b[90m',
   bold: '\x1b[1m',
   italics: '\x1b[3m',
   end: '\x1b[0m'
+};
+
+exports.red = function(string) {
+  return tty.red + string + tty.end;
+};
+
+exports.green = function(string) {
+  return tty.green + string + tty.end;
+};
+
+exports.yellow = function(string) {
+  return tty.yellow + string + tty.end;
+};
+
+exports.magenta = function(string) {
+  return tty.magenta + string + tty.end;
+};
+
+exports.blue = function(string) {
+  return tty.blue + string + tty.end;
+};
+
+exports.gray = function(string) {
+  return tty.gray + string + tty.end;
+};
+
+exports.bold = function(string) {
+  return tty.bold + string + tty.end;
+};
+
+exports.italics = function(string) {
+  return tty.italics + string + tty.end;
 };
 
 exports.bold = function(text) {
@@ -69,6 +100,10 @@ exports.logYellow = function(text) {
 
 exports.logRed = function(text) {
   return console.log(tty.red + text + tty.end);
+};
+
+exports.logGray = function(text) {
+  return console.log(tty.gray + text + tty.end);
 };
 
 exports.logBlue = function(text) {

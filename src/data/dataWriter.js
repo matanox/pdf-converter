@@ -38,7 +38,9 @@ exports.writeArray = function(context, dataType, dataArray) {
 exports.write = function(context, dataType, data, cnsl) {
   var dataFile, dataSerialized, inputFileName, writer;
   inputFileName = context.name;
-  rdbmsWrite(context, dataType, data, cnsl);
+  if (dataType !== 'stats' && dataType !== 'timers' && dataType !== 'partDetection') {
+    rdbmsWrite(context, dataType, data, cnsl);
+  }
   if (typeof data === 'object') {
     dataSerialized = Object.keys(data).map(function(key) {
       return "" + key + ": " + data[key];

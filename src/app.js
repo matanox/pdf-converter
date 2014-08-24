@@ -79,7 +79,6 @@ if (cluster.isMaster) {
   spawnClusterWorkers();
   selfMonitor = require('./selfMonitor').start('master');
 } else {
-  logging.init();
   app = express();
   app.set('port', port);
   app.set('views', __dirname + '/views');

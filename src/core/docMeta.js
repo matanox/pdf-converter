@@ -7,7 +7,7 @@ exports.storePdfMetaData = function(context, localCopy, docLogger) {
   var params;
   params = {
     execCommand: 'pdfinfo -meta',
-    writerType: 'pdfMeta',
+    dataType: 'pdfMeta',
     description: 'Getting pdf file metadata using pdfinfo'
   };
   return storeCmdOutput(context, localCopy, docLogger, params);
@@ -17,13 +17,13 @@ exports.storePdfFontsSummary = function(context, localCopy, docLogger) {
   var params;
   params = {
     execCommand: 'pdffonts',
-    writerType: 'pdfFonts',
+    dataType: 'pdfFonts',
     description: 'Getting pdf fonts summary using pdffonts (1 of 2)'
   };
   storeCmdOutput(context, localCopy, docLogger, params);
   params = {
     execCommand: 'pdffonts -subst',
-    writerType: 'pdfFonts',
+    dataType: 'pdfFonts',
     description: 'Getting pdf fonts summary using pdffonts (2 of 2)'
   };
   return storeCmdOutput(context, localCopy, docLogger, params);

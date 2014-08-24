@@ -30,7 +30,7 @@ getQuerySingleResult = function(resultArray) {
 
 serveInEditor = function(docName, dataArray, dataType) {
   var tmpFile;
-  tmpFile = "" + tmpDir + "/" + docName + "(" + dataType + ")";
+  tmpFile = "" + tmpDir + "/" + docName + " (" + dataType + ")";
   fs.writeFileSync(tmpFile, dataArray.join('\n'));
   return exec('subl', [tmpFile]);
 };
@@ -64,6 +64,9 @@ query = function(dataType, field) {
     });
   }).then(function() {
     return true;
+  })["catch"](function(error) {
+    logging.logYellow(error);
+    return logging.logYellow('could not create data summary');
   });
 };
 

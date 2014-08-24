@@ -8,6 +8,23 @@ Promise = require 'bluebird'
 # Tables definition
 #
 
+pdfTablesDefinition = 
+  [
+    name: 'pdfToHtml'
+    fields:
+      output: 'long-string'
+   ,
+    name: 'pdfFonts'
+    fields:
+      output: 'long-string'
+   ,
+    name: 'pdfMeta'
+    fields:
+      output: 'long-string'
+  ]
+
+pdfTablesDefinition.forEach((table) -> table.type = 'pdf')
+
 docTablesDefinition = 
   [
     name: 'sentences'
@@ -29,7 +46,7 @@ docTablesDefinition =
       header:           'short-string'
       detectionComment: 'short-string'
    ,
-    name  : 'properties'
+    name  : 'auto-properties'
     fields: 
       propName:  'short-string'
       propValue: 'short-string'
@@ -70,15 +87,27 @@ runsTableDef =
     name: 'runs'
     fields:
       docName:      'short-string'
-      runID:        'short-string'
       status:       'short-string'
       statusDetail: 'short-string'
   ]
 
-tableDefs = docTablesDefinition.concat diffsTable, runIDsTableDef, runsTableDef
+gradingTable =
+  [
+    type: 'grading'
+    name: 'grading'
+    fields:
+      docName:   'short-string'
+      runID:     'short-string'
+      aspect:    'short-string'
+      propName:  'short-string'
+      propValue: 'short-string'
+  ]
+
+# finalize array of tables
+tableDefs = docTablesDefinition.concat diffsTable, runIDsTableDef, runsTableDef, pdfTablesDefinition, gradingTable
+
 tableDefs.forEach((table) ->
-  switch table.type 
-    when 'docTable' 
+  if table.type in ['docTable', 'pdf']
       table.fields.docName = 'short-string'
       table.fields.runID   = 'short-string'
 )
@@ -133,7 +162,7 @@ write = (context, dataType, mapping) ->
     .catch((error) -> 
       logging.logRed error
       console.dir error
-      logging.logRed """writing to rdbms for data type #{dataType} failed"""
+      logging.logGray """writing to rdbms for data type #{dataType} failed"""
       error = true
       return false
     )
@@ -148,6 +177,15 @@ write = (context, dataType, mapping) ->
 # Maps data to the correct table field/s, and send off to actual writing
 #
 dataMap = (context, dataType, data) ->
+
+  if dataType in ['pdfFonts', 'pdfMeta', 'pdfToHtml']
+    mapping = # map from CoffeeScript variable names to table field names
+      output  : data
+      docName : context.name
+      runID   : context.runID
+
+    return mapping
+
   switch dataType
     when 'sentences'
 
@@ -285,10 +323,10 @@ init = () ->
 # if it is already there, purge it first. 
 #
 exports.reinit = reinit = () ->
-  exec('src/storage/rdbms/rdbms-recreate.sh', null, (success) -> 
-    if success 
+  exec('src/storage/rdbms/rdbms-recreate.sh', null, (error, success) -> 
+    if error
+      console.error 'database reinitialization failed - could not recreate database or database user'
+    else 
       console.log 'database definition and database user clean and ready'
       init()
-    else 
-      console.error 'database reinitialization failed - could not recreate database or database user'
   )

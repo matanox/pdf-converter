@@ -19,27 +19,28 @@ exports.log   = (msgOrObj) -> log('info',  msgOrObj)
 exports.warn  = (msgOrObj) -> log('warn',  msgOrObj)
 exports.error = (msgOrObj) -> log('error', msgOrObj)
 
-exports.init = () ->
-  #winston.remove(winston.transports.Console) # turn off winston's default console logging
 
-# This coloring is terminal color based. 
-# It doesn't work for the browser console. For browser console solutions (which are all based on css) 
-# see http://stackoverflow.com/questions/7505623/colors-in-javascript-console/13017382.
-#
-# It's easy to create a function that provides the same API for both.... similar to 
-# stuff in https://github.com/visionmedia/node-term-css.
-#
-
-tty = {
-  green:    '\x1b[32m'
+tty = { # see http://en.wikipedia.org/wiki/ANSI_escape_code for more
   red  :    '\x1b[31m'  
+  green:    '\x1b[32m'
   yellow:   '\x1b[33m'  
-  blue:     '\x1b[36m'  
   magenta:  '\x1b[35m'
+  blue:     '\x1b[36m'  
+  gray:     '\x1b[90m' 
   bold:     '\x1b[1m'
   italics:  '\x1b[3m'
   end:      '\x1b[0m'
 }
+
+# create colored string part
+exports.red     =  (string) -> tty.red + string + tty.end
+exports.green   =  (string) -> tty.green + string + tty.end
+exports.yellow  =  (string) -> tty.yellow + string + tty.end
+exports.magenta =  (string) -> tty.magenta + string + tty.end
+exports.blue    =  (string) -> tty.blue + string + tty.end
+exports.gray    =  (string) -> tty.gray + string + tty.end
+exports.bold    =  (string) -> tty.bold + string + tty.end
+exports.italics =  (string) -> tty.italics + string + tty.end
 
 exports.bold = (text) ->
   tty.bold + text + tty.end
@@ -57,6 +58,7 @@ exports.logGreen  = (text, bold) ->
     console.log(tty.green + text + tty.end)
 exports.logYellow = (text) -> console.log(tty.yellow + text + tty.end)
 exports.logRed    = (text) -> console.log(tty.red + text + tty.end)
+exports.logGray   = (text) -> console.log(tty.gray + text + tty.end)
 exports.logBlue   = (text) -> console.log(tty.blue + text + tty.end)
 exports.logPerf   = (text) -> console.log(tty.magenta + text + tty.end)
 
@@ -112,3 +114,14 @@ testWinstonLogstash = () ->
   #logSample = {a: '3', b: 'bbbb', sub}
   #winston.log('warn', 'New Hello to logstash')
   #winston.log('warn', logSample)
+
+#exports.init = () ->
+  #winston.remove(winston.transports.Console) # turn off winston's default console logging
+
+# This coloring is terminal color based. 
+# It doesn't work for the browser console. For browser console solutions (which are all based on css) 
+# see http://stackoverflow.com/questions/7505623/colors-in-javascript-console/13017382.
+#
+# It's easy to create a function that provides the same API for both.... similar to 
+# stuff in https://github.com/visionmedia/node-term-css.
+#

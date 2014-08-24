@@ -109,7 +109,6 @@ else
   #
   # Configure and start express
   #
-  logging.init()
   app = express()
   app.set 'port', port
 

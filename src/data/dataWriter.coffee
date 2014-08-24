@@ -46,8 +46,7 @@ exports.getReadyName = getReadyName = (context, dataType) ->
   #now = new Date()
   return docsDataDir + '/' + inputFileName + '/' + dataType + '*' + context.runID + '.out' 
 
-rdbmsWrite = (context, dataType, data, cnsl) ->
-  rdbms.write(context, dataType, data)
+rdbmsWrite = (context, dataType, data, cnsl) -> rdbms.write(context, dataType, data)
 
 #
 # Simpler writer for bulk - 
@@ -79,7 +78,8 @@ exports.write = (context, dataType, data, cnsl) ->
   
   inputFileName = context.name
 
-  rdbmsWrite(context, dataType, data, cnsl)
+  unless dataType in ['stats', 'timers', 'partDetection'] # till those get sorted out or superseded
+    rdbmsWrite(context, dataType, data, cnsl)
 
   if typeof data is 'object'
     dataSerialized = Object.keys(data).map((key) -> """#{key}: #{data[key]}""").join(', ')

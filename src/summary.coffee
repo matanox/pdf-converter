@@ -27,7 +27,7 @@ getQuerySingleResult = (resultArray) ->
 # Open result as a sublime view, relying on a temp file (which will be rewritten if already exists)
 #
 serveInEditor = (docName, dataArray, dataType) ->
-  tmpFile = """#{tmpDir}/#{docName}(#{dataType})""" 
+  tmpFile = """#{tmpDir}/#{docName} (#{dataType})""" 
   fs.writeFileSync(tmpFile, dataArray.join('\n'))
   exec('subl', [tmpFile])
 
@@ -37,6 +37,7 @@ serveInEditor = (docName, dataArray, dataType) ->
 query = (dataType, field) ->
   knex = rdbms.knex
   runID = null
+  #logging.logGreen """Opening summary for run ID #{runID}, #{dataType}..."""
   # get the chronologically last runID
   knex('runIDs').max('order')
     .then((result) ->
@@ -65,6 +66,11 @@ query = (dataType, field) ->
           serveInEditor(docName, result, dataType)
       )    
     ).then(() -> return true)
+    .catch((error) ->
+      logging.logYellow error
+      logging.logYellow 'could not create data summary'
+    )
+
 
 query('sentences', 'sentence')
 .then((rc) ->
