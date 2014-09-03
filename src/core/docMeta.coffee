@@ -20,10 +20,12 @@ exports.storePdfFontsSummary = (context, localCopy, docLogger) ->
 
   storeCmdOutput(context, localCopy, docLogger, params)
 
+  ### TODO: re-enable this additional font data logging, 
   params =  
     execCommand : 'pdffonts -subst', 
     dataType    : 'pdfFonts',
     description : 'Getting pdf fonts summary using pdffonts (2 of 2)'
 
   storeCmdOutput(context, localCopy, docLogger, params)
+  ###
   

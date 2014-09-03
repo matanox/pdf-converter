@@ -86,6 +86,7 @@ runsTableDef =
     type: 'runs'
     name: 'runs'
     fields:
+      runID: 'short-string'
       docName:      'short-string'
       status:       'short-string'
       statusDetail: 'short-string'

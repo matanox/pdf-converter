@@ -37,6 +37,11 @@ exports.go = (req, res) ->
   # 
   if req.query.localLocation?
 
+    unless req.query.runID
+      logging.logRed("""Bad request. runID parameter missing in request.""")
+      res.send(500) 
+      return
+
     # initialize a context object, to be passed around
     context = 
       runID : req.query.runID
@@ -50,6 +55,7 @@ exports.go = (req, res) ->
 
     outFile = setOutFile(baseFileName)
     convert.go(context, outFile, docLogger, req, res)
+    return
 
   #
   # Handle api request for inkUrl file (fetch the upload and pass on to conversion)
@@ -64,4 +70,7 @@ exports.go = (req, res) ->
 
     outFile = setOutFile(baseFileName)
     fetch(inkUrl, outFile, docLogger, req, res, convert.go)
-
+    return
+  
+  logging.logRed("""Bad request""")
+  res.send(500) 

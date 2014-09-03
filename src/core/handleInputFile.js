@@ -36,6 +36,11 @@ setOutFile = function(baseFileName) {
 exports.go = function(req, res) {
   var baseFileName, context, docLogger, inkUrl, outFile;
   if (req.query.localLocation != null) {
+    if (!req.query.runID) {
+      logging.logRed("Bad request. runID parameter missing in request.");
+      res.send(500);
+      return;
+    }
     context = {
       runID: req.query.runID
     };
@@ -45,6 +50,7 @@ exports.go = function(req, res) {
     docLogger.info('logger started');
     outFile = setOutFile(baseFileName);
     convert.go(context, outFile, docLogger, req, res);
+    return;
   }
   if (req.query.inkUrl != null) {
     inkUrl = req.query.inkUrl;
@@ -53,6 +59,9 @@ exports.go = function(req, res) {
     docLogger.info('logger started');
     req.session.docLogger = docLogger;
     outFile = setOutFile(baseFileName);
-    return fetch(inkUrl, outFile, docLogger, req, res, convert.go);
+    fetch(inkUrl, outFile, docLogger, req, res, convert.go);
+    return;
   }
+  logging.logRed("Bad request");
+  return res.send(500);
 };
