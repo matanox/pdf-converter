@@ -19,7 +19,7 @@ rdbms      = require './storage/rdbms/rdbms'
 nconf.argv().env()
 nconf.defaults 
   host        : "localhost"
-  directory   : '../local-copies/pdf/'
+  directory   : '../data/pdf/0-input/'
   flood       : false
   parallelism : 2
   maxFiles    : process.argv[2] or 10000  # first command-line argument if any
@@ -136,7 +136,7 @@ makeRequest = (filename) ->
           #process.exit(0) 
           return)) (filename) # Callback application
 
-  console.log "Requesting " + directory + filename
+  console.log "Requesting " + filename
   util.timelog null, 'Server response for ' + filename
 
   #
@@ -163,7 +163,7 @@ for filename in fs.readdirSync(directory)
       #console.log toRequest.length
       #console.log maxFiles
       if toRequest.length < maxFiles
-        toRequest.push(filename)
+        toRequest.push(directory + filename)
     else
       console.log 'Skipping .gitignore' 
   else

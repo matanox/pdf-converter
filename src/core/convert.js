@@ -49,7 +49,6 @@ exports.go = function(context, localCopy, docLogger, req, res) {
       storage.store(context, "pdf", fileContent, docLogger);
       util.timelog(context, "Conversion to html");
       logging.cond("starting the conversion from pdf to html", 'progress');
-      util.mkdir(outFolder, name);
       execCommand = executable + " ";
       execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + '"';
       dataWriter.write(context, 'pdfToHtml', execCommand);

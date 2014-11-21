@@ -80,7 +80,8 @@ exports.go = (context, localCopy, docLogger, req, res) ->
         
         #res.send('Please wait...'');
 
-        util.mkdir(outFolder, name)
+        #util.mkdir(baseFolder)
+        #util.mkdir(outFolder)
 
         execCommand = executable + " "
         

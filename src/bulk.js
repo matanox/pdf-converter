@@ -17,7 +17,7 @@ nconf.argv().env();
 
 nconf.defaults({
   host: "localhost",
-  directory: '../local-copies/pdf/',
+  directory: '../data/pdf/0-input/',
   flood: false,
   parallelism: 2,
   maxFiles: process.argv[2] || 10000
@@ -127,7 +127,7 @@ makeRequest = function(filename) {
       });
     };
   })(filename);
-  console.log("Requesting " + directory + filename);
+  console.log("Requesting " + filename);
   util.timelog(null, 'Server response for ' + filename);
   return http.get({
     host: host,
@@ -149,7 +149,7 @@ for (_i = 0, _len = _ref.length; _i < _len; _i++) {
   if (fs.statSync(directory + filename).isFile()) {
     if (filename !== '.gitignore') {
       if (toRequest.length < maxFiles) {
-        toRequest.push(filename);
+        toRequest.push(directory + filename);
       }
     } else {
       console.log('Skipping .gitignore');
