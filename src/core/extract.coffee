@@ -935,7 +935,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       #dataWriter.write context, 'sentences', sentence
 
   dataWriter.writeArray context, 'sentences', sentences
-
+  fs.writeFile('../data/pdf/2-as-text/' + context.name, sentences.join('\n'))
  
   #
   # data-log all that has meta-tag

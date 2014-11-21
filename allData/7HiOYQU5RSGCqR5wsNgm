@@ -1,0 +1,478 @@
+a a Xfi Centre for Finance and Investment, Exeter University Business School, Exeter, UK Published online: 20 Jun 2013. 
+To cite this article: Pengguo Wang (2013) The role of disaggregation of earnings in stock valuation and earnings forecasting, Accounting and Business Research, 43:5, 530-557, DOI: 10.1080/00014788.2013.804794 To link to this article: http://dx.doi.org/10.1080/00014788.2013.804794 PLEASE SCROLL DOWN FOR ARTICLE Taylor & Francis makes every effort to ensure the accuracy of all the information (the “Content”) contained in the publications on our platform. 
+However, Taylor & Francis, our agents, and our licensors make no representations or warranties whatsoever as to the accuracy, completeness, or suitability for any purpose of the Content. 
+Any opinions and views expressed in this publication are the opinions and views of the authors, and are not the views of or endorsed by Taylor & Francis. 
+The accuracy of the Content should not be relied upon and should be independently verified with primary sources of information. 
+Taylor and Francis shall not be liable for any losses, actions, claims, proceedings, demands, costs, expenses, damages, and other liabilities whatsoever or howsoever caused arising directly or indirectly in connection with, in relation to or arising out of the use of the Content. 
+This article may be used for research, teaching, and private study purposes. 
+Any substantial or systematic reproduction, redistribution, reselling, loan, sub-licensing, systematic supply, or distribution in any form to anyone is expressly forbidden. 
+Terms & Conditions of access and use can be found at http://www.tandfonline.com/page/termsand-conditions The role of disaggregation of earnings in stock valuation and earnings forecasting PENGGUO WANG ∗ Xﬁ Centre for Finance and Investment, Exeter University Business School, Exeter, UK This paper compares and contrasts two accounting information systems, the aggregate earnings system and the disaggregated cash ﬂow/accrual system, examining their relative performance in stock valuation and in forecasting of earnings. 
+It ﬁnds, in general, that the forecasts of earnings and predicted market values from the cash ﬂow and accrual system have smaller forecasting errors than those from the aggregate earnings system. 
+The adjusted R-squareds from the disaggregated system are in the main higher than those from the aggregated system when considering the explanatory power of the model-predicted values. 
+The results also show that the cash ﬂow and accrual system forecasts dominate the aggregate earnings system forecasts in a large majority of industries. 
+Keywords: cash ﬂow; accruals; components of earnings; forecasts of earnings; stock valuation JEL Classiﬁcation: C53; G12; M41 1. Introduction Received wisdom suggests that models incorporating information about earnings components should genera te better forecasts of future earnings and lead to a greater accuracy in stock valuation. 
+Surprisingly, the valuation and forecasting implications of decomposing aggregate earnings into accrual and cash ﬂow components are largely unexplored. 
+One reason is that accruals are subject to accounting rules and can be manipulated by management. 
+More importantly, existing theoretical literature provides only limited guidance on how to map earnings and its components into equity values. 
+This paper investigates whether, and to what extent, decomposing aggregate earnings into operating cash ﬂows and total accruals improves the forecasting of earnings and the valuation of equity. 
+The general belief is that in an accrual accounting system, current earnings are a better indicator of future earnings than cash ﬂows. 
+However, it is not clear whether, given the ‘noisy’ nature of accruals, the combined information content embedded in cash ﬂows and accruals is inferior or # 2013 Taylor & Francis ∗ Email: p.wang@exeter.ac.uk Accounting and Business Research, 2013 Vol. 
+43, No. 5, 530–557, http://dx.doi.org/10.1080/00014788.2013.804794 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 superior to that in aggregate earnings. 
+Accruals rely on accounting rules, which have discretionary elements, and many accruals involve estimates, which will unavoidably contain errors. 
+Moreover, accruals may be manipulated by management. 
+It is not surprising that ﬁnancial analysts frequently focus on forecasting future earnings rather than its two components: cash ﬂows and accruals. 
+Nevertheless, the value relevance of an earnings component relies on its ability to predict future (abnormal) earnings and cash ﬂows (Dechow 1994, Sloan 1996, Ohlson 1999, Barth et al. 2001). 
+Existing studies show that if the information dynamics of cash ﬂows and accruals do not satisfy certain conditions, then they will attract different valuation weights (Feltham and Ohlson 1995, Stark 1997, Barth et al. 1999, Walker and Wang 2003, Pope 2005). 
+Since there is no one-to-one mapping between forecasting relevance and valuation relevance of an earnings component (Pope and Wang 2005), it is worthwhile examining empirically the implications of the information content in the aggregated and disaggregated accounting systems for both earnings forecasting and stock valuation. 
+In examining the incremental role of accruals in valuation and forecasting, prior literature documents that accruals are mean reverting and are less persistent than cash ﬂows. 
+Sloan (1996) argues that stock prices act as if investors do not understand the lower persistence of the accrual component of earnings, which leads to incorrect forecasts of future earnings and mispricing of stocks. 
+Clubb (1996) shows that incremental information content for unexpected accrual/cash ﬂow beyond aggregate earnings depends on the investment opportunity set. 
+Dechow et al. (1998) explore the forecasting properties of cash ﬂows and accruals. 
+Consistent with Dechow (1994), they ﬁnd that earnings are better predictors of future operating cash ﬂows than are current operating cash ﬂows. 
+Pfeiffer and Elgers (1999) ﬁnd accruals have less value relevance than cash ﬂows as measured by the signiﬁcance of the coefﬁcients in regressions of stock returns. 
+Barth et al. (1999) apply Ohlson (1999) to investigate the incremental role of cash ﬂows and accruals in forecasting future abnormal earnings, given aggregate abnormal earnings, where abnormal earnings are deﬁned as the difference between earnings and capital charges. 
+Sloan (1999) suggests that cash ﬂows and accruals may have different incremental roles in forecasting earnings due to different treatment of cash ﬂows and accruals in the existing generally accepted accounting principles (GAAP). 
+More recently, Barth et al. (2005) set out to determine whether industry-speciﬁc valuation parameters are an aid to predicting contemporaneous equity values. 
+They document that accruals and cash ﬂows have different abilities in forecasting abnormal earnings and ﬁnd that the roles of abnormal earnings and accruals in stock valuation vary signiﬁcantly across industries. 
+This paper differs from prior literature by directly modelling and contrasting two accounting information systems, one describing an operating cash ﬂow and a total accrual system and another describing an aggregate earnings system. 
+It examines the relative performance of each accounting system in stock valuation and in forecasting of earnings in terms of forecasting errors and the explanatory power of the model-predicted values to the realisations of earnings and observed market values of equity. 
+It is well established that accounting rate of returns are mean reverting – a reﬂection of unsustainable economic conditions in proﬁtability in a competitive market (see, for example, Beaver 1970, Freeman et al. 1982, Sloan 1996, Nissim and Penman 2001). 
+1 The accounting information dynamics in this paper are accordingly based on the assumption that return on equity (ROE) follows a mean-reverting process. 
+The deﬁnition of ROE depends on the accounting system being modelled. 
+Speciﬁcally, one accounting information system speciﬁes operating cash ﬂows, total accruals and book value of equity; the other is based on the evolution of bottomline numbers, namely aggregate earnings and book value of equity. 
+In the ﬁrst accounting system, I deﬁne two measures of ROE, one for each of the earnings components: cash ﬂows divided by book value and accruals divided by book value, whereas in th e second system, Accounting and Business Research 531 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 ROE is deﬁned as aggregate earnings scaled by book value. 
+The assumption of mean reversion for all ROE measures is internally consistent in the sense that the persistence and ROE measures satisfy two speciﬁc restrictions, i.e. the persistence of earnings and its components are equal, and the long-run mean aggregate ROE is equal to the sum of the long-run means of the cashROE and the accrual-ROE. 
+This consistency in the theoretical models is important because it sets a common base for comparing the aggregated and the disaggregated accounting information systems. 
+The assumed accounting information dynamics enable me to obtain analytic form forecasts of earnings and market values of equity. 
+I can therefore examine whether, and the extent to which, predicted earnings and equity values from each system explain reported earnings and observable equity values. 
+In this exercise, the parameters for each of the accounting information dynamics are estimated using out-of-sample estimations on an industry basis. 
+Because ﬁrms in the same industry compete for market share, analysis of the competitive structure of input and output markets is best conducted at the industry level (Lundholm and Sloan 2007). 
+I ﬁnd t hat the lower per sistence of accruals in the di saggregated accounting system does not imply that the decomposed accou nting system is inferior. 
+O n the contr ary, the evid ence shows that there is a clear advantage to decomposing aggregate earnings into cash ﬂow and accrual components for stock valuation and ear nings forecasting resulting in improved forecasts of observable market values and reported earnings. 
+In general, the forecasts of earnings and predicted market values from the cash ﬂow and accru al syste m have smaller relative errors than those from the aggregate earnings system. 
+Wh en examining the explanatory power of predicti ons of earnings and market values in each of the t wo systems, the adjusted R-squareds in the disaggregated acco unting system are mostly higher tha n those from the aggregated system. 
+The analysis also shows that the cash ﬂow and accrual system forecasts dominate the aggregate earnings system forecasts in the sense that forecasts of earnings and predicted market values from the latter hav e no incr emental information about the realisations of earnings and observed market values after controll ing for forecas ts of earnings and predicted market values from the former in a large majority of industries. 
+While in general there is an advantage in decomposing earnings for the purpose of valuation and forecasting, whet her, and the extent to which, the disaggregated sys tem outperforms the aggregate d system is industry speciﬁc. 
+This paper contributes to the literature in several ways. 
+First, it jointly models the generating processes for the operating cash ﬂow element of ROE and the accrual element of ROE on the grounds of economic and accounting realism. 
+Properties of the mean reverting of individual accounting ratios are well established, but the impact of the correlations between these ratios is not explored in prior literature. 
+Second, it establishes a formal theoretical link between the value of equity and components of earnings. 
+This computationally simple model can be useful for investment practice. 
+Third, it provides evidence showing that splitting earnings into its operating cash ﬂow and accrual components is likely to yield more precise forecasts of future payoffs and therefore better estimates of the value of equity. 
+Finally, it shows that forecasts from the aggregated earnings system are largely redundant for forecasting and valuation if one controls for forecasts from the disaggregated cash ﬂow and accrual system but not vice versa. 
+The rest of the paper is organised as follows. 
+In Section 2, I describe the accounting information dynamics of aggregate earnings, cash ﬂows and accruals, and then I derive the theoretical value for earnings forecasts and market value of equity; Section 3 explains the estimation procedures and research design; Section 4 describes the data and reports sample statistics; Section 5 presents the empirical results and robustness tests; ﬁnally, Section 6 concludes the paper. 
+532 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 2. Model development In the spirit of Beaver (1970) and others, I assume that both the operating cash ﬂow-ROE and the total accrual-ROE follow mean-reverting processes as below: CFO t+1 b t −m 1 =a 1 CFO t b t −m 1  +a 12 ACC t b t −m 2  + 1 c,t+1 , (1) ACC t+1 b t −m 2 =a 2 ACC t b t −m 2  + 1 a,t+1 , (2) where CFO t and ACC t are, respectively, the two earnings components: cash from operations and total accruals, b t is book value of the ﬁrm at time t. 2 a 1 anda 2 . 
+0 are persistence of the cashROE and the accrual-ROE. 
+3 m 1 andm 2 are the expected long-run mean of the cash-ROE and longrun mean of the accrual-ROE, respectively. 
+Thea 12 term captures how the convergence of the accrual-ROE affects the convergence of the cash-ROE. 
+1 c,t+ 1 and 1 a,t+1 are two zero mean disturbance terms. 
+4 The cash ﬂow dynamic, (1), can be rewritten as E t [CFO t+1 ] =a 1 CFO t +a 12 ACC t + ((1 −a 1 )m 1 −a 12 m 2 )b t . 
+(3) Hence, the persistence in (1) are the persistence of the components of earnings in the cash ﬂow dynamics after controlling for the book value of equity. 
+Thea 12 term captures the importance of accruals as forecasts of future cash ﬂows. 
+It recognises the role of accruals in smoothing out cash ﬂows and reduces the noise in performance measurement. 
+This is consistent with Barth et al. (2001), who investigate the role of accrual components in cash ﬂow forecasts and stock valuation. 
+Feltham and Ohlson (1996) assume a similar cash ﬂow dynamic, where accruals due to depreciation are their focus. 
+Unlike Barth et al. (2001), the total accrual here is modelled jointly by the information dynamic (2), which can be rewritten as E t [ACC t+1 ] =a 2 ACC t + (1 −a 2 )m 2 b t . 
+(4) This is similar to the accrual system in Barth et al. (1999, 2005). 
+5 I denote the expected earnings at time t + 1 based on the available information at time t, E t [e cfacc t+1 ], where the superscript cfacc refers to the value derived from the cash ﬂow and accrual dynamics. 
+By construction, the earnings of the ﬁrm at time t, e t ; CFO t + ACC t , and E t [e cfacc t+1 ] ; E t [CFO t+1 ] + E t [ACC t+1 ]. Equations (3) and (4) imply: E t [e cfacc t+1 ] =a 1 CFO t + (a 12 +a 2 ) ACC t + ((1 −a 1 )m 1 + (1 −a 12 −a 2 )m 2 )b t =a 1 e t − (a 1 −a 12 −a 2 ) ACC t + ((1 −a 1 )(m 1 +m 2 ) + (a 1 −a 12 −a 2 )m 2 )b t . 
+(5) This is similar to Sloan (1996), which ﬁrst documents accrual anomaly and hypothesises that investors naively ﬁxate on aggregate earnings and do not appreciate the relative magnitudes of the coefﬁcientsa 1 and (a 12 +a 2 ) in the ﬁrst line of Equation (5), resulting in incorrect forecasts of earnings and the mispricing of stocks. 
+When cash ﬂows and accruals are equally persistent in earnings dynamic (5), i.e.a 1 ¼a 12 + a 2 , aggregate earnings is a sufﬁcient earnings construct for forecasting. 
+The following degenerate Accounting and Business Research 533 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 earnings dynamic follows: E t [e cfacc t+1 ] b t − (m 1 +m 2 ) =a 1 e t b t − (m 1 +m 2 )  , where (m 1 +m 2 ) is the implied expected long-run mean of aggregate ROE in the disaggregated system. 
+This degenerate case often motivates the following second accounting system as a practice tool. 
+Speciﬁcally, it assumes that aggregate ROE follows a mean-reverting process (Freeman et al. 1982): 6 e t+1 b t −m=a e t b t −m  + 1 e,t+ 1 , (6) wherea. 
+0 is the persistence of the aggreg ate ROE andmis the expected long-run mean of the aggregate ROE. 
+1 e,t+ 1 is a disturbance term with zero mean. 
+Equation (6) implies that the expected aggregate earnings can be written as: E t [e e t+1 ] =ae t + (1 −a)mb t , (7) where E t [e e t+1 ] denotes the expected earnings at time t + 1 based on the available information at time t, with the superscript e referring to forecasts derived from the aggregate earnings system. 
+Similar to Equation (5) and (7) illustrates the importance of proﬁta bility and book equity in the generation of future earnings. 
+It is important to note thatmis the expected long-run mean of aggregate ROE corresponding to the aggregate earnings system (6), while (m 1 +m 2 ) is the implied expected long-run mean of aggregate ROE corresponding to the disaggregated cash ﬂow/accrual system (1) and (2). 
+E t [e e t+1 ] in Equation (7) and E t [e cfacc t+1 ] in Equation (5) are generated by different dynamics, which describe different accounting items. 
+For instance, ifa 1 = (a 2 +a 12 ), and an analyst believes that Equations (1) and (2) are a correctly speciﬁed accounting system, then Equation (6) will be mis-speciﬁed, and vice versa. 
+As a consequence, empirical implementation may result inm being a biased estimate of (m 1 +m 2 ). For the convenience and clarity of exposition in the following analysis, I refer to the sum of the long-run means of cash-ROE and accrual-ROE from the disaggregated cash ﬂow and accrual system as the implied expected long-run mean ROEm ′ to differentiate it fromm. 
+Given the information dynamics of the earnings components in (1) and (2), we need to establish the evolution of the book value of equity for the purpose of stock valuation. 
+This is important since a benchmark with which to assess the usefulness of decomposing aggregate earnings is prediction of the market value of equity. 
+7 Maintaining parsimony, I follow prior literature by assuming that book values have an expected constant growth rated21 (Feltham and Ohlson 1995, Barth et al. 1999, 2005, Myers 1999) as Equation (8) below b t+1 =db t + 1 b,t+1 , (8) whered, R, which is 1 plus the cost of capital. 1 b,t+1 is a disturbance term with zero mean. 
+Assuming that the clean surplus accounting relation holds, i.e. dividends are equal to earnings less change in book values of equity, the market value of equity in a no-arbitrage economy can 534 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 be written in terms of the earnings components {CFO t , ACC t } and book values as follows: MV cfacc t = (1 +b 0 )b t +b 1 CFO t +b 2 ACC t , (9) where b 0 = 1 R −d R(m 1 +m 2 ) 1 −a 1 R −a 1 + Rm 2 (a 1 −a 2 −a 12 )(R − 1) (R −a 1 )(R −a 2 ) − R + 1  , b 1 = a 1 R −a 1 , b 2 = a 2 R −a 2 + Ra 12 (R −a 1 )(R −a 2 ) = a 1 R −a 1 − R (a 1 −a 2 −a 12 ) (R −a 1 )(R −a 2 ) . 
+(10) Proof of Equation (9) can be found in Appendix 1. Equation (9) indicates that accrua l accounting recognises accruals or noncash values as part of the value added. 
+As argued by Sloan (1996), it is clear that the relative persistence of cash ﬂows and accruals in the earnings dynamic (5),a 1 2 (a 2 +a 12 ), is one of the important factors in equity pricing. 
+The long-run mean of accrual-ROE also plays a decisive role via the book value of equity. 
+When cash ﬂows and accruals are equally persistent, i.e.a 1 ¼a 2 +a 12 , aggregate earnings is a sufﬁcient earnings construct not only for forecasting, but also for valuation, since the valuation weights on the two earnings components are th e same (b 1 =b 2 =a 1 /(R −a 1 )). Whena 1 ¼a 12 +a 2 ¼a, andm 1 +m 2 ¼m, Equations (9) and (10) imply that the corresponding market value of equity in a no-arbitrage economy can be expressed in terms of the aggregate earnings and book value as follows: MV e t = 1 + 1 (R −d) Rm 1 −a R −a − R + 1  b t + a R −a e t , (11) where MV e t is the market value of equity at time t based on aggregate earnings system. 
+In summary, the aggregate earnings information dynamic (6) can be viewed as a restricted version of the cash ﬂow and the accrual information dynamics (1) and (2), when the persistence parameters in the information dynamics satisfy:a 1 ¼a 12 +a 2 ¼a, and the long-run mean aggregate ROE,m, is equal to the implied expected long-run mean ROE,m ′ , from the disaggregated system. 
+8 Although such restrictions do not imply that one accounting information system is necessarily inferior/superior to the other, Equations (5) and (7) (the forecasting equations) together with Equations (9) and (11) (the valuation equations) provide us with a basis to compare and contrast the two accounting information systems. 
+One point needs to be emphasised here: my focus is on which accounting system better describes realised earnings and observed equity values, not on the absolute accuracy of the forecasts and valuations. 
+The simple parsimonious information dynamics inevitably generate biased predictions because non-accounting information and growth components in forecasting and stock valuation are ignored in the analysis. 
+Nevertheless, if capital market participants assume that ‘other information’ and investment decisions are independent of either accounting information system, then they can conveniently and fairly compare and contrast the performance of the two accounting information systems for valuation and forecasting. 
+Accounting and Business Research 535 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 3. Estimation procedure and empirical design To compare and contrast the two accounting information systems, we need to estimate persistence parameters,a’s, and the long-run means,m’s, in Equations (1), (2) and (6), as well as the growth parameter,d, in Equation (8). 
+In view of the possible correlations among the error terms in Equations (1), (2) and (8) for the dynamics of the cash-ROE, the accrual-ROE and the book value of equity, I run the seemingly unrelated regressions: CFO t+1 b t = c 1 +a 1 CFO t b t +a 12 ACC t b t + 1 c,t+ 1 , ACC t+1 b t = c 2 +a 2 ACC t b t + 1 a,t+1 , Db t+1 = c 3 + (d 1 − 1)b t + 1 b,t+1 , (12) where Db t+1 = b t+1 − b t and c i (i ¼ 1, 2, 3) are intercepts. 
+9 While the persistence parameters,a 1 , a 12 , anda 2 , can be directly estimated, the long-run mean cash-ROE and accrual-ROE can be derived from the corresponding intercepts and persistence as m 1 = 1 1 −a 1 c 1 + a 12 c 2 1 −a 2  andm 2 = c 2 1 −a 2 . 
+Similarly, I estimate the aggregate earnings dynamics by running the seemingly unrelated regressions: e t+1 b t = c 4 +a e t b t + 1 e,t+ 1 , Db t+1 = c 5 + (d 2 − 1)b t + 1 b,t+1 , (13) where c i (i ¼ 4, 5) are intercepts. 
+The long-run mean aggregate ROE can then be written as: m= c 4 /(1 −a). 
+Since prior literature documents that valuation parameters are industry speciﬁc, I estimate industry-speciﬁc information parameters from both the aggregated and disaggregated accounting systems. 
+Following Barth et al. (2005), I use a jackkniﬁng procedure to estimate ﬁrm-industryspeciﬁc parameters. 
+Speciﬁcally, I run cross-sectional regressions using the previous ﬁve years of data for each ﬁrm-year in an industry without using that ﬁrm’s data to generate parameters in either of the two accounting systems. 
+10 By doing so, the parameters are ﬁrm-industry-year speciﬁc estimates, which incorporate yearly updated information. 
+For example, for ﬁrm i in industry j in year 1991, the ﬁrm’s speciﬁc information parameters,a’s andm’s, are estimated based on 1987– 1991 data for all other ﬁrms in the industry. 
+11 The prediction of ﬁrm i’s earnings in year t + 1 in industry j is the predicted value from the earnings models, E[e cfacc i,t+1 ] in (5) and E[e e i,t +1 ] in (7), using parameters estimated from systems (12) and (13), and using all ﬁrms in industry j except ﬁrm i’s from year t24 to year t. The resulting predictions are strictly out-of-sample since ﬁrm i’s data in year t are not used to estimate the coefﬁcients. 
+Similarly, the estimation of ﬁrm i’s equity market value in year t in industry j is the estimated value from the valuation models, MV cfacc i,t in (9) and MV e i,t in (11), again using parameters estimated from systems (12) and (13), and using all ﬁrms in industry j except ﬁrm i’s from year t2 4 to year t. The predictions in market values are consequently deemed out-of-sample. 
+536 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 To get a sense and assess the differences in prediction errors across accounting information systems, I calculate a commonly applied prediction error metric – the absolute percentage error in forecasting and in valuation. 
+I calculate absolute errors because it is expected that the predicted stock values are underestimated by ignoring non-accounting information and any growth components in the systems. 
+The errors in equity market capitalisation derived from both the cash ﬂow and accrual dynamics, and the aggregate earnings dynamic are computed as below. 
+For industry j, denote MDMV cfacc j = Mean of absolute percentage difference in market value, (MV cfacc ijt − MV ijt )/MV ijt for all firm i and time t from cash flow and accrual dynamics, (14) and MDMV e j = Mean of absolute percentage difference in market value, (MV e ijt − MV ijt )/MV ijt for all firm i and time t from aggregate earnings dynamics, (15) where MV ijt is market capitalisation for ﬁrm i at time t in industry j. The same prediction error metric is applied to the forecasted earnings on an industry basis. 
+For industry j, denote MDE cfacc j = Mean of absolute percentage difference in earnings, (e cfacc ijt − e ijt )/e ijt for all firm i and time t from cash flow and accrual dynamics, (16) and MDE e j = Mean of absolute percentage difference in earnings, (e e ijt − e ijt )/e ijt for all firm i and time t from aggregate earnings dynamics, (17) where e ijt is reported earnings for ﬁrm i at time t in industry j. With the expected earnings derived from the cash ﬂow and accrual information dynamics, E[e cfacc i,t+1 ] in (5), and the expected earnings derived from the aggregate earnings dynamics, E[e e i,t+1 ] in (7), adjusted R-squareds and Vuong Z-statistics (Mincer and Zarnowitz 1969, Vuong 1989, Dechow 1994) can be used to examine whether E[e cfacc i,t+1 ]orE[e e i,t+1 ] better explains the reported earnings, e i,t +1 . 
+Similarly, with the estimated stock value derived from the cash ﬂow and accrual information dynamics, MV cfacc i,t in (9), and the estimated stock value derived from the aggregate earnings dynamics, MV e i,t in (11), adjusted R-squareds, and Vuong Z-statistics can be used to examine whether MV cfacc i,t or MV e i,t better explains equity market capitalisation, MV i,t . 
+If the Z-statistic is positive and statistically signiﬁcant, the test indicates that the cash ﬂow and accrual information dynamics are better than the aggregate earnings dynamics, in the sense that the residuals generated by the following regressions: e i,t+1 = k 1 +g 1 E t [e cfacc i,t+1 ] + 1 1i,t+1 and MV i,t = k 3 +g 3 MV cfacc i,t + 1 2i,t , (18) Accounting and Business Research 537 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 are smaller than those from the corresponding regressions in (19): e i,t+1 = k 2 +g 2 E t [e e i,t +1 ] + 1 3i,t+1 and MV i,t = k 4 +g 4 MV e i,t + 1 4i,t , (19) where k i (i ¼ 1 –4) are intercepts andg i (i ¼ 1 –4) are slopes. 
+On the other hand, if the Z-statistic is negative and statistically signiﬁcant, then the aggregate earnings dynamics are superior. 
+Finally, I run an encompassing regression: e i,t +1 = k 5 +g 51 E t [e cfacc i,t +1 ] +g 52 E t [e e i,t +1 ] + 1 5i,t+1 , (20) where k 5 is the intercept andg 5i (i ¼ 1 –2) are slopes. 
+Ifg 51 is close to 1 and statistically different from zero, andg 52 is not signiﬁcantly different from zero, then the cash ﬂow and accrual system forecasts can be said to dominate the aggregate earnings system forecasts. 
+On the other hand, if g 51 is not statistically signiﬁcantly different from zero, andg 52 is close to 1 and statistically different from zero, then the aggregate earnings system forecasts can be said to dominate the cash ﬂow and accrual system forecasts. 
+For other (statistically signiﬁcant) values of the regression slope parameters, neither system forecasts dominate the other, so that both forecasts contain useful information about the realisation of earnings. 
+Similarly, I run the following encompassing regression to see whether MV cfacc i,t and/or MV e i,t contain useful information about the observed equity values: MV i,t = k 6 +g 61 MV cfacc i,t +g 62 MV e i,t + 1 6i,t , (21) where k 6 is the intercept, andg 6i (i ¼ 1– 2) are slopes. 
+4. Sample description I collect relevant accounting data from Compustat’s entire data-set for years 1987–2009. 
+Year 1987 is the ﬁrst year wh en operating cash ﬂows are available in Compustat. 
+Aggregate earnings are measured as net income before extraordinary items (Compustat item: IB). 
+12 Following Barth et al. (1999, 2005), total accruals are measured by the difference between aggregate earnings and operating cash ﬂows (OANCF). 
+13 Market capitalisation is equal to price per share multiplied by the numbers of shares of outstanding (CSHO). 
+Price per share is measured three months after the end of the ﬁscal year from the Center for Research in Security Prices to ensure that accounting information is known before value is computed. 
+Firms with negative book values (CEQ) are deleted. 
+To avoid the inﬂuence of small ﬁrms, I restrict the sample to ﬁrms with market capitalisation in excess of $10 million. 
+14 To mitigate the effects of outliers, ﬁrms in the extreme percentiles of earnings, book values, numbers of share outstanding, operating cash ﬂows, accruals and ROEs are also excluded (Barth et al. 1999, 2005, Ball et al . 
+2000). 
+All variables are expressed in millions of dollars and measured as of ﬁscal year-end, except equity market value. 
+Panel A of Table 1 contains details of the sample. 
+Summary descriptive statistics can be found in Panel B. It shows that less than 25% of ﬁrms have positive accruals and that the mean accrual is negative. 
+The main reason for this is that depreciation expense is included in accruals but capital expenditures are included in investing cash ﬂows (Sloan 1996, Barth et al. 2001). 
+The average aggregate ROE is 5.6%, and the average cash-ROE and average accrual-ROE are 17.2% and 211.6%, respectively, over the sample period. 
+Panel C of Table 1 shows the correlation mat rix of the input variables. 
+The Pearson correlation is the lower half and the Spearman correlation is the top half. 
+They show that accruals are highly negatively correlated with market capitalisation, book value of equity, earnings and operating cash ﬂows. 
+538 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 1. Sample descriptive statistics and correlations. 
+Panel A: Summary of data used in parameter estimation in accounting systems Number of ﬁrm-years from 1987 to 2009 for which earnings, book value and operating cash ﬂows observations are obtained from COMPUSTAT 123,508 Less: ﬁrms with negative book value 4095 119,413 Less: cases for which there is no matching operating cash ﬂow 17,320 102,093 Less: 1% extreme observations of book value, earnings, dividend, operating cash ﬂow, accrual and number of share outstanding 11,454 90,639 Less: ﬁrms with market capitalisation less than 10 million dollars and top 1% 7802 82,837 Less: cases for which there is no matching lagged book value observation 14,867 67,970 Less: 1% of extreme values of return on equity, lagged return on equity, cash return on equity, lagged cash return on equity, accrual return on equity and lagged accrual return on equity 7764 Number of ﬁrm-years used in estimating of parameters in accounting systems 60,206 Panel B: Sample descriptive statistics MV be CFO Accrual ROE ROCF ROACC ROE1 ROCF1 ROACC1 Mean 740.50 350.90 31.95 73.36 241.42 0.056 0.172 20.116 0.052 0.152 20.100 Stdev 1257.00 580.60 81.74 144.60 90.19 0.204 0.217 0.169 0.176 0.188 0.154 Q1 66.66 43.75 0.12 2.82 240.64 0.003 0.065 20.193 0.014 0.060 20.169 Median 225.50 127.20 7.44 17.27 29.23 0.092 0.175 20.097 0.090 0.159 20.081 Q3 796.10 388.10 36.62 74.77 21.03 0.163 0.288 20.022 0.145 0.258 2 0.013 Panel C: Correlation matrix (Pearson bottom; Spearman top) MV be CFO Accrual ROE ROCF ROACC ROE1 ROCF1 ROACC1 MV 1 0.880 0.674 0.751 20.521 0.348 0.348 20.057 0.305 0.318 20.090 b 0.788 1 0.673 0.812 20.601 0.255 0.309 20.071 0.250 0.308 20.095 e 0.750 0.750 1 0.757 20.260 0.751 0.540 0.135 0.536 0.461 20.022 CFO 0.777 0.861 0.823 1 20.713 0.456 0.706 20.326 0.404 0.523 20.196 Accrual 2 0.566 20.700 20.413 20.857 1 0.056 20.504 0.731 20.053 20.320 0.319 ROE 0.234 0.164 0.410 0.241 20.014 1 0.627 0.224 0.668 0.493 0.037 ROCF 0.249 0.181 0.322 0.376 20.311 0.682 1 20.510 0.479 0.618 20.253 ROACC 20.037 20.035 0.083 20.192 0.382 0.338 20.458 1 0.098 20.225 0.379 ROE1 0.211 0.165 0.291 0.221 20.091 0.647 0.513 0.126 1 0.570 0.216 ROCF1 0.240 0.193 0.288 0.316 20.246 0.540 0.644 20.172 0.645 1 2 0.575 ROACC1 20.052 2 0.047 2 0.020 20.134 0.196 0.080 20.200 0.354 0.357 20.483 1 (Continued) Accounting and Business Research 539 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 1. Continued. 
+Panel D: Industry composition Industry description Primary SIC codes Obs. 
+% Food 2000–2111 1299 2.16 Textiles, printing and publishing 2200–2780 3251 5.40 Chemicals 2800–2824, 2840–2899 1551 2.58 Pharmaceuticals 2830–2836 2791 4.64 Extractive industries 2900– 2999, 1300 –1399 2171 3.61 Durable manufacturers Rubber, plastic, leather, stone, clay and glass 3000– 3299 1320 2.19 Metal 3300–3499 1881 3.12 Machinery 3500–3569, 3580–3599 2262 3.76 Electrical equipment 3600–3669, 3680–3699 2767 4.60 Transportation equipment 3700–3799 1225 2.03 Instruments 3800–3899 4070 6.76 Miscellaneous manufacturers 3900– 3999 568 0.94 Computers 7370–7379, 3570–3579, 3670–3679 7831 13.01 Transportation 4000–4899 2861 4.75 Utilities 4900–4999 2707 4.50 Retail 5000–5999 5982 9.94 Financial institutions 6000–6411 5333 8.86 Insurance and real estate 6500–6999 3289 5.46 Services 7000–7369, 7380–8999 5189 8.62 All other 1858 3.09 Total 60,206 100 Notes: Panel A summarises data used in accounting system parameter estimation. 
+Panel B shows descriptive statistics for 60,206 ﬁrm-years between 1987 and 2009. 
+MVand b are market value and book value of equity, respectively. 
+e is net income before extraordinary items. 
+CFO is operating cash ﬂow. 
+Accrual ¼ e – CFO. 
+ROE is return on equity, ROCF is cash return on (lagged book value of) equity and ROACC is accrual return on (lagged book value of) equity. 
+ROE1 is earnings over book value, ROCF1 is cash ﬂows over book value and ROACC1 is accruals over book value of equity. 
+Firms in the extreme percentiles are deleted. 
+Only ﬁrms with market capitalisation . 
+$10 millions are included. 
+The mean, standard deviation (Stdev), median, and ﬁrst (Q1) and third (Q3) quartiles are reported. 
+Panel C shows the correlation matrix. 
+The Pearson correlation is at the bottom and the Spearman correlation is at the top. 
+All correlations are signiﬁcantly different from zero at 1% level. 
+Panel D describes industry composition. 
+Industry classiﬁcation is per Barth et al. (1999, 2005). 
+540 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 I base my industry classiﬁcations on those in Barth et al. (1998) and Barth et al. (1999, 2005). 
+Panel D of Table 1 describes the industry composition of the sample. 
+It reveals that industries with the largest concentrations of ﬁrm-year observations are Computers, 13.01%; Retail, 9.94%; Financial Institutions, 8.86% ; and Services, 8.62%. 
+Consistent with prior literature, I use a cost of capital of 11% in equity valuation models (9) and (11), and set negative predicted equity market values to zero. 
+15 5. Empirical results 5.1 Parameters in the two accounting information systems Table 2 reports the persistence parameters,a,a 1 ,a 12 anda 2 , in the information dynamics (12) and (13), based on seemingly unrelated regressions on the pooled sample. 
+The growth parameter of book value,d, and the long-run means of returns,m,m 1 andm 2 , are also reported. 
+Table 2. Parameters in accounting information dynamics based on pooled sample estimations. 
+Panel A Panel B Dependent variables Dependent variables ROCF ROACC Db ROE Db Intercept 0.063 (.008) 20.039 (.007) 5.962 (6.08) Intercept 0.05 (.007) 6.086 (6.08) a 1 0.814 (.003)a0.743 (.004) a 12 0.20 (.004) a 2 0.388 (.004) d 1 1.058 (.001)d 2 1.058 (.001) m10.271m0.195 m 2 20.063 R 2 0.432 0.137 0.070 R 2 0.427 0.070 Test of coefﬁcients of cash ﬂow and accruals in the disaggregated system: Wald tests:a 1 ¼a 2 ;x 2 (1) ¼ 6217.01, Prob .x 2 ¼ 0.0000. 
+Wald tests:a 1 ¼a 12 +a 2 ;x 2 (1) ¼ 2814.85, Prob .x 2 ¼ 0.0000. 
+Notes: Table 2 reports the persistence and the long-run means of cash-ROE, accrual-ROE and aggregate ROE in information dynamics below based on two seemingly unrelated regressions. 
+Cash ﬂow and accrual system: CFO t+1 b t = c 1 +h 1,t +a 1 CFO t b t +a 12 ACC t b t + 1 c,t+1 , ACC t+1 b t = c2+h 2,t +a2 ACC t b t + 1a,t+1, Dbt+1= c3+h 3,t + (d1− 1)bt+ 1b,t+1, Aggregate earnings system: e t+1 b t = c 4 +h 4,t +a e t b t + 1 4,t+1 , Dbt+1= c5+h 5,t + (d2− 1)bt+ 15,t+1, where c i (i ¼ 1–5) are intercepts andh i,t (i = 1 − 5) are time dummies for each sample year, m 1 = 1 1 −a 1 c 1 + a 12 c 2 1 −a 2  ,m 2 ¼ c 2 /(1 2a 2 ) andm¼ c 4 /(1 2a). 
+Pooled sample consists of 60,206 observations from 1987 to 2009. 
+ROE is aggregate return on equity. 
+ROCF is cash ﬂow scaled by lagged book value, ROACC is accrual scaled by lagged book value, and b is book value of equity. 
+Values in parenthesis are standard errors. 
+Accounting and Business Research 541 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 2 shows that the persistence of cash ﬂows is much larger than that of accruals,a 1 ¼ 0.814 .a 2 ¼ 0.388. 
+In other words, the accrual-ROE reverts to its mean much more quickly than does cash-ROE. 
+This of course reﬂects the nature of accrual accounting. 
+A Wald test on the parameters of the ﬁtted model shows that the null hypothesis of equality, H 0 :a 1 ¼a 2 ,is strongly rejected. 
+Table 2 also shows thata 1 ¼ 0.814 .a 12 ¼ 0.20, i.e. high cash ﬂow performance that is attributable to the cash ﬂow component is more likely to persist than that which is attributable to the accruals. 
+This implies that cash ﬂows contain more information than accruals about the next period’s cash ﬂows (Barth et al. 2001). 
+As shown in Equation (5), the coefﬁcient of accrual in earnings forecasting in the disaggregated accounting system is (a 12 +a 2 ). Table 2 shows thata 12 +a 2 ¼ 0.589 ,a 1 ¼ 0.814. 
+He re again the null hypothesis of equality, H 0 : a 1 ¼a 12 +a 2 , is strongly rejected. 
+This is consistent with Sloan (1996), which ﬁnds that a good earnings performance that is attributable to the cash ﬂow component is more likely to persist than that which is attributable to the accrual component of earnings. 
+Note that the coefﬁ cient of accruals,a 12 +a 2 , in the earnings dynamic here is implied by jointly regressing cash ﬂow dynamic and accrual dynamic, whereas in contrast, Sloan’s ﬁnding is based on directly regressing one-period ahead earnings on current cash ﬂows and accruals. 
+The long-run means of the cash-ROE and the accrual-ROE derived from the intercept terms and the coefﬁcients ofa 1 ,a 12 ,a 2 are respectivelym 1 ¼ 0.271 andm 2 ¼ 20.063. 
+The negative long-run mean accrual-ROE reﬂects the smoothing effect of accruals on the long-run mean aggregate ROE. 
+The growth rate of book value in both the accounting systems is roughly equal to 5.8% p.a. over the sample period. 
+16 The persistence of earnings and the long-run mean ROE are shown in Panel B witha¼ 0.743 andm¼ 0.195. 
+On an industry-by-industry basis, I use the jackkniﬁng approach to estimate ﬁrm-year parameters for the information dynamics (12) and (13) for each industry. 
+17 In order to make the comparison meaningful on an industry-by-industry basis, I delete the Pharmaceuticals industry since its long-run mean aggregate ROE is negative (m, 0), which suggests other information could be signiﬁcant in determining its future earnings and current equity value. 
+18 The average values of the information parameters for each industry are reported in Table 3. These parameters are respectively the persistence of cash ﬂows (a 1 ) and accruals (a 12 ) in the cash ﬂow dynamics, the persistence of accruals (a 2 ), and the persistence of aggregate earnings (a), the long-run means of the cash-ROE (m 1 ), the accrual-ROE (m 2 ), and the aggregate ROE (m), and the long-run growth rates of book value of equity (d 1 andd 2 ). Panel A of Table 3 shows characteristics similar to those in Table 2. Accruals revert to their mean more quickly than do cash ﬂows for all sample industries (with persistence rates ofa 2 ¼ 0.385 anda 1 ¼ 0.74, respectively). 
+In the cash ﬂow dynamic (3), cash ﬂows are more persistent than accruals, with the mean persistence rates ofa 1 ¼ 0.74 anda 12 ¼ 0.202, respectively, indicating that cash ﬂows contain more information than accruals about future cash ﬂows. 
+Hence a good earnings performance that is attributable to the cash ﬂow component is more likely to persist than that which is attributable to the accruals component of earnings for all sample industries (a 12 +a 2 ,a 1 ). A paired t-test ofa 1 againsta 12 +a 2 based on the 18 industries has a tvalue of 11.68, indicating thata 12 +a 2 is statistically signiﬁcantly different froma 1 . 
+Panel B of Table 3 shows that the mean value ofa¼ 0.758 for the sample industries anda. 
+a 12 +a 2 , for all industries. 
+A paired t-test ofa 1 againsta, based on the 18 industries has a t-value of 21.88, suggesting thatais not statistically signiﬁcantly different froma 1 at the 5% level. 
+The mean of long-run growth in book equity is 6.6% in each of the accounting systems over the sample period. 
+Table 3 also shows that the long-run accrual-ROE is negative for all sample industries (m 2 , 0). However, the implied expected long-run mean ROEm ′ (¼m 1 +m 2 ) from the disaggregated system is larger than the long-run aggregate ROE (m), for all but one industry that of Financial 542 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 3. Parameters in cash ﬂows and accrual dynamics and earnings dynamics by industry, out-of-sample estimations. 
+Panel A Panel B Industrya 1 a 12 a 2 m 1 m 2 a 12 +a 2 m 1 +m 2 d 1 Namd 2 Food 0.763 0.278 0.336 0.253 20.107 0.615 0.146 1.056 1148 0.805 0.146 1.056 Textiles, printing and publishing 0.711 0.202 0.329 0.242 20.120 0.531 0.122 1.036 2834 0.756 0.109 1.036 Chemicals 0.773 0.293 0.355 0.225 20.111 0.648 0.114 1.030 1359 0.789 0.112 1.030 Extractive industries 0.706 20.028 0.648 0.488 2 0.321 0.621 0.167 1.079 1524 0.690 0.118 1.078 Rubber, plastic, leather, stone, etc. 
+0.717 0.191 0.395 0.249 20.118 0.586 0.131 1.029 1170 0.723 0.118 1.028 Metal 0.608 0.274 0.248 0.205 20.100 0.522 0.105 1.035 1667 0.630 0.101 1.035 Machinery 0.722 0.232 0.233 0.203 20.084 0.465 0.119 1.063 2017 0.734 0.101 1.061 Electrical equipment 0.713 0.231 0.266 0.164 20.074 0.497 0.091 1.087 1586 0.694 0.063 1.086 Transportation equipment 0.694 0.266 0.307 0.236 20.104 0.573 0.132 1.065 1003 0.769 0.120 1.064 Instruments 0.756 0.315 0.233 0.171 20.061 0.547 0.111 1.107 3503 0.757 0.082 1.107 Miscellaneous manufacturers 0.704 0.274 0.227 0.157 20.085 0.501 0.072 1.104 381 0.778 0.042 1.104 Computers 0.712 0.099 0.362 0.230 20.139 0.461 0.091 1.103 4460 0.661 0.047 1.102 Transportation 0.863 0.040 0.682 0.448 20.238 0.721 0.210 1.046 2566 0.857 0.102 1.046 Utilities 0.690 0.271 0.314 0.267 20.148 0.585 0.119 1.038 2341 0.692 0.113 1.038 Retail 0.749 0.247 0.409 0.225 20.121 0.657 0.105 1.070 5360 0.827 0.094 1.069 Financial institutions 0.787 0.209 0.474 0.285 20.120 0.683 0.165 1.096 4529 0.859 0.184 1.096 Insurance and real estate 0.838 0.067 0.649 0.277 20.121 0.716 0.155 1.066 2995 0.787 0.103 1.066 Services 0.806 0.168 0.470 0.270 20.156 0.638 0.114 1.079 4626 0.826 0.069 1.079 Mean 0.740 0.202 0.385 0.255 20.129 0.587 0.126 1.066 2504 0.758 0.101 1.066 Stdev 0.060 0.097 0.147 0.086 0.061 0.081 0.033 0.027 1463 0.066 0.034 0.027 Median 0.720 0.231 0.346 0.239 20.119 0.585 0.119 1.066 2179 0.763 0.102 1.065 Max 0.863 0.315 0.682 0.488 20.061 0.721 0.210 1.107 5360 0.859 0.184 1.107 Min 0.608 20.028 0.227 0.157 2 0.321 0.461 0.072 1.029 381 0.630 0.042 1.028 (Continued) Accounting and Business Research 543 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 3. Continued. 
+Panel C: t-test H 0 : mean ofa 1 ¼ mean ofa 12 + mean ofa 2 ; t ¼ 11.68 (with degree of freedom ¼ 17) H 0 : mean ofa 1 ¼ mean ofa; t ¼ 21.88 (with degree of freedom ¼ 17) H 0 : mean ofm¼ mean ofm 1 + mean ofm 2 ; t ¼ 23.68 (with degree of freedom ¼ 17) Notes: Table 3 reports the average parameters in the cash ﬂow and accrual dynamics, and the earnings dynamics in systems (12): CFO t+1 b t = c 1 +a 1 CFO t b t +a 12 ACC t b t + 1 c,t+1 , ACC t+1 b t = c 2 +a 2 ACC t b t + 1 a,t+1 , Db t+1 = c 3 + (d 1 − 1)b t + 1 b,t+1 , and (13): et+1 b t = c 4 +a et b t + 1 e,t+1 , Db t+1 = c 5 + (d 2 − 1)b t + 1 b,t+1 , on an industry basis in each year by using previous ﬁve-year data from 1991 to 2009, wherem 1 = 1 1 −a1 c1+ a 12 c 2 1 −a2  ,m 2 = c 2 1 −a2 andm= c 4 1 −a . 
+Estimations are based on crosssectional seemingly unrelated regressions for each industry by applying the jackkniﬁng procedure. 
+It is out-of-sample in the sense that cross-sectional regressions for each ﬁrm-year in an industry without using that ﬁ rm’s data to generate parameters. 
+Average numbers for each industry (N) are reported. 
+O ne per cent of dependent and independent variables are Winsorised. 
+The last ﬁve rows in Panels A and B show the statistics of the parameters, including mean, standard deviation, median, maximum and minimum values. 
+Industry classiﬁcation is per Barth et al. (1999, 2005). 
+544 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Institutions. 
+19 The long-run mean cash-ROE for the sample industries is 25.5%, and the long-run mean accrual-ROE is about (negative) 12.9%. 
+The implied expected long-run mean ROEm ′ from the disaggregated system is 0.126 and the long-run mean aggregate ROE (m) is 0.101. 
+The test of m¼m ′ based on the 18 industries has a t-value of 23.68, suggesting thatmis signiﬁcantly smaller thanm ′ . 
+Therefore, the disaggregated accounting system differs from the aggregated system in both the persistence and long-run mean of ROEs: the persistence of accruals is lower than that of cash ﬂows as documented in the existing literature, and the expected longrun mean aggregate ROE is less than the implied expected long-run mean ROE from the disaggregated system. 
+The industry-speciﬁc effect on the information parameters is clearly observed in both accounting systems. 
+In Table 3, the three industries with the lowest mean persistence of accruals (a 12 + a 2 ) in earnings forecasting are Computers, Machinery and Electrical Equipment. 
+The three industries with the lowest long-run mean accrual-ROE (m 2 ) are Extractive industries, Transportation, and Utilities, and two of these (Extractive industries, and Transportation) have among the three highest long-run mean cash-RO Es (m 1 ). This suggests a negative relationship between the long-run cash-ROE and the long-run accrual-ROE. 
+5.2 The forecasting ability of the two accounting information systems After estimating th e ﬁrm-year information parameters for each industry in both the accounting systems, I calculate the expected earnings and market value of equity, E[e e t+1 ], E[e cfacc t+1 ], MV e t and MV cfacc t using Equations (5), (7), (9) and (11) for each ﬁrm in each year. 
+I then compute the forecast errors between the predicted earnings/stock values and the reported earnings/ observed equity values. 
+Finally I examine the explanatory power of these predicted earnings and stock values for the reported earnings and the observed equity values. 
+To mitigate the effects of outliers, observations in the extreme percentiles of the information parameters, includinga,a 1 ,a 12 ,a 2 ,m,m 1 ,m 2 ,d 1 andd 2 are Winsorised. 
+Observations in the extreme percentiles of MV cfacc t and MV e t are also Winsorised in the analysis. 
+Panels A and B of Table 4 compare earnings and stock values, respectively. 
+Columns 2– 4 show the ability of predictions of earnings, E t [e cfacc t+1 ], and market capitalisation, MV cfacc t , derived from the cash ﬂows and accrual dynamics, to explain the reported earnings and observed market capitalisation (MV) on an industry-by-industry basis. 
+Columns 5–7 show the equivalent results for predictions of earnings, E[e e t+1 ], and market capitalisation, MV e t , derived from the aggregate earnings dynamics. 
+Column 8 reports Vuong Z-statistics from the earnings regression equations and from the valuation regression equations in Panels A and B, respectively. 
+Comparing Columns 2 and 5 in Panel A of Table 4, one observes that the means of absolute forecast errors for earnings from the cash ﬂow and accrual system (MDE cfacc j ) are smaller than those from the aggregate earnings system (MDE e j ) except in 4 out of the 18 industries. 
+The same columns in Panel B show that the means of absolute forecast errors for market values from the cash ﬂow and accrual system (MDMV cfacc j ) are all smaller than those from the aggregate earnings system (MDMV e j ). Next, I use two-way cluster-robust standard errors to correct for both cross-sectional and timeseries dependence in a Mincer –Zarnowitz analysis (Petersen 2009, Gow et al. 2010). 
+20 Columns 3 and 6 illustrate that, both the means and the medians of the industry coefﬁcients (g 1 andg 2 in Equations (18) and (19)) in the earnings regressions in Panel A are close to 1 (with mean values of 1.015 and 1.037 and median values of 1.013 and 1.038, respectively) in the two accounting systems. 
+The mean and median of industry coefﬁcients (g 3 andg 4 in Equations (18) and (19)) in market value regressions in Panel B are 1.377 and 1.429, respectively, for the cash ﬂow and accrual system, while the corresponding values in the aggregate earnings system are 1.2 and Accounting and Business Research 545 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 4. Forecast errors from regressing reported earnings and observed equity market capitalisation on predicted earnings and market value. 
+Panel A: Earnings forecasts Cash ﬂow and accrual system Aggregate earnings system Vuong test Industry MDE cfacc g 1 R 2 e,cfacc MDE e g 2 R 2 e,e Z-stat Food 0.0437 1.099 0.856 0.0436 1.115 0.864 23.365 Textiles, printing and publishing 0.0606 1.001 0.620 0.0616 1.001 0.611 1.565 Chemicals 0.0506 0.930 0.652 0.0515 0.939 0.640 2.072 Extractive industries 0.0611 0.922 0.520 0.0613 0.940 0.534 2 1.978 Rubber, plastic, leather, stone, clay and glass 0.0581 0.883 0.491 0.0590 0.859 0.452 2.850 Metal 0.0692 0.937 0.505 0.0689 0.953 0.518 2 2.048 Machinery 0.0535 1.001 0.652 0.0544 1.024 0.631 2.507 Electrical equipment 0.0575 1.127 0.812 0.0584 1.267 0.800 1.578 Transportation equipment 0.0593 1.119 0.739 0.0583 1.091 0.733 0.986 Instruments 0.0509 1.056 0.694 0.0515 1.121 0.665 3.740 Miscellaneous manufacturers 0.0780 1.098 0.579 0.0781 1.114 0.537 1.067 Computers 0.0662 1.053 0.589 0.0675 1.202 0.577 1.280 Transportation 0.0574 0.923 0.586 0.0578 0.916 0.568 3.330 Utilities 0.0313 1.019 0.794 0.0312 1.036 0.791 2.801 Retail 0.0580 1.094 0.745 0.0587 1.045 0.735 5.770 Financial institutions 0.0453 0.977 0.758 0.0458 0.959 0.744 6.893 Insurance and real estate 0.0485 1.006 0.659 0.0491 1.041 0.662 2 0.857 Services 0.0601 1.021 0.638 0.0607 1.050 0.631 1.209 Mean 0.0561 1.015 0.660 0.0565 1.037 0.650 1.633 t-Value 22.82 57.14 26.15 22.94 42.46 24.91 2.67 t-Value (g 1 ¼ 1,g 2 ¼ 1) 0.44 0.85 Median 0.0577 1.013 0.652 0.0584 1.038 0.636 1.572 Min 0.0313 0.883 0.491 0.0312 0.859 0.452 2 3.365 Max 0.0780 1.127 0.856 0.0781 1.267 0.864 6.893 546 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Panel B: Equity valuations Cash ﬂow and accrual system Aggregate earnings system Industry MDMV cfacc g 3 R 2 mv,cfacc MDMV e g 4 R 2 mv,e Z-stat Food 0.6335 2.259 0.734 0.6522 2.230 0.741 2 1.577 Textiles, printing and publishing 0.6547 1.984 0.612 0.7030 2.231 0.630 23.384 Chemicals 0.6859 2.127 0.582 0.6997 2.104 0.577 0.637 Extractive industries 0.9966 1.477 0.175 1.1054 0.354 0.076 2.021 Rubber, plastic, leather, stone, clay and glass 0.5678 2.118 0.623 0.5819 2.226 0.614 1.243 Metal 0.6617 1.390 0.467 0.6842 1.380 0.452 3.319 Machinery 0.7781 1.223 0.383 0.8446 1.082 0.320 5.122 Electrical equipment 1.2115 0.414 0.076 1.9666 0.209 0.050 0.621 Transportation equipment 0.6843 0.962 0.368 0.8131 0.428 0.191 2.311 Instruments 2.2111 0.255 0.162 2.5376 0.325 0.299 2 3.738 Miscellaneous manufacturers 1.0887 0.837 0.287 1.4956 0.298 0.121 1.272 Computers 2.5053 0.316 0.111 3.6982 0.205 0.087 2.445 Transportation 0.7640 1.469 0.508 0.9098 1.973 0.414 5.169 Utilities 0.4980 1.697 0.786 0.5132 1.770 0.787 2 0.829 Retail 0.8856 3.113 0.492 0.9739 2.821 0.392 11.156 Financial institutions 2.4027 0.321 0.282 3.5906 0.188 0.156 7.990 Insurance and real estate 0.6808 1.867 0.472 0.7675 1.188 0.230 5.094 Services 1.0302 0.955 0.155 1.1466 0.596 0.091 1.687 Mean 1.0523 1.377 0.404 1.3158 1.200 0.346 2.253 t-Value 6.99 7.35 7.90 5.63 5.64 6.07 2.56 t-Value (g 3 ¼ 1,g 4 ¼ 1) 1.05 0.19 Median 0.7710 1.429 0.425 0.8772 1.135 0.310 1.854 Min 0.4980 0.255 0.076 0.5132 0.188 0.050 2 3.738 Max 2.5053 3.113 0.786 3.6982 2.821 0.787 11.156 (Continued) Accounting and Business Research 547 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 4. Continued. 
+Panel C: t-test. H0: mean of R 2 e,cfacc ¼ mean of R 2 e,e ; t ¼ 2.94 (with degree of freedom ¼ 17). 
+H0: mean of R 2 mv,cfacc ¼ mean of R 2 mv,e ; t ¼ 2.83 (with degree of freedom ¼ 17). 
+Notes: Table 4 shows mean forecast errors and the regression results for reported earnings and observed market capitalisation on the estimated earnings and market capitalisation on an industry basis. 
+Two-way cluster-robust standard errors are considered (Petersen 2009). 
+Columns 2 and 5 report the forecast errors. 
+MDE cfacc j and MDE cfacc j are means of absolute % difference in earnings for all ﬁrm i, time t and industry j from cash ﬂow and accrual system and aggregate earnings system, respectively, as deﬁned in Equations (16) and (17). 
+MDMV cfacc j and MDMV cfacc j are means of absolute % difference in market values for all ﬁrm i, time t and industry j from cash ﬂow and accrual system and aggregate earnings system, respectively, as deﬁned in Equations (14) and (15). 
+Columns 3 and 4 report the coefﬁcients and adjusted R-squareds of expected earnings in Equation (5) and market capitalisation in Equation (9) derived from cash ﬂows and accrual dynamics in explaining the reported earnings and market capitalisation (MV) in a ﬁxed-effect robust model: e i,t+1 = k 1 +g 1 E[e cfacc i,t+1 ] + 1 1i,t+1 and MV i,t = k 3 +g 3 MV cfacc i,t + 1 2i,t . 
+(18) Columns 6 and 7 report the coefﬁcients and adjusted R-squared of expected earnings in Equation (7) and market capitalisation in Equation (11) derived from aggregate earnings dynamics in explaining the reported earnings and market capitalisation in a ﬁxed-effect robust model: ei,t+1= k2+g 2 E[e e i,t+1 ] + 13i,t+1and MVi,t= k4+g 4 MV e i,t + 14i,t. 
+(19) Column 8 reports Z-statistics from Vuong test in earnings and in valuation for two accounting systems. 
+A positive Z-statistic indicates that the residuals generated by Equation (18) are smaller than those from Equation (19). 
+For slopesg i (i ¼ 1–4), the t-statistic for whether the mean coefﬁcient is different from one in the industry-by-industry regressions is also reported. 
+548 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 1.135, respectively. 
+As expected, the t-statistics in the industry-by-industry regressions indicate that the mean coefﬁcient ofg i (i ¼ 1 –4) is not signiﬁcantly different from one. 
+In 14 out of the 18 industries, the adjusted R-squareds (R 2 e,cfacc ) in the earnings regressions from the cash ﬂow and accrual system are higher than those (R 2 e,e ) in the aggregate earnings system as can be seen in Columns 4 and 7 in Panel A. The equivalent number for the market value regressions is also 14 as can be seen in Columns 4 and 7 in Panel B. The means of the adjusted R-squareds for earnings and market value regressions from the cash ﬂow and accrual system are 66.0% and 40.4%, respectively. 
+These are larger than those from the aggregate earnings system which are 65.0% and 34.6%, respectively. 
+I then test the null hypothesis that the two models are equally close in explaining the ‘true data generating process’ against the alternative that one model is closer using a Vuong test. Column 8 in Panel A of Table 4 shows that there are eight industries with statistically signiﬁcant positive Zstatistics and only two industries with negative Z-statistic at the 5% level in the earnings regressions. 
+The same column in Panel B shows that there are nine industries with statistically signiﬁcant positive Z-statistics, but no negative Z-statistic is signiﬁcant at the 5% level in the market value regressions. 
+The t-values suggest that the (positive) means of these Z-statistics are statistically signiﬁcantly different from zero. 
+Furthermore, as shown in Panel C of Table 4, a paired t-test of R 2 mv,cfacc = R 2 mv,e has a t-value of 2.83, suggesting that R 2 mv,cfacc is statistically signiﬁcantly different from R 2 mv,e . 
+The same test of R 2 e,cfacc = R 2 e,e has a t-value of 2.94, indicating that R 2 e,cfacc is also statistically signiﬁcantly different from R 2 e,e . 
+5.3 Incremental contribution from an alternative accounting system I report results on the two encompassing regressions as in Equations (20) and (21) on an industry basis in Table 5. Again, I use two-way cluster-robust standard errors to correct for both cross-sectional and time-series correlation in the analysis. 
+Panel A and Panel B of Table 5 show the results for the earnings and stock value regressions, respectively. 
+Columns 2–3 present the intercept terms and their t-values. 
+In contrast to the intercepts in the earnings regressions where only three are statistically signiﬁcant at the 5% level, m ost of the intercepts in the market value regressions are signiﬁcant. 
+This is likely because nonaccounting information, such as growth options, may play an important role in stock valuations. 
+Columns 4 –5 in Panel A show that 13 out of the 18 coefﬁcients are signiﬁcantly different from zero at the 5% level with an overall mean of 0.731, while Columns 6– 7 show that only 6 out of the 18 coefﬁcients are signiﬁcantly different from zero with an overall mean of 0.295. 
+The t-statistics in the industry-by -industry regressions indicate that the mean coefﬁcient ofg 51 is not signiﬁcantly different from one. 
+However, tests reveal that the mean coefﬁcient ofg 52 is signiﬁcantly less than one and greater than zero. 
+In other words, the cash ﬂow and accrual system forecasts dominate the aggregate earnings system forecasts for most of the industries in earnings forecasting. 
+Note that for two industries (Electrical equipment and Computers), neither system forecasts dominate the other, so that both forecasts contain useful information about the realisation of earnings. 
+The pooled sample analysis shows that the regression coefﬁcient of the forecasts in the disaggregated system is 0.83 (with t-value 7.51) against the regression coefﬁci ent of the forecasts 0.179 (with t-value 1.73) in the aggregated system. 
+Similarly, Columns 4 –5 in Panel B show that 10 out of the 18 coefﬁcients are signiﬁcantly different from zero at the 5% level with an overall mean of 1.431, while Columns 6– 7 show that only 3 out of the 18 coefﬁcients are signiﬁcantly different from zero with an overall mean of 20.031. 
+Again, the t-statistics in the industry-by-industry regressions indicate that the mean coefﬁcient ofg 61 is not signiﬁcantly different from one, while the mean coefﬁcient ofg 62 is not signiﬁcantly different from zero. 
+Note also that for the Retail Industry, the incremental Accounting and Business Research 549 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Table 5. Encompassing regressions: reported earnings and observed market value on predicted earnings and market value. 
+Industry Intercept t-Valueg 51 t-Valueg 52 t-Value Adj-R 2 Panel A: Earnings regressions: e i,t+1 = k 5 +g 51 E[e cfacc i,t+1 ] +g 52 E[e e i,t+1 ] + 1 5i,t+1 . 
+Food 20.982 20.859 0.223 0.813 0.892 3.027 0.864 Textiles, printing and publishing 20.460 20.203 0.709 2.308 0.299 1.081 0.621 Chemicals 4.904 1.909 0.888 1.751 0.043 0.086 0.652 Extractive industries 5.560 2.017 20.383 2 0.565 1.322 2.092 0.535 Rubber, plastic, leather, stone, clay and glass 3.167 1.498 1.786 3.336 2 0.927 21.689 0.505 Metal 2.008 1.159 20.671 2 0.974 1.623 2.276 0.521 Machinery 0.268 0.178 0.849 5.380 0.162 1.156 0.652 Electrical equipment 20.732 2 1.131 0.783 7.360 0.397 2.003 0.815 Transportation equipment 24.430 22.461 0.759 2.664 0.356 1.502 0.740 Instruments 20.450 20.616 1.191 5.760 20.148 20.585 0.694 Miscellaneous manufacturers 22.034 2 1.232 0.944 3.093 0.171 0.499 0.579 Computers 20.858 2 0.627 0.702 4.399 0.417 2.240 0.593 Transportation 4.620 2.274 1.190 4.247 20.272 20.923 0.587 Utilities 1.235 0.935 0.775 2.299 0.250 0.738 0.795 Retail 21.140 2 1.563 1.187 3.919 20.090 20.314 0.745 Financial institutions 2 0.760 20.596 1.203 2.567 20.225 20.472 0.758 Insurance and real estate 21.090 2 1.129 0.374 1.734 0.658 3.283 0.663 Services 0.047 0.068 0.654 2.076 0.387 1.192 0.641 Mean 0.493 20.021 0.731 2.898 0.295 0.955 0.665 t-Value 0.80 20.07 5.38 5.85 2.13 2.89 27.01 t-Value (g51¼ 1,g52¼ 1) 20.78 22.51 Median 20.455 2 0.400 0.779 2.616 0.274 1.119 0.652 Min 24.430 2 2.461 20.671 20.974 2 0.927 21.689 0.505 Max 5.560 2.274 1.786 7.360 1.623 3.283 0.864 Pooled sample: 0.466 0.750 0.830 7.510 0.179 1.730 0.683 550 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Panel B: Market value regressions: MV i,t = k 6 +g 61 MV cfacc i,t +g 62 MV e i,t + 1 6i,t . 
+Food 81.924 1.797 0.611 0.597 1.636 1.661 0.742 Textiles, printing and publishing 147.512 3.117 0.378 0.540 1.822 2.360 0.631 Chemicals 242.900 2.585 1.248 1.829 0.900 1.365 0.588 Extractive industries 770.867 4.736 1.320 4.692 0.114 1.426 0.180 Rubber, plastic, leather, stone, clay and glass 220.424 20.490 1.438 1.306 0.737 0.733 0.626 Metal 191.352 2.589 4.059 1.358 2 2.704 20.935 0.479 Machinery 339.834 3.981 2.528 3.350 2 1.300 21.910 0.407 Electrical equipment 512.147 6.616 0.632 2.357 20.151 21.118 0.080 Transportation equipment 389.575 3.022 1.005 3.615 2 0.036 20.373 0.368 Instruments 232.790 4.803 0.066 1.230 0.286 3.641 0.306 Miscellaneous manufacturers 221.060 2.107 0.869 2.052 20.025 20.233 0.286 Computers 528.732 5.297 0.647 2.322 20.252 21.527 0.121 Transportation 365.185 4.983 1.572 5.153 2 0.168 20.373 0.508 Utilities 54.934 2.947 0.773 1.934 0.971 2.336 0.789 Retail 267.291 4.236 4.490 6.900 21.479 22.310 0.504 Financial institutions 360.825 3.903 0.495 4.127 20.155 21.321 0.305 Insurance and real estate 208.516 2.818 1.995 3.501 20.158 20.451 0.474 Services 504.342 7.572 1.628 1.737 20.604 21.058 0.172 Mean 299.965 3.701 1.431 2.700 20.031 0.106 0.420 t-value 6.52 8.45 5.05 6.71 2 0.12 0.27 8.50 t-value (g 61 ¼ 1,g 62 ¼ 1) 0.65 24.58 Median 255.095 3.510 1.127 2.187 20.093 20.373 0.441 Min 220.424 20.490 0.066 0.540 2 2.704 22.310 0.080 Max 770.867 7.572 4.490 6.900 1.822 3.641 0.789 Pooled sample: 555.655 9.730 0.490 2.110 20.020 20.110 0.167 Notes: Table 5 reports the intercepts and coefﬁcients of two encompassing regressions on an industry basis. 
+Panel A shows the results of regressing realisations of earnings (e i,t+1 )on forecasted earnings from both disaggregated system (E[e cfacc i,t+1 ]) and aggregated system (E[e e i,t+1 ]). Panel B shows the results of regressing observed market value (MV i,t ) on predicted market values from both disaggregated system (MV cfacc i,t ) and aggregated system (MV e i,t ). The last six rows in Panels A and B show the statistics of the intercepts and slopes, including mean, t-value, median, minimum, maximum and regression results on the pooled sample. 
+For slopesg 51, g 52, g 61 andg 62 , the t-statistic for whether the mean coefﬁcient is different from one in the industry-by-industry regressions is also reported. 
+Accounting and Business Research 551 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 information contained in the predicted market values from the aggregate system is extremely inefﬁcient (with signiﬁcantly negative coefﬁcient) though neither system forecasts dominate the other. 
+In the pooled sample analysis, the coefﬁcient of the predicted value in the disaggregated system is 0.49 (with t-value 2.11) against the corresponding coefﬁcient 20.02 (with t-value 20.11) in the aggregated system. 
+This conﬁrms my ﬁnding above that the cash ﬂow and accrual system forecasts dominate the aggregate earnings system forecasts in most industries. 
+Column 8 shows the adjusted R-squareds for the regressions. 
+They are not much different from those in simple Mincer–Zarnowitz regressions as reported in Table 4. In summary, the analysis shows that the disaggregated accounting system largely outperforms the aggregated system although there are exceptions for a few industries. 
+5.4 Robustness test For robustness checks, I repeat the above analysis for December ﬁscal year-end ﬁrms only. 
+This allows for the estimation of the relationship between market value and accounting fundamentals at the same point in time for each ﬁrm-year observation. 
+It results in 37,053 ﬁrm-years observations. 
+I summarise the main results without tabulating the details. 
+I ﬁnd that the means of absolute forecast errors for earnings from the cash ﬂow and accrual system (MDE cfacc j ) are smaller than those from the aggregate earnings system (MDE e j ) except in three out of the 18 industries. 
+The means of absolute forecast errors for market value from the cash ﬂow and accrual system (MDMV cfacc j ) are also smaller than those from aggregate earnings dynamic (MDMV e j ) except for three industries. 
+For 14 out of the 18 industries, the adjusted R-squareds (R 2 e,cfacc ) in the earnings regressions from the cash ﬂow and accrual dynamics are higher than those (R 2 e,e ) from the aggreg ate earnings system. 
+The equivalent number for the market value regressions is 13. The means of the adjusted R-squareds for the earnings and the market value regressions from the cash ﬂow and accrual dynamics are 64.5% and 44.5%, respectively. 
+These are larger than those from the aggregate earnings dynamics, 63.2% and 38.4%, respectively. 
+Finally, I run the two encompassing regressions as in Equations (20) and (21) on an industry basis. 
+Again, I use two-way cluster-robust standard errors to correct for both cross-sectional and time-series dependence in the analysis. 
+In contrast to the intercepts in the earnings regressions where only one is statistically signiﬁcant, all but three intercepts in the market value regressions are signiﬁcant at the 5% level. 
+Eleven out of the 18 coefﬁcients of E[e cfacc i,t +1 ] are signiﬁcan tly different from zero at the 5% level with an overall mean of 0.792, while only 2 out of the 18 coefﬁcients of E[e e i,t +1 ] are signiﬁcantly different from zero with an overall mean of 0.202. 
+Similarly, 11 out of the 18 coefﬁcients of predicted market values, MV cfacc i,t , are signiﬁcantly different from zero at the 5% level with an overall mean of 1.154, while only 4 out of the 18 coefﬁcients of MV e i,t are signiﬁcantly different from zero with an overall mean of 0.1. 
+This conﬁrms my earlier ﬁndings based on the full sample that forecasts based on the cash ﬂow and accrual system dominate those from the aggregate earnings system for most of the industries. 
+6. Conclusion Investigating the consequences of decomposing aggregate earnings into cash ﬂow and accrual components for stock valuation and th e forecasting of earnings is important on both theoretical and practical grounds. 
+This paper compares and contrasts two accounting information systems, one specifying operating cash ﬂows and total accruals and the other aggregate earnings. 
+The model focuses on the persistence of each of aggregate earnings, cash ﬂows and accruals, and the expected long-run mean accounting returns on book equity. 
+Investigation of the properties 552 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 of the information parameters enables an assessment of the consistency of these two information dynamics and an exploration of the implications of incremental information content for earnings forecasts and stock valuation. 
+I ﬁnd that both the persistence of earnings and that of cash ﬂows are larger than the persistence of accruals in forecasting of earnings. 
+I also ﬁnd that the expected long-run mean aggregate ROE (in the aggregate system) is less than the implied expected long-run mean ROE in the disaggregated system. 
+The evidence shows that the disaggregated cash ﬂow/accrual system generally outperforms the aggregate earnings system in both the forecasting of earnings and in stock valuation. 
+Speciﬁcally, forecasts of earnings and the predicted market values from the cash ﬂow and accrual system in general have smaller errors than those from the aggregate earnings system relative to the realisations of earnings and observed market values. 
+The adjusted R-squareds from the disaggregated accounting system are generally higher than those from the aggregated accounting system when examining the explanatory powers of the models. 
+The results also show that the cash ﬂow and accrual system forecasts dominate the aggregate earnings system forecasts in the sense that forecasts of earnings and predicted market values from the latter system provide no incremental information about the realisations of earnings and observed market values after controlling for forecasts of relevant values from the former system in a large majority of industries. 
+While it is advantageous to decompose earnings for the purpose of valuation and forecasting, whether, and the extent to which, the disaggregated system outperforms the aggregated system remains industry speciﬁc. 
+This study has implications for investment professionals and theoretical researchers. 
+It is useful to bear in mind that splitting earnings into its components is likely to yield more precise forecasts of future payoffs and therefore better estimates of equity value. 
+Researchers may model earnings components with the same notion proposed in this paper and derive a plausible theoretical value of equity to explore any mispricing. 
+The results also appear to provide a basis for understanding some of the features of accounting practice. 
+Although the analysis is presented in terms of only two earnings components, the intuition provides a rationale for the emergence of detailed line item disclosures in GAAP. 
+Explicit modelling of accrual and cash ﬂow dynamics leads to the establishment of a relationship between stock return and accounting accruals. 
+This may shed light on understanding the accrual anomaly – stocks with high and low accruals are mispriced given their risk. 
+I leave this investigation for future research. 
+Acknowledgements I am indebted to David Ashton for imparting his insights. 
+I am grateful for helpful comments received from Daniella Acker, Colin Clubb, Elisabeth Dedman, Stuart Mcleay, John O’Hanlon, Ken Peasnell, Mark Tippett and Martin Walker on the earlier version of the paper. 
+This paper has also beneﬁted from the comments of participants at the EAA 2011, the Ningbo-Nottingham International Finance Forum 2011, and Warwick University. 
+Particular thanks are due to the editor, Pauline Weetman, two anonymous referees for their constructive and helpful suggestions. 
+Notes 1. Allen et al. (2010) argue that accounting accruals anticipate future economic beneﬁts and must ultimately reverse. 
+Others also examine the mean-reverting property of the accrual component, for example, Basu (1997), Fairﬁeld et al. (2003), Richardson et al. (2005), Chan et al. (2006), and Ohlson (2010). 
+2. Strictly speaking, ROE on the right-hand side of Equations (1) and (2) should be CFO t /b t21 and ACC t / b t21 . 
+Using b t as a deﬂator is for the parsimony of model development. 
+This parsimony has its cost. ROE has a tendency but it can never approach its mean unless book value has no growth. 
+Accounting and Business Research 553 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 However, the resulting information dynamics of cash ﬂows and accruals are consistent with prior literature, see Barth et al. (2001) and Barth et al. (1999, 2005). 
+3. Note that low values of parameters,a 1 anda 2 , indicate high speeds of convergence of the cash-ROE and the accrual-ROE. 
+4. If cash ﬂows and accruals are negatively correlated as documented (e.g. 
+Barth et al. 1999), then the sum of the errors, 1 e,t+1 = 1 c,t+1 + 1 a,t+1 will be less volatile than the individual errors: 1 c,t+1 and 1 a,t+1 . 
+Perhaps this is the underlying reason for some analysts to believe that forecast of aggregate earnings should be the focus. 
+5. Note that Barth et al. (2001) and Barth et al. (1999, 2005) do not model the correlation between the persistence of earnings components and persistence of book value. 
+6. Sloan (1996) assumes that earnings deﬂated by assets follow an autoregressive process, which effectively assumes that the accounting rate of return on assets follows a mean-reverting process. 
+Note that Equations (1) and (2) imply Equation (6) ifa¼a 1 ¼a 2 +a 12 ,m¼m 1 +m 2 and 1 e,t+1 = 1 c,t+1 + 1 a,t+1 . 
+7. Few prior studies establish a formal theoretical link between the value of equity and the incremental role of accruals. 
+Two exceptions are Barth et al. (1999, 2005). 
+8. This paper examines information dynamic (6) as an independent process, although it can be viewed as a reduced form of information dynamics (1) and (2). 
+9. In order to deal with stationarity, I run regressions on change in book values. 
+10. The results for these regressions are consistent with the results by using previous 10 years of data. 
+11. The ﬁrm-industry-year parameters are available from 1991 and onwards since operating cash ﬂows are available from 1987 in Compustat by using ﬁve-year data in the cross-sectional regressions. 
+This approach contrasts with Barth et al. (2005), who estimate parameters for each ﬁrm that are constant over time. 
+In other words, their parameters are ﬁrm-industry speciﬁc but not ﬁrm-industry-year speciﬁc. 
+As noted in Barth et al. (2005), the jackkniﬁng approach effectively assumes that parameter estimates are generated from a randomly collected sample and that observations in the sample are independent. 
+Therefore, the statistics obtained for hypothesis testing do not rely on unknown parametric distributions. 
+12. This may violate the clean surplus accounting assumption. 
+However it eliminates potentially confounding effects of one-time items and is consistent with prior literature (Dechow et al. 1999, Barth et al. 2005). 
+13. Hribar and Collins (2002) suggest using the statement of cash ﬂows to calculate accruals, due to problems with non-articulation events in using the balance sheet approach. 
+14. The results are similar when that cut-off is $1.00 per share. 
+15. The number of negative predicted equity market values is approximately 10%. 
+There is no doubt that ‘other information’ and growth options will contribute a positive equity value component. 
+Unlike Barth et al. (2005), the predicted equity market value in this paper is directly derived from earnings and its component information dynamics, rather than simultaneously estimated from both information dynamics and expected valuation model. 
+Ashton and Wang (2013) suggest a plausible range for the cost of equity capital for US market over the period to be between 10% and 12%. 
+Results are mainly unaltered when using 9% or 15% as a discount rate. 
+16. A slight difference between the two intercepts for D b is due to running seemingly unrelated regressions. 
+17. White (1980) corrections are used to the standard errors in the estimations. 
+18. Barth et al. (1999) also ﬁnd that ‘convergence failed to occur during system estimation for Pharmaceuticals ﬁrms.’ 19. This suggests that the accrual components for ﬁnancial institutions may need to be interpreted differently. 
+For example, inventory is not a predictor of future earnings for this industry. 
+20. I thank Michell Petersen for the generous provision of some programming code. 
+References Allen, E., Larson, C., and Sloan, R., 2010. 
+Accrual reversals, earnings and stock returns. 
+Working Paper, University of California at Berkeley. 
+Ashton, D. and Wang, P., 2013. 
+Terminal valuations, growth rates and the implied cost of capital. Review of Accounting Studies, 18 (1), 261–290. 
+Ball, R., Kothari, S.P., and Robin, A., 2000. 
+The effect of international institutional factors on properties of accounting earnings. 
+Journal of Accounting and Economics, 29 (1), 1–51. 
+554 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Barth, M.E., Beaver, W.H., and Landsman, W.R., 1998. 
+Relative valuation roles of equity book value and net income as a function of ﬁnancial health. 
+Journal of Accounting and Economics, 25 (1), 1–34. 
+Barth, M.E., Beaver, W.H., Hand, J.M., and Landsman, W.R., 1999. 
+Accruals, cash ﬂows, and equity values. 
+Review of Accounting Studies, 3 (3–4), 205–229. 
+Barth, M.E., Cram, D.P., and Nelson, K.K., 2001. 
+Accruals and the prediction of future cash ﬂows. 
+Accounting Review, 76 (1), 27–58. 
+Barth, M.E., Beaver, W.H., Hand, J.M., and Landsman, W.R., 2005. 
+Accruals, accounting-based valuation models, and the prediction of equity values. 
+Journal of Accounting, Auditing and Finance, 20 (4), 311–345. 
+Basu, S., 1997. 
+The conservatism principle and the asymmetric timeliness of earnings. 
+Journal of Accounting and Economics, 24 (1): 3–37. 
+Beaver, W., 1970. 
+The time series behavior of earnings. 
+Empirical Research in Accounting: Selected Studies, Supplement to Journal of Accounting Research, 8, 62–89. 
+Chan, K., Chan, L.K., Jegadeesh, N., and Lakonishok, J., 2006. 
+Earnings quality and stock returns. 
+Journal of Business, 79 (3), 1041–1082. 
+Clubb, C.D.B., 1996. 
+Valuation and clean surplus accounting: some implications of the Feltham and Ohlson model for the relative information content of earnings and cash ﬂows. 
+Contemporary Accounting Research, 13 (1), 329–337. 
+Dechow, P.M., 1994. 
+Accounting earnings and cash ﬂows as measures of ﬁrm performance: the role accounting accruals. 
+Journal of Accounting and Economics, 18 (1), 3–42. 
+Dechow, P.M., Kothari, S.P., and Watts, R.L., 1998. 
+The relation between earnings and cash ﬂows. 
+Journal of Accounting and Economics, 25 (2), 133–168. 
+Dechow, P.M., Hutton, A.P., and Sloan, R.G., 1999. 
+An empirical assessment of the residual income valuation model. 
+Journal of Accounting and Economics, 26 (1), 1–34. 
+Fairﬁeld, P.M., Whisenant, S.J., and Yohn, T.L., 2003. 
+Accounting earnings and growth: implications for future proﬁtability and market mispricing. 
+Accounting Review, 78 (1), 353–371. 
+Feltham, G.A. and Ohlson, J.A., 1995. 
+Valuation and clean surplus accounting for operating and ﬁnancial activities. 
+Contemporary Accounting Research, 11 (2), 689–732. 
+Feltham, G.A. and Ohlson, J.A., 1996. 
+Uncertainty resolution and the theory of depreciation measurement. 
+Journal of Accounting Research, 34 (2), 209–234. 
+Freeman, R.N., Ohlson, J.A., and Penman, S.H., 1982. 
+Book rate-of-return and prediction of earnings changes: an empirical investigation. 
+Journal of Accounting Research, 20 (2), 639–653. 
+Gow, I.D., Ormazabal, G., and Taylor, D.J., 2010. 
+Correcting for cross-sectional and time-series dependence in accounting research. 
+Accounting Review, 85 (2), 483–512. 
+Hribar, P. and Collins, D.W., 2002. 
+Errors in estimating accruals: implications for empirical research. 
+Journal of Accounting Research, 40 (1), 105–134. 
+Lundholm, R. and Sloan, R., 2007. 
+Equity Valuation and Analysis. 
+2nd ed. New York: McGraw-Hill/Irwin. 
+Mincer, J. and Zarnowitz, V., 1969. 
+The evaluation of economic forecasts. 
+In: J. Mince, ed. Economic Forecasts and Expectation. 
+New York: National Bureau of Research, 1–40. 
+Myers, J.N., 1999. 
+Implementing residual income valuation with linear information dynamics. 
+Accounting Review, 74 (1), 1–28. 
+Nissim, D. and Penman, S., 2001. 
+Ratio analysis and equity valuation: from research to practice. 
+Review of Accounting Studies, 6 (1), 109–154. 
+Ohlson, J.A., 1999. 
+On transitory earnings. 
+Review of Accounting Studies, 3 (3–4), 145–162. 
+Ohlson, J.A., 2010. 
+Accruals: an overview. 
+Working Paper, New York University. 
+Petersen, M.A., 2009. 
+Estimating standard errors in ﬁnance panel data sets: comparing approaches. 
+Review of Financial Studies, 22 (1), 435–480. 
+Pfeiffer, R.J. and Elgers, P.T., 1999. 
+Controlling for lagged stock price responses pricing regressions: an application to the pricing of cash ﬂows and accruals. 
+Journal of Accounting Research, 37 (1), 239–347. 
+Pope, P., 2005. 
+Discussion – accruals, accounting-based valuation models, and the prediction of equity values. 
+Journal of Accounting, Auditing and Finance, 20 (4), 347–354. 
+Pope, P. and Wang, P., 2005. 
+Earnings components, accounting bias and equity valuation.Review of Accounting Studies, 10 (4), 387–407. 
+Richardson, S., Sloan, R.G., Soliman, M.T., and Tuna, I., 2005. 
+Accrual reliability, earnings persistence and stock prices. 
+Journal of Accounting and Economics, 39 (3), 437–485. 
+Sloan, R.G., 1996. 
+Do stock prices fully reﬂect information in accruals and cash ﬂows about future earnings? 
+The Accounting Review, 71 (3), 289–315. 
+Accounting and Business Research 555 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Sloan, R.G., 1999. 
+Discussion of accruals, cash ﬂows and equity values. 
+Review of Accounting Studies,4 (3–4), 231–234. 
+Stark, A., 1997. 
+Linear information dynamics, dividend irrelevance, corporate valuation and the clean surplus relationship. 
+Accounting and Business Research, 27 (3), 219–228. 
+Vuong, Q.H., 1989. 
+Likelihood ratio tests for model selection and non-nested hypotheses. 
+Econometrica,57 (2), 307–333. 
+Walker, M. and Wang, P., 2003. 
+Towards an understanding of proﬁtability analysis within the residual income valuation framework. 
+Accounting and Business Research, 33 (3), 235–246. 
+White, H., 1980. 
+A heteroscedasticity-consistent covariance estimator and a direct test for heteroscedasticity. 
+Econometrica, 48 (4), 817–838. 
+Appendix 1 In this appendix, I ﬁrst show how the market value of equity in a no-arbitrage economy can be written as a linear combination of the current book value and the earnings components representing cash ﬂows from operations and accruals {b t , CFO t , ACC t }. I then proceed to identify the mathematical structure of the coefﬁcients in the linear valuation models as in Equations (9), (10) and (11) in the main text. 
+The dividend discount model and the clean surplus relationship: d t+1 = CFO t+1 + ACC t+1 − (b t+1 − b t ) enable us to write the market value of equity MV t in terms of the future values of {b t+t ,CFO t+t ,ACC t+t }, t= 1, 2, ...1. 
+The three recurrence Equations (1), (2) and (8), specifying the information dynamics for {b t ,CFO t ,ACC t }, then enable us to express the market value of equity in terms of their current values. 
+Hence the market value of equity, MV t , can be written in a linear combination of {b t ,CFO t ,ACC t } as MVcfacc t= (1 +b0)bt+b1CFOt+b2ACCt. 
+(A1) Next, we need to show that the ﬁrm-speciﬁc constantsbi(i ¼ 0, 1, 2) can be expressed in the form as in equation system (10). 
+The no-arbitrage condition: Et[MVt+1+ dt+1] = R × MVtimplies that Et[(1 +b0)bt+1+b1CFOt+1+b2ACCt+1+ dt+1] = R((1 +b0)bt+b1CFOt+b2ACCt). 
+Using the clean surplus accounting relationship to substitute for dt+1in the above, gives (1 +b1)Et[CFOt+1] + (1 +b2)Et[ACCt+1] +b0Et[bt+1] + bt= R((1 +b0)bt+b1CFOt+b2ACCt). 
+When we use the information dynamics (1), (2) and (8) to eliminate the t + 1 terms, the above equation implies that (1 +b1)(((1 −a1)m1−a12m2)bt+a1CFOt+a12ACCt) + (1 +b2)((1 −a2)m2bt+a2ACCt) + (1 +db0)bt = R(1 +b0)bt+ Rb1CFOt+ Rb2ACCt. 
+Since this equation must hold for all t for each ﬁrm, by matching coefﬁcients of CFOt, ACCtand bt,we have: CFOt:a1(1 +b1) − Rb1= 0, ACCt:a12(1 +b1) +a2(1 +b2) − Rb2= 0, bt:(1+b1)(1 −a1)m1+ ((1 +b2)(1 −a2) − (1 +b1)a12)m2+ 1 − R + (d− R)b0= 0. 556 P. Wang Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 Solving forb0,b1andb2from the three-equation system above, we get b0=1 R −dR(m1+m2)1 −a1 R −a1+ Rm2(a1−a2−a12)(R − 1) (R −a1)(R −a2)− R + 1 , b1=a1 R −a1, b2=a2 R −a2+Ra12 (R −a1)(R −a2)=a1 R −a1− R(a1−a2−a12) (R −a1)(R −a2).(A2) Finally, if we denotea¼a1¼a12+a2andm¼m1+m2, we have b0=1 R −dRm1 −a R −a− R + 1 ,b1=b2=a R −a. The market value of equity from the aggregate earnings system can now be written as MVe t= 1 +1 (R −d)Rm1 −a R −a− R + 1 bt+a R −aet. 
+(A3) Appendix 2. Deﬁnition of the variables with the relevant mnemonics MV: market value of equity b: book value of equity e: net income before extraordinary items CFO: operating cash ﬂow ROE: return on equity ROCF: cash return on lagged book value of equity ROACC: accrual return on lagged book value of equity ROE1: earnings over book value ROCF1: cash ﬂows over book value ROACC1: accruals over book value MDEcfacc j: mean of absolute % difference in earnings for all ﬁrms over the sample period in industry j from cash ﬂow and accrual system MDEe j: mean of absolute % difference in earnings for all ﬁrms over the sample in industry j from aggregate earnings system MDMVcfacc j: mean of absolute % difference in market values for all ﬁrms over the sample in industry j from cash ﬂow and accrual system MDMVe j: mean of absolute % difference in market values for all ﬁrms over the sample in industry j from aggregate earnings system E[ecfacc t+1]: forecasted one period ahead earnings from the cash ﬂow and accrual system E[ee t+1]: forecasted one period ahead earnings from the aggregate earnings system MVcfacc t: predicted market values from the cash ﬂow and accrual system at time t MVe t: predicted market values from the aggregate system at time t Accounting and Business Research 557 Downloaded by [Open University Library - ISRAEL] at 11:29 28 October 2013 

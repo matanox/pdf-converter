@@ -11,6 +11,7 @@ expected =
   'General Discussion'
   'Results',
   'Conclusion',
+  'Conclusions',
   'References'
 ]
 

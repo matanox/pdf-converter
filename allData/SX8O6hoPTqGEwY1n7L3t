@@ -1,0 +1,45 @@
+MATH 106 HOMEWORK 4 SOLUTIONS 1. Show directly from the definition that sin(2z) = 2sin z cos z Solution: sin(2z) = e 2zi − e −2zi 2i = 2 (e zi −e −zi ) 2i (e zi + e −zi ) 2 = 2 sin z cos z 2. Write the following complex numbers in standard form: (i) (−1 + i √ 3) i . 
+What is the principal value? 
+(ii) tan −1 (2i), (iii) tan( iπ 2 ), Solution: (i) (−1+i √ 3) i = e i(ln(2)+i( 2π 3 +2nπ)) = e −( 2π 3 +2nπ) cos(ln 2)+ie −( 2π 3 +2nπ) sin(ln 2). P.V. (−1 + i √ 3) i = e − 2π 3 cos(ln 2) + ie − 2π 3 sin(ln 2). (ii) tan −1 (2i) = z ⇔ tan(z) = 2i ⇔ e iz − e −iz e iz + e −iz = −2 ⇔ e iz − e −iz = −2e iz − 2e −iz ⇔ e −iz = −3e iz ⇔ e −2iz = −3 z = − π 2 + i ln 3 2 + nπ. (iii) tan( iπ 2 ) = e i( iπ 2 ) − e −i( iπ 2 ) i(e i iπ 2 + e −i( iπ 2 ) ) = i · e π 2 − e − π 2 e π 2 + e − π 2 . 
+(iv) sin z = 2 ⇔ e iz − e −iz = 4i ⇔ w − 1 w = 4i, with w = e iz ⇔ w 2 − 4iw − 1 = 0 ⇔ w = (2 ± √ 3)i ⇔ e iz = (2 ± √ 3)e iπ 2 ⇔ z = π 2 + 2kπ + i ln(2 ± √ 3). 3. Evaluate the following integrals by parametrizing the contour: (i)  C xdz where C is the oriented line segment joining 1 to i, (ii)  C (z − 1)dz where C is the semicircle joining 0 to 2, (iii)  C cos( z 2 )dz where C is the line segment joining 0 to π + 2i. Solution: (i) Parametrize the contour by z = (i − 1)t + 1 with 0 ≤ t ≤ 1. Then  C xdz =  1 0 (1 − t)(i − 1)dt = i − 1 2 . 
+(ii) Using the parametrization z = 1 + e −iθ , −π ≤ θ ≤ 0, dz = −ie −iθ dθ, we compute  C (z − 1)dz =  0 −π e −iθ (−ie −iθ )dθ = −i  0 −π e −2iθ dθ = 1 2 e −2iθ     θ=0 θ=−π = 0. (iii) Writing z = (π + 2i)t for 0 ≤ t ≤ 1, we compute  C cos( z 2 )dz = π + 2i 2  1 0 e i( π 2 +i)t +e −i( π 2 +i)t dt = −i  e i( π 2 +i)t − e −i( π 2 +i)t      t=1 t=0 = = e + e −1 . 
+4. Evaluate  C z −1+i dz where C is the positively oriented unit circle, and the integrand is defined by chosing the branch 0 < arg(z) < 2π. What happens if we take −π < arg(z) < π? 
+Solution: For z = e iθ , we have  C z −1+i dz =  2π 0 e iθ(i−1) · ie iθ dθ = i  2π 0 e −θ dθ = i(1 − e −2π ). If we take −π < arg(z) < π we’ll get i(e π − e −π ). 5. Compute  C z a dz where C is the counterclockwise unit circle and a is any real number. 
+The principal value is used for the integrand. 
+Do it in two ways: by picking a parametrization of C, and by using a suitable anti-derivative. 
+Solution: Let z = e iθ . 
+If a = −1, we have  C z a dz =  π −π e iaθ · ie iθ dθ = e iπ(a+1) − e −iπ(a+1) a + 1 = 2i a + 1 sin((a + 1)π). 
+If a = −1, then  C z −1 dz =  π −π idθ = 2πi. 
+For the second method, let us assume first a = −1. Note that the principal value of z a = e aLog z is undefined at the negative reals. 
+To compute the integral, we will split the circle into the upper and lower halves. 
+For the integral across the upper half C 1 , we will replace z a by a different branch which is everywhere defined and holomorphic. 
+We pick a branch cut which doesn’t cross C 1 , for instance − π 2 < arg(z) < 3π 2 . 
+This branch of z a agrees with the principal branch along C 1 . 
+Then,  C 1 z a dz = e (a+1) log(z=−1) − e (a+1) log(z=1) a + 1 = e πi(a+1) − 1 a + 1 For the integral along C2, we may branch cut along a half-line which avoids C 2 , for instance (1) − 3π 2 < arg(z) < π 2 . 
+The values of z a for this branch coincide with the principal values along C 2 . 
+We evaluate  C 2 z a dz = e (a+1) log(z=1) − e (a+1) log(z=−1) a + 1 = 1 − e −πi(a+1) a + 1 . 
+Putting things together  C z a dz = e πi(a+1) −e −πi(a+1) a + 1 just as before. 
+The case a = −1 is done in similar way but using the antiderivative of 1 z which is Log (z) and was done in class. 
+N.B. 
+You should be careful when chosing your branch cut. 
+It is especially easy to get a wrong answer when evaluating the integral along C 2 . 
+Picking a branch cut which avoids C 2 is not enough, you have to make sure that the chosen branch coincides with the principal value, so that you are not changing the integral. For instance the branch cut (2) π 2 < arg(z) < 5π 2 would not work in this case. 
+This is because this branch of z a does not agree with the principal value along C 2 . 
+This can be seen, for instance, at the point 1. There, the branch (2) gives the value 1 a+1 = e 2πi(a+1) which differs from the principal value 1 a+1 = 1. However, you can convince yourself that the chosen branch (1) does work. 
+6. Show that  1 −1 z i dz = (1 + e −π )(1 − i) 2 for any path joining −1 to 1 which lies above the real axis, endpoints excluded. 
+The principal value is used for the integrand. 
+Do it also for any path joining −i and i which lies on the right of the imaginary axis. 
+Solution: Observe that the integrand does not exist at the endpoint z = −1. To fix this, let us consider a different branch cut along − π 2 < arg(z) < 3π 2 . 
+The branch of z i above agrees along the path of integration with the principal branch (except possibly at z = −1 where the latter is undefined). 
+Therefore, we may safely work with the new branch considered above. 
+Now, note that z i has an antiderivative in the upper half plane given by z i+1 i + 1 where the new branch is used again in the definition of z i+1 . 
+Therefore  1 −1 z i dz = e (i+1) log(z=1) − e (i+1) log(z=−1) i + 1 = 1 − e (i+1)(iπ) i + 1 = (1 + e −π )(1 − i) 2 . 
+The integral along the second path causes no problems since the path does not intersect the branch cut at the negative reals. 
+Therefore,  i −i z i dz = e (i+1) log(z=i) − e (i+1) log(z=−i) i + 1 = e (i+1) iπ 2 − e (i+1) −iπ 2 i + 1 = (e − π 2 + e π 2 )(i + 1) 2 . 
+7. What are the values of the following integrals: (i)  C z 2 z−3 dz where C is the positively oriented unit circle, (ii)  C Log(z + 2)dz where C is the positively oriented unit circle. 
+Solution: In both cases the integrands are holomorphic on and inside the unit circle so by Cauchy Theorem the integrals are 0. For the first function, the pole is at z = 3 which is clearly outside C. The second function is holomorphic everywhere except for the line z = −2+x with x is a negative real. This line also avoids the unit circle. 
+8. Determine the value of the integral  C (z − 1) n dz where n is any integer and C is a positively oriented square of side a, which doesn’t go through 1. Solution: If 1 is not inside the square, the integral is 0 because (z − 1) n is holomorphic inside C no matter whether n is positive, negative or 0. If 1 is inside the square, and n ≥ 0 the same reasoning shows that the integral is 0. So let us consider the case when n < 0, in which case the function (z − 1) n has a pole at z = 1. We can consider a small circle around 1 that lies inside the square. 
+Since (z − 1)nis holomorphic in the area between the square and the circle, the integrals over these curves are equal. Consider parametrization of the circle z = 1 + reiθ, where r is the radius. 
+Then  C(z − 1)ndz = rn+12π 0einθ· ieiθdθ =2irn+1 n + 1ei(n+1)θ   θ=2π θ=0= 0 The case n = −1 is special since then the denominator becomes 0. The integral can be computed by hand to be 2πi. 
+9. Show that the area enclosed by a positively oriented simple closed curve C is given by 1 2i C¯zdz Solution: We have  C¯zdz = C(x − iy) · (dx + idy) = C(x dx + y dy) + i(x dy − y dx). 
+Let R be the region encolosed by C. We can apply Green’s theorem to each of the two terms above to conclude  C¯zdz =  R2i dx dy = 2i area (R). 

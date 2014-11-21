@@ -1,0 +1,292 @@
+Linear regression •Linear regression is a simple approach to supervised learning. 
+It assumes that the dependence of Y on X 1 , X 2 , . 
+. 
+. 
+X p is linear. 
+•True regression functions are never linear! 
+SLDM IIIcHastie & Tibshirani - March 7, 2013 Linear Regression 71 Linearity assum pti on ? 
+η(x) = β 0 + β 1 x 1 + β 2 x 2 + . 
+. 
+. 
+β p x p Almost always thought of as an approximation to the truth. 
+Functions in nature are rarely linear. 
+2 4 6 8 3 4 5 6 7 X f(X) •although it may seem overly simplistic, linear regression is extremely useful both conceptually and practically. 
+1 / 48 Linear regression •Linear regression is a simple approach to supervised learning. 
+It assumes that the dependence of Y on X 1 , X 2 , . 
+. 
+. 
+X p is linear. 
+•True regression functions are never linear! 
+SLDM IIIcHastie & Tibshirani - March 7, 2013 Linear Regression 71 Linearity assum pti on ? 
+η(x) = β 0 + β 1 x 1 + β 2 x 2 + . 
+. 
+. 
+β p x p Almost always thought of as an approximation to the truth. 
+Functions in nature are rarely linear. 
+2 4 6 8 3 4 5 6 7 X f(X) •although it may seem overly simplistic, linear regression is extremely useful both conceptually and practically. 
+1 / 48 Linear regression •Linear regression is a simple approach to supervised learning. 
+It assumes that the dependence of Y on X 1 , X 2 , . 
+. 
+. 
+X p is linear. 
+•True regression functions are never linear! 
+SLDM IIIcHastie & Tibshirani - March 7, 2013 Linear Regression 71 Linearity assum pti on ? 
+η(x) = β 0 + β 1 x 1 + β 2 x 2 + . 
+. 
+. 
+β p x p Almost always thought of as an approximation to the truth. 
+Functions in nature are rarely linear. 
+2 4 6 8 3 4 5 6 7 X f(X) •although it may seem overly simplistic, linear regression is extremely useful both conceptually and practically. 
+1 / 48 Linear regression for the advertising data Consider the advertising data shown on the next slide. 
+Questions we might ask: •Is there a relationship between advertising budget and sales? 
+•How strong is the relationship between advertising budget and sales? 
+•Which media contribute to sales? 
+•How accurately can we predict future sales? 
+•Is the relationship linear? 
+•Is there synergy among the advertising media? 
+2 / 48 Advertising data 0 50 100 200 300 5 10 15 20 25 TV Sales 0 10 20 30 40 50 5 10 15 20 25 Radio Sales 0 20 40 60 80 100 5 10 15 20 25 Newspaper Sales 3 / 48 Simple linear regression using a single predictor X. •We assume a model Y = β 0 + β 1 X + , where β 0 and β 1 are two unknown constants that represent the intercept and slope, also known as coefficients or parameters, and  is the error term. 
+•Given some estimates ˆ β 0 and ˆ β 1 for the model coefficients, we predict future sales using ˆy = ˆ β 0 + ˆ β 1 x, where ˆy indicates a prediction of Y on the basis of X = x. The hat symbol denotes an estimated value. 
+4 / 48 Estimation of the parameters by least squares •Let ˆy i = ˆ β 0 + ˆ β 1 x i be the prediction for Y based on the ith value of X. Then e i = y i − ˆy i represents the ith residual •We define the residual sum of squares (RSS) as RSS = e 2 1 + e 2 2 + ··· + e 2 n , or equivalently as RSS = (y 1 − ˆ β 0 − ˆ β 1 x 1 ) 2 +(y 2 − ˆ β 0 − ˆ β 1 x 2 ) 2 +. . 
+.+(y n − ˆ β 0 − ˆ β 1 x n ) 2 . 
+•The least squares approach chooses ˆ β 0 and ˆ β 1 to minimize the RSS. 
+The minimizing values can be shown to be ˆ β 1 =  n i=1 (x i − ¯x)(y i − ¯y)  n i=1 (x i − ¯x) 2 , ˆ β 0 = ¯y − ˆ β 1 ¯x, where ¯y ≡ 1 n  n i=1 y i and ¯x ≡ 1 n  n i=1 x i are the sample means. 
+5 / 48 Estimation of the parameters by least squares •Let ˆy i = ˆ β 0 + ˆ β 1 x i be the prediction for Y based on the ith value of X. Then e i = y i − ˆy i represents the ith residual •We define the residual sum of squares (RSS) as RSS = e 2 1 + e 2 2 + ··· + e 2 n , or equivalently as RSS = (y 1 − ˆ β 0 − ˆ β 1 x 1 ) 2 +(y 2 − ˆ β 0 − ˆ β 1 x 2 ) 2 +. . 
+.+(y n − ˆ β 0 − ˆ β 1 x n ) 2 . 
+•The least squares approach chooses ˆ β 0 and ˆ β 1 to minimize the RSS. 
+The minimizing values can be shown to be ˆ β 1 =  n i=1 (x i − ¯x)(y i − ¯y)  n i=1 (x i − ¯x) 2 , ˆ β 0 = ¯y − ˆ β 1 ¯x, where ¯y ≡ 1 n  n i=1 y i and ¯x ≡ 1 n  n i=1 x i are the sample means. 
+5 / 48 Estimation of the parameters by least squares •Let ˆy i = ˆ β 0 + ˆ β 1 x i be the prediction for Y based on the ith value of X. Then e i = y i − ˆy i represents the ith residual •We define the residual sum of squares (RSS) as RSS = e 2 1 + e 2 2 + ··· + e 2 n , or equivalently as RSS = (y 1 − ˆ β 0 − ˆ β 1 x 1 ) 2 +(y 2 − ˆ β 0 − ˆ β 1 x 2 ) 2 +. . 
+.+(y n − ˆ β 0 − ˆ β 1 x n ) 2 . 
+•The least squares approach chooses ˆ β 0 and ˆ β 1 to minimize the RSS. 
+The minimizing values can be shown to be ˆ β 1 =  n i=1 (x i − ¯x)(y i − ¯y)  n i=1 (x i − ¯x) 2 , ˆ β 0 = ¯y − ˆ β 1 ¯x, where ¯y ≡ 1 n  n i=1 y i and ¯x ≡ 1 n  n i=1 x i are the sample means. 
+5 / 48 Example: advertising data 4 3. L in ear Regression between the ith observed response value and the ith response value that is predicted by our linear model. 
+We define the residual sum of squares (RSS) residual sum of squares as RSS = e 2 1 + e 2 2 + ··· + e 2 n , or equivalently as RSS = (y1− ˆ β0− ˆ β1x1) 2 +(y2− ˆ β0− ˆ β1x2) 2 +. . 
+.+(yn− ˆ β0− ˆ β1xn) 2 . 
+(3.3) The least squares approach choos e s ˆ β0and ˆ β1to minimize the RSS. 
+Using some calculus, one can show that the minimizers are ˆ β 1 =  n i=1 (xi− ¯x)(yi− ¯y)  n i=1 (x i − ¯x) 2 , ˆ β0= ¯y − ˆ β1¯x, (3.4) where ¯y ≡ 1 n  n i=1 yiand ¯x ≡ 1 n  n i=1 xiare the sample means. 
+In other words, (3.4) defines the least squares coefficient estimates for simple linear regression. 
+0 50 100 150 200 250 300 5 10 15 20 25 TV Sales FIGURE 3.1. 
+For the Advertising data, the least squares fit for the regression ofsales onto TV is shown. 
+The fit is found by minimizing the sum of squared errors. 
+Each grey line segment represents an error, and the fit makes a compromise by averaging their squares. 
+In this case a linear fit captures the essence of the relationship, although it is somewhat deficient in the left of the plot. 
+Figure 3.1 displays the simple linear regression fit to theAdvertising data, where ˆ β0= 7.03 and ˆ β1= 0.0475. 
+In other words, according to this The least squares fit for the regression of sales onto TV. In this case a linear fit captures the essence of the relationship, although it is somewhat deficient in the left of the plot. 
+6 / 48 Assessing the Accuracy of the Coefficient Estimates •The standard error of an estimator reflects how it varies under repeated sampling. 
+We have SE( ˆ β 1 ) 2 = σ 2  n i=1 (x i − ¯x) 2 , SE( ˆ β 0 ) 2 = σ 2  1 n + ¯x 2  n i=1 (x i − ¯x) 2  , where σ 2 = Var() •These standard errors can be used to compute confidence intervals. 
+A 95% confidence interval is defined as a range of values such that with 95% probability, the range will contain the true unknown value of the parameter. 
+It has the form ˆ β 1 ± 2 ·SE( ˆ β 1 ). 7 / 48 Assessing the Accuracy of the Coefficient Estimates •The standard error of an estimator reflects how it varies under repeated sampling. 
+We have SE( ˆ β 1 ) 2 = σ 2  n i=1 (x i − ¯x) 2 , SE( ˆ β 0 ) 2 = σ 2  1 n + ¯x 2  n i=1 (x i − ¯x) 2  , where σ 2 = Var() • These standard errors can be used to compute confidence intervals. 
+A 95% confidence interval is defined as a range of values such that with 95% probability, the range will contain the true unknown value of the parameter. 
+It has the form ˆ β 1 ± 2 ·SE( ˆ β 1 ). 7 / 48 Confidence intervals — continued That is, there is approximately a 95% chance that the interval  ˆ β 1 − 2 ·SE( ˆ β 1 ), ˆ β 1 + 2 ·SE( ˆ β 1 )  will contain the true value of β 1 (under a scenario where we got repeated samples like the present sample) For the advertising data, the 95% confidence interval for β 1 is [0.042, 0.053] 8 / 48 Confidence intervals — continued That is, there is approximately a 95% chance that the interval  ˆ β 1 − 2 ·SE( ˆ β 1 ), ˆ β 1 + 2 ·SE( ˆ β 1 )  will contain the true value of β 1 (under a scenario where we got repeated samples like the present sample) For the advertising data, the 95% confidence interval for β 1 is [0.042, 0.053] 8 / 48 Hypothesis testing •Standard errors can also be used to perform hypothesis tests on the coefficients. 
+The most common hypothesis test involves testing the null hypothesis of H 0 : There is no relationship between X and Y versus the alternative hypothesis H A : There is some relationship between X and Y . 
+•Mathematically, this corresponds to testing H 0 : β 1 = 0 versus H A : β 1 = 0, since if β 1 = 0 then the model reduces to Y = β 0 + , and X is not associated with Y . 
+9 / 48 Hypothesis testing •Standard errors can also be used to perform hypothesis tests on the coefficients. 
+The most common hypothesis test involves testing the null hypothesis of H 0 : There is no relationship between X and Y versus the alternative hypothesis H A : There is some relationship between X and Y . 
+•Mathematically, this corresponds to testing H 0 : β 1 = 0 versus H A : β 1 = 0, since if β 1 = 0 then the model reduces to Y = β 0 + , and X is not associated with Y . 
+9 / 48 Hypothesis testing — continued •To test the null hypothesis, we compute a t-statistic, given by t = ˆ β 1 − 0 SE( ˆ β 1 ) , •This will have a t-distribution with n − 2 degrees of freedom, assuming β 1 = 0. •Using statistical software, it is easy to compute the probability of observing any value equal to |t| or larger. 
+We call this probability the p-value. 
+10 / 48 Results for the advertising data Coefficient Std. 
+Error t-statistic p-value Intercept 7.0325 0.4578 15.36 < 0.0001 TV 0.0475 0.0027 17.67 < 0.0001 11 / 48 Assessing the Overall Accuracy of the Model •We compute the Residual Standard Error RSE =  1 n − 2 RSS =     1 n − 2 n  i=1 (y i − ˆy i ) 2 , where the residual sum-of-squares is RSS =  n i=1 (y i − ˆy i ) 2 . 
+• R-squared or fraction of variance explained is R 2 = TSS − RSS TSS = 1 − RSS TSS where TSS =  n i=1 (y i − ¯y) 2 is the total sum of squares. 
+•It can be shown that in this simple linear regression setting that R 2 = r 2 , where r is the correlation between X and Y : r =  n i=1 (x i − x)(y i − y)   n i=1 (x i − x) 2   n i=1 (y i − y) 2 . 
+12 / 48 Assessing the Overall Accuracy of the Model •We compute the Residual Standard Error RSE =  1 n − 2 RSS =     1 n − 2 n  i=1 (y i − ˆy i ) 2 , where the residual sum-of-squares is RSS =  n i=1 (y i − ˆy i ) 2 . 
+• R-squared or fraction of variance explained is R 2 = TSS − RSS TSS = 1 − RSS TSS where TSS =  n i=1 (y i − ¯y) 2 is the total sum of squares. 
+•It can be shown that in this simple linear regression setting that R 2 = r 2 , where r is the correlation between X and Y : r =  n i=1 (x i − x)(y i − y)   n i=1 (x i − x) 2   n i=1 (y i − y) 2 . 
+12 / 48 Assessing the Overall Accuracy of the Model •We compute the Residual Standard Error RSE =  1 n − 2 RSS =     1 n − 2 n  i=1 (y i − ˆy i ) 2 , where the residual sum-of-squares is RSS =  n i=1 (y i − ˆy i ) 2 . 
+• R-squared or fraction of variance explained is R 2 = TSS − RSS TSS = 1 − RSS TSS where TSS =  n i=1 (y i − ¯y) 2 is the total sum of squares. 
+•It can be shown that in this simple linear regression setting that R 2 = r 2 , where r is the correlation between X and Y : r =  n i=1 (x i − x)(y i − y)   n i=1 (x i − x) 2   n i=1 (y i − y) 2 . 
+12 / 48 Advertising data results Quantity Value Residual Standard Error 3.26 R 2 0.612 F-statistic 312.1 13 / 48 Multiple Linear Regression •Here our model is Y = β 0 + β 1 X 1 + β 2 X 2 + ··· + β p X p + , •We interpret β j as the average effect on Y of a one unit increase in X j , holding all other predictors fixed. 
+In the advertising example, the model becomes sales = β 0 + β 1 × TV + β 2 × radio + β 3 × newspaper + . 14 / 48 Interpreting regression coefficients •The ideal scenario is when the predictors are uncorrelated — a balanced design: - Each coefficient can be estimated and tested separately. 
+- Interpretations such as “a unit change in X j is associated with a β j change in Y , while all the other variables stay fixed”, are possible. 
+• Correlations amongst predictors cause problems: - The variance of all coefficients tends to increase, sometimes dramatically - Interpretations become hazardous — when X j changes, everything else changes. 
+•Claims of causality should be avoided for observational data. 
+15 / 48 The woes of (interpreting) regression coefficients “Data Analysis and Regression” Mosteller and Tukey 1977 •a regression coefficient β j estimates the expected change in Y per unit change in X j , with all other predictors held fixed. 
+But predictors usually change together! 
+•Example: Y total amount of change in your pocket; X 1 = # of coins; X 2 = # of pennies, nickels and dimes. 
+By itself, regression coefficient of Y on X 2 will be > 0. But how about with X 1 in model? 
+•Y = number of tackles by a football player in a season; W and H are his weight and height. 
+Fitted regression model is ˆ Y = b 0 + .50W − .10H. 
+How do we interpret ˆ β 2 < 0? 
+16 / 48 The woes of (interpreting) regression coefficients “Data Analysis and Regression” Mosteller and Tukey 1977 •a regression coefficient β j estimates the expected change in Y per unit change in X j , with all other predictors held fixed. 
+But predictors usually change together! 
+• Example: Y total amount of change in your pocket; X 1 = # of coins; X 2 = # of pennies, nickels and dimes. 
+By itself, regression coefficient of Y on X 2 will be > 0. But how about with X 1 in model? 
+•Y = number of tackles by a football player in a season; W and H are his weight and height. 
+Fitted regression model is ˆ Y = b 0 + .50W − .10H. 
+How do we interpret ˆ β 2 < 0? 
+16 / 48 The woes of (interpreting) regression coefficients “Data Analysis and Regression” Mosteller and Tukey 1977 •a regression coefficient β j estimates the expected change in Y per unit change in X j , with all other predictors held fixed. 
+But predictors usually change together! 
+• Example: Y total amount of change in your pocket; X 1 = # of coins; X 2 = # of pennies, nickels and dimes. 
+By itself, regression coefficient of Y on X 2 will be > 0. But how about with X 1 in model? 
+•Y = number of tackles by a football player in a season; W and H are his weight and height. 
+Fitted regression model is ˆ Y = b 0 + .50W − .10H. 
+How do we interpret ˆ β 2 < 0? 
+16 / 48 Two quotes by famous Statisticians “Essentially, all models are wrong, but some are useful” George Box “The only way to find out what will happen when a complex system is disturbed is to disturb the system, not merely to observe it passively” Fred Mosteller and John Tukey, paraphrasing George Box 17 / 48 Two quotes by famous Statisticians “Essentially, all models are wrong, but some are useful” George Box “The only way to find out what will happen when a complex system is disturbed is to disturb the system, not merely to observe it passively” Fred Mosteller and John Tukey, paraphrasing George Box 17 / 48 Estimation and Prediction for Multiple Regression •Given estimates ˆ β 0 , ˆ β 1 , . 
+. 
+. 
+ˆ β p , we can make predictions using the formula ˆy = ˆ β 0 + ˆ β 1 x 1 + ˆ β 2 x 2 + ··· + ˆ β p x p . 
+• We estimate β 0 , β 1 , . 
+. 
+. 
+, β p as the values that minimize the sum of squared residuals RSS = n  i=1 (y i − ˆy i ) 2 = n  i=1 (y i − ˆ β 0 − ˆ β 1 x i1 − ˆ β 2 x i2 − ··· − ˆ β p x ip ) 2 . 
+This is done using standard statistical software. 
+The values ˆ β 0 , ˆ β 1 , . 
+. 
+. 
+, ˆ β p that minimize RSS are the multiple least squares regression coefficient estimates. 
+18 / 48 3.2 Multiple Linear Regression 15 X 1 X 2 Y FIGURE 3.4. 
+In a three-dimensional setting, with two predictors and one response, the least squares regression line becomes a plane. 
+The plane is chosen to minimize the sum of the squared vertical distances between each observation (shown in red) and the plane. 
+The parameters are estimated using the same least squares approach that we saw in the context of simple linear regressio n. We cho ose β 0 , β 1 , . 
+. 
+. 
+, β p to minimize the sum of squared residuals RSS = n  i=1 (y i − ˆy i ) 2 = n  i=1 (y i − ˆ β 0 − ˆ β 1 x i1 − ˆ β 2 x i2 − ···− ˆ β p x ip ) 2 . 
+(3.22) The values ˆ β 0 , ˆ β 1 , . 
+. 
+. 
+, ˆ β p that minimize (3.22) are the multiple least s quares regression coefficient estimates. 
+Unlike the simple linear regression estimates given in (3.4), the multiple regression coefficient estimates have somewhat complicated forms that are most easily represented using matrix algebra. 
+For this reason, we do not provide them here. 
+Any statistical software package ca n be used to compute these coefficient estimates, and later in this chapter we will show how this c an be done inR. 
+Figure 3.4 illustrates an example of the least squares fit to a toy data set with p = 2 predictors. 
+Table 3.4 displays the multiple regression coefficient estimates when TV, radio, and newspaper advertising budgets are used to predict product sales 19 / 48 Results for advertising data Coefficient Std. 
+Error t-statistic p-value Intercept 2.939 0.3119 9.42 < 0.0001 TV 0.046 0.0014 32.81 < 0.0001 radio 0.189 0.0086 21.89 < 0.0001 newspaper -0.001 0.0059 -0.18 0.8599 Correlations: TV radio newspaper sales TV 1.0000 0.0548 0.0567 0.7822 radio 1.0000 0.3541 0.5762 newspaper 1.0000 0.2283 sales 1.0000 20 / 48 Some important questions 1. Is at least one of the predictors X 1 , X 2 , . 
+. 
+. 
+, X p useful in predicting the response? 
+2. Do all the predictors help to explain Y , or is only a subset of the predictors useful? 
+3. How well does the model fit the data? 
+4. Given a set of predictor values, what response value should we predict, and how accurate is our prediction? 
+21 / 48 Some important questions 1. Is at least one of the predictors X 1 , X 2 , . 
+. 
+. 
+, X p useful in predicting the response? 
+2. Do all the predictors help to explain Y , or is only a subset of the predictors useful? 
+3. How well does the model fit the data? 
+4. Given a set of predictor values, what response value should we predict, and how accurate is our prediction? 
+21 / 48 Some important questions 1. Is at least one of the predictors X 1 , X 2 , . 
+. 
+. 
+, X p useful in predicting the response? 
+2. Do all the predictors help to explain Y , or is only a subset of the predictors useful? 
+3. How well does the model fit the data? 
+4. Given a set of predictor values, what response value should we predict, and how accurate is our prediction? 
+21 / 48 Some important questions 1. Is at least one of the predictors X 1 , X 2 , . 
+. 
+. 
+, X p useful in predicting the response? 
+2. Do all the predictors help to explain Y , or is only a subset of the predictors useful? 
+3. How well does the model fit the data? 
+4. Given a set of predictor values, what response value should we predict, and how accurate is our prediction? 
+21 / 48 Is at least one predictor useful? 
+For the first question, we can use the F-statistic F = (TSS − RSS)/p RSS/(n − p −1) ∼ F p,n−p−1 Quantity Value Residual Standard Error 1.69 R 2 0.897 F-statistic 570 22 / 48 Deciding on the important variables •The most direct approach is called all subsets or best subsets regression: we compute the least squares fit for all possible subsets and then choose between them based on some criterion that balances training error with model size. 
+• However we often can’t examine all possible models, since they are 2 p of them; for example when p = 40 there are over a billion models! 
+Instead we need an automated approach that searches through a subset of them. 
+We discuss two commonly use approaches next. 
+23 / 48 Deciding on the important variables •The most direct approach is called all subsets or best subsets regression: we compute the least squares fit for all possible subsets and then choose between them based on some criterion that balances training error with model size. 
+• However we often can’t examine all possible models, since they are 2 p of them; for example when p = 40 there are over a billion models! 
+Instead we need an automated approach that searches through a subset of them. 
+We discuss two commonly use approaches next. 
+23 / 48 Forward selection • Begin with the null model — a model that contains an intercept but no predictors. 
+•Fit p simple linear regressions and add to the null model the variable that results in the lowest RSS. 
+•Add to that model the variable that results in the lowest RSS amongst all two-variable models. 
+•Continue until some stopping rule is satisfied, for example when all remaining variables have a p-value above some threshold. 
+24 / 48 Backward selection • Start with all variables in the model. 
+•Remove the variable with the largest p-value — that is, the variable that is the least statistically significant. 
+•The new (p −1)-variable model is fit, and the variable with the largest p-value is removed. 
+•Continue until a stopping rule is reached. 
+For instance, we may stop when all remaining variables have a significant p-value defined by some significance threshold. 
+25 / 48 Model selection — continued • Later we discuss more systematic criteria for choosing an “optimal” member in the path of models produced by forward or backward stepwise selection. 
+• These include Mallow’s C p , Akaike information criterion (AIC), Bayesian information criterion (BIC), adjusted R 2 and Cross-validation (CV). 
+26 / 48 Other Considerations in the Regression Model Qualitative Predictors •Some predictors are not quantitative but are qualitative, taking a discrete set of values. 
+• These are also called categorical predictors or factor variables. 
+•See for example the scatterplot matrix of the credit card data in the next slide. 
+In addition to the 7 quantitative variables shown, there are four qualitative variables: gender, student (student status), status (marital status), and ethnicity (Caucasian, African American (AA) or Asian). 
+27 / 48 Credit Card Data 26 3. Linear Regression Balance 20 40 60 80 100 5 10 15 20 2000 8000 14000 0 500 1500 20 40 60 80 100 AgeCards 2 4 6 8 5 10 15 20 EducationIncome 50 100 150 2000 8000 14000 Limit 0 500 1500 2 4 6 8 50 100 150 200 600 1000 200 600 1000 Rating FIGURE 3.6. 
+The Credit data set contains information about balance, age, cards, education, income, limit, and rating for a number of potential customers. 
+and use this variable as a predictor in the regression equation. 
+This results in the model yi= β0+ β1xi+ ǫi=  β 0 + β 1 + ǫ i if ith person is female β0+ ǫiif ith person is ma le . 
+(3.27) Now β 0 can be interpreted as the average credit card balance among males, β0+ β1as the average credit card balance among females, and β1as the average difference in credit card balance between females and males. 
+Table 3.7 displays the coefficient estimates and o ther information associated with the model (3.27). 
+The average credit card debt for male s is estimated to be $509.80, whereas fema les are estimated to carry $19.73 in additional debt for a total of $509.80 + $19.73 = $529.53. 
+However, we notice that the p-value for the dummy variable is very high. 
+This indicates 28 / 48 Qualitative Predictors — continued Example: investigate differences in credit card balance between males and females, ignoring the other variables. 
+We create a new variable x i =  1 if ith person is female 0 if ith person is male Resulting model: y i = β 0 + β 1 x i +  i =  β 0 + β 1 +  i if ith person is female β 0 +  i if ith person is male. 
+Intrepretation? 
+29 / 48 Credit card data — continued Results for gender model: Coefficient Std. 
+Error t-statistic p-value Intercept 509.80 33.13 15.389 < 0.0001 gender[Female] 19.73 46.05 0.429 0.6690 30 / 48 Qualitative predictors with more than two levels •With more than two levels, we create additional dummy variables. 
+For example, for the ethnicity variable we create two dummy variables. 
+The first could be x i1 =  1 if ith person is Asian 0 if ith person is not Asian, and the second could be x i2 =  1 if ith person is Caucasian 0 if ith person is not Caucasian. 
+31 / 48 Qualitative predictors with more than two levels — continued. 
+•Then both of these variables can be used in the regression equation, in order to obtain the model y i = β 0 +β 1 x i1 +β 2 x i2 + i =      β 0 + β 1 +  i if ith person is Asian β 0 + β 2 +  i if ith person is Caucasian β 0 +  i if ith person is AA. • There will always be one fewer dummy variable than the number of levels. 
+The level with no dummy variable — African American in this example — is known as the baseline. 
+32 / 48 Results for ethnicity Coefficient Std. 
+Error t-statistic p-value Intercept 531.00 46.32 11.464 < 0.0001 ethnicity[Asian] -18.69 65.02 -0.287 0.7740 ethnicity[Caucasian] -12.50 56.68 -0.221 0.8260 33 / 48 Extensions of the Linear Model Removing the additive assumption: interactions and nonlinearity Interactions: •In our previous analysis of the Advertising data, we assumed that the effect on sales of increasing one advertising medium is independent of the amount spent on the other media. 
+•For example, the linear model  sales = β 0 + β 1 × TV + β 2 × radio + β 3 × newspaper states that the average effect on sales of a one-unit increase in TV is always β 1 , regardless of the amount spent on radio. 
+34 / 48 Interactions — continued •But suppose that spending money on radio advertising actually increases the effectiveness of TV advertising, so that the slope term for TV should increase as radio increases. 
+•In this situation, given a fixed budget of $100, 000, spending half on radio and half on TV may increase sales more than allocating the entire amount to either TV or to radio. 
+•In marketing, this is known as a synergy effect, and in statistics it is referred to as an interaction effect. 
+35 / 48 Interaction in the Advertising data? 
+3.2 Multiple Linear Regression 81 Sales Radio TV FIGURE 3.5. 
+For the Advertising data, a linear regression fit to sales using TV and radio as predictors. 
+From the pattern of the residuals, we can see that there is a pronounced non-linear relationship in the data. 
+which simplifies to (3.15) for a simple linear regression. 
+Thus, models with more variables can have higher RSE if the decrease in RSS is small relative to the increase in p. In addition to looking at the RSE and R 2 statistics just discussed, it can be useful to plot the data. 
+Graphical summaries can reveal problems with a model that are not visible from numerical statistics. 
+For example, Figure 3.5 displays a three-dimensional plot ofTV and radio versus sales. 
+We see that some observations lie above and some observations lie below the least squares regr ession plane. 
+Notice that there is a clear pattern of negative residuals, followed by positive residuals, followed by negative residuals. 
+In particular, the linear model seems to overestimatesales for instances in which most of the advertising money was spent exclusively on either TV or radio. 
+It underestimates sales for instances where the budget was split between the two media. 
+This pronounced non-linear pattern cannot be modeled accurately using linear regression. 
+It suggests a synergy or interaction effect between the advertising media, where by combining the media together results in a bigger boost to sales than using any single medium. 
+In Section 3.3.2, we will discuss extending the linear model to accommodate such synergistic effects through the use of interaction terms. 
+When levels of either TV or radio are low, then the true sales are lower than predicted by the linear model. 
+But when advertising is split between the two media, then the model tends to underestimate sales. 
+36 / 48 Modelling interactions — Advertising data Model takes the form sales = β 0 + β 1 × TV + β 2 × radio + β 3 × (radio ×TV) +  = β 0 + (β 1 + β 3 × radio) ×TV + β 2 × radio + . Results: Coefficient Std. 
+Error t-statistic p-value Intercept 6.7502 0.248 27.23 < 0.0001 TV 0.0191 0.002 12.70 < 0.0001 radio 0.0289 0.009 3.24 0.0014 TV×radio 0.0011 0.000 20.73 < 0.0001 37 / 48 Interpretation • The results in this table suggests that interactions are important. 
+• The p-value for the interaction term TV×radio is extremely low, indicating that there is strong evidence for H A : β 3 = 0. •The R 2 for the interaction model is 96.8%, compared to only 89.7% for the model that predicts sales using TV and radio without an interaction term. 
+38 / 48 Interpretation — continued • This means that (96.8 − 89.7)/(100 −89.7) = 69% of the variability in sales that remains after fitting the additive model has been explained by the interaction term. 
+•The coefficient estimates in the table suggest that an increase in TV advertising of $1, 000 is associated with increased sales of ( ˆ β 1 + ˆ β 3 × radio) ×1000 = 19 + 1.1 ×radio units. 
+• An increase in radio advertising of $1, 000 will be associated with an increase in sales of ( ˆ β 2 + ˆ β 3 × TV) ×1000 = 29 + 1.1 ×TV units. 
+39 / 48 Hierarchy • Sometimes it is the case that an interaction term has a very small p-value, but the associated main effects (in this case, TV and radio) do not. 
+• The hierarchy principle: If we include an interaction in a model, we should also include the main effects, even if the p-values associated with their coefficients are not significant. 
+40 / 48 Hierarchy — continued • The rationale for this principle is that interactions are hard to interpret in a model without main effects — their meaning is changed. 
+• Specifically, the interaction terms also contain main effects, if the model has no main effect terms. 
+41 / 48 Interactions between qualitative and quantitative variables Consider the Credit data set, and suppose that we wish to predict balance using income (quantitative) and student (qualitative). 
+Without an interaction term, the model takes the form balance i ≈ β 0 + β 1 × income i +  β 2 if ith person is a student 0 if ith person is not a student = β1× incomei+  β 0 + β 2 if ith person is a student β 0 if ith person is not a student. 
+42 / 48 With interactions, it takes the form balance i ≈ β 0 + β 1 × income i +  β2+ β3× incomeiif student 0 if not student =  (β 0 + β 2 ) + (β 1 + β 3 ) × income i if student β 0 + β 1 × income i if not student 43 / 48 90 3. Linear Regression 0 50 100 150 200 600 1000 1400 Income Balance 0 50 100 150 200 600 1000 1400 Income Balance student non−student FIGURE 3.7. 
+For the Credit data, the least squares lines are shown for prediction ofbalance from income for students and non-students. 
+Left: The model (3.34) was fit. 
+There is no interaction betweenincome and student. 
+Right: The model (3.35) was fit. 
+There is an i nteraction term betweenincome and student. 
+takes the form balance i ≈ β 0 + β 1 ×income i +  β 2 if ith person is a student 0 if ith person is not a student = β1×incomei+ β0+ β2if ith person is a student β0if ith person is not a student. 
+(3.34) Notice that this amounts to fitting two parallel lines to the data, one for students a nd one for non-students. 
+The lines for students and non-students have different intercepts, β0+ β2versus β0, but the same slope, β1. This is illustrated in the left-ha nd panel of Figure 3.7. 
+The fact that the lines are parallel means that the average effect onbalance of a one-unit increase inincome does not depend on whether or not the individual is a student. 
+This represents a potentially serious limitation of the model, since in fact a change inincome may have a very different effect on the credit card balance of a student versus a non-student. 
+This limitation can be addressed by adding an interaction variable, created by multiplyingincome with the dummy variable for student. 
+Our model now becomes balancei≈ β0+ β1×incomei+ β2+ β3×incomeiif student 0 if not student = (β0+ β2) + (β1+ β3) ×incomeiif student β0+ β1×incomeiif not student (3.35) Once again, we have two different regression lines for the students and the non-students. 
+But now those regression lines have different intercepts, Credit data; Left: no interaction between income and student. 
+Right: with an interaction term between income and student. 
+44 / 48 Non-linear effects of predictors polynomial regression on Auto data3.3 Other Considerations in the Regression Model 91 50 100 150 20010 20 30 40 50 HorsepowerMiles per gallonLinear Degree 2 Degree 5 FIGURE 3.8. 
+The Auto data set. 
+For a number of cars, mpg and horsepower are shown. 
+The linear regression fit is shown in orange. 
+The li near regression fit for a model that includeshorsepower2is shown as blue curve. 
+The linear regression fit for a model that includes all polynomials ofhorsepower up to fifth-degree is shown in green. 
+β0+β2versus β0, as well as different slopes, β1+β3versus β1. This allows for the possibility that changes in income may affect the credit card balances of students and non-students differently. 
+The right-hand panel of Figure 3.7 shows the estimated relations hips between income and balance for students and non-students in the model (3.35). 
+We note that the slope for students is lower than the slope for non-students. 
+This suggests that increases in income are associated with smaller incr e ases in credit card balance among students as compared to non-students. 
+Non-Linear Relationships As discussed previously, the linear regression model (3.19) assumes a linear relationship between the response and predictors. 
+But in some cases, the true relationship between the response and the predictors may be nonlinear. 
+Here we present a very simple way to directly extend the linear model to accommodate non-linear relationships, using polynomial regression. 
+In polynomial regressionlater chapters, we will present more complex approaches for performing non-linear fits in more general settings. 
+Consider Figure 3.8, in which thempg (gas mileage in miles per gallon) versus horsepower is shown for a number of cars in the Auto data set. 
+The orange line represents the linear regression fit. 
+There is a pronounced rela45 / 48 The figure suggests that mpg = β0+ β1× horsepower + β2× horsepower2+  may provide a better fit. 
+Coefficient Std. 
+Error t-statistic p-value Intercept 56.9001 1.8004 31.6 < 0.0001 horsepower -0.4662 0.0311 -15.0 < 0.0001 horsepower20.0012 0.0001 10.1 < 0.0001 46 / 48 What we did not cover Outliers Non-constant variance of error terms High leverage points Collinearity See text Section 3.33 47 / 48 Generalizations of the Linear Model In much of the rest of this course, we discuss methods that expand the scope of linear models and how they are fit: •Classification problems: logistic regression, support vector machines •Non-linearity: kernel smoothing, splines and generalized additive models; nearest neighbor methods. 
+•Interactions: Tree-based methods, bagging, random forests and boosting (these also capture non-linearities) •Regularized fitting: Ridge regression and lasso 48 / 48 

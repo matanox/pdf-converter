@@ -43,6 +43,7 @@ writer = module.exports = (fileName) ->
          )
   ###
 
+  #logging.logYellow fileName
   fd = fs.openSync(fileName, 'wx')
   opens += 1
 

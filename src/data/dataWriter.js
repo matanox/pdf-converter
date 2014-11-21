@@ -11,7 +11,7 @@ rdbms = require('../storage/rdbms/rdbms');
 
 fs = require('fs');
 
-exports.docsDataDir = docsDataDir = 'docData';
+exports.docsDataDir = docsDataDir = '../data/pdf/2-as-data';
 
 files = {};
 
@@ -19,7 +19,7 @@ exports.getReadyName = getReadyName = function(context, dataType) {
   var inputFileName;
   inputFileName = context.name;
   util.mkdir(docsDataDir, inputFileName);
-  return docsDataDir + '/' + inputFileName + '/' + dataType + '*' + context.runID + '.out';
+  return docsDataDir + '/' + context.name + '/' + dataType + '*' + context.runID + '.out';
 };
 
 rdbmsWrite = function(context, dataType, data, cnsl) {

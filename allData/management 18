@@ -1,0 +1,478 @@
+a , Clive Emmanuel b & Francesco Vallascas c a Dipartimento di Scienze Economiche e Aziendali, Università di Cagliari, Cagliari, Italy b Formerly of Adam Smith Business School, University of Glasgow, Glasgow, UK c Accounting and Finance Division, Leeds University Business School, Leeds, UK Published online: 14 Jun 2013. 
+To cite this article: Alessandro Mura, Clive Emmanuel & Francesco Vallascas (2013) Challenging the reliability of comparables under profit-based transfer pricing methods, Accounting and Business Research, 43:5, 483-505, DOI: 10.1080/00014788.2013.798581 To link to this article: http://dx.doi.org/10.1080/00014788.2013.798581 PLEASE SCROLL DOWN FOR ARTICLE Taylor & Francis makes every effort to ensure the accuracy of all the information (the “Content”) contained in the publications on our platform. 
+However, Taylor & Francis, our agents, and our licensors make no representations or warranties whatsoever as to the accuracy, completeness, or suitability for any purpose of the Content. 
+Any opinions and views expressed in this publication are the opinions and views of the authors, and are not the views of or endorsed by Taylor & Francis. 
+The accuracy of the Content should not be relied upon and should be independently verified with primary sources of information. 
+Taylor and Francis shall not be liable for any losses, actions, claims, proceedings, demands, costs, expenses, damages, and other liabilities whatsoever or howsoever caused arising directly or indirectly in connection with, in relation to or arising out of the use of the Content. 
+This article may be used for research, teaching, and private study purposes. 
+Any substantial or systematic reproduction, redistribution, reselling, loan, sub-licensing, systematic supply, or distribution in any form to anyone is expressly forbidden. 
+Terms & Conditions of access and use can be found at http://www.tandfonline.com/page/termsand-conditions Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Challenging the reliability of comparables under proﬁt-based transfer pricing methods ALESSANDRO MURA a∗† , CLIVE EMMANUEL b‡ AND FRANCESCO VALLASCAS c a Dipartimento di Scienze Economiche e Aziendali, Universita`di Cagliari, Cagliari, Italy; b Formerly of Adam Smith Business School, University of Glasgow, Glasgow, UK; c Accounting and Finance Division, Leeds University Business School, Leeds, UK Under proﬁt-based transfer pricing methods, the selection of comparable companies is essential if detection of transfer price manipulation is to be reliable. 
+Comparative advantage as embedded in internalisation theory argues that foreign-controlled companies (FCCs) should, in the long run, display greater proﬁtability than domestic-controlled companies. 
+In high-tax host countries, transfer pricing manipulation theory predicts an opposite effect on proﬁtability. 
+Applying a reﬁned set of tests to a large sample of ﬁrms operating in a high-tax country such as Italy offers strong support for the internalisation prediction. 
+Furthermore, the analysis of the interquartile range of our measure of proﬁtability indicates that only a low percentage of FCCs would be subject to ﬁscal enquires, as implied by the Organisation for Economic Co-operation and Development guidelines, under the suspicious of transfer pricing manipulation. 
+These results suggest that current comparability tests are likely to fail the identiﬁcation of transfer pricing practices in countries where the comparative advantage of FCCs is particularly pronounced and question the reliability of these tests. 
+Keywords: transfer pricing; reliability; comparables; proﬁt-based methods JEL Classiﬁcation: M41; M48 1. Introduction There are very few more controversial issues than international transfer pricing. 
+Transfer prices convey the monetary value placed on intra-group transactions within multinational enterprises # 2013 Taylor & Francis ∗ Corresponding author. 
+Email: sandromura@unica.it † Although the paper is a joint effort by the authors, in adherence to the academic Italian procedure we specify that sections 1, 2, 3 and 4.1 can be attributed to Alessandro Mura. 
+‡ Sadly, Clive Emmanuel died in October 2012. 
+We dedicate this paper to him. 
+Clive has provided the seeds, the soil and much of the water needed to grow this project. 
+His outstanding contribution to the ﬁeld of management accounting and transfer pricing represents a perpetual heritage that present and future academia will enjoy. 
+We have also had the privilege to appreciate his kindness and modesty. 
+Clive is the type of academic that you have the chance to meet only once in your lifetime. 
+Accounting and Business Research, 2013 Vol. 
+43, No. 5, 483–505, http://dx.doi.org/10.1080/00014788.2013.798581 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 and encompass tangibles, intangibles, services and intellectual capital. They evoke a spectrum of conceptual views from facilitating in ternational trade through to enabling tax evasion and creating social injustice (Matsui 2011). 
+Recent estimates suggest intra-group transactions account for 60% of world trade (OECD 2008); the exports of multinational enterprises and their afﬁliates comprise one-third of the global total (UNCTAD 2010) and the periodic Ernst & Young surveys (2011) indicate multinational enterprise executives regard tra nsfer pricing as their most important tax issue. 
+In contrast, the accounting audience appears largely uninformed on this key area of accounting practice and seemingly little attention is paid by the media, politicians, regulators, corporate critics and standard setters (Sikka and Willmott 2010). 
+Furthermore, the Financial Accounting Standards Board Interpretation No. 48 (FIN 48), requiring taxpayers to report in the annual accounts any uncertain tax positions, represents a recent and rare exception to the la ck of comprehensive disclosure requirements by generally accepted accounting principles internationally (Borkowski and Gaffney 2012). 
+Transfer pricing manipulation theory posits that multinational enterprises have incentives to over- or under-invoice their intra-group transfers in the presence of corporate income tax differentials between host and home country (Lin et al. 1993, Eden 1998). 
+Speciﬁcally, afﬁliates operating in a high-tax country are expected to show lower proﬁtability than domestic companies due to either artiﬁcially deﬂated taxable revenues or inﬂated deductible expenses relating to intragroup trade. 
+Several methods are proposed to verify transfer pricing compliance (see the OECD (2010a, 2010b) and UN (2011) model conventions). 
+The search for a set of comparable companies under these methods becomes essential for the detection of manipulations in intra-group transactions in multinational corporations and this is particularly true when the comparable proﬁts or the transactional net margin methods are employed. 
+Here, the focus to verify transfer pricing compliance moves from individual transactions to the proﬁts of comparable companies. 
+The careful selection of comparable companies is vital to demonstrate that any differences in profitability between a tested party and unrelated parties are realistically attributable to transfer prices not in line with the arm’s length proﬁt principle. 
+This procedure poses particular challenges since price is only one component of proﬁt. 
+Independent taxpayers undertaking similar activities and functions may exhibit different cost structures and systems, operate in different geographic locations or markets, the quality of management may differ as well as capital costs, corporate objectives, business efﬁciency and experience. 
+The purpose of this study is to test whether the use of comparable proﬁt-based methods can reliably detect international transfer pricing manipulation in an institutional setting where a high corporate tax rate is linked with a business environment where afﬁliates of multinational enterprises are expected to display strong comparative advantages relative to domestic companies. 
+Concerns on the implications of the transfer pricing manipulation theory, and the assumption that where assets are located should reﬂect the expected return (Wheeler 1988, 1990), motivated numerous empirical studies which compare foreign-controlled companies (FCCs) and domesticcontrolled companies (DCCs) proﬁtability to demonstrate that opportunistic income-shifting activities were in place (Wheeler 1988, Kim and Lyn 1990, Grubert and Mutti 1991, Harris et al. 1991, Grubert et al. 1993, Crain and Stitts 1994, Collins et al. 1997, Grubert 1997, Collins et al. 1998). 
+Early contributions based on the USA correlate differences in proﬁtability with differentials in corporate tax rates and import tariffs to infer that aggressive transfer pricing is the cause of DCCs outperforming FCCs. 
+Similar arguments characterise a few empirical studies that collect evidence on Europe by focusing on the UK, Norway and Germany (Oyelere and Emmanuel 1998, Langli and Saudagaran 2004, Weichenrieder 2009). 
+484 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 The interpretation of these ﬁnding s as an indication of the presence of international transfer pricing anomalies in multinational afﬁliates rests on internalisation theory, a long-established explanation of the existence and growth of multinational enterprises (Dunning 1958, Caves 1996). 
+In order to engage in successful foreign direct investments, multinational enterprises should have superior technological, managerial or other intangible advantages over domestic ﬁrms. 
+In the long term, their subsidiaries beneﬁt from these comparative advantages after familiarisation with the host countries’ culture, business practices and customer preferences in the start-up period. 
+Accordingly, lower levels of proﬁtability in FCCs than in DCCs contradict the importance of comparative advantage underpinning an international strategy and provides evidence to support the anomaly as in the international transfer pricing studies. 
+The possible interaction between the comparative advantages and international transfer pricing manipulation incentives may explain why the literature focusing on comparative advantage theory offers mixed results on the expected superiority of FCCs (Globerman et al. 1994, Doms and Jensen 1998, Girma et al. 2001, Harris 2002, Harris and Robinson 2003, Benfratello and Sembenelli 2006). 
+In this study we suggest that the interaction between the incentives to undertake international transfer pricing manipulations and the comparative advantage enjoyed by the FCCs might produce a less clear-cut picture than that postulated by the transfer pricing manipulation theory and may, then, undermine the ability of comparability methods to detect transfer pricing manipulations. 
+We undertake a proﬁt-comparability analysis to detect the presence of international transfer pricing manipulations at the ﬁrm level. 
+Essentially, the purpose is to empirically investigate the ﬁscal implications of using independent domestic companies as comparables to judge the congruence of FCCs proﬁtability in one European jurisdiction. 
+To this end, we focus on a sample of Italian companies. 
+The choice of Italy is motivated by the peculiarities of the Italian institutional framework which is markedly different from those characterising other countries analysed in previous international transfer pricing studies. 
+In particular, Italy shows the two characteristics that may generate conﬂicting predictions between the transfer pricing manipulation theory and the internalisation theory: (i) a high level of corporate taxation; (ii) a low level of foreign direct investment attractiveness. 
+In spite of various ﬁscal reforms, Italy remains characterised by high statutory corporate tax rates and high effective corporate tax rates as compared to the majority of other countries (Nicode`me 2007). 
+This is conﬁrmed by the Global Competitiveness Report (World Economic Forum 2012): out of 144 countries Italy ranks 141st on the extent and effect of tax and 133rd in terms of total tax rate. 
+In this respect, the tax incentives for multinational enterprises with afﬁliates in Italy to shift income to countries with lower corporate tax rates may be particularly pronounced. 
+The Global Competitiveness Report also provides a ranking on the extent to which rules governing foreign direct investment actually encourage investment (business impact of rules on foreign direct investment) where Italy is ranked 126th. 
+1 Furthermore, statistical analyses conﬁrm that Italy is signiﬁcan tly less able than other European Union countries of similar size to attract foreign direct investments (Italian Institute for Foreign Trade 2010). 
+This implies that FCCs operating in Italy are expected to exhibit strong comparative advantages to counterbalance the risk proﬁle of their investments. 
+Overall, these institutional features are suitable for empirically observing how internalisation and transfer pricing manipulation theories display their potentially contrasti ng effects on FCCs’ proﬁtability and for investigating whether the reliability of comparability analysis might remain an attainable goal under such circumstances. 
+The results of an extensive set of univariate and multivariate tests, conducted on a sample consisting of 416,248 ﬁrm-year observations of independent Italian companies and of 17,189 ﬁrmyear observations of FCCs for the period 1998 –2010, show that FCCs generally outperform DCCs. 
+This ﬁnding is in stark contrast to other international transfer pricing empirical studies Accounting and Business Research 485 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 but consistent with the presence of comparative advantages in foreign afﬁliates and holds after including several control variables and alternative proﬁt-level indicators in the multivariate tests. 
+Next, as the transfer pricing Organisation for Economic Co-operation and Development (OECD) guidelines suggest that the use of interquartile range might help to enhance the reliability of the comparability analysis (OECD 2010a, 2010b, par. 
+3.57), we also analyse how FCCs’ performances relate to the interquartile range of the DCCs’ return on assets (ROA) distribution. 
+The ﬁndings show that more than 70% of FCCs report values of ROA falling either above the 75 percentile or within the interquartile range. 
+In other words, only a low percentage of FCCs operating in Italy would be subject to ﬁscal enquiries under the suspicion of transfer pricing manipulation. 
+Overall, our analysis offers strong support for the presence of comparative advantages in FCCs as postulated by internalisation theory and shows a potential room for an unimpeded use of transfer pricing manipulation. 
+This is because a legitimate high proﬁtab ility due to comparative advantages may represent a comfortable buffer that unfairly protects FCCs from ﬁscal authorities in their income-shifting activities and the use of the interquartile range as an assessment method does not seem to remove this concern. 
+The remainder of the paper contains ﬁve sections, the ﬁrst of which explains the peculiarities of proﬁt-based methods to monitor international transfer pricing behaviour. 
+Section 3 reports the theoretical development of the two alternative hypotheses to be tested. 
+The research design is explained in Section 4. The results of the empirical tests are then given in Section 5 and Section 6 discusses the policy implications of the study. 
+2. Proﬁt-based methods and comparability in international transfer pricing Proﬁt-based methods, such as the comparable proﬁts and the transactional net margin methods, use average industry rates of return on proﬁt to value the taxpayers’ proﬁts adherence to the arm’s length principle (Eden 1998, p. 420). 
+Both methods apply the “arm’s length” principle through the examination of proﬁts – instead of focusing on prices – that arise from particular transactions or activities (Culbertson 1995). 
+The procedure involves testing one of the transacting enterprises’ proﬁt-level indicators (such as ROA or operating proﬁt to costs or sales) with those earned by unrelated enterprises (OECD 2010a, 2010b, par. 
+2.58; Income Tax Regulation, Section 1.482– 5). When the tested enterprise’s ﬁnancial results fall outside the comparable arm’s length range, a ﬁscal enquiry leading to a possible audit is triggered. 
+2 The search for comparable companies plays the heroic role of guaranteeing that they enjoy market positions, levels of efﬁciency, advanced technology and so on that are similar to those of the tested party in order to realistically infer that eventual differences in proﬁts relate to abuse in transfer pricing (Emmanuel and Mehafdi 1994). 
+In making the comparison between intra-group and unrelated party transactions not only the internalisation concept but also value chain, market versus hierarchy, strategic management and multinational enterprises as strategi c oligopolists considerations may be taken into account (Eden 1998). 
+The different acceptable methods can yield different proﬁts for subsidiaries or afﬁliates “since no method is suitable in every possible situation” (OECD 1994, par. 
+84). 
+The previous recommendation of the OECD favoured the exercise of good judgement, selecting a method and transfer price that best ﬁts the facts and circumstances of the case. 
+However, since the current advice is to choose the most reliable transfer pricing method (OECD 2010a, 2010b), the transactional net margin method is no longer a method of last resort. 
+Reliability therefore occupies a fulcrum position in policing transfer pricing manipulation, simultaneously enabling international trade and development. 
+3 As regards Italy, statutory rules require transfer prices to be set at normal value (art. 
+110, par. 
+7 of the Italian Income Tax Code), whose deﬁnition substantially coincides with the OECD arm’s length principle. 
+The International Standard Ruling Report issued by the Italian ﬁscal authority 486 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 has ofﬁcially recognised, for interpretative purposes, the 1995 version of the OECD guidelines (Agenzia delle Entrate 2010, par. 
+4). This document also recognises that over the period 2004– 2009 the transactional net margin method was by far the most popular transfer pricing method in advanced pricing agreements: it was applied in 53% of the cases. 
+3. Hypotheses development The transfer price manipulation theory (Eden 1998), regardless of the level of taxation or the degree of attractiveness for foreign direct investment in the host country, requires transfer prices in line with the arm’s length standard. 
+When FCCs equalise the performance of independent comparable companies, this theory recognises the transfer pricing practices of these companies as congruent with the arm’s length principle. 
+By contrast, the presence of signiﬁcant differences in ﬁnancial performance between FCCs and DCCs is normally interpreted as offering an indirect evidence of potential transfer pricing abuse: it is a manifestation of income-shifting strategies for tax-minimisation purposes (Emma nuel and Oyelere 2002, p. 4). This is because, according to the transfer price manipulation theory, a multinational company is expected to over-state intra-group exports and under-state intra-ﬁrm imports in order to minimise its global tax liability when the host country presents a level of taxation higher than the parent company (Lin et al. 1993). 
+Therefore, foreign subsidiaries will report, ceteris paribus, a lower proﬁt than domestic companies due to net effect of either maximising tax deductible expenses or minimising tax revenues through the alteration of transfer prices. 
+Obviously, the incentives for an FCC to engage in income-shifting strategies are expected to be especially pronounced in an institutional context where corporate taxation is strongly penalising in the host country as is the case of Italy. 
+In sum, under the transfer price manipulation theory we formulate the following hypothesis: H 1 : Foreign controlled companies report signiﬁcantly lower proﬁtability than domestic independent companies operating in Italy as they undertake international transfer pricing manipulations. 
+Empirical evidence which supports this hypothesis would imply that FCCs are artiﬁcially manipulating transfer prices to shift proﬁts outside Italy as postulated by transfer pricing manipulation theory. 
+As a consequence, proﬁt-based comparability methods will be able to detect international transfer pricing manipulation to the extent they materialise in terms of differences in proﬁtability between FCCs and DCCs. 
+However, we suggest that in a higher-taxed host country, as is the case of Italy, foreign afﬁliates may still present higher proﬁtability levels than domestic companies due to the presence of substantial comparative advantages (Buckley and Casson 2009). 
+Thus, proﬁt-based comparability methods will not provide a signal to ﬁscal authorities on the presence of abuse in international transfer pricing practices. 
+We postulate the following alternative hypothesis: H 2 : Foreign controlled companies report signiﬁcantly higher proﬁtability than domestic independent companies operating in Italy due to their comparative advantages. 
+Empirical evidence that supports this second hypothesis will open to question the reliability of the comparison with no negative ﬁscal implications for these companies. 
+A higher proﬁt, though not in line with comparable companies, will be accepted by the local ﬁscal authorities as it generates higher tax revenues for the host country. 
+In sum, under proﬁt-based methods these companies have scope for manipulating international transfer pricing without facing ﬁscal consequences Accounting and Business Research 487 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 because their performance remains higher than that of DCCs. 
+Therefore, the extent to which domestic companies show a very low degree of proﬁtability, due to the lack of competitiveness and/or to a high degree of tax evasion, perversely increases the scope for transfer pricing manipulation by foreign afﬁliates without arousing the attention of the ﬁscal authority. 
+4. Sample, variable construction and statistical tests 4.1 The sampling process The sample of DCCs and FCCs was drawn from the database AIDA, managed by Bureau van Dijk, which contains detailed ﬁnancial accounting and ownership data on a large number of companies located in Italy. 
+In order to ensure that the sample properly represents the Italian productive sector, and since AIDA has substantially increased the amount of available information only from the late 1990s, the sampling process has focused on the period spanning 1998– 2010. 
+The substantial number of Italian companies captured in th e database and the introduction of proﬁt-based transfer pricing methods prompted the selection of this time period. 
+In effect, the comparable proﬁts method was ﬁrst introduced in the USA in 1992, and a few years later the OECD ofﬁcially introduced the transactional net margin method as did the UN, with a similar set of rules to those of the comparable proﬁts method (Culbertson 1995). 
+The ﬁnal sample is the result of the application of several selection criteria. 
+First, due to their speciﬁcities in terms of business policies and strategies, the sample does not include ﬁnancial, real estate ﬁrms and ﬁ r ms with act i vities related t o the public sector. 
+Second, coopera tive ﬁrms as non-proﬁt-maximising enti ties are also excluded from th e samp le that, therefore, consists of only limited liability corporations. 
+Third, we require that all companies close their ﬁscal year at the end of the calendar year . 
+Fourth, with the purpose of both eliminating concerns over the reliability of the accounting items provided at the ﬁrm level and excluding unimportant ﬁrms in ﬁnancial terms, we maintain in the sample only ﬁrms with a positive book-equity value (as in Klassen et al. 1993) and with a minimum value of total sales equal to E1,000,000. 
+Fi fth, we maintain in the sample only ﬁrms for which we can clearly identify the nationality of the owner from the database. 
+Finally, we remove f rom the s ample DCCs th at are not independent entities as they are c ontrolled by another corporation that holds at least 50% of the total ownership. 
+Applying these criteria allows our selection process to conform to the approach adopted by ﬁscal authorities in identifying comparables when the purpose is to detect international transfer pricing manipulation practices. 
+The ﬁnal sample refers to 39,901 unique ﬁrms with each ﬁrm entering the database on average for 10.6 years. 
+As shown by Panel A of Table 1, 416,248 ﬁrm-year observations relate to DCCs and 17,189 to FCCs. 
+The number of observations achieves the maximum value of 37,296 (1532) for DCCs (FCCs) in 2006 (2004). 
+Panel B of Table 1 shows the sample distribution across three sectors (manufacturing, commercial and other services) identiﬁed on the basis of the economic activities (ATECO) classiﬁcation provided by the Italian National Institute of Statistics. 
+4 From this distribution, we observe that the largest number of ﬁrms is concentrated in the manufacturing sector: around 54% of the DCCs and 46% of the FCCs. 
+4.2 The performance measure The ROA is the measure of ﬁrm proﬁtability computed as the ratio of net operating proﬁt (the difference between operating revenues (O_REV ) and costs (O_COSTS) as identiﬁed by the Italian civil code 5 ) and the value of total assets (ASSETS), net of the amount of liquidity (LIQUIDITY), obtained from the ﬁrm balance sheet at the end of the ﬁnancial year. 
+More 488 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 formally, the ROA for company i at time t is deﬁned as follows: ROA i,t = O REV i,t − O COSTS i,t ASSETS i,t − LIQUIDITY i,t (1) Our choice to focus on the ROA as a measure of ﬁrm proﬁtability is motivated by two main reasons. 
+First, this measure of performance has been widely employed in previous empirical studies on transfer pricing practices at the ﬁrm level (Wheeler 1988, Craven and Shearon 1996, Oyelere and Emmanuel 1998, Emmanuel and Oyelere 2002, Weichenrieder 2009). 
+By employing this measure, we have the opportunity of a direct comparison of our results with other empirical studies. 
+Second, the ROA is a proﬁt-level indicator commonly employed by both the UN and OECD transfer pricing regulations to apply the transactional net margin method and by the USA when using the comparable proﬁt method. 
+Nonetheless, in order to verify the robustness of the results we replicate our statistical tests using alternative proﬁt-level indicators as dependent variables. 
+In particular we use the ratio of “taxable income” to either total assets and equity as in Grubert et al. (1993) and Langli and Saudagaran (2004). 
+Furthermore, in accordance with the OECD guidelines we carry out additional tests with two alternative measures: the return on costs (ROC) computed as the ratio of net operating proﬁt and total costs of production and the return on sales (ROS) whose denominator is total sales. 
+4.3 Statistical tests The analysis of the differences between FCCs’ and DCCs’ performance consists of two steps. 
+First, we test the hypothesis of the equality in median performances for the two groups of Table 1. Sample distribution. 
+DCCs FCCs Panel A: sample distribution by year 1998 22,807 5.48 1031 6.00 1999 26,054 6.26 1191 6.93 2000 29,212 7.02 1257 7.31 2001 31,229 7.50 1375 8.00 2002 35,868 8.62 1470 8.55 2003 35,161 8.45 1460 8.49 2004 37,261 8.95 1532 8.91 2005 37,237 8.95 1507 8.77 2006 37,296 8.96 1477 8.59 2007 37,064 8.90 1424 8.28 2008 32,900 7.90 1206 7.02 2009 28,372 6.82 1149 6.68 2010 25,787 6.20 1110 6.46 Total 416,248 100.00 17,189 100.00 Panel B: sample distribution by sector Manufacturing 224,863 54.02 7821 45.50 Commercial 141,071 33.89 5077 29.54 Services 50,314 12.09 4291 24.96 Total 416,248 100.00 17,189 100.00 Notes: Panel A shows the sample distribution of DCCs and FCCs by year. 
+Panel B shows the distribution by sector identiﬁed according to the taxonomy proposed by the Italian Institute of Statistics. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998–2010. 
+. 
+Accounting and Business Research 489 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 observations by using the Wilcoxon rank-sum test, also known as the Mann2Whitney twosample statistic. 
+Notably, as a non-parametric test, the Wilcoxon rank-sum test is less sensitive to the presence of extreme values in the ROA distribution than the two-sample t -test. Furthermore, it is valid for data from any type of distribution, whether normal or not. 
+Second, we extend the analysis to a multivariate setting where ﬁrm performance (ROA) is expressed as a function of a set of covariates including company ownership. 
+This further analysis is necessary as the univariate tests may reﬂect the presence of other factors other than simply being the consequence of the ownership variable. 
+For instance, as suggested by Kim and Lyn (1990) and Langli and Saudagaran (2004), different values of ﬁnancial leverage, used as a proxy of ﬁnancial risk, may generate differences in proﬁtability. 
+In a similar vein, the reliability of the comparison under the ROA depends on the extent to which the assets composition is similar among the ﬁrms included in the sample. 
+In fact differences in performance may be related to differences in the asset structure (Langli and Saudagaran 2004) expressed by the ratio between ﬁxed assets and total assets: ﬁrms invest in ﬁxed assets when the expected net present value of the investment is positive. 
+Thus, ﬁrms with a high level of ﬁxed assets to total assets ratio may have better investment opportunities than ﬁrms with lower ﬁxed assets to assets ratios, implying a positive effect on performance. 
+However, this ratio may also impact on income via differences in costs due to depreciation. 
+6 Start-up and maturation effects may also affect proﬁtability as ﬁrms move through the various stages of the business cycle. 
+We control for this potential effect by introducing in the regression model the logarithmic transformation of the age of the ﬁrm measured in years. 
+Finally, in the case of Italy, it is widely recognised that regional location plays a signiﬁcant role in determining the degree of proﬁtability at the ﬁrm level, providing some competitive advantages for companies located in the north, due to the business environment and availability of infrastructure (Leonardi 1995). 
+Thus, the multivariate analysis is conducted by estimating the following linear regression model: ROA i,t =a+b 1 OWNER i +b 2 SIZE i,t +b 3 NORTH i +b 4 EQUITY i,t +b 5 FIXED i,t +b 6 AGE + YEAR + SECTOR + 1 i,t , (2) where ROA i,t is the return on assets of company i at time t, OWNER i is a dummy equal to 1 if the company i is controlled by a foreign owner and 0 otherwise, SIZE i,t is the log of total assets of company i at time t, NORTH i is a dummy equal to 1 if the company i is located in the north and 0 otherwise, EQUITY i,t is the ratio between equity and total assets for company i at time t, FIXED i,t is the ratio between tangible ﬁxed assets and total assets, AGE i,t is the log of the ﬁrm age in number of years that controls for the inﬂuence of maturation effects, YEAR is a vector of time dummies that controls for the inﬂuence of the business cycle on performance and SECTOR is a vector of dummies that controls for sector differences. 
+The model is estimated using a median regression so as to replicate in a multivariate framework the non-parametric approach adopted in the univariate tests. 
+More precisely, median regressions belong to the family of quantile regressions that aim to estimate the quantiles (in our case the median) of the conditional distribution of the response variable (ROA) as functions of the observed covariates. 
+Koenker and Hallock (2001) show that quantile regression is equivalent to minimising a sum of asymmetrically weighted absolute residuals by means of a linear programming method. 
+While the estimation method mirrors our univariate approach, to ease the comparison with previous studies, we also report the results using the more conventional ordinary least squares (OLS) estimator. 
+Table 2 reports descriptive statistics for the full sample and separately for the group of DCCs and FCCs, for the ROA performance indicator and for the set of variables used in the multivariate 490 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 tests. 
+Panels B and C report the statistics separately for the two groups and clearly highlight the need to control for several differences between FCCs and DCCs: foreign companies are larger, are better capitalised, have a higher level of tangible ﬁxed assets to total assets ratio and tend to be more concentrated in the north of Italy. 
+While some of these differences are likely to vanish if the comparison is made between groups that are homogenous in terms of size and sector, the multivariate tests represent an essential tool to remove the inﬂuence of any of these characteristics before formulating conclusions on the impact of the ownership structure on ROA. 
+Therefore, the intention of including these control variables is to deﬁne more precisely the comparable range in order that reliable benchmarks are recognised. 
+5. Empirical results 5.1 Univariate analysis This section discusses the results of the Wilcoxon rank-sum tests on the equality in performances that we have measured in terms of ROA between the sample of FCCs and the sample of DCCs operating in Italy. 
+To compare the median performances realised by the two groups of companies, we start by eliminating the inﬂuence of the size differential on the performance levels. 
+As anticipated in Section 4.3, FCCs are on average substantially larger than their Italian counterparts; therefore, Table 2. Descriptive statistics. 
+N Mean Median SD P1 P99 Panel A: full sample ROA (%) 433,447 7.83 5.68 11.66 2 11.29 47.11 OWNER 433,437 0.04 0.00 0.20 0.00 1.00 SIZE 433,437 7.91 7.79 1.00 6.16 11.25 NORTH 433,447 0.68 1.00 0.47 0.00 1.00 EQUITY (%) 433,437 24.36 19.36 19.10 0.94 78.81 FIXED (%) 433,437 19.40 13.35 18.48 0.19 78.35 AGE 433,437 2.78 2.88 0.69 0.74 4.13 Panel B: DCCs ROA (%) 416,248 7.81 5.68 11.44 2 10.55 46.35 SIZE 416,248 7.84 7.76 0.88 6.15 10.32 NORTH 416,248 0.67 1.00 0.47 0.00 1.00 EQUITY (%) 416,248 24.18 19.17 19.02 0.95 78.58 FIXED (%) 416,248 19.60 13.61 18.47 0.24 78.25 AGE 416,248 2.78 2.88 0.68 0.75 4.11 Panel C: FCCs ROA (%) 17,189 8.29 5.83 16.02 226.08 61.15 SIZE 17,189 9.69 9.57 1.66 6.61 13.92 NORTH 17,189 0.83 1.00 0.38 0.00 1.00 EQUITY (%) 17,189 28.78 24.42 20.42 0.74 83.60 FIXED (%) 17,189 14.64 6.85 18.00 0.00 79.33 AGE 17,189 2.79 2.84 0.83 0.45 4.45 Notes: This table reports basic descriptive statistics for the variables employed in the empirical analysis. 
+More precisely, Panel A refers to the full sample, while Panels B and C focus, respectively, on DCCs and FCCs. 
+ROA is the ratio between net operating income and total assets net of liquidity, OWNER is a dummy equal to 1 for FCCs and zero otherwise, EQUITY is the ratio between book value of equity and total assets, FIXED is the ratio between tangible ﬁxed assets and total assets, SIZE is the log of total assets, AGE is the log of the ﬁrm age in years and NORTH is a dummy equal to 1 if a company is located in the north of Italy and zero otherwise. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998 – 2010. 
+Accounting and Business Research 491 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 any comparison in terms of performance conducted without controlling for this size differential may produce unreliable evidence. 
+We control for the size effect by adopting a matching strategy. 
+More precisely, we initially classiﬁed the FCCs into ﬁve size classes, based on the distribution of the (average) total assets over the sample period. 
+7 Next, we have identiﬁed domestic ﬁrms that fall in each class on the basis of their average value of total assets. 
+The domestic ﬁrms included in each size class of FCCs show an average value of total assets over the sample period between the minimum and the maximum (average) size value in that class. 
+Table 3 reports the results of the univariate tests on the equality in median performances for each size class. 
+The results of these tests do not appear supportive of our ﬁrst hypothesis discussed in Section 3. In particular, these tests do not conﬁrm the evidence provided by the prior literature showing that FCCs tend to underperform DCCs. 
+By contrast, in our sample, in all size classes, the (median) performa nces of FCCs are signiﬁcantly higher than that of their independent domestic counterparts. 
+This difference is, however, less pronounced among the largest ﬁrms. 
+One possible interpretation for this result is that large FCCs when engaged in ﬁscal planning are more effective than small and medium FCCs in matching the proﬁtability of their DCC counterparts. 
+Alternatively, we might speculate that small and medium DCCs have a strong tax avoidance attitude or a low level of competitiveness such that a compatible low proﬁtability for a multinational enterprise afﬁliate may trigger ﬁscal interest at the host and home jurisdictions. 
+As differences in performance may also be related to business characteristics, in Table 4, we extend the analysis by repeating the Wilcoxon rank-sum test separately for different industry sectors. 
+The sample is divided into three groups consisting of, respectively, manufacturing ﬁrms, ﬁrms operating in the commercial sector and ﬁrms offering non-ﬁnancial services. 
+Overall, the results of these tests continue to conﬁrm the general ﬁnding emerging from Table 3, although some variations across sectors are clearly visible. 
+Only in the third sub-sample, consisting of companies operating in the service sector, do FCCs outperform DCCs in all size classes, Table 3. Univariate tests by size class. 
+Size Ownership N Median size Median ROA Q1 Italian 297,755 1739.90 0.060 Foreign 3262 2054.20 0.078 Z-Stat 11.415 ∗∗∗ (0.000) Q2 Italian 92,086 5496.50 0.050 Foreign 3431 6155.82 0.072 Z-Stat 14.878 ∗∗∗ (0.000) Q3 Italian 20,461 11987.00 0.044 Foreign 3436 14318.09 0.054 Z-Stat 6.179 ∗∗∗ (0.000) Q4 Italian 4275 31419.00 0.038 Foreign 3552 34786.77 0.055 Z-Stat 10.975 ∗∗∗ (0.000) Q5 Italian 1671 107696.00 0.034 Foreign 3508 149288.40 0.040 Z-Stat 3.015 ∗∗∗ (0.002) Notes: This table reports the results of the Wilcoxon rank-sum test of equality in median performance between DCCs and FCCs; p-values for the z-statistic are reported in round brackets. 
+∗ Signiﬁcant at 10%. 
+∗∗ Signiﬁcant at 5%. ∗∗∗ Signiﬁcant at 1%. 492 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 whereas in the other two sub-samples, this result appears to be limited to small2 medium enterprises and tends to disappear in the case of the largest companies. 
+The univariate analysis shows that there are signiﬁcant differences in the median performances between DCCs and FCCs: in our sample FCCs perform relat ively better than DCCs, in particular in the case of small 2 medium enterprises and in the group of companies that offer nonﬁnancial services. 
+These result s, therefore, are in sharp contrast with those found in previous studies that have employed an indirect method to detect the presence of international transfer pricing manipulation practices in FCCs and infer evidence of income-shifting mechanisms in multinational corporations (see, for example, Collins et al. 1997, 1998, Oyelere and Emmanuel 1998, Emmanuel and Oyelere 2002, Langli and Saudagaran 2004). 
+Our ﬁndings are instead supportive of the presence of strong comparative advantages in FCCs as postulated by Hypothesis 2 that might undermine the ability of proﬁt comparable methods to detect international transfer pricing manipulations at the ﬁrm level. 
+5.2 Regression analysis This section extends the analysis to a multiva riate setting by modelling the ROA as a function of a set of covariates including ﬁrm ownership. 
+Table 5 shows the results of the median and OLS regression models estimated for each size class and with the full set of control variables. 
+The evidence offered by these multivariate tests is broadly in line with the results of the univariate analysis reported in Table 3: FCCs outperform DCCs in all size classes. 
+We can therefore argue that the presence of comparative advantage in Table 4. Univariate tests by size class and sector. 
+Size class Manufacturing Commercial Services NN N Q1 Italian 147,563 0.062 114,788 0.057 35,404 0.068 Foreign 1003 0.079 1296 0.066 963 0.098 Z-Stat 6.349 ∗∗∗ (0.000) 2.897 ∗∗∗ (0.004) 9.028 ∗∗∗ (0.000) Q2 Italian 60,176 0.051 21,782 0.049 10,128 0.049 Foreign 1335 0.069 1181 0.072 915 0.082 Z-Stat 6.534 ∗∗∗ (0.000) 10.377 ∗∗∗ (0.000) 9.565 ∗∗∗ (0.000) Q3 Italian 13,898 0.044 4461 0.048 3102 0.040 Foreign 1609 0.047 877 0.064 950 0.060 Z-Stat 0.407 (0.684) 5.596 ∗∗∗ (0.000) 6.657 (0.000) ∗∗∗ Q4 Italian 2190 0.046 912 0.040 1173 0.019 Foreign 1963 0.060 991 0.051 598 0.044 5.232 ∗∗∗ (0.000) 4.401 ∗∗∗ (0.000) 7.694 ∗∗∗ (0.000) Q5 Italian 1036 0.039 128 0.039 507 0.025 Foreign 1911 0.044 732 0.038 865 0.039 Z-Stat 0.977 (0.329) 0.649 (0.516) 4.560 ∗∗∗ (0.000) Notes: This table reports the results of the Wilcoxon rank-sum test of equality in median performance between DCCs and FCCs classiﬁed in three sectors; p-values for the z-statistic are reported in round brackets. 
+∗ Signiﬁcant at 10%. 
+∗∗ Signiﬁcant at 5%. ∗∗∗ Signiﬁcant at 1%. Accounting and Business Research 493 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Table 5. Firm ownership and performance. 
+Quantile regression OLS regression Sample by asset size class Sample by asset size class Q1 Q2 Q3 Q4 Q5 Q1 Q2 Q3 Q4 Q5 OWNER 0.009 ∗∗∗ (9.39) 0.012 ∗∗∗ (12.56) 0.004 ∗∗∗ (4.32) 0.010 ∗∗∗ (7.83) 0.013 ∗∗∗ (7.42) 0.014 ∗∗∗ (7.85) 0.016 ∗∗∗ (9.27) 0.005 ∗∗∗ (2.74) 0.012 ∗∗∗ (6.77) 0.017 ∗∗∗ (8.30) SIZE 2 0.012 ∗∗∗ (61.18) 2 0.009 ∗∗∗ (19.64) 2 0.009 ∗∗∗ (12.58) 2 0.006 ∗∗∗ (4.75) 2 0.007 ∗∗∗ (8.36) 2 0.014 ∗∗∗ (54.24) 2 0.010 ∗∗∗ (16.04) 2 0.010 ∗∗∗ (8.00) 2 0.007 ∗∗ (1.97) 2 0.010 ∗∗ (2.20) NORTH 0.008 ∗∗∗ (35.42) 0.007 ∗∗∗ (19.55) 0.007 ∗∗∗ (10.39) 0.001 (0.95) 20.007 ∗∗∗ (3.59) 0.011 ∗∗∗ (40.20) 0.010 ∗∗∗ (22.92) 0.011 ∗∗∗ (11.18) 0.003 (1.56) 20.009 ∗∗∗ (3.77) EQUITY 0.120 ∗∗∗ (200.09) 0.084 ∗∗∗ (92.15) 0.071 ∗∗∗ (47.19) 0.083 ∗∗∗ (28.37) 0.037 ∗∗∗ (9.70) 0.181 ∗∗∗ (186.08) 0.148 ∗∗∗ (96.68) 0.138 ∗∗∗ (46.84) 0.127 ∗∗∗ (25.92) 0.088 ∗∗∗ (15.54) FIXED 2 0.042 ∗∗∗ (65.00) 2 0.043 ∗∗∗ (47.09) 2 0.046 ∗∗∗ (29.59) 2 0.055 ∗∗∗ (18.83) 2 0.013 ∗∗∗ (3.26) 2 0.072 ∗∗∗ (87.43) 2 0.077 ∗∗∗ (62.53) 2 0.083 ∗∗∗ (32.36) 2 0.089 ∗∗∗ (19.37) 2 0.035 ∗∗∗ (6.36) AGE 20.005 ∗∗∗ (30.76) 2 0.003 ∗∗∗ (9.08) 2 0.002 ∗∗∗ (3.70) 0.002 ∗∗∗ (2.72) 0.010 ∗∗∗ (11.63) 2 0.011 ∗∗∗ (46.33) 2 0.007 ∗∗∗ (16.98) 2 0.007 ∗∗∗ (8.27) 2 0.001 (0.68) 0.013 ∗∗∗ (10.20) Constant 0.138 ∗∗∗ (88.36) 0.109 ∗∗∗ (26.94) 0.116 ∗∗∗ (15.74) 0.059 ∗∗∗ (4.65) 0.068 ∗∗∗ (6.44) 0.174 ∗∗∗ (81.37) 0.130 ∗∗∗ (22.90) 0.139 ∗∗∗ (10.76) 0.081 ∗∗ (2.38) 0.084 ∗ (1.71) Sector dummies Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Time dummies Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Pseudo R 2 0.066 0.059 0.054 0.060 0.037 Adjusted R 2 0.199 0.195 0.179 0.156 0.096 Observations 301,017 95,517 23,897 7827 5179 301,017 95,517 23,897 7827 5179 Notes: This table reports the estimation results for the model described in Section 4.3. 
+The regression analysis has been conducted for ﬁve sub-samples based on company size. 
+ROA is the ratio between net operating income and total assets net of liquidity, OWNER is a dummy equal to 1 for FCCs and zero otherwise, SIZE is the log of total assets, NORTH is a dummy equal to 1 if a company is located in the north of Italy and zero otherwise, EQUITY is the ratio between book value of equity and total assets, FIXED is the ratio between ﬁxed assets and total assets and AGE is the log of the ﬁrm age measured in number of years. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998– 2010. 
+∗ Signiﬁcant at 10% (absolute value of t-statistics in parentheses). 
+∗∗ Signiﬁcant at 5% (absolute value of t-statistics in parentheses). 
+∗∗∗ Signiﬁcant at 1% (absolute value of t-statistics in parentheses). 
+494 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 FCCs is not driven by omitted variables reﬂecting ﬁrm-speciﬁc characteristics. 
+These tests also show that these characteristics are signiﬁcant drivers of ﬁrm performance in Italy; namely, OWNER is not the only variable that enters the regression with a statistically signiﬁcant coefﬁcient. 
+For instance, it appears that geographical location and size play inﬂuential roles in explaining the ROA level: regardless of ownership, companies located in the northern region outperform those in other regions as well as small and medium companies outperform large companies. 
+These results are not surprising in the light of both the north2 south dualism that is peculiar to Italian history and the fact that small and medium companies have always represented the backbone of the Italian entrepreneurial system (Leonardi 1995, Cucculelli and Micucci 2008). 
+Furthermore, the ROA improves as the capital ratio increases and when the ﬁxed over total assets and ﬁrm size declines. 
+Notably, while the impact of EQUITY on ROA conﬁrms the ﬁnding in Langli and Saud agaran (2004) for a sample of Norway-based companies of a negative inﬂuence of leverage on ﬁrm performance, the sign of the relationship between FIXED and ROA in Italy is instead opposite. 
+AGE appears positively related to proﬁtability only when ﬁrms have a great size (Q5) while the opposite holds for small and medium-sized ﬁrms. 
+Next, to assess the robustness of our ﬁndings and to increase the degree of comparability between FCCs and DCCs, we have repeated the multivariate analysis separately for each sector. 
+To ease the exposure and to save space, in Table 6 we present for each sector only the coefﬁcient of the variable OWNER, obtained from the regression analysis. 
+8 The multivariate model estimated separately for the three sectors shows prevalently better performances in FCCs that in DCCs: the coefﬁcient of OWNER is positive and signiﬁcant at customary levels in 13 out of 15 sub-samples analysed under the multivariate setting. 
+9 Finally, differently from previous related studies which normally analyse an earlier time period (Grubert et al. 1993, Crain and Stitts 1994, Oyelere and Emmanuel 1998, Langli and Saudagaran 2004), our analysis extends over a number of years where most European ﬁscal authorities have increasingly intensiﬁed their focus on transfer pricing compliance. 
+Thus, our results might be driven by this growing focus on transfer pricing compliance that has led to reduce incentives for income-shifting practices. 
+To verify the validity of this conjecture we have repeated the multivariate analysis separately for each year of the s ample period. 
+The results of these tests, reported in Table 7, show that the signiﬁcant superior performance of FCCs as compared to DCCs does not appear related to a speciﬁc temporal pattern. 
+We conclude, therefore, that it is unlikely that the peculiarity of our results is related to the increased scrutiny by regulators and ﬁscal authorities of international transfer pricing practice over the past decade. 
+To summarise, the battery of multivariate tests discussed in this section reinforces the ﬁndings of the univariate analysis. 
+First, in our sample FCCs outperform DCCs in terms of ROA. 
+While this result is in contrast with the evidence found by several studies conducted in other institutional settings (USA, Germany, UK and Norway) to detect the presence of income-shifting policies in FCCs, it offers support for the internalisation theory and the related comparative advantage hypothesis. 
+In sum, this result suggests that eith er tax minimisation in Italy is not the aim of FCCs or, more likely, if this is the case, the expected negative inﬂuence on proﬁtability is more than offset by positive effects stemming from comparative advantages. 
+Second, in addition to the different levels of performance relating to ﬁrm ownership, it appears that several other factors are signiﬁcant determinants of ROA in Italy; namely, location, assets structure, investment policies and size are all key drivers of performances of companies based in Italy. 
+These results imply that the comparison of the degree of proﬁtability between FCCs and DCCs by ﬁscal authorities needs to consider this full set of variables in the search for reliable comparables between the two groups of ﬁrms. 
+Accounting and Business Research 495 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Table 6. Firm ownership and performance; regression results by sector. 
+Quantile regression OLS regression Sample by asset size class Sample by asset size class Q1 Q2 Q3 Q4 Q5 Q1 Q2 Q3 Q4 Q5 Manufacturing 0.013 ∗∗∗ 0.006 ∗∗∗ 2 0.002 0.007 ∗∗∗ 0.009 ∗∗∗ 0.017 ∗∗∗ 0.003 2 0.002 0.008 ∗∗∗ 0.015 ∗∗∗ Commercial 0.001 0.015 ∗∗∗ 0.008 ∗∗∗ 0.004 ∗∗ 0.010 ∗ 0.007 ∗∗∗ 0.022 ∗∗∗ 0.010 ∗∗∗ 0.012 ∗∗∗ 0.012 ∗ Services 0.018 ∗∗∗ 0.025 ∗∗∗ 0.018 ∗∗∗ 0.018 ∗∗∗ 0.017 ∗∗∗ 0.020 ∗∗∗ 0.036 ∗∗∗ 0.016 ∗∗∗ 0.017 ∗∗∗ 0.023 ∗∗∗ Firm controls Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Time dummies Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Notes: This table reports the coefﬁcient of the variable OWNER obtained form the model described in Section 4.3 estimated separately for each sector by size class. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998–2010. 
+∗ Signiﬁcant at 10%. 
+∗∗ Signiﬁcant at 5%. ∗∗∗ Signiﬁcant at 1%. 496 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 5.3 Additional analyses In this section, we discuss several additional tests that we have conducted to corroborate the evidence reported in the previous sections. 
+While the ratio between net operating proﬁt and total assets is one of the key performance measures usually employed to compare the degree of proﬁtability of FCCs and DCCs, it is generally suggested that additional performance measures should be used to assess the congruence of transfer pricing practices at the ﬁrm level (Przysuski and Lalapet 2005). 
+In Table 8 we report the regression results when we employ two alternative proﬁt indicators which are constructed by using the proﬁt before taxes as a rough proxy of taxable income (Grubert et al. 1993, Klassen et al. 1993, Langli and Saudagaran 2004). 
+Speciﬁcally, we estimate the regression model by asset size class using our measure of ‘Taxable Income’ scaled by total assets. 
+In an effort to control for differences in debt policy we also use equity as an alternative scaling factor in the denominator. 
+In the interest of brevity, we report only the results obtained when the models are estimated via median regression. 
+Overall, these additional tests conﬁrm a higher proﬁtability in FCCs and support the view that the presence of a strong competitive advantage in these compa nies undermines the possibility to identify transfer pricing practices. 
+One additional concern about our approach might be related to the presence of companies with low capital intensity for which both the classiﬁcation in size classes based on assets and the choice of the ROA might be inappropriate. 
+Essentially, for these companies the value of sales represents a more adequate size variable and alternative proﬁt-margin indicators, such as the ROS or the ROC, are normally identiﬁed as acceptable performance measures to investigate transfer pricing abuses under the comparable proﬁts and transactional net margin methods (IRS,s482– 5; OECD 2010a, 2010b, par. 
+2.58). 
+We address this concern in Table 9 where we focus on the sub-sample of ﬁrms with low capital intensity measured by the ratio of total Table 7. Firm ownership and performance: analysis by year. 
+Year Sample by asset size class Q1 Q2 Q3 Q4 Q5 1998 0.007 0.019 ∗∗∗ 0.005 0.010 ∗ 0.006 1999 0.005 0.011 ∗∗∗ 2 0.002 0.008 ∗ 0.016 ∗ 2000 0.009 ∗∗ 0.007 ∗ 2 0.004 0.010 ∗∗ 0.018 ∗ 2001 0.016 ∗∗∗ 0.005 ∗ 0.008 ∗∗ 0.013 ∗∗∗ 0.011 ∗ 2002 0.007 ∗ 0.004 0.008 ∗∗∗ 0.013 ∗∗∗ 0.015 ∗∗∗ 2003 0.005 ∗ 0.012 ∗∗∗ 0.005 ∗ 0.007 ∗ 0.017 ∗∗∗ 2004 0.012 ∗∗∗ 0.022 ∗∗∗ 0.009 ∗∗∗ 0.010 ∗∗ 0.016 ∗∗ 2005 0.013 ∗∗∗ 0.015 ∗∗∗ 2 0.001 0.013 ∗∗ 0.018 ∗∗∗ 2006 0.013 ∗∗∗ 0.015 ∗∗∗ 0.005 ∗ 0.016 ∗∗∗ 0.013 ∗∗ 2007 0.017 ∗∗∗ 0.016 ∗∗∗ 0.003 0.019 ∗∗∗ 0.020 ∗∗∗ 2008 0.014 ∗∗∗ 0.015 ∗∗∗ 0.003 0.012 ∗ 2 0.006 2009 0.004 0.006 ∗∗ 0.002 0.008 0.001 2010 0.011 ∗∗∗ 0.006 ∗∗ 0.012 ∗∗∗ 0.010 0.010 Firm controls Yes Yes Yes Yes Yes Time dummies Yes Yes Yes Yes Yes Notes: This table reports the coefﬁcient of the variable OWNER obtained form the model described in Section 4.3 estimated yearly by size class. 
+The model has been estimated via quantile regression. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998– 2010. 
+∗ Signiﬁcant at 10%. 
+∗∗ Signiﬁcant at 5%. ∗∗∗ Signiﬁcant at 1%. Accounting and Business Research 497 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Table 8. Firm ownership and performance measures based on “taxable income”. 
+Dependent variable: taxable income over total assets Dependent variable: taxable income over total equity Sample by size class Sample by size class Q1 Q2 Q3 Q4 Q5 Q1 Q2 Q3 Q4 Q5 OWNER 0.018 ∗∗∗ (21.09) 0.019 ∗∗∗ (25.60) 0.008 ∗∗∗ (8.73) 0.013 ∗∗∗ (11.77) 0.014 ∗∗∗ (6.08) 0.089 ∗∗∗ (14.55) 0.076 ∗∗∗ (18.23) 0.036 ∗∗∗ (9.04) 0.059 ∗∗∗ (10.79) 0.056 ∗∗∗ (9.23) NORTH 0.007 ∗∗∗ (40.54) 0.008 ∗∗∗ (27.29) 0.006 ∗∗∗ (8.90) 0.001 (0.84) 2 0.006 ∗∗ (2.28) 0.059 ∗∗∗ (43.50) 0.045 ∗∗∗ (27.34) 0.027 ∗∗∗ (9.20) 0.012 ∗∗ (1.99) 2 0.007 (1.11) SIZE 2 0.010 ∗∗∗ (61.82) 2 0.007 ∗∗∗ (20.33) 2 0.007 ∗∗∗ (9.27) 2 0.005 ∗∗∗ (4.23) 2 0.003 ∗∗∗ (3.02) 2 0.096 ∗∗∗ (47.11) 2 0.064 ∗∗∗ (26.20) 2 0.069 ∗∗∗ (18.34) 2 0.024 ∗∗∗ (3.57) 2 0.057 ∗∗∗ (8.42) EQUITY 0.165 ∗∗∗ (334.02) 0.131 ∗∗∗ (178.36) 0.113 ∗∗∗ (71.41) 0.129 ∗∗∗ (47.85) 0.107 ∗∗∗ (22.12) 2 0.133 ∗∗∗ (63.10) 2 0.069 ∗∗∗ (24.81) 2 0.049 ∗∗∗ (10.48) 2 0.016 ∗∗ (1.97) 2 0.046 ∗∗∗ (5.08) FIXED 20.047 ∗∗∗ (88.48) 2 0.050 ∗∗∗ (67.89) 2 0.054 ∗∗∗ (32.74) 2 0.069 ∗∗∗ (26.07) 2 0.047 ∗∗∗ (9.36) 2 0.054 ∗∗∗ (45.62) 2 0.047 ∗∗∗ (23.46) 2 0.041 ∗∗∗ (12.34) 2 0.012 ∗∗ (2.29) 2 0.010 ∗∗∗ (3.85) AGE 20.006 ∗∗∗ (45.22) 2 0.004 ∗∗∗ (17.68) 2 0.002 ∗∗∗ (3.25) 0.000 (0.65) 0.012 ∗∗∗ (10.45) 2 0.274 ∗∗∗ (75.89) 2 0.092 ∗∗∗ (22.62) 2 0.033 ∗∗∗ (4.99) 2 0.037 ∗∗∗ (2.81) 2 0.067 ∗∗∗ (5.03) Constant 0.106 ∗∗∗ (81.93) 0.081 ∗∗∗ (24.82) 0.081 ∗∗∗ (10.34) 0.044 ∗∗∗ (3.82) 0.007 (0.54) 2 0.244 ∗∗∗ (62.86) 2 0.230 ∗∗∗ (56.55) 2 0.207 ∗∗∗ (30.42) 2 0.259 ∗∗∗ (20.13) 2 0.176 ∗∗∗ (12.66) Time dummies Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Pseudo R 2 0.110 0.103 0.090 0.093 0.075 0.067 0.058 0.038 0.032 0.020 Observations 301,013 95,517 23,897 7827 5179 301,013 95,517 23,897 7827 5179 Notes: This table reports the estimation results for the model described in Section 4.3 where the dependent variable is deﬁned as taxable income over total assets (equity). 
+The regression analysis has been conducted for ﬁve sub-samples based on company size measured in terms of assets. 
+OWNER is a dummy equal to 1 for FCCs and zero otherwise, SIZE is the log of total assets EQUITY is the ratio between book value of equity and total assets, FIXED is the ratio between ﬁxed assets and total assets and NORTH is a dummy equal to 1 if a company is located in the north of Italy and zero otherwise. 
+The sample has been selected from the database AIDA, managed by Bureau van Dijk, for the period 1998– 2010. 
+The models are estimated via quantile regression. 
+∗ Signiﬁcant at 10% (absolute value of t-statistics in parentheses). 
+∗∗ Signiﬁcant at 5% (absolute value of t-statistics in parentheses). 
+∗∗∗ Signiﬁcant at 1% (absolute value of t-statistics in parentheses). 
+498 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Table 9. Firm ownership and proﬁt-level indicators in ﬁrms with low capital intensity. 
+Dependent variable: operating income over total sales (ROS) Dependent variable: operating income over total operating costs (ROC) Sample by size class Sample by size class Q_S1 Q_S2 Q_S3 Q_S4 Q_S5 Q_S1 Q_S2 Q_S3 Q_S4 Q_S5 OWNER 0.003 ∗∗∗ (3.01) 0.014 ∗∗∗ (19.67) 0.010 ∗∗∗ (8.21) 0.008 ∗∗∗ (6.71) 0.002 ∗ (1.77) 0.003 ∗∗∗ (3.16) 0.015 ∗∗∗ (19.44) 0.010 ∗∗∗ (8.19) 0.008 ∗∗∗ (6.68) 0.002 ∗∗ (2.33) NORTH 0.004 ∗∗∗ (21.01) 0.001 ∗∗∗ (3.17) 2 0.003 ∗∗ (2.50) 0.004 ∗∗∗ (2.96) 2 0.000 (0.40) 0.004 ∗∗∗ (19.86) 0.001 ∗∗∗ (3.32) 2 0.003 ∗∗ (2.21) 0.004 ∗∗∗ (3.28) 2 0.000 (0.40) Log (SALES) 20.004 ∗∗∗ (17.72) 2 0.000 (0.52) 0.001 (0.63) 2 0.002 (1.59) 2 0.001 (1.53) 2 0.004 ∗∗∗ (16.71) 2 0.000 (0.63) 0.001 (0.49) 2 0.002 ∗∗ (2.09) 2 0.001 ∗∗ (2.45) EQUITY 0.060 ∗∗∗ (90.48) 0.047 ∗∗∗ (52.79) 0.080 ∗∗∗ (22.24) 0.084 ∗∗∗ (20.73) 0.071 ∗∗∗ (22.29) 0.063 ∗∗∗ (86.69) 0.049 ∗∗∗ (52.34) 0.083 ∗∗∗ (23.48) 0.086 ∗∗∗ (22.83) 0.073 ∗∗∗ (28.75) FIXED 2 0.006 ∗∗∗ (8.01) 2 0.006 ∗∗∗ (6.08) 2 0.019 ∗∗∗ (4.65) 2 0.022 ∗∗∗ (3.98) 2 0.009 ∗∗ (1.99) 2 0.007 ∗∗∗ (8.01) 2 0.006 ∗∗∗ (5.59) 2 0.021 ∗∗∗ (5.25) 2 0.023 ∗∗∗ (4.52) 2 0.011 ∗∗∗ (2.83) AGE 2 0.001 ∗∗∗ (7.42) 2 0.001 ∗∗∗ (6.31) 0.001 (1.25) 0.001 (0.89) 0.002 ∗∗∗ (3.28) 2 0.001 ∗∗∗ (6.83) 2 0.001 ∗∗∗ (6.30) 0.001 (1.34) 0.000 (0.64) 0.002 ∗∗∗ (3.86) Constant 0.049 ∗∗∗ (28.36) 0.016 ∗∗∗ (5.09) 2 0.003 (0.24) 0.007 (0.53) 0.002 (0.29) 0.049 ∗∗∗ (26.38) 0.016 ∗∗∗ (4.96) 2 0.002 (0.19) 0.011 (0.98) 0.004 (0.86) Time dummies Yes Yes Yes Yes Yes Yes Yes Yes Yes Yes Pseudo R 2 0.071 0.071 0.106 0.127 0.103 0.067 0.068 0.102 0.121 0.067 Observations 58,965 20,648 2440 1299 1288 58,964 20,648 2440 1299 1288 Notes: This table reports the regression results from quantile regressions for the sample of companies with low capital intensity using proﬁt-margin indicators as dependent variables. 
+Capital intensity is measured as the ratio between total assets and total revenues. 
+This sub-sample has been obtained by ﬁrstly classifying the FCCs as low-capital-intensity companies if they fall within the ﬁrst quintile of the sample distribution based on the average value of capital intensity shown during the sample period. 
+Then DCCs that fall in the same quintile have been selected. 
+The analysis has been conducted by size categories, deﬁned in terms of total sales. 
+∗ Signiﬁcant at 10% (absolute value of t-statistics in parentheses). 
+∗∗ Signiﬁcant at 5% (absolute value of t-statistics in parentheses). 
+∗∗∗ Signiﬁcant at 1% (absolute value of t-statistics in parentheses). 
+Accounting and Business Research 499 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 assets and total sales. 
+More speciﬁcally, ﬁrst we have classiﬁed the FCCs in quintiles based on the average value of capital intensity over the sample period; then, we have selected ﬁrms falling in the ﬁrst quintile and matched these ﬁrms with DCCs with a value of capital intensity falling in the range of the same quintile. 
+The selected companies are then classiﬁed in ﬁve size classes based on sales in a similar manner as in the previous section. 
+Finally, for each size class based on sales, Table 9 reports the regression results when the ratio between operating proﬁt and total sales or the ratio between operating proﬁt and total costs are employed as measures of performance. 
+The results of these tests conﬁrm the ﬁnding observed in the previous sections. 
+5.4 The interquartile range of the ROA distribution Our univariate and multivariate tests provide robust evidence of the presence of a signiﬁcant and positive difference in median performances between FCCs and DCCs in Italy and this is in line with the postulates of the internalisation theory. 
+However, the comparability of the performances of a te sted company with those of unrelated independent companies to detect transfer pricing manipulations, as generally conducted by ﬁscal authorities in accordance with the transfer pricing guidelines established by the OECD (2010a, 2010b), may go beyond the analysis of the median values of a measure of performance. 
+For instance, in the presence of a great number of observations it is suggested that the interquartile range or other percentiles will help in the search of comparables to justify the arm’s length range. 
+In the context of the current analysis, the possibility to use additional analytical tools by ﬁscal authorities is particularly relevant as it might indicate that, in spite of the presence of a relevant comparative advantage in the median foreign ﬁrm, there is scope to activate transfer pricing enquires via the adoption of more reﬁned approaches. 
+These enquires can then collect more information to uncover manipulations in transfer prices that otherwise would be ignored under the comparison of median performances. 
+Table 10. Firm ownership and performance interquartile analysis; percentage values. 
+Sample divided by size classes Q1 Q2 Q3 Q4 Q5 Panel A: full sample Below the 25 percentile 27.47 27.13 29.37 23.25 28.05 Inside the range 32.86 28.80 32.57 35.98 35.97 Above the 75 percentile 39.67 44.07 38.07 40.77 35.97 Panel B: manufacturing sector Below the 25 percentile 27.12 26.89 32.75 26.95 29.93 Inside the range 33.30 32.51 34.43 35.86 37.94 Above the 75 percentile 39.58 40.60 32.82 37.19 32.13 Panel C: commercial Below the 25 percentile 31.17 27.52 26.45 27.95 32.10 Inside the range 32.41 26.16 32.50 32.39 37.16 Above the 75 percentile 36.42 46.32 41.05 39.66 30.74 Panel D: services Below the 25 percentile 22.74 25.90 25.47 21.07 25.43 Inside the range 37.07 26.67 29.68 32.11 32.60 Above the 75 percentile 40.19 47.43 44.84 46.82 41.97 Notes: This table reports the interquartile range analysis according to the methodology discussed in Section 4.3. 
+More precisely, the FCCs have been classiﬁed as falling within, below or above the interquartile range of the ROA distribution during the full sample period. 
+While Panel A reports the results of this test for the full sample of FCCs classiﬁed in ﬁve size classes, Panels B, C and D show the results of the same analysis conducted separately for, respectively, manufacturing, commercial and service ﬁrms. 
+500 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Table 10 extends, therefore, the empirical analysis to the investigation of the full distribution of the ROA for DCCs, initially for the full sample and then for each sector. 
+Speciﬁcally, we identify, for the sub-samples based on size and on size and sector analysed in the univariate tests and in the regression analysis, the interquartile range of the ROA distribution. 
+Next, we compute the percentage of foreign ﬁrms that fall inside and outside this range. 
+These tests show unequivocally that more than 70% of FCCs would not be subject to any ﬁscal enquiry either because their comparative advantage is particularly pronounced or because they report proﬁtability values within a tolerable range. 
+In other words, in spite of operating in a high-tax country, only a minor share of FCCs seem to manipulate transfer prices to such an extent as to attract the consideration of ﬁscal authorities. 
+In general, this conclusion also holds when the analysis is conducted separately for each sector; namely, when we attempt to increase the degree of comparability between FCCs and DCCs. 
+Overall, these results conﬁrm the hypothesis that there are signiﬁcant differences in performance between FCCs and independent DCCs operating in Italy and conﬁrm a potential room for an unimpeded use of transfer pricing manipulation. 
+This is because ﬁscal authorities are not likely to set their sights on numerous FCCs, as they are unfairly unsuspected under the shield of a reassuring high proﬁtability due to comparative advantage. 
+In this respect, the use of the analysis of the interquartile range as an assessment method does not seem effective even for FCCs where the comparative advantages do not fully materialise and the reported proﬁtability levels are unlikely to induce any ﬁscal enquiry. 
+6. Conclusions Our ﬁndings contradict the traditional evidence in the international transfer pricing empirical literature (see for example Collins et al. 1997, Grubert 1997, Collins et al. 1998, Emmanuel and Oyelere 2002, Langli and Saudagaran 2004) by showing that FCCs outperform their Italian independent counterparts at a sta tistically signiﬁcant level. 
+This result holds when alternative proﬁtlevel indicators and more precise comparators are incorpo rated within the analysis. 
+Furthermore, the application of the interquartile range to detect acceptable arm’s length proﬁts highlights that a high proportion of FCCs either reports performance within the interquartile range of the ROA distribution or above. 
+Unexpectedly, in a country with an extremely high taxation, the comparability method, even in its more reﬁned approach, suggests that transfer pricing manipulation is not a major issue. 
+A possible explanation for our results can be related to the speciﬁcities of Italy in terms of level of taxation, foreign direct investment attractiveness and legal enforcement: the performance differential appears a plausible consequence of strong comparative advantages that FCCs operating in Italy may enjoy. 
+Thus, the expectation of a similar proﬁtability between a given tested FCC and a set of comparable independent companies as a proof that transfer prices are set at arm’s length appears potentially fallacious. 
+The presence of these comparative advantages might depend on a lower quality of DCCs management and a consequent lower business efﬁciency. 
+Furthermore, the magnitude of this advantage in terms of performance differential might be inﬂated by a greater aggressiveness in tax avoidance by DCCs. 
+In this respect, we speculate that especially small and medium-sized Italian ﬁrms, often individually or family owned, might be more ﬂexible and effective in exploiting a low level of tax enforcement and thus hiding their proﬁtability given the absence of strong outside shareholders (Desai et al. 2007). 
+On the basis of our results, we argue that the capability of tax authorities to detect and police transfer price manipulation has to rely more heavily on judgement than apparently “hard” ﬁnancial data and this provides an explanation for the investigation of individual intra-group Accounting and Business Research 501 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 transactions and activities. 
+The exercise of judgement by ﬁscal agents becomes of paramount importance but, as Ernst & Young surveys (2011) have shown, the preferred methods for intangibles and intellectual property activities are the comparable proﬁts and transactional net margin methods. 
+These are precisely the intra-group activities where comparative advantages come to the fore and where internalisation legitimises proﬁtability differentials. 
+They are also activities where even inexact comparables may not exist or can be contested. 
+The lack of focus on individual transactions or individual FCCs represents a limitation of this study. 
+In addition, the analysis ignores the total tax regime operating in Italy and does not attempt to recognise the importance of intra-group transactions involving DCCs with differing degrees of international involvement. 
+Nevertheless, we show that a careful analysis of comparables using the reﬁned indirect method and the OEC D-recommended method gives rise to ambiguous interpretations. 
+The reliability of the tests of comparability therefore seems a reasonable starting point for debate on whether the arm’s length principle should remain the cornerstone of ﬁscal regulation. 
+The recent proposal of the European Commission to introduce the Common Consolidated Corporate Tax Base to tax multinational enterprises operating in Europe may, arguably, bypass all potential disputes over internal transfer prices. 
+An alternative view is that the comparables problem is then replaced by a formula apportionment problem that is equally intractable. 
+Nonetheless, in their indifference towards detailed disclosure of international transfer pricing policies, accounting standard setters appear surprisingly convergent across countries. 
+Acknowledgements We would like to thank Michelle Hanlon (USA), Ardit Nesimi (Denmark) and the other participants to the Workshop on Current Research in Taxation at the University of Mu¨nster 2011 (Germany) for their valuable suggestions on an earlier draft of this paper. 
+We are also grateful to Michael Dempsey (Australia) for his comments as discussant of this paper at the Macao International Symposium on Accounting and Finance 2011 (China). 
+This paper has also greatly beneﬁtted from the wise comments of Pauline Weetman and Vivien Beattie (editors) as well as from two challenging anonymous referees. 
+Notes 1. The peculiarities of Italy emerge when this country is compared with the other countries analysed in prior international transfer pricing empirical studies. 
+In particular, the USA, the UK, Germany and Norway rank, respectively, 69, 77, 74 and 59 on the extent and effect of tax and, respectively, 103, 67, 103 and 82 in terms of total tax rate. 
+In terms of “Business impact of rules on FDI”, the same countries are ranked as 64, 13, 72 and 79. 2. Traditionally transaction-based methods such as full cost plus, resale price and comparable uncontrolled price have been recommended to detect international transfer pricing manipulation. 
+They examine the prices of speciﬁc transactions wherever possible using comparable prices between unassociated enterprises. 
+It has been clearly demonstrated that transaction-based comparables are of questionable reliability and are not necessarily consistent with transaction cost economics (Eden 1998, Emmanuel and Cools 2007). 
+That is, asset, location, human speciﬁcity and other forms that comprise multinational enterprise comparative advantage are not capable of accurate measurement or easily observed even when similar transactions are the focus of analysis. 
+These concerns are emphasised when proﬁtbased methods of transfer pricing are applied. 
+3. Similarly, under the US regulations, reliability depends on the comparability of the controlled and unrelated party transactions or activities, the completeness and accuracy of the data, and the reliability of the assumptions made (IRS,s482 F94, 119). 
+For proﬁt-based methods, the “arm’s length” principle is amended to compare the results of subsidiary activities for consistency with the results that uncontrolled taxpayers would obtain. 
+When material differences exist, adjustment can be made, but this will depend on the completeness and accuracy of the data supplied by the taxpayer, the multinational enterprise. 
+The burden of proof is, therefore, on the multinational enterprise to demonstrate reliability in order that comparables are acceptable and that compliance with the “arm’s length” principle can be shown. 
+502 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 4. The manufacturing sector includes ﬁrms with an ATECO code that ranges from 06.100 to 33.200. 
+The commercial sector considers ATECO codes from 45.100 to 49.500. 
+The remaining ﬁrms are in the service sector. 
+5. More precisely, we refer to the difference between the classes of items labelled (a) Valore della produzione and (b) Costi della produzione in the income statement as identiﬁed by art. 
+2425 of the Civil Code. 
+6. The choice of these control variables is also consistent with the OECD requirements: one of the ﬁve comparability factors relates to the “... functions performed by the parties (taking into account assets used and risks assumed) ...” (OECD 2010a, 2010b, par. 
+1.36). 7. For instance, in the ﬁrst class (quintile) we have included FCCs whose average size is in the ﬁrst 20% of the average asset distribution over the sample period; this is equivalent to examining companies with an average size not larger than E3820 million. 
+8. The full results are available from the authors upon request. 9. In order to control for sub-sector differences within the categories analysed in Table 6, we have also repeated the analysis by introducing in the regression analysis by sector sub-sector dummies deﬁned on the basis of the two-digit classiﬁcation proposed by ATECO. 
+While these dummies are jointly different from zero, we still observe prevalently a higher degree of proﬁtability in FCCs. 
+References Agenzia delle entrate, 2010. 
+International standard ruling report [online]. 
+Agenzia delle Entrate. 
+Central Directorate for Tax Assessment. 
+Available from: http://www.agenziaentrate.gov.it/wps/content/Nsilib/ Nsi/Documentazione/Ruling+internazionale/ [Accessed 7 December 2012] Benfratello, L. and Sembenelli, A., 2006. 
+Foreign ownership and productivity: is the direction of causality so obvious? 
+International Journal of Industrial Organization, 24 (4), 733–751. 
+Borkowski, S.C. and Gaffney, M.A., 2012. 
+FIN 48, uncertainty and transfer pricing: (im)perfect together? 
+Journal of International Accounting, Auditing and Taxation, 21 (1), 32–51. 
+Buckley, P.J. and Casson, M.C., 2009. 
+The internalisation theory of the multinational enterprise: a review of the progress of a research agenda after 30 years. 
+Journal of International Business Studies, 40 (9), 1563–1580. 
+Caves, R.E., 1996. 
+Multinational Enterprise and Economic Analysis. 
+Cambridge: Cambridge University Press. 
+Collins, J.H., Kemsley, D. and Shackelford, D.A., 1997. 
+Transfer pricing and the persistent zero taxable income of foreign-controlled U.S. corporations. 
+Journal of the American Taxation Association,19 (Suppl), 68–83. 
+Collins, J.H., Kemsley, D. and Lang, M., 1998. 
+Cross-jurisdictional income shifting and earnings valuation. 
+Journal of Accounting Research, 36 (2), 209–229. 
+Crain, T.L. and Stitts, R.H., 1994. 
+A comparison of gross-proﬁt margins between foreign-controlled domestic corporations. 
+Journal of International Accounting Auditing & Taxation, 3 (1), 85–101. 
+Cravens, K.S. and Shearon, W.T., 1996. 
+An outcome-based assessment of international transfer pricing policy. 
+The International Journal of Accounting, 31 (4), 419–443. 
+Cucculelli, M. and Micucci, G., 2008. 
+Family succession and ﬁrm performance: evidence from Italian family ﬁrms. 
+Journal of Corporate Finance, 14 (1), 17–31. 
+Culberston, R., 1995. 
+A rose by any other name: smelling the ﬂower at the OECD’s last resort. 
+Taxes Notes International, 11 (5), 370–382. 
+Desai, M.A., Dyck, A. and Zingales, L., 2007. 
+Theft and taxes. 
+Journal of Financial Economics, 84 (3), 591–623. 
+Doms, M.E. and Jensen, B., 1998. 
+Comparing wages, skills, and productivity between domestically and foreign owned manufacturing establishments in the United States. 
+In: R.E. 
+Lipsey, R.E. 
+Baldwin and J.D. 
+Richardson, eds. 
+Geography and Ownership as Bases for Economic Accounting. 
+Chicago: The University of Chicago Press, 235–258. 
+Dunning, J.H., 1958. 
+American Investment in British Manufacturing Industry. 
+London: George Allen and Unwin. 
+Eden, L., 1998. 
+Taxing Multinationals: Transfer Pricing and Corporate Income Taxation in North America. 
+Toronto: University of Toronto Press. 
+Emmanuel, C. and Cools, M., 2007. 
+Transfer pricing: the implications of ﬁscal compliance. 
+In: C.S. 
+Chapman and M.D. 
+Shields, eds. 
+Handbook of Management Accounting Research. 
+Amsterdam: Elsevier, 579–591. 
+Emmanuel, C.R. and Mehafdi, M., 1994. 
+Transfer Pricing. 
+London: Academic Press. 
+Accounting and Business Research 503 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Emmanuel, C.R. and Oyelere, P.B., 2002. 
+Differences in the reported performances of foreign-controlled and domestically-controlled ﬁrms: some U.K. evidence. 
+Journal of International Accounting, Auditing & Taxation, 11 (1), 1–17. 
+Ernst & Young, 2011. 
+2010 Global Transfer Pricing Survey. 
+Addressing the Challenges of Globalisation. 
+EYGM. 
+Girma, S., Greenaway, D. and Wakelin, K., 2001. 
+Who beneﬁts from foreign direct investment in the UK. Scottish Journal of Political Economy, 48 (2), 119–133. 
+Globerman, S., Ries, J.C., and Vertinsky, I., 1994. 
+The economic performance of foreign afﬁliates in Canada. 
+The Canadian Journal of Economics, 27 (1), 143–156. 
+Grubert, H., 1997. 
+Another Look at the Low Taxable Income of Foreign-Controlled Corporations in the United States. 
+Washington, DC: Ofﬁce of Tax Analysis (OTA), US Treasury Department, Working Paper No. 74. Grubert, H. and Mutti, J., 1991. 
+Taxes, tariffs and transfer pricing in multinational corporate decision making. 
+Review of Economics and Statistics, 73 (2), 285–293. 
+Grubert, H., Goodspeed, T. and Swenson, D., 1993. 
+Explaining the low taxable income of foreign controlled companies. 
+In: A. Giovannini, R.G. 
+Hubbard and J. Slemrod, eds. 
+Studies in International Taxation. 
+Chicago, IL: NBER and University of Chicago, 237–276. 
+Harris, R., 2002. 
+Foreign ownership and productivity in the United Kingdom – some issues when using the ARD establishment level data. 
+Scottish Journal of Political Economy, 49 (3), 318–335. 
+Harris, R. and Robinson, C., 2003. 
+Foreign ownership and productivity in the United Kingdom. 
+Estimates for U.K. manufacturing using the ARD. 
+Review of Industrial Organization, 22 (3), 207–223. 
+Harris, D.G., Morck, R., Slemrod, J. and Yeung, B., 1991. 
+Income shifting in U.S. multinational corporations. 
+In: A. Giovannini, G. Hubbard and J. Slemrod, eds. 
+Studies in International Taxation. 
+Chicago, IL: NBER and University of Chicago, 277–302. 
+Italian Institute for Foreign Trade, 2010. 
+Italy in the World Economy – ICE Report 2009–2010 – Summary. 
+Rome: ICE. 
+Kim, W.S. and Lyn, E.O., 1990. 
+FDI theories and the performance of foreign multinationals operating in the US. Journal of International Business Studies, 21 (1), 41–54. 
+Klassen, K., Lang, M. and Wolfson, M., 1993. 
+Geographic income shifting by multinational corporations in response to tax rate changes. 
+Journal of Accounting Research, 31 (Suppl.), 141–173. 
+Koenker, R. and Hallock, K.F., 2001. 
+Quantile regression. 
+Journal of Economic Perspectives, 15 (4), 143–56. 
+Langli, J.C. and Saudagaran, S.M., 2004. 
+Taxable income differences between foreign and domestic controlled corporations in Norway. 
+European Accounting Review, 13 (4), 713–741. 
+Leonardi, R., 1995. 
+Regional development in Italy: social capital and the Mezzogiorno. 
+Oxford Review of Economic Policy, 11 (2), 165–179. 
+Lin, L., Lefebvre, C. and Kantor, J., 1993. 
+Economic determinants of international transfer pricing and the related accounting issues, with particular reference to Asian speciﬁc countries. 
+International Journal of Accounting, 28 (1), 49–70. 
+Matsui, K., 2011. 
+Strategic transfer pricing and social welfare under product differentiation. 
+European Accounting Review, 20 (3), 521–550. 
+Nicode`me, G., 2007. 
+Comparing effective corporate tax rates. 
+Frontiers in Finance and Economics, 4 (2), 102–131. 
+OECD, 1994. 
+Transfer Pricing Guidelines for Multinational Enterprises and Tax Administrations: Report of the OECD Committee on Fiscal Affairs. 
+Paris: OECD. 
+OECD, 2008. 
+Transfer pricing: keeping it at arm’s length. 
+OECD Observer, 230 (as amended at July 2008). 
+OECD, 22 July 2010a. 
+Review of Comparability and of Proﬁt Methods: Revision of Chapters I-III of the Transfer Pricing Guidelines. 
+Geneva: OECD. 
+OECD, 2010b. 
+Transfer Pricing Guidelines for Multinational Enterprises and Tax Administrations. 
+Geneva: OECD. 
+Oyelere, P.B. and Emmanuel, C., 1998. 
+International transfer pricing and income shifting: evidence from the UK. European Accounting Review, 7 (4), 623–635. 
+Przysuski, M. and Lalapet, S., 2005. 
+A comprehensive look at the berry ratio. 
+Tax Notes International, 40 (8), 759–767. 
+Sikka, P. and Willmott, H., 2010. 
+The dark side of transfer pricing: its role in tax avoidance and wealth retentiveness. 
+Critical Perspectives on Accounting, 21 (4), 342–356. 
+UN, 2011. 
+Practical Manual on Transfer Pricing for Developing Countries. 
+New York: UN, Working Draft. 
+UNCTAD, 2010. 
+World Investment Report 2010. 
+Investing in a Low-Carbon Economy. 
+Geneva: UNCTAD. 
+504 A. Mura et al. Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 Wheeler, J.E., 1988. 
+An academic look at transfer pricing in a global economy. 
+Tax Notes, 40 (1), 87–96. 
+Wheeler, J.E., 1990. 
+Hearings on Tax Under-Payments by Foreign-Owned US Subsidiaries, Hearings Before the Subcommittee on Ways and Means, United States House of Representatives, April, 1 –15. 
+Weichenrieder, A.J., 2009. 
+Proﬁt shifting in the EU: evidence from Germany. 
+International Tax and Public Finance, 16 (3), 281–297. 
+World Economic Forum, 2012. 
+The Global Competitiveness Report 2012 –2013. 
+Geneva: World Economic Forum.Accounting and Business Research 505 Downloaded by [Open University Library - ISRAEL] at 11:28 28 October 2013 

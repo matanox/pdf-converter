@@ -27,7 +27,7 @@ util     = require '../util/util'
 rdbms    = require '../storage/rdbms/rdbms' 
 fs       = require 'fs'
 
-exports.docsDataDir = docsDataDir = 'docData'
+exports.docsDataDir = docsDataDir = '../data/pdf/2-as-data'
 
 files = {} # dictionary to hinge writers used for each input pdf file
 
@@ -44,7 +44,7 @@ exports.getReadyName = getReadyName = (context, dataType) ->
   inputFileName = context.name
   util.mkdir(docsDataDir, inputFileName)
   #now = new Date()
-  return docsDataDir + '/' + inputFileName + '/' + dataType + '*' + context.runID + '.out' 
+  return docsDataDir + '/' + context.name + '/' + dataType + '*' + context.runID + '.out' 
 
 rdbmsWrite = (context, dataType, data, cnsl) -> rdbms.write(context, dataType, data)
 

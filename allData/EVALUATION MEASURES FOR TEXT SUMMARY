@@ -1,0 +1,479 @@
+Keywords: Text summarization, automatic extract, summary evaluation, latent semantic analysis, singular value decomposition 1 INTRODUCTION Automatic text summarization is a process that takes a source text and presents the most impo rtant content in a condensed fo rm in a manner sensitive to the user or task needs. 
+The impo rtance of having a text summarization system has been growing with the rapid expansion of information available on-line. 
+The production 1002 J. Steinberger, K. Jeˇzek of summaries is directly associ ated with the processes of text understa ndi ng and production. 
+Firstly, the source text is read and its content is recognized. 
+Afterwards, the central ideas are compiled in a co ncise summary. 
+Summarizat ion is a tough problem because the system has to understand the point of a text. 
+This requires semantic analysis and grouping of the content using world knowledge. 
+However, the system cannot do it without a great deal of world knowledge. 
+Therefore, attempts at performing t rue abstraction have not been very successful so far. 
+Fortunately, an approximation called extraction is more feasible today. 
+The system simply needs to identify the most important passag es of the text to produce an extract. 
+The problem i s that the summary is mostly not coherent. 
+Nevertheless, the reader can form an opinion of the original content. 
+Thus at present, most automated system s produce extracts only. 
+Several theories ranging from text linguisti cs to a rtificial intelligence have been proposed. 
+The evaluation of a summary quality is a very ambitious task. 
+Serious questions remain concerning the appropriate methods and types of evaluation. 
+There are a variety of possible bases for the comparison of summarization syst ems performance. 
+We can compare a system summary to the source text, to a human-generated summary or to another system summary. 
+Summariza tion evaluation m ethods can be broadly classified into two categories [37]. 
+In extrinsic evaluation, the summary quality is judged o n the basis of how helpful summari es are for a given task, and in intrinsic evaluation, it is directly based on analysis of the summary. 
+The lat ter can involve a comparison with the source document, measuring how many main ideas of the source document are covered by the summary or a content comparison with an abstract written by a human. 
+The problem of matching the system summary against an “ideal summary” is that the ideal summary i s hard to establish. 
+The human summary may be supplied by the author o f the article, by a judge asked to construct an abstract, o r by a judge asked to extract sentences. 
+There can be a large number of abstracts that can summarize a given document. 
+The intrinsic evaluations can then be broadly divided into content evaluation and text quality evaluation. 
+Whereas content evaluations measure the ability to identify the key topics, text quality evaluations judge the rea dability, grammar and coherence of automatic summaries. 
+Latent semantic analysis (LSA) [19] is a technique for extracting the hidden dimensions of the semantic representation of terms, sentences, or documents, on the basis of their contextual use. 
+We have developed a summarization method that is based o n LSA [39]. 
+The idea is to identify the most important topics f rom the source text and then to choose the sentences with the greatest combined weights acr oss the topics. 
+Afterwards, we enriched the document representation by anaphoric relations [40]. 
+It was found that the addition of anaphoric knowledge leads to improved per formance o f the summarizer. 
+Later, we went beyond sentence extraction and proposed a simple sentence compression algorithm for our summarizer [41]. 
+Summaries are used in our MUSE (Multilingual Searching and Extraction) system [42]. 
+They enable better and faster user orientation in retrieved result s. Nowadays, we investigate additional techniques for producing personalized summa ries (i.e., favouring Evaluation Measures for Text Summarization 1003 sentences that either include words from the user query or match the user profile [17]). 
+The fact that LSA can identify the most importa nt topics induces the possibility of using it for summary content evaluation. 
+We present here a summary evaluation method whose idea is that the summary should retain the main topics of the source text. 
+The rest of the paper is organized as follows: Section 2 covers related work in text summarization. 
+Then the taxonomy of summary evaluation measures is presented (Section 3). Afterwards, we describe the LSA principles and we pay close attention to related work in LSA-based summarization (Section 4). In Section 5 we propose our LSA-based eval uation method. 
+The experimental part (Section 6) covers a comparison of 13 summarization systems that participated in DUC 2002 1 from the point of view of several evaluation measures: two baselines, the standard ROUGE measure (see Section 3. 3.4) and our proposed LSA measures. 
+Firstly, the similarity of system summaries and abstracts and then the similarity of system summaries and f ull text s were studied. 
+The correlation between system rankings produced by the evaluation measures and a manual ranking provided by DUC organizers was measured. 
+2 TEXT SUMMARIZATION The earliest work in aut omatic text summa rization dates back to the 1950s. 
+In the last ten years a lo t of new approaches have appeared as a result of the informati on overload on the Web. 
+Recently, several LSA-based approaches have been developed. 
+They are described in separate Section 4. 2.1 Surface Level Approaches The oldest appr oaches use surface level indicators to decide what parts of a text are impo rtant. 
+The first sentence extraction algorithm was developed in 1958 [22]. 
+It used term frequencies to measure sentence relevance. 
+The idea was that when writing about a given topic, a writer will repeat certain words a s the text is developed. 
+Thus, term relevance is considered proportional to its in-document frequency. 
+The term frequencies are later used t o score and select sentences for the summary. 
+Other good indicators of sentence relevance are the position of a sentence within the document [2], the presence of title words or certain cue-words (i.e., words like “importa nt” or “relevant”). 
+In [9] it was demonstrated that the combination of the presence of cue-words, title words and the position of a sentence produce the most similar extracts to abstracts written by a human. 
+1 The National Institute of Standards and Technology (NIST) initiated the Document Understanding Conference (DUC) series to evaluate automatic text summarization. 
+Its goal is to further the progress in s ummarization and enable rese archers to participate in large-scale experiments. 
+1004 J. Steinberger, K. Jeˇzek 2.2 Corpus-Based Approaches It is likely that documents in a certain field share common terms in that field that do not carry salient information. 
+Their relevance should be reduced. 
+[35] showed that the relevance of a term in the document is inversely proportional to the number of documents i n the corpus containing the term. 
+The normalized f ormula for term relevance is given by tf i · idf i , where tf i is the frequency of term i in the document and idf i is the inver ted document frequency. 
+Sentence scores can then be computed in a number of ways. 
+For instance, they can be measured by the sum of term scores in the sentence. 
+In [11] an alternative to measuring term relevance was pro posed. 
+The authors presented concept relevance which can be determ ined using WordNet. 
+The occurrence of the concept “bicycle” is counted when the word “bicycle” is found as well as when, for instance, “bike”, “pedal”, or “brake” are found. 
+In [18] a Bayesian classifier that computes the probability that a sentence in a source document should be included in a summary was implemented. 
+In order to train the classifier the authors used a corpus of 188 pairs of full documents/summaries from scientific fields. 
+They used, for example, the following features: sentence length, phrase structure, in-paragraph position, word frequency, upperca se words. 
+The probability that a sentence should be selected is computed by the Bayesian formula. 
+2.3 Cohesion-Based Approaches Extractive methods can fail to capture the rela tions between concepts in a text. 
+Anaphoric expressions 2 that refer back to events and entities in the text need their antecedents in order to be understood. 
+The summary can become difficult to understand if a sentence that contains an anaphoric link is extracted without the previous context. 
+Text cohesion comprises relations between expressions which determine the text connectivity. 
+Cohesive proper ties of the text have been explored by different summarization approaches. 
+In [1] a method called Lexical chains was introduced. 
+It uses the WordNet database for determining cohesive relations (i.e., repetition, synonymy, antonymy, hypernymy, and holonymy) between terms. 
+The chains are then compo sed by related terms. 
+Their scores are determined on the basis of the number and type of relations in the chain. 
+Sentences where the strongest chains are highly concentrated are selected for the summa ry. A similar method where sentences are scored according to the objects they mention was presented in [5]. 
+The objects are identified by a coreference resolution system. 
+Co-reference resolution is the process of determining whether two expressions in natural language refer to the same entity in the world. 
+Sentences where the f requently mentioned objects occur go to the summary. 
+2 Anaphoric expression is a word or phrase which r efers back to some previous ly expressed word or phrase or meaning (typic ally, pronouns such as herself, himself, he, she ). Evaluation Measures for Text Summarization 1005 2.4 Rhetoric-Based Approaches Rhetorical Structure Theory (RST) is a theory about text organization. 
+It consist s of a number of rhetorical relations that tie together text units. 
+The relations connect together a nucleus – central to the writer’s goal, and a satellite – less central materia l. Finally, a tree-like repr esentation is composed. 
+Then the text units have to be extracted for the summary. 
+In [31] sentences are penalized accor ding to their rhetorical role in the tree. 
+A weight of 1 is given to satellite units and a weight of 0 is given to nuclei units. 
+The final score of a sentence is given by t he sum of weights from the root of the tree t o the sentence. 
+In [24], each parent node identifies its nuclear children as salient. 
+The children are promoted to the parent level. 
+The pr ocess is recursive down the tree. 
+The score of a unit is given by the level it obtained after promoti on. 2.5 Graph-Based Approaches Graph-Based algorithms, such as HITS [15] or Goo gle’s PageRank [6] have been successfully used in citation analysis, social networks, and in the analysi s of t he link-structure of the Web. 
+In graph-based ranking algorithms, the importance of a vertex within the graph is recursively computed from the entire graph. 
+In [ 26] the graph-based model was applied to natural language processing, resulting in TextRank. 
+Further, the graph-based ranking algorithm was applied to summarization [27]. 
+A graph is constructed by adding a vertex for each sentence in the text, and edges between vertices a re established using sentence inter-connections. 
+These connections are defined using a similarity rel ation, where similarity is measured as a function of content overla p. The overlap of two sentences can be determined simply as the number of common tokens between lexical representations of two sentences. 
+After the ranking algorithm is run on the graph, sentences are sorted in the reverse order of their score, and the top ranked sentences are incl uded in the summ ary. 
+2.6 Beyond Sentence Extraction There is a bi g gap between the summari es produced by current autom atic summarizers and the abstracts written by human professionals. 
+One reason is that systems cannot always co rrectly identify the important topics of an article. 
+Another factor is that most summarizers r ely on extracting key sentences or paragraphs. 
+However, if the extracted sentences are disconnected in t he original article and they are str ung together in the summary, the result can be incoherent and sometimes even misleading. 
+Lately, some non-sentence-extractive summarization methods have started to develop. 
+Instead of repro duci ng full sentences from the text, these methods either compress the sentences [13, 16, 38, 41], or re-generate new sentences from scratch [25]. 
+In [14] a Cut-and-paste strategy was propo sed. 
+The aut hors have identified six editing operations in human abstracting : 1006 J. Steinberger, K. Jeˇzek 1. sentence reduction, 2. sentence combination, 3. syntactic transformation, 4. lexical paraphrasing, 5. generali zation and specification, and 6. reorderi ng. Summaries produced this way resemble the human summarization process more than extraction does. 
+However, if large quantities of text need to be summarized, sentence extraction is a more efficient method, and it is robust towards all kinds of input, even slightly ungrammatical ones. 
+3 EVALUATION MEASURES The taxonomy of summary evaluation measures can be found in Figure 1. Text quality is often assessed by human annotators. 
+They assign a value from a predefined scale to each summary. 
+The main approach for summary quality determination is the intrinsic content evaluation which is often done by comparison wi th an ideal summary. 
+For sentence extracts, it is often measured by co-selection. 
+It finds out how many ideal sentences the automatic summary contains. 
+Content-based measures compare the actual words in a sentence, rather than the entire sentence. 
+Their advantage is that they can compare both human and automatic extracts with human abstracts that contain new ly wr itten sentences. 
+Another significant group are taskbased methods. 
+They measure the performa nce of using the summaries for a certa in task. 
+Fig. 1. The taxonomy of summary evaluation measures Evaluation Measures for Text Summarization 1007 3.1 Text Quality Measures There are several aspects of text (linguistic) quality: grammaticality – the text should not contain non-textual items (i.e., markers) or punctuation errors or incorrect words non-redundancy – the text should not contain redundant information reference clarity – the nouns and pronouns should be clearly referred to in the summary. 
+For example, the pronoun he ha s to mean somebody in the context of t he summ ary. 
+coherence and structure – the summary should have good struct ure and the sentences should be coherent. 
+This cannot be done automatically. 
+The annotators mostly assign marks (i.e., from A – very good – to E – very poor – at DUC 2005) to each summary. 
+3.2 Co-Selection Measures 3.2.1 Precision, Recall and F-score The main evaluation metrics of co-selection are precision, recall and F-score. 
+Precision (P) is the number of sentences occurring in both system and ideal summaries divided by the number of sentences in the system summary. 
+Recall (R) is the number of sentences occurring in both system and ideal summar ies divided by the number of sentences in the ideal summary. 
+F-score is a composite measure that combines precision and recall. 
+The basic way how to compute the F-score is to count a harmonic average of precision and recall: F = 2 · P · R P + R . 
+(1) Below is a more complex formula for measuring the F-score: F = (β 2 + 1) · P · R β 2 · P + R , (2) where β is a weighting factor that favours precision when β > 1 and favours recall when β < 1. 3.2.2 Relative Utility The main problem with P & R is that human judges often disagree on what the top p % m ost important sentences are in a document. 
+Using P& R creates the possibility that two equally good extracts are judged very differently. 
+Suppose that a manual summary contains sentences [1 2] from a document. 
+Suppose also that two systems, 1008 J. Steinberger, K. Jeˇzek A and B, produce summaries consisting of sentences [1 2] and [1 3], respecti vely. 
+Using P & R, system A will be ranked much higher than system B. It i s quite possible that sentences 2 and 3 are equall y im portant, in which case the two systems should get the same score. 
+To address the problem with precision and recall, the relative utility (RU) measure was introduced [32]. 
+With RU, the model summary represents al l sentences of the input document with confidence values for their incl usion in the summary. 
+For example, a document with five sentences [1 2 3 4 5] is represented as [1/5 2/4 3/4 4/1 5/ 2]. The second number in each pair indicates the degree to which the given sentence sho uld be part of the summary according to a human judge. 
+This number is called the utility of the sentence. 
+It dep ends on the input document, the summa ry length, and the judge. 
+In the example, the system that selects sentences [1 2] wil l not get a higher score than a system that chooses sentences [1 3] because both summaries [1 2] and [1 3] carry the same number of utility points (5 + 4). Given that no other combination of two sentences carries a higher utility, both systems [1 2] and [1 3] produce optimal extracts. 
+To compute relative utility, a number of judges, (N ≥ 1) are asked to assign utility scores to all n sentences in a document. 
+The top e sentences according to utility score 3 are then called a sentence extract o f size e. We can then define the following system performance metric: RU =  n j=1 δ j  N i=1 u ij  n j=1 ǫ j  N i=1 u ij , (3) where u ij is a utility score of sentence j from annotator i, ǫ j is 1 fo r the to p e sentences according to the sum of utility scores from all judges, otherwise its value is 0, and δ j is equal to 1 f or the top e sentences extracted by the system, otherwise i ts value is 0. For details, see [32]. 
+3.3 Content-Based Me asures Co-selection measures can count as a m atch only exactl y the same sentences. 
+This ignores the fact that two sentences can contain the same information even if they are written differently. 
+Furthermore, summaries written by two different annotators do not in genera l share identical sentences. 
+In the following example, it is obvious that b oth headlines, H 1 and H 2 , carry the same meaning and they should somehow count as a match. 
+H 1 : “The visit of the president of the Czech Republic to Slovakia” H 2 : “The Czech president visited Slovakia” Whereas co-selection measures cannot do this, content-based similarity measures can. 
+3 In the ca se of ties, an arbitrary but consistent mechanism is used to decide which sentences should be included in the summary. 
+Evaluation Measures for Text Summarization 1009 3.3.1 Cosine Similarity A basic content-based simila rity measure is Co sine Similari ty [35]: cos(X , Y ) =  i x i · y i   i (x i ) 2 ·   i (y i ) 2 , (4) where X and Y are representations of a system summary and its reference document based on the vector space model. 
+3.3.2 Unit Overlap Another similarity measure is Unit Overlap [34]: overlap(X, Y ) = X ∩ Y  X + Y  − X ∩ Y  , (5) where X and Y are representations based on sets of words or lemmas. 
+X is the size of set X. 3.3.3 Longest Common Subsequence The third content-based measure is called Longest Common Subsequence (LCS) [33]: lcs(X, Y ) = length(X) + length(Y ) − edit di (X, Y ) 2 , (6) where X and Y are representations based on sequences of words or lemmas, lcs(X, Y ) is the length of the longest common subsequence between X and Y , length(X) i s the length of the string X, and edit di (X, Y ) is the edit distance of X and Y [33]. 
+3.3.4 N-gram Co-occurrence Statistics – ROUGE In the last edition of DUC conferences, ROUGE (R eca ll-Oriented Understudy for Gisting Evaluation) was used as an automatic eval uation method. 
+The ROUGE family of measures, which are based on the similarity of n-grams 4 , was firstly introduced in 2003 [20]. 
+Suppose a number of annota tors created reference summaries – reference summary set (RSS). 
+The ROUGE-n score of a candidate summary is computed as follows: ROUGE-n =  C∈RSS  gramn∈C Countmatch(gram n )  C∈RSS  gram n ∈C Count(gram n ) , (7) where Count match (gram n ) is the maximum number of n-grams co-occurring in a candidate summary and a reference summary and Count(gram n ) is the number of 4 An n-gram is a subsequence of n words from a given text. 
+1010 J. Steinberger, K. Jeˇzek n-grams in the reference summary. 
+Notice that the average n-gram ROUGE score, ROUGE-n, is a recall metric. 
+There are other ROUGE scores, such as ROUGE-L – a longest common subsequence measure (see the previous section) – and ROUGESU4 – a bigram measure t hat enables at most 4 unigrams inside bigram components to be skipped [21]. 
+3.3.5 Pyramids The Pyramid method is a novel semi-automatic evaluation method [30]. 
+Its basic idea is to identify summarization content units (SCUs) that are used for comparison of information in summaries. 
+SCUs emerge from annotation of a corpus of summaries and are not bigger than a clause. 
+The annotation starts with identifying similar sentences and then proceeds with finer grained inspection that can lead to identifying related subpar ts more tightly. 
+SCUs that appea r in mo re manual summaries wil l get greater weights, so a pyramid will be formed after SCU annotation of manual summaries. 
+At the top of the pyramid there are SCUs that appear in most of the summaries and thus they have the greatest wei ght. 
+The lower in the pyramid the SCU appears, the lower its weight is because it is contained in fewer summaries. 
+The SCUs in p eer summary ar e then compared against an existi ng pyramid to evaluate how much information agrees between the peer summary and manual summary. 
+However, this promising m etho d still requires some annotation work. 
+3.4 Task-based Measures Task-based evaluation methods do not anal yze sentences in the summary. 
+They try to measure the prospect of using summaries for a certain task. 
+Various approaches to task-based summarizat ion evaluation can be found in literature. 
+We mention the three most important tasks – document categorization, information r etrieval and question answering. 
+3.4.1 Document Categorization The quality of automatic sum maries can be measured by their suitability for surrogating full documents for categorization. 
+Here the evaluation seeks to determine whether the generic summary is effective in capturing whatever informatio n in the document is needed to correctly categorize the document. 
+A cor pus of documents together with the topics they b elong to is needed for this task. 
+Results obta ined by categori zing summaries are usually compared to those obtained by categori zing full documents (an upper bound) or random sentence extracts (lower bound). 
+Categorization can be performed either manually [23] or by a ma chine classifier [12]. 
+If we use an automati c categorization we must keep in mind that the classifier demonstrates some inherent errors. 
+It is therefore necessary to differenti ate between the error genera ted by a classifier and one that by a summarizer. 
+It is often done onl y by comparing the system performance with the upper a nd lower bounds. 
+Evaluation Measures for Text Summarization 1011 In SUMMAC evaluation [23], apart from other tasks, 16 participating summarization systems were compared by a manual categorization task. 
+Given a document, which could be a generic summary or a full t ext source (the subject was not told which), the human subject chose a single catego ry (from five categories, each of which had an associated topic description) to which the document is relevant, or else chose “none of the above”. 
+Precision and recall of categorization are the main evaluation metrics. 
+Precision in this context is the number of correct topics assigned to a document divided by the total number of topics assig ned to the document. 
+Recall is the number of correct topics assigned to a document div ided by the total number of topics that should be assigned to the document. 
+The measures go against each other and therefore a composite measure – the F-score – can be used (see t he Section 3.2.1). 3.4.2 Information Retrieval Information Retrieval (IR) i s another task appropriate for the ta sk -ba sed evaluation of a summary quality. 
+Relevance correlation [33] is an IR-based measure for assessing the rela tive decrease in retrieval performance when moving from full documents to summaries. 
+If a summary captures the main points of a document, then an IR machine indexed on a set of such summaries (instead of a set of the full documents) should produce (almost) as good a result. 
+Moreover, the difference between how well the summaries do and how well the full documents do should serve as a possible measure for the quality of sum maries. 
+Suppose that given query Q and a corpus of documents D, a search engine ranks all documents in D according to their relevance to query Q. If instead of corpus D, the corresponding summ aries of all documents are substituted for the full documents and the resulting corpus of summaries S is ranked by the same retrieval engine for relevance to the query, a different ranking will be obtained. 
+If the summaries are good surrogates for the full documents, then it can be expected that the ranking will be similar. 
+There exist several methods for measuri ng the similarity of rankings. 
+One such method is Kendall’s tau and anot her is Spearman’s rank correlation [36]. 
+However, since search engines pr oduce relevance scores in addition to rankings, we can use a stronger similarity test, linear correlation. 
+Relevance correlation (RC) is defined as the linear correlation of the relevance scores assigned by the same IR algorithm in different data sets (for details see [33]). 
+3.4.3 Question Answering An extrinsic evaluation of the impact of summarizat ion in a task of question answering was carried out in [28]. 
+The authors picked four Graduate Management Admission Test (GMAT) reading comprehension exercises. 
+The exercises were multiplechoice, with a single answer to be selected from answers shown alongside each question. 
+The authors measured how many of the questions the subjects answered correctly under different conditions. 
+Firstly, they were shown the ori ginal passages, 1012 J. Steinberger, K. Jeˇzek then an automa tically generated summary, furthermore a human abstract created by a professional abstractor instruct ed to create informative abstracts, and finally, the subjects had to pick the correct answer just from seeing the questions witho ut seeing anything else. 
+The results of answering in the different conditio ns were then compared. 
+4 LSA IN SUMMARIZATION FRAMEWORK Latent Semantic Analysis (LSA) [19] is a fully automatic mathematical/statistical technique for extracting and representing the contextual usa ge of words’ meanings in passages of discourse. 
+T he basic idea is that the aggregate of a ll the word contexts in which a given word does and does not appear provides mutual constraints that determine the similarity of meanings of words and sets of words to each other. 
+LSA has been used in a variety of applications (e.g., information retrieval, document categori zation, information filtering, and text summarization). 
+The heart of the analysis in summarizat ion background is a document representation developed in two steps. 
+The first step is the creation of a term by sentences matrix A = [A 1 , A 2 , . 
+. 
+., A n ], where each column A i represents the weighted termfrequency vector of sentence i in the document under consideration 5 . 
+If there are m terms and n sentences in the document, then we will obtain an m ×n matrix A. The next step is to apply Singular Value Decomp osition (SVD) to matrix A. The SVD of an m × n matrix A is defined as: A = U ΣV T (8) where U = [u ij ] is an m×n column-orthonormal matrix whose columns are called left singular vectors. 
+Σ = diag(σ1, σ2, . 
+. 
+., σn) is an n×n diagonal matrix, whose diagonal elements are non-negative singular values sorted in descending order. 
+V = [v ij ] is an n × n orthonorm al matrix, whose columns are called right singular vectors. 
+The dimensionali ty of the matrices is reduced to r most important dimensi ons and thus, U is m × r, Σ is r × r and V T is r × n matri x . 
+From a mathematical point of view, SVD derives a mapping between the m-dimensional space specified by the weighted term-frequency vectors and the r-dim ensional singular vector space. 
+From an NLP perspective, what SVD does is to deri ve the latent semantic structure of the document represented by matrix A: i.e. a br eakdown of the original document into r linearly-independent base vectors which express the main ‘topics’ of the document. 
+SVD can capture interrelationships among terms, so that terms and sentences can be clustered on a ‘semantic’ basis rather than on the basis of words only. 
+Furthermore, as demonstrated in [4], if a word combination pattern is salient and recurring in a document, this pattern wi ll be ca ptured and represented by 5 The best performing weighting in our experiments was a simple Boolean weight: 1 if the sentence contains a particular word and 0 if it does not (see Section 6.2). 
+Evaluation Measures for Text Summarization 1013 Fig. 2. Singular Value Decomposition one of the left singular vectors. 
+The m agnitude of the corresponding singular value indicates the importance degree of this pattern wit hin the document. 
+Any sentences containing this word combination pa ttern will be projected along this singular vector, and the sentence that represents this pattern best will have the largest value with this vector. 
+Assuming that each particular word combination pattern describes a certain topic in the document, ea ch left si ngular vector can be viewed as representing such a topic [7], the magnitude of its singular value representing the importance degree of this topic. 
+The summarization method proposed in [10] uses the representation of a document thus obtained to choose the sentences to go in the summary on the basis of the relative importance of the ‘topics’ they mention, descri bed by the matrix V T . 
+The summarization algorithm simply chooses for each ‘topic’ the most importa nt sentence for that topic: i.e. , the k th sentence chosen is the one with the largest index value in the k th right singular vector in matrix V T . 
+The main drawback of Gong and Liu’s method is that when l sent ences are extracted the top l topics are treated as equally important. 
+As a result, a summary may include sentences about ‘topics’ which are not par ticularly important. 
+In order to fix the problem, we changed the selection criterio n to include in the summary the sentences whose vectorial representation in the matrix Σ 2 · V has the greatest ‘l eng th’, instead of the sentences containing the highest index value for each ‘topic’. 
+Intuitively, the i dea is to choose the sentences with gr eatest combined weight across all important t opics, possibly including more than one sentence about an important topic, rather than one sentence for each topic. 
+More formally: aft er computing the SVD of a term by sentences matri x , we compute the length of each sentence vector in Σ 2 ·V , which represents its summarization score as well (for details see [39]). 
+In [29] an LSA-based summar ization of meeting recordings was presented. 
+The authors followed the Gong and Liu approach, but rather than extracting the best sentence for each topic, n best sent ences were extracted, with n determined by the corresponding singula r values from matrix Σ. The number of sentences in the 1014 J. Steinberger, K. Jeˇzek summary that will come from the first topic is determined by the percentage that the la rgest singular value represents out of the sum of all singular values, and so on for each topic. 
+Thus, dimensionality reduction is no longer tied to summary length and more than one sentence per topic can be chosen. 
+Another summarization method that uses LSA was proposed in [43]. 
+It is a mixture of graph-based and LSA-based approaches. 
+After performing SVD on the wordby-sentence matrix and reducing the dimensionality of the latent space, they reconstruct the corresponding matrix A ′ = U ′ Σ ′ V ′T . 
+6 Each col umn of A ′ denotes the semantic sentence representation. 
+These sentence representations are then used, instead of a keyword-based frequency vector, for the creation of a text relationship map t o represent the structure of a document. 
+A ranking algorithm is then applied in the resulting map (see Section 2.5). 5 EVALUATION BY LATENT SEMANTIC ANALYSIS The ability to capture the most important topics is used by the two evalua tion metrics we propose. 
+The idea is that a summary should contain the most important topic(s) of the r ef erence document ( e.g., full text or abstract). 
+It evaluates a summary quality via content similarity between a reference document and the summary like other content-based evaluation measures do. The matrix U of the SVD breakdown represents the degree of term importance in salient topics. 
+The methods measure the similarity between the matrix U derived from the SVD performed on the reference document and t he matrix U derived from the SVD perform ed on the summary. 
+To appraise this similarity we have proposed two measures. 
+5.1 Main Topic Similarity The first measure compares first left si ngular vectors of the SVD performed on the reference document and the SVD performed on the summary. 
+These vectors correspond to the most impor tant word patt ern in the reference text and the summary. 
+We call it the main topic. 
+The cosine of the angle between the first left singular vectors is measured. 
+The vectors are normalized, thus we can use the following formula: cos ϕ = n  i=1 ur i · us i , (9) where ur is the first left singular vector of the reference text SVD, us is the first left singular vector of the summary SVD 7 and n is the number of unique terms in the reference text. 
+6 U ′ , or Σ ′ , V ′T , A ′ , denotes matrix U , or Σ, V T , A, reduced to r dimensions. 
+7 Values which correspond to particular terms are sorted by the r eference text terms and instead of missing terms there are zeroes. 
+Evaluation Measures for Text Summarization 1015 5.2 Term Significance Similarity The second LSA measure compares a summary with the reference document from an angle of r most salient topics. 
+The idea behind it is that there should be the same important topics/terms in both documents. 
+The first step is to perform the SVD on both the reference document and summary matrices. 
+Then we need to reduce the dimensionali ty of the documents’ SVDs t o leave only the important topics there. 
+5.2.1 Dimensionality Reduction If we perform SVD o n a m × n matrix we can look at the new dimensi ons as descriptions of document’s topics or some sort of pseudo sentences. 
+They are linear combinations of original terms. 
+The first dimension corresponds to the most important pseudo sentence 8 . 
+From the summarization point of view, the summary contains r sentences, where r i s dependent on the sum mary length. 
+Thus, the approach of setting the level of dimensionality reduction r is the following: • We know what percentage of the reference document the summary is – p %. The length is measured i n the number of words. 
+Thus, p = min(sw/fw · 100, 100), where sw is the number of words in the summary and fw is the number of words in the reference text. 
+9 • We reduce the latent space to r dimensions, where r = p /100 · total number of dimensions. 
+In our case, the total number of dimensions is the same as the number of sentences. 
+The evaluator can thus automatical ly determine the number of significant dimensions dependent on the summary/reference document length r atio. 
+Example: The sum mary contains 10 % of full text words and the full text contains 30 sentences. 
+Thus, SVD creates a space of 30 dimensions and we choose the 3 most important dimensions (r is set to 3). However, p % dimensions contain more than p % informati on. It is possible to estimate each dimension’s significance from the magnitude of its singular value. 
+In [7] it was proved that the statistical significance of each LSA dimension is approximately the square of its singular value. 
+We perform ed an experiment with DUC2002 data in which we tried to find out how much inf ormation is contained in the top p % dimensions. 
+In [7] it was shown that the magnitudes of the squares of singular values fol low a Zipf-like distribution: σ 2 i = a · i b , (10) where b is very close to -1 and a is very l arge. 
+8 It is the first left singular vector. 
+9 When the reference document is represented by an abstract, the min func tion arranges that even if the summary is longer than the reference document, p is 100 %, (e.g., we take all topics of the abstract). 
+1016 J. Steinberger, K. Jeˇzek Suppose, for example, we have singula r values [10, 7, 5 , . 
+. 
+.], that their significances (squares of singular values) are [100, 49, 25, . 
+. 
+.], and that the total significance is 500 (sum of the singular value squares). 
+Then the relative significances are [20 %, 9.8 %, 5 %, . 
+. 
+.]: i. e., the first dimension captur es 20 % of the information in the original document. 
+Figure 3 illustrates the logarithm dependency of the significance of r most important dimensions used for evaluation on the summary length (both quantities are shown in percents). 
+For instance, when evaluating a 10 % summary, the 10 % 0 10 20 30 40 50 60 70 80 90 100 0 10 20 30 40 50 60 Percentage of information in top r dimensions Percentage of summary length (measured in words) Fig. 3. The depe ndency of the significance of r most important dimensions on the summary length most important dim ensi ons used for evaluation deal with 40 % of document information, or when evaluating 30 % summary, the top 30 % dimensions deal with 70 % of document information. 
+5.2.2 Term Significances After obtaining the reduced matr ices we compute the significance of each term in the document latent space. 
+Firstly, the components of matrix U are multiplied by the square of its corresponding singular value that contains the topic significance as discussed above. 
+The multiplication favours the values that correspond to the most important topics. 
+The result is labeled B: B =      u 1,1 σ 2 1 u 1,2 σ 2 2 . 
+. 
+. 
+u 1,r σ 2 r u 2,1 σ 2 1 u 2,2 σ 2 2 . 
+. 
+. 
+u 2,r σ 2 r . 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+u m,1 σ 2 1 u m,2 σ 2 2 . 
+. 
+. 
+u m,r σ 2 r      . 
+(11) Evaluation Measures for Text Summarization 1017 Then we take matri x B and measure the l eng th of each row vector: |bi| =  b 2 i,1 + b 2 i,2 + . 
+. 
+. 
++ b 2 i,r . 
+(12) This corresponds to the importance of each term within the r m ost salient topics. 
+From t hese lengths, we compute the resulting term vector s: s =      |b 1 | |b 2 | . 
+. 
+. 
+|b n |      (13) Vect or s is fur ther normalized. 
+The process is performed for both reference and summary documents. 
+Thus, we get one resulting vector for the reference document and one for the summary. 
+Finally, the cosine of the angle between the resulting vectors, which corresponds to the similarity of the compared documents, is m easured. 
+6 EXPERIMENTS To assess the usefulness of our evaluation measures, we used the DUC 20 02 corpus. 
+This gave us the opportunity to compare the quality of the systems participating in DUC from an angle of several evaluation measures. 
+Furthermore, we were able to compare the system rankings provided by our measures against human rankings. 
+In 2002 the family of ROUGE measures had not yet been introduced. 
+However, now we were able to perfo rm ROUGE evaluation. 
+This gives us another i nteresting comparison of standard evaluation measur es with our LSA-based ones. 
+We included in the computatio n ROUGE-1, ROUG E-2, ROUGE-SU4, ROUGE-L, Cosine similarity, top n keywords and our two measures – Main topic similarity and Term significance similarity. 
+The systems were sorted from each measure’s point of v iew. 
+Then, we computed the Pearson correlation between these rankings and human ones. 
+6.1 DUC 2002 Corpus DUC 2002 included a single-document summarization task, in whi ch 13 systems participated 10 . 
+The test corpus used for the task contains 567 documents from different sources; 10 assessors were used to provide for each document two 10 0-word human summaries. 
+In addit ion to the results of the 13 participating systems 11 , the DUC organizers also distributed baseline summaries (the fir st 100 words of a document). 
+The coverage of all the summaries was assessed by humans. 
+For assessing the quality 10 2002 is the last version of DUC that included the evaluation of single-document informative summaries. 
+In later yea rs only hea dline -le ng th single-document summaries were analysed. 
+11 Two systems produced only headlines. 
+Therefore, we did not include them in the evaluation. 
+1018 J. Steinberger, K. Jeˇzek of each evaluation method, we computed the Pearson correlation between system rankings and human ones. 
+6.2 Term Weighting Schemes for SVD We analysed various term weighti ng schemes for SVD input matrix. 
+The vector A i = [a 1i , a 2i , . 
+. 
+., a ni ] T is defined as: a ij = L ij · Gij, (14) where L ij denotes the local weight for ter m j in sentence i, and G ij is the g lobal weight f or term j in the whole document. 
+Local weighting L(t ij ) has the following four possible alternatives [8]: • Frequency weight (fq in short): L ij = tf ij , where tf ij is the number of t imes term j occurs in sentence i . 
+• Binary weight (bi): L ij = 1, if term j appears at least once in sentence i; L(t ij ) = 0, o therwise. 
+• Augmented weight (au): L ij = 0.5 + 0.5 · (tf ij /tfmax i ), where tfmax i is the frequency of the m ost frequently occurring term in the sentence. 
+• Logarithm weight (lo): L ij = log(1 + tf ij ). Global weighting G ij has the following four possible alternat ives: • No weight (nw): G ij = 1 for any term j. • Inverse sentence frequency (isf): G ij = log(N/n j ) + 1, where N is the total number of sentences in the document, and n j is the number of sentences that contain term j. • GFIDF (gf): G ij = gf j sf j , where the sentence frequency sf j is the number of sentences in which term j occurs, and the global frequency gf j is the total number of times t hat term j occurs in the whole do cument. 
+• Entropy frequency (en): G ij = 1 −  i pijlog(pij) log(nsent) , wher e p ij = tf ij /gf j and nsent is the number o f sentences in the document. 
+All combinations of these local and global weights for the new LSA-based evaluation methods are compared in Figures 4 (reference document is an abstract) and 5 (reference document is the full text). 
+We can observe that the best performing weighting scheme when comparing summaries with abstracts was binary local weight and inverse sentence frequency global weight. 
+When comparing summaries with full texts, a simple Boolean local weight and no global weight perform ed the best. However, not all of the differences are statistical significant. 
+The best performing weightings are used for the comparison of evaluators in Tables 1 a nd 2. Evaluation Measures for Text Summarization 1019 0 ,7 6 0 ,7 8 0 ,8 0 ,8 2 0 ,8 4 0 ,8 6 0 ,8 8 0 ,9 FQ -NW BI -NW AU -NWLO -NW FQ - ISF BI -ISFAU - ISF LO -ISF FQ - GF BI -GFAU - GF LO -GF FQ -EN BI -ENAU - EN LO - EN Correlation with human scores Weighting Scheme M ain T opicT erm Signi fi c anc e Fig. 4. The influence of different weighting schemes on the evaluation performance measure by the cor relation w ith human sc ores. 
+The meaning of the letters is as follows: [Local weight]–[Global weight]. 
+The reference document is abstract. 
+6.3 Baseline Evaluators We included two baseline evaluator s in the evaluation. 
+The first one – cosine sim ilarity – was described in Section 3.3.1. 
+The second baseline evaluator compares the set of keywords of a system s summary and that of its ref erence document. 
+The most frequent lemmas of words in the document which do not occur in stop-word l ist were labeled as keywords. 
+The top n keywords were compared in the experiments – see Figure 6. The best performing value of n for the 100-word summaries was 30. This setting is used in Tables 1 and 2. 6.4 Summary and Abstract Similarity In thi s experiment we measured the similarity of summaries wi th human abstracts from the angle o f the studied evaluato rs. The correlation results can be fo und in Table 1. We can observe that when comparing summaries with abstracts, ROUGE measures demo nstrate t he best performance. 
+The measures showing the best co rrelation were ROUGE-2 and ROUGE-SU4, which is in accord with the latest DUC observations. 
+For the LSA measures we obtained worse correlation. 
+The first rea son is that abstractors usually put in the abstract some words not contained in the original text and this can make the main topics of the abstract and an extractive summary different. 
+Another reason is that the abstracts were sometimes not l ong enough to find the main topics and therefore to use a ll terms in evaluation, as ROUGE does, 1020 J. Steinberger, K. Jeˇzek 0 ,7 6 0 ,7 8 0 ,8 0 ,8 2 0 ,8 4 0 ,8 6 0 ,8 8 0 ,9 FQ - NW BI - NW AU - NW LO -NW FQ - ISF - ISF AU -ISF LO -ISF FQ - GF -GF AU - GF LO -GF FQ -EN BI -ENAU -ENLO -EN Correlation with human scores Weighting Scheme M ain T opicT erm Signi fi c anc e Fig. 5. The influence of different weighting schemes on the evaluation performance measure by the cor relation w ith human sc ores. 
+The meaning of the letters is as follows: [Local weight]–[Global weight]. 
+The reference document is full text. 
+Score Correllation ROUGE-2 0.96119 ROUGE-SU4 0.93897 ROUGE-L 0.91143 ROUGE-1 0.90317 LSA – Main Topic Similarity 0.88206 Keywords 0.88187 LSA – Term Significance Similarity 0.87869 Cosine similarity 0.87619 Table 1. Correlation between evaluation mea s ures and human assessments – the reference document is an abstract results in better performance. 
+The differences between LSA measures and baselines were not statist ically significant at 95 % confidence. 
+6.5 Summary and Full Text Similarity In the second experiment we took the full t ext as a reference document. 
+We compared Cosine similarity, top n keywords, and LSA-ba sed measures with human rankings. 
+ROUGE is not designed for comparison with full texts. 
+We report the results in Table 2. Evaluation Measures for Text Summarization 1021 0 0 ,1 0 ,2 0 ,3 0 ,4 0 ,5 0 ,6 0 ,7 0 ,8 0 ,9 1 51 01 52 02 53 03 54 05 0 Correlation with human scores No. of keywords s ummary co mp are d w i th abs tr a c ts ummary co mp are d w i th full tex t Fig. 6. The dependency of the performance of the key word evaluator on the numbe r of keywords Score Correllation LSA – Main Topic Similarity 0.85988 LSA – Term Significance Similarity 0.85573 Keywords 0.80970 Cosine similarity 0.27117 Table 2. Correlation between evaluation mea s ures and human assessments – the reference document is a full text These results showed that the simple Cosine similarity did not correlate well with human rankings. 
+Here we can see the positive influence of dimensionality reduction. 
+It is better to take only the main ter ms/topics for evaluation instead of all, as Cosine similarity does. 
+Keyword evaluator hol ds a solid correlation level. 
+However, the LSA measure correlates even significantly better. 
+The difference between LSA measures is not statistically significant at 95 % confidence and, therefore, it is sufficient to use the simpler Main topi c similarity. 
+The results suggest t hat LSA-based similarity is appropriate for the evaluation of extractive summarization where abstracts a re not available. 
+7 CONCLUSIONS We have covered the basic i dea s of recent approaches to text summarization. 
+The exact taxonomy of evaluation methods was presented. 
+Moreover, we introduced our metrics, which are based on latent semantic analysis that can capture the m ain topics of an article. 
+We experimentally compared the appro ach with state-of-the-art 1022 J. Steinberger, K. Jeˇzek ROUGE evaluat ion measures. 
+We demonstrated that the system ranking provided by ROUGE correlates well with the human ranking when compa ring summaries with abstracts. 
+The appropriate usage of our LSA-based evaluation measures is to compare summaries with full texts. 
+The method works well on extractive summaries. 
+If abstracts are included in a corpus we recommend using the ROUGE family, however, if not then LSA-based comparison w ith the source is a good choice. 
+For the future we plan to apply our evaluation method in multi-document summarization. 
+Acknowledgement This research was partly supported by National Research Programme II, project 2C06009 (COT-SEWing). 
+REFERENCES [1] Barzilay, R.—Elhadad, M.: Using Lexical Chains for Text Summarization. 
+In Proceedings of the ACL/EACL ’97 Workshop on Intelligent Scalable Text Summarization, Madrid, Spain, 199 7, pp. 10–17. 
+[2] Baxendale, P. B.: Man-Made Index for Technical Literature – An Experiment. 
+In IBM Journal of Research Development, Vol. 
+2, 1958, No. 4, pp. 354–361. 
+[3] Benbrahim, M.—A hmad, K.: Text Summarisation: The Role of Lexical Cohesion Analysis. 
+In The New Review of Document & Text Management, 1995 , pp. 321–335. 
+[4] Berry, M. W.—Dumais, S. T.—O’Brien, G. W.: Using Linear A lg ebra for Intelligent IR. In SIAM Review, Vol. 
+37, 1995, No. 4. [5] Boguraev, B.—Kennedy, C.: Salience-Based Content Characterization of Text Documents. 
+In I. Mani and M. T. Maybury, eds., Advanc es in Automatic Text Summarization, The MIT Press, 1999. 
+[6] Brin, S.—Page, L.: The Anatomy of a Large -Sc ale Hypertextual Web Search Engine. 
+In Computer Networks and ISDN Systems, Vol. 
+30, 1998, pp. 1–7. 
+[7] Ding, Ch.: A Probabilistic Model for Latent Semantic Indexing. 
+In Journal of the American Society for Information Science and Technology, Vol. 
+56, 2005, No. 6, pp. 597–608. 
+[8] Dumais, S. T.: Improving the Retrieval of Information from External Sourc es. In Behavior Research Methods, Instruments & Computers, Vol. 
+23, 1991, No. 2, pp. 229–236. 
+[9] Edmundson, H. P.: New Methods in Automatic Extracting. 
+In Journal of the Association for Computing Machinery, Vol. 
+16, 1969, No. 2 , pp. 264–285. 
+[10] Gong, X.—Liu, X.: Generic Text Summarization Using Relevance Measure and Latent Se mantic Analysis. 
+In Proceedings of ACM SIGIR, New Orleans, USA, 2002. 
+[11] Hovy, E.—Lin, C.-Y.: Automated Text Summarization in SUMMARIST. 
+In I. Mani and M. T. Maybury, eds., Advances in Automatic Text Summarization, 1999, The MIT Press, pp. 81–94. 
+Evaluation Measures for Text Summarization 1023 [12] Hynek, J.—Jeˇzek, K.: Practical Approach to Automatic Text Summarization. 
+In Proceedings of the ELPUB ’03 Conference, Guimaraes, Portugal, 200 3 , pp. 378–388. 
+[13] Jing, H.: Sentence Reduction for Automatic Text Summarization. 
+In Proceedings of the 6 th Applied Natural Language Proc essing Conference, Seattle, USA, 2000, pp. 310–315. 
+[14] Jing, H.—McKeown, K.: Cut and Paste Based Text Summarization. 
+In P roceedings of the 1 st Meeting of the North American Chapter of the Association for Computational Linguistics, Seattle, USA, 2000, pp. 178–185. 
+[15] Kleinberg, J. M.: Authoritative Sources in a Hyper-Linked Envir onment. 
+In Journal of the ACM, Vol. 
+46, 1999, No. 5, pp. 604–632. 
+[16] Knight, K.—Marcu, D.: Statistics-Based Summarization – Step One: Sentence Compression. 
+In Proceeding of The 17 th National Conference of the American Association for Artificial Intelligence, 2000, pp. 703–710. 
+[17] Kovaˇl, R.—N´avrat, P.: Intelligent Support for Information Retrieval of Web Documents. 
+In Computing and Informatics, Vol. 
+21, 2002, No. 5, pp. 509–528. 
+[18] Kupiec, J.—Pedersen, J. O.— C hen, F.: A Trainable Document Summarizer. 
+In Research and Development in Information Retrieval, 1995, pp. 68–73. 
+[19] Landauer, T. K.—Dumais, S. T.: A Solution to Plato´ıs Problem: the Latent Semantic Analysis Theory of the Acquisition, Induction, and Representation of Knowledge. 
+In Psychological Review, Vol. 
+104, 1997, pp. 211–240. 
+[20] Lin, Ch.—Hovy, E.: Automatic Evaluation of Summaries Using n-Gram CoOccurrence Statistics. 
+In Proceedings of HLT-NAACL, Edmonton, Canada, 2003. 
+[21] Lin, Ch.: ROU GE : A Package for Automatic Evaluation of Summaries. 
+In Proceedings of the Worksho p on Text Summarization Branches Out, Barcelona, Spain, 2004. 
+[22] Luhn, H. P.: The Automatic Creation of Literature Abstracts. 
+In IBM Journal of Research Development, Vol. 
+2, 1958, No. 2, pp. 159–165. 
+[23] Mani, I.—Firmin, T., House, D.—Klein, G.—Sundheim, B.—Hirschman, L.: The TIPSTER Summac Text Summarization Evaluation. 
+In Proceedings of the 9 th Meeting of the European Chapter of the Association for Computational Linguistics, 1999, pp. 77–85. 
+[24] Marcu, D.: From Dis course Structures to Text Summaries. 
+In Proceedings o f the ACLI97/EACLI97 Workshop on Intelligent Scalable Text Summarization, Madrid, Spain, 1997, pp. 82 –88. 
+[25] McKeown, K.—Klavans, J.—Hatzivassiloglou, V.—Barzilay, R.— Eskin, E.: From Discourse Structures to Text Summaries. 
+In Towards Multidocument Summarization by Reformulation: Progress and Pros pects, AAAI/IAAI, 1999, pp. 453–460. 
+[26] Mihalcea, R.—Tarau, P.: Text-Rank – Bringing Order Into Texts. 
+In Proceeding of the Comference on Empirical Methods in Natural Language Processing, Barcelona, Spain, 2004. 
+[27] Mihalcea, R.— Tarau, P.: An Algorithm for Language Independent Single and Multiple Document Summarization. 
+In Proceedings of the International Joint Conference on Natural Language Processing, Korea, 2005. 
+1024 J. Steinberger, K. Jeˇzek [28] Morris, A.—Kasper, G.—Adams, D.: The Effects and Limitations of Automatic Text Condensing on Reading Comprehension Performance. 
+In Information Systems Research, Vol. 
+3, 1992, No. 1, pp. 17–35. 
+[29] Murray, G.—Renals, S.—Carletta J.: Extractive Summarization of Meeting Recordings. 
+In Procee dings of Interspee ch, Lisboa, Portugal, 2005. 
+[30] Nenkova, A.—Passonneau, R.: Evaluating Content Selection in Summarization: The Pyr a mid Method. 
+In Document Understanding Conference, Vancouver, Canada, 2005. 
+[31] Ono, K.—Sumita, K.—Miike, S.: Abstract Genera tion Based on Rhetorical Structure Extraction. 
+In Proceedings of the International C onference on Computational Linguistics, Kyoto, Japan, 1994, pp. 344–348. 
+[32] Radev, D.—Jing, H.—Budzikowska, M.: Centroid-Based Summarization of Multiple Docume nts. 
+In ANLP/NAACL Workshop on Automatic Summarization, Seattle, USA, 2000. 
+[33] Radev, D.—Teufel, S.—Saggion, H.—Lam, W.—Blitzer, J.—Qi, H.— Celebi, A.—Liu, D.—Drabek, E.: Evaluation Challenges in Large-Scale Document Summarization. 
+In Proceeding of the 41 st meeting of the Association for Computational Linguistics, Sapporo, Japan, 2003. 
+[34] Saggion, H.—Radev, D.—Teufel, S.—Lam, W.—Strassel, S.: Developing Infrastructure for the Evaluation of Single and Multi-Document Summarization Systems in a Cross-Lingual Environment. 
+In Proceedings of LRE C , Las Palmas, Spain, 2002. 
+[35] Salton, G.: Automatic Text Processing. 
+Addison-Wes ley Publishing Company, 1988. 
+[36] Siegel, S.–Castellan, N. J.: Nonparametric Statistics for the Behavioral Sciences. 
+Berkeley, CA: McGraw-Hill, 2nd edn., 1988. 
+[37] Spark Jones, K.—Galliers, J. R.: Evaluating Natural Language Processing Systems: An Analysis and Review. 
+In Lecture Notes in Artificial Intelligence, No. 1083, Springer, 1995. 
+[38] Sporleder, C.—Lapata, M.: Discourse Chunking a nd Its Application to Sentence Compression. 
+In Pro ceedings of HLT/EMNLP, Vancouver, Canada, 2005, pp. 257–264. 
+[39] Steinberger, J.—Je ˇ zek, K.: Text Summarization and Singular Value Dec omposition. 
+In Lecture Notes for Computer Science, Vol. 
+2457, pp. 245–254, Springer-Verlag, 2004. 
+[40] Steinberger, J.—Kabadjov, M. A.—Poesio, M.: Improving LSA-Based Summarization with Anaphora Resolution. 
+In Pr oc eedings of HLT/EMNLP, Vancouver, Canada, 2005, pp. 1–8. 
+[41] Steinberger, J.—Jeˇzek, K.: Sentence Compression for the LSA-Based Summarizer. 
+In Proceedings of the 7thInternational Conference on Information Systems Implementa tion and Modelling, Pˇrerov, Cze ch Republic, 2006, pp. 141–148. 
+[42] Toman, M.—Steinberger, J.—Jeˇzek, K.: Searching and Summarizing in Multilingual Environment. 
+In Proceedings of the 10thInternational Confere nce on Electronic Publishing, Bansko, Bulgaria, 2006. 
+Evaluation Measures for Text Summarization 1025 [43] Yeh, J.-Y.—Ke, H.-R.—Yang, W.- P.— Meng, I-H.: Text Summarization Using a Trainable Summarizer and Latent Semantic Analysis. 
+In Special issue of Information Processing and Ma na gement on An Asian digital libraries perspective, Vol. 
+41, 2005, No. 1, pp. 75–95. 
+Josef is a Ph. D. student at Faculty of Applied Sciences, University of West Bohemia in Pilsen, Czech Republic. 
+His research focuses on automatic text summarization through latent semantic analysis and anaphora resolution. 
+Karel works at Department of Computer Science and Engineering at University of West Bohemia in Pilsen. 
+His research interests are in theory of formal languages and c ompilers, operating systems theory, programming languages, database and knowledge-base systems. 
+Recently he is interested in data mining. 

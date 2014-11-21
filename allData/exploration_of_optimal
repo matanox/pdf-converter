@@ -1,0 +1,907 @@
+209 
+private spending. 
+Indeed, this was one of the motivations for the stimulus package proposed by President Barack Obama and passed by Congress in early 2009. 
+The logic behind this policy should be familiar to anyone who has taken a macroeconomics principles course anytime over the past half century. 
+Yet many Americans (including quite a few congressional Republicans) are skeptical that increased government spending is the right policy response. 
+Their skepticism is motivated by some basic economic and political questions: If we as individual citizens are feeling poorer and cutting back on our spending, why should our elected representatives in effect reverse these private decisions by increasing spending and going into debt on our behalf? 
+If the goal of government is to express the collective will of the citizenry, shouldn’t it follow the lead of those it represents by tightening its own belt? 
+Traditional Keynesians have a standard answer to this line of thinking. 
+According to the paradox of thrift, increased saving may be individually rational but collectively irrational. As individuals try to save more, they depress aggregate demand and thus national income. 
+In the end, saving might not increase at all. 
+Increased thrift might lead only to depressed economic activity, a malady that can be remedied by an increase in government purchases of goods and services. 
+The goal of this paper is to address this set of issues in light of modern macroeconomic theory. 
+Unlike traditional Keynesian analysis of fiscal policy, modern macro theory begins with the preferences and constraints facing households and firms and builds from there. 
+This feature of modern theory is not a mere fetish for microeconomic foundations. 
+Instead, it allows policy prescriptions to be founded on the basic principles of welfare economics. 
+This feature seems particularly important for the case at hand, because the Keynesian recommendation is to have the government undo the actions that private citizens are taking on their own behalf. 
+Figuring out whether such a policy can improve the well-being of those citizens is the key issue, and a task that seems impossible to address without some reliable measure of welfare. 
+The model we develop to address this question fits solidly in the New Keynesian tradition. 
+That is, the starting point for the analysis is an intertemporal general equilibrium model that assumes prices to be sticky in the short run. 
+This temporary price rigidity prevents the economy from reaching an optimal allocation of resources, thus giving monetary and fiscal policy a possible role in helping the economy reach a better allocation through their influence on aggregate demand. 
+The model yields several significant conclusions about the best responses of policymakers under various economic conditions and constraints on the set of policy tools at their disposal. To be sure, by the nature of this kind of exercise, the validity of any conclusion depends on whether the model captures the essence of the problem being examined. 
+Because all models are simplifications, one can always question whether a conclusion is robust to generalization. 
+Our strategy is to begin with a simple model that illustrates our approach and yields some stark results. 
+We then generalize this baseline model along several dimensions, both to check its robustness and to examine a broader range of policy issues. 
+Inevitably, any policy conclusions from such a theoretical exploration must be tentative. 
+In the final section we discuss some of the simplifications we make that might be relaxed in future work. 
+Our baseline model is a two-period general equilibrium model with sticky prices in the first period. 
+The available policy tools are monetary policy and government purchases of goods and services. 
+Like private consumption goods, government purchases yield utility to households. 
+Private and public consumption are not, however, perfect substitutes. 
+Our goal is to examine the optimal use of the tools of monetary and fiscal policy when the economy finds itself producing below potential because of insufficient aggregate demand. 
+We begin with the benchmark case in which the economy does not face the zero lower bound on nominal interest rates. 
+In this case the only stabilization tool that is necessary is conventional monetary policy. 
+Once monetary policy is set to maintain full employment, fiscal policy should be determined based on classical principles. 
+In particular, government consumption should be set to equate its marginal benefit with the marginal benefit of private consumption. 
+As a result, when private citizens are cutting back on their private consumption spending, the government should cut back on public consumption as well. 
+We then examine the complications that arise because nominal interest rates cannot be set below zero. 
+We show that even this constraint on monetary policy does not by itself give traditional fiscal policy a role as a stabilization tool. 
+Instead, the optimal policy is for the central bank to commit to future monetary policy actions in order to increase current aggregate demand. 
+Fiscal policy continues to be set on classical principles. 
+A role for countercyclical fiscal policy might arise if the central bank both hits the zero lower bound on the current short-term interest rate and is unable to commit itself to expansionary future policy. 
+In this case monetary policy cannot maintain full employment of productive resources on its own. 
+Absent any fiscal policy, the economy would find itself in a nonclassical short-run equilibrium. 
+Optimal fiscal policy then looks decidedly Keynesian if the only instrument of fiscal policy is the level of government purchases: increase those purchases to increase the demand for idle productive resources, even if the marginal value of the public goods being purchased is low. 
+This very Keynesian result, however, is overturned once the set of fiscal tools available to policymakers is expanded. 
+Optimal fiscal policy in this situation is one that tries to replicate the allocation of resources that would be achieved if prices were flexible. 
+An increase in government purchases cannot accomplish that goal: although it can yield the same level of national income, it cannot achieve the same composition of it. We discuss how tax instruments might be used to induce a better allocation of resources. 
+The model suggests that tax policy should aim at increasing the level of investment spending. 
+Something like an investment tax credit comes to mind. 
+In essence, optimal fiscal policy in this situation tries to produce incentives similar to what would be achieved if the central bank were somehow able to reduce interest rates below zero. 
+A final implication of the baseline model is that the traditional fiscal policy multiplier may well be a poor tool for evaluating the welfare implications of alternative fiscal policies. 
+It is common in policy circles to judge alternative stabilization ideas using “bang-for-the-buck” calculations. 
+That is, fiscal options are judged according to how many dollars of extra GDP are achieved for each dollar of extra deficit spending. 
+But such calculations ignore the composition of GDP and therefore are potentially misleading as measures of welfare. 
+After developing these results in our baseline model, we examine three variations. 
+First, we add a third period. 
+We show how the central bank can use long-term interest rates as an additional tool to achieve the flexible-price equilibrium. 
+Second, we add government investment spending to the baseline model. 
+We show that all government expenditure follows classical principles when monetary policy is sufficient to stabilize output. 
+Moreover, even when monetary policy is limited, the model does not point toward government investment as a particularly useful tool for putting idle resources to work. 
+Third, we modify the baseline model to include nonRicardian, rule-of-thumb households who consume a constant fraction of income. 
+The presence of such households means that the timing of taxes may affect output, and we characterize the optimal policy mix in that setting. 
+We find that the description of the equilibrium closely resembles the traditional Keynesian model, but the prescription for optimal policy can differ substantially from the textbook answer. 
+I. Introducing the Model In this section we introduce the elements of the baseline model. 
+Before delving into the model’s details, it may be useful to describe how this model is related to a few other models with which readers may be familiar. 
+Our goal is not to provide a completely new model of stabilization policy but rather to illustrate conventional mechanisms in a way that permits an easier and more transparent analysis of the welfare implications of alternative policies. 
+First, the model is closely related to the model of short-run fluctuations found in most leading undergraduate textbooks. 
+Students are taught that prices are sticky in the short run but flexible in the long run. 
+As a result, the economy can temporarily deviate from its full-employment equilibrium, yet over time it gravitates toward full employment. 
+Similarly, we will (in a later section) impose a sticky price level in the first period but allow future prices to be flexible. 
+Second, this model is closely related to the large literature on dynamic stochastic general equilibrium (DSGE) models. 
+Strictly speaking, the model is not stochastic: we will solve for the deterministic path of the economy after one (or more) of the exogenous variables changes. 
+But the spirit of the model is much the same. 
+As in DSGE models, all decisions are founded on underlying preferences and technology. 
+Moreover, all decisionmakers are forward looking, so their actions will depend not only on current policy but also on the policy they expect to prevail in the future. 
+There is, however, a key methodological difference between our approach and that in the DSGE literature. 
+In recent years that literature has evolved in the direction of greater complexity, as researchers have attempted to match various moments of the data more closely. 
+(See, for example, Christiano, Eichenbaum, and Evans 2005 and Smets and Wouters 2003.) By contrast, our goal is greater simplicity and transparency so that the welfare implications of alternative monetary and fiscal policies can be better illuminated. 
+Third, the model we examine is related to the older literature on “general disequilibrium” models, such as those of Robert Barro and Herschel Grossman (1971) and Edmond Malinvaud (1977). 
+As in these models, we will assume that the price level in the first period is exogenously stuck at a level that is inconsistent with full employment of productive resources. 
+At the prevailing price level, there will be an excess supply of goods. 
+But unlike this earlier literature, our model is explicitly dynamic. 
+That is, we emphasize the role of forward-looking, intertemporal behavior in determining current spending decisions and the impact of policy. 
+I.A. 
+Households The economy is populated by a large number of identical households. 
+The representative household has the following objective function: ( ) max ,1 1 1 2 2 u C v G u C v G ( ) + ( ) + ( ) + ( )[ ]{ } β where C t is consumption in period t, G t is government purchases, and b is the discount factor. 
+Households choose consumption but take government purchases as given. 
+Households derive all their income from their ownership of firms. 
+Each household’s consumption choices are limited by a present-value budget constraint: ( ) ,2 1 0 1 1 1 1 2 2 2 2 1 P T C P T C i Π Π − −( )+ − − ( ) +( ) = where P t is the price level, P t is profits of the firm, T t is tax payments, and i 1 is the nominal interest rate between the first and second periods. 
+Implicit in this budget constraint is the assumption of a bond market in which households can borrow or lend at the market interest rate. 
+I.B. 
+Firms Firms do all the production in the economy and provide all household income. 
+It is easiest to imagine that the number of firms is the same as the number of households and that each household owns one firm. 
+For simplicity, we assume that capital K is the only factor of production. 
+In each period the firm produces output with an AK production function, where A is an exogenous technological parameter. 
+The firm begins with an endowment of capital K 1 and is able to borrow and lend in financial markets to determine the future capital stock K 2 . 
+Without loss of generality, we assume that capital fully depreciates each period, so investment in the first period equals the capital stock in the second period. 
+The parameter A plays a key role in our analysis. 
+In particular, we are interested in studying the optimal policy response to a decline in aggregate demand, and in our model the most natural cause of such a decline is a decrease in the future value of A. Such an event can be described as a decline in expected growth, a fall in confidence, or a pessimistic shock to “animal spirits.” In any event, in our model it will tend to reduce wealth and current aggregate demand, as well as reducing the natural rate of interest (that is, the real interest rate consistent with full employment). 
+A similar set of events would unfold if the shock were to households’ discount factor b, but it seems more natural to assume stable household preferences and changes in the expected technology available to firms. 
+Before proceeding, it might be worth commenting on the absence of a labor input in the model. 
+That omission is not crucial. As we will describe more fully later, it could be remedied by giving each household an endowment of labor in each period and making the simplifying assumption that capital and labor are perfect substitutes in production. 
+That somewhat more general model yields identical results regarding monetary and fiscal policy. 
+Therefore, to keep the results as clean and easily interpretable as possible, we will focus on the one-factor case. 
+Firms choose the second period’s capital stock to maximize the present value of profits, discounting the second period’s nominal profit by the nominal interest rate: max . 
+K P P i 2 1 1 2 2 1 1 Π Π + + ()       Profits are ( ) ,3 Π t t t Y I= − where Y t is equilibrium aggregate output and I t is investment. 
+Because capital fully depreciates each period, investment in the first period becomes the capital stock in the second period: ( ) .4 2 1 K I= Recall that the initial capital stock K 1 is given. 
+Also, because there is no third period, there is no investment in the second period (I 2 = 0). As noted above, the model has a simple AK production function: F A K A K t t t t , , () = with A t > 0. Finally, it is important to note an assumption implicit in this statement of the firm’s optimization problem: The firm is assumed to sell all of its output at the going price, and it is assumed to buy investment goods at the going price. 
+In particular, the firm is not permitted to produce capital for itself, nor is it allowed to produce consumption goods directly for the household that owns it. This restriction is irrelevant in the case of fully flexible prices, but it will matter in the case of sticky prices, where firms may be demand constrained. 
+In that case this assumption prevents the firm from directly circumventing the normal inefficiencies that arise from sticky prices. 
+In practice, such a restriction arises naturally because firms are specialists in producing highly differentiated goods. 
+Because we do not formally incorporate product differentiation in our analysis, it makes sense to impose this restriction as an additional constraint on the firm’s behavior. 
+I.C. 
+The Money Market and Monetary Policy Households are required to hold money to purchase consumption goods. 
+The money market in this economy is assumed to be described by the following quantity equation:  t t t PC= φ . 
+That is, money holdings are proportional to nominal consumer spending. 
+The parameter f reflects the efficiency of the monetary system; a small f implies a high velocity of money. 
+We tend to think of f as being very small, which is why we ignore the cost of holding money in the households’ budget constraint above. 
+The limiting case as f approaches zero is sometimes called a “cashless” economy. 
+Hereafter, it will prove useful to define M t t =  φ , which implies the conventional money market equilibrium condition: M PC t t t = . 
+M can be interpreted either as the money supply adjusted for the money demand parameter f or as the determinant of nominal consumer spending. 
+Money earns a nominal rate of return of zero. 
+When the nominal interest rate on bonds is positive, money is a dominated asset, and households will hold only what is required for transactions purposes, as determined above. 
+However, they could choose to hold more (in which case M t > P t C t ). This possibility prevents the nominal interest rate in the bond market from falling below zero. 
+Because there are two periods, there are two policy variables to be set by the central bank. 
+In the first period, the central bank is assumed to set the nominal interest rate i 1 , subject to the zero lower bound. 
+It allows that period’s money supply M 1 to adjust to whatever is demanded in the economy’s equilibrium. 
+In the second period, the central bank sets the money supply M 2 . 
+(Recall that there is no interest rate in the second period, because there is no third period.) One can think of the current interest rate i 1 as the central bank’s short-run policy instrument and the future money supply M 2 as the long-run nominal anchor. 
+I.D. 
+Fiscal Policy Fiscal policy in each period is described by two variables: G t is government purchases in period t, and T t is lump-sum tax revenue. 
+(In a later section we introduce an investment subsidy as an additional fiscal policy tool.) It will prove useful to define g t , the share of government purchases in fullemployment output: ( ) .5 g G A K t t t t = Any deficits are funded by borrowing in the bond market at the market interest rate. 
+The government’s budget constraint is ( ) .6 1 0 1 1 1 2 2 2 1 P T G P T G i − () + − () + = Note that because households are forward looking and have the same time horizon as the government, this model will be fully Ricardian: the timing of tax payments is neutral. In a later section we generalize the model to include some non-Ricardian behavior. 
+I.E. 
+Aggregate Demand and Aggregate Supply Output is used for consumption, investment, and government purchases: ( ) .7 Y C I G t t t t = + + Equilibrium aggregate output is also constrained by potential output: ( ) .8 Y A K t t t ≤ In the full-employment equilibrium, this last expression holds with equality. 
+However, we are particularly interested in cases in which this expression holds as a strict inequality. 
+In these cases aggregate demand is insufficient to employ all productive resources, and monetary and fiscal policy can potentially remedy the problem. 
+The key issue is the optimal use of these policy tools. 
+II. The Equilibrium under Flexible Prices The natural place to start in analyzing the model is with the behavior of the firms and households, as well as optimal policy, for the case of flexible prices. 
+The flexible-price equilibrium will provide the benchmark when we impose sticky prices in the next section. 
+II.A. 
+Firm and Household Behavior We first derive the equations characterizing the equilibrium decisions of the private sector (households and firms), taking government policy as given. 
+We start with firms. 
+In this setting, prices adjust to guarantee full employment in each period. 
+Therefore, ( ) , .9 Y A K t t t t = for all The firm’s profit maximization problem can be restated, using the fullemployment condition (equation 9) and the investment equation (equation 4), as max . 
+K P A K K P i A K 2 1 1 1 2 2 1 2 2 1 −( )+ + ( )       This yields the following first-order condition: ( ) .10 1 1 2 2 1 +()=i A P P Expression 10 is similar to a conventional Fisher equation: the nominal interest rate reflects the marginal productivity of capital and the equilibrium inflation rate. 
+The household’s utility maximization yields the standard intertemporal Euler equation: ( ) .11 1 1 2 1 1 2 ′ () ′() = +() u C u C i P Pβ The full-employment condition (equation 9) and the accounting identity for aggregate output (equation 7) imply the following values for consumption: ( )12 1 1 1 2 1 C A K K G= − − ( ) .13 2 2 2 2 C A K G= − Equations 10 through 13 simultaneously determine the equilibrium for four endogenous variables: C 1 , C 2 , K 2 , and P 2 /P 1 . 
+The second-period money market equilibrium condition (M 2 = P 2 C 2 ) then pins down P 2 and thereby P 1 . 
+To derive explicit solutions for the economy’s equilibrium, we specify the household’s utility function as isoelastic u C C t t ( )= − − −       1 1 1 1 1 σ σ , where s is the elasticity of intertemporal substitution. 
+The equilibrium real quantities are: ( )14 1 1 1 1 1 1 2 2 2 2 2 C A A g A A =       −() +       − β β σ σ gg A K G 2 1 1 1 () −() ( )15 1 1 1 1 2 2 2 2 2 2 1 1 1 C A g A A g A K G= − () +       −() − β σ (() ( )16 1 1 1 1 1 2 2 2 1 1 1 I A A g A K G= +       −() −() β σ ( )17 1 1 1 Y A K= ( ) .18 1 1 1 2 2 2 2 2 1 1 1 Y A A A g A K G= +       −() −() β σ The equilibrium nominal quantities are ( )19 1 1 1 1 1 2 2 2 2 1 1 1 P A A g g A K G = +       − () −()−() β σ MM i 2 1 1 +() ( )20 1 1 1 1 2 2 2 2 2 2 1 1 1 P A A g A g A K G = +       −() −()− β σ (() M 2 ( ) .21 1 1 1 2 2 2 1 M A A M i =       +()β σ Note that the economy exhibits monetary neutrality. 
+That is, the monetary policy instruments do not affect any of the real variables. 
+Expansionary monetary policy, as reflected in either lower i 1 or higher M 2 , implies a higher price level P 1 . 
+As already mentioned, we are interested in studying the effects of a decline in aggregate demand. 
+Such a shock, which can be thought of most naturally as some exogenous event leading to a decline in the private sector’s desire to spend, can be incorporated into this kind of model in various ways. 
+One that is often used is to assume a shock to the intertemporal discount rate (which here would be an increase in b). Alternatively, a decline in spending desires can arise because of a decrease in A 2 , the productivity of technology projected to prevail in the future. 
+The impact of A 2 on current demand depends crucially on s, which in turn governs the relative size of income and substitution effects from a change in the rate of return. 
+If s < 1, the income effect dominates the substitution effect, and a lower A 2 primarily causes households to feel poorer, inducing a reduction in desired consumption. 
+Hereafter, we focus on the case of a decline in A 2 together with the maintained assumption that s < 1. This is, of course, not the only way one might model shocks to aggregate demand, but we believe it is the closest approximation in this model to what one might call a decline in confidence or an adverse shift in “animal spirits.” Equations 14 to 21 above show what a decline in A 2 does to all the endogenous variables in the flexible-price equilibrium. 
+Consumption falls because households are poorer. 
+Their higher saving translates into higher investment. 
+Output in the first period remains the same. 
+The flexibility of the price level is crucial for this result. 
+Equation 19 shows that a fall in A 2 leads to a fall in the price level P 1 . 
+In section III we will examine the case in which the price level is sticky and thus unable to respond to this shock. 
+II.B. 
+Optimal Fiscal Policy under Flexible Prices Optimal fiscal policy follows classical principles. 
+We state the government’s optimization problem formally in a later section, but in words, it chooses public expenditure G t and taxes T t to maximize household utility subject to the economy’s feasibility and the government’s budget constraints. 
+The following conditions define optimal government purchases: ( )22 1 2 2 ′ () =′ () v G A v Gβ ( ) .23′ ( ) =′ ( ) u C v G t t t for all Equation 23 shows that optimal fiscal policy has government purchases move in the same direction as private consumption, unless there is a change in preferences for government services. 
+To derive explicit solutions, we assume that the utility from government purchases takes a form similar to that from consumption: v G G t t ( )= − − −       θ σ σ σ 1 1 1 1 1 1 , where q is a taste parameter. 
+These expressions imply optimal government purchases: G C 1 1 = θ G C 2 2 = θ , and therefore the following equilibrium quantities in closed form: ( )24 1 1 1 1 1 2 2 2 2 C A A A A =       +()+          β θ β σ σ    A K 1 1 ( )25 1 1 1 2 2 2 2 1 1 C A A A A K= +()+             θ β σ ( )26 1 1 1 1 2 2 1 1 I A A A K= +             β σ ( )27 1 1 1 1 1 2 2 2 2 G A A A A =       +()+         θ β θ β σ σ     A K 1 1 ( )28 1 1 1 2 2 2 2 1 1 G A A A A K= +()+             θ θ β σ ( )29 1 1 1 Y A K= ( ) .30 1 1 2 2 2 2 1 1 Y A A A A K= +             β σ This flexible-price equilibrium with optimal fiscal policy will be a natural benchmark in the analysis that follows. 
+II.C. 
+An Aside on Labor As mentioned earlier, it is possible to incorporate labor as an additional factor of production without affecting the key results of the model. 
+Suppose that the production function is Y A K L t t t t t = + () ω , where w t is an exogenous labor productivity parameter and L t is the exogenous level of labor supplied inelastically to the firm by the representative household. 
+With this production function, the baseline model is more cumbersome but little changed. 
+In essence, current and future labor inputs serve as additions to the initial productive endowment of the household, funding consumption and government purchases just as does K 1 . 
+None of the policy analysis would be altered by adding labor input in this way. 
+Interested readers are referred to a technical appendix available both at the Brookings Papers website and at the authors’ personal websites. 
+1 If, contrary to what the above production function assumes, labor and capital were not perfect substitutes in production, more details about factor markets would need to be specified. 
+In particular, firms facing insufficient demand would have to choose between idle labor and idle capital in some way. 
+We suspect that this issue is largely unrelated to the topics at hand, and so we avoid these additional complexities. 
+Hereafter, we maintain the assumption of a single input into production. 
+III. 
+The Equilibrium under Short-Run Sticky Prices So far we have introduced a two-period general equilibrium model with monetary and fiscal policy and solved for the equilibrium under the assumption that prices are flexible in both periods. 
+In this section we use the model to analyze what happens if prices are sticky in the short run. 
+In particular, we take the short-run price level P 1 to be fixed, while allowing the long-run price level P 2 to remain flexible. 
+The cause of the price stickiness will not be modeled here, and the reason for the deviation of prices from equilibrium prices will not enter our analysis. 
+It seems natural to imagine that prices were set in advance based on economic conditions that were expected to prevail and that conditions 1. Online appendixes to papers in this issue may be found on the Brookings Papers webpage (www.brookings.edu/economics/bpea/past_editions.aspx). turned out differently than expected. 
+Equation 19 shows what determines the price level consistent with full employment. 
+If any of the exogenous variables in this equation are other than what was anticipated, and the price level is unable to change, the economy will be forced to deviate from the classical flexible-price equilibrium. 
+One notable possibility, for instance, is fluctuations in A 2 , which we have interpreted as reflecting confidence about future economic growth. 
+With a fixed price level, there are two cases to consider: the price level can be stuck too low, or it can be stuck too high. 
+If the price level is too low, the goods market will experience excess demand. 
+Such a situation is sometimes called “repressed inflation.” If the price level is too high, the goods market will experience excess supply. 
+In this case, which might be called the “Keynesian regime,” firms will be unable to sell all they want at the going price, and so some productive resources will be left idle. 
+Because our goal is to understand optimal policy during recessions, our analysis will focus on this latter case. 
+2 Formally, the equations describing the sticky-price equilibrium closely resemble equations 9 through 13 from the flexible-price model. 
+One difference is that because nominal rigidity prevents full employment of capital in the first period, equation 9, Y t = A t K t , may not hold for t = 1. Moreover, A 1 K 1 needs to be replaced with Y 1 in equation 12, which now becomes C Y K G 1 1 2 1 = − − . 
+Of course, the presence of a sticky price level in the first period breaks the monetary neutrality of the flexible-price model. 
+Here, monetary policy affects the real economy’s equilibrium quantities. 
+The equilibrium of this model is described by the following equations: ( )31 1 1 1 2 2 2 1 1 C A A M i P =       +()β σ ( )32 1 2 2 2 1 1 C A M i P = +() 2. As an aside, we note that much of the New Keynesian literature makes this case canonical, and precludes the case of repressed inflation, by assuming monopolistic competition. 
+Firms in such industries charge prices above marginal cost and, as long as prices are not too far from equilibrium, are always eager to sell more at the going price. 
+( )33 1 1 1 1 2 2 1 1 I g M i P = − () + () ( )34 1 1 1 1 1 1 2 2 2 2 2 1 Y A A g g M i P = +       −() − () + () β σ 11 1 + G ( )35 1 1 1 2 2 2 2 1 1 Y A g M i P = −()+() ( ) .36 1 2 1 2 1 P i A P= + () Equation 34 can be viewed as an aggregate demand curve. 
+It yields a negative relationship between output Y 1 and the price level P 1 . 
+This set of equations also yields another famous Keynesian result: the paradox of thrift. 
+If b rises, households will want to consume less and save more. 
+In equilibrium, however, saving and investment are unchanged, because output falls. 
+That is, because aggregate demand influences output, more thriftiness does not increase equilibrium saving. 
+Note that all the real equilibrium quantities above depend on the ratio ( ) .37 1 2 1 1 M i P+() Expression 37 succinctly captures the policy position of the central bank. 
+It also hints at our findings detailed below, where we show that the various tools available to the central bank can act as substitutes. 
+In this setting, the monetary policy that generates full employment can be read directly from equation 34 by equating Y 1 with A 1 K 1 : ( )38 1 1 1 1 1 2 1 1 2 2 2 2 M i P g A A g A +() = − () +       − () β σ11 1 1 K G−(). 
+To maintain full employment, monetary policy needs to respond to present and future technology, present and future fiscal policy, and household preferences. 
+To illustrate the implications of this solution, consider the impact of a negative shock to future technology A 2 . 
+(We maintain the assumption that s < 1.) In the absence of a policy response, the effect on the economy’s short-run equilibrium can be seen immediately from equations 31 through 36. Consumption falls in both periods. 
+Output falls in the second period, even though the economy is at full employment, as worse technology reduces potential output in that period. 
+Most important for our purposes, output falls in the first period because of weak aggregate demand. 
+Potential output in the first period is unchanged because A 1 and K 1 are fixed. 
+Thus, a decline in “confidence” as reflected in the fall in A 2 causes resources in the first period to become idle. 
+IV. Optimal Policy When Monetary Policy Is Sufficient to Restore the Flexible-Price Equilibrium In this section we begin to examine optimal policy responses to a drop in aggregate demand. 
+For concreteness, we focus on a negative shock to future technology A 2 . 
+Formally, let a caret over a variable denote the value of that variable anticipated when prices were set. 
+We assume that the price level was set to achieve full employment based on an expected value Â 2 , but once prices are set, the actual realized value is A 2 , where A 2 < Â 2 . 
+We begin with conventional monetary policy, where the central bank adjusts the short-term nominal interest rate, and derive the threshold value for A 2 above which conventional monetary policy is sufficient to replicate the flexible-price equilibrium. 
+We also characterize optimal fiscal policy in this scenario. 
+Then we examine the options for monetary policy when A 2 falls further and the economy hits the zero lower bound on nominal interest rates. 
+Whenever monetary policy is sufficient to restore the flexible-price equilibrium, optimal fiscal policy follows classical principles, satisfying equation 23 from the flexible-price equilibrium. 
+Therefore, the postshock equilibrium with optimal fiscal policy can be summarized with the following set of equations: ( )39 1 1 1 2 2 2 1 1 C A A M i P =       + () β σ ( )40 1 2 2 2 1 1 C A M i P = + () ( )41 1 1 1 2 1 1 I M i P = +() + () θ ( )42 1 1 1 1 1 2 2 2 1 1 Y A A M i P = + () +             + () θ β σ ( )43 1 1 2 2 2 1 1 Y A M i P = + () + () θ ( )44 1 1 1 2 2 2 1 1 G A A M i P =       + () θ β σ ( ) .45 1 2 2 2 1 1 G A M i P = +( ) θ Optimal monetary policy is implied by equation 42 and the full-employment condition Y 1 = A 1 K 1 : ( )46 1 1 1 1 1 2 1 1 2 2 M i P A A A + ( ) = + ( ) +             θ β σ11 1 K . 
+In our canonical case in which s < 1, a fall in A 2 raises the right-hand side of this expression. 
+Thus, a decline in confidence about the future causes optimal monetary policy to be more expansionary, as reflected in either a fall in the short-term nominal interest rate i 1 or an increase in the future money supply M 2 . 
+IV.A. 
+Conventional Monetary Policy The conventional monetary policy response to weak aggregate demand is to lower i 1 . 
+For now, assume that this conventional response is the central bank’s only response, so that the long-term money supply remains at its preshock level (that is, M 2 = M ˆ 2 ). Fiscal policy is at its classical optimum derived above. 
+With these assumptions we can rearrange equation 46 and substitute it along with i 1 into equation 42 and solve for first-period output after the shock: ( ) ˆ ˆ 47 1 1 1 1 1 2 2 2 2 Y A A A A = +       +           β β σ σ           + () +() 1 1 1 1 1 1 ˆ . 
+i i A K Manipulating equation 47 yields a threshold value for A 2 above which conventional policy is sufficient to restore the flexible-price equilibrium. 
+We denote this threshold A 2conventional , and it is ( ) ˆ ˆˆ 48 1 1 2 2 1 A A A i 2 conventional =       −    β β σ    + ()               − σ σ 1 1 1 1 ˆ . 
+i Note that a higher initial value of i ˆ 1 implies a lower threshold A 2conventional . 
+This result parallels much recent discussion suggesting that higher normal levels of nominal interest rates would increase the scope for conventional monetary responses to adverse demand shocks (see, for example, Blanchard, Dell’Ariccia, and Mauro 2010). 
+To show this clearly, note that if i ˆ 1 = 0, this expression reduces to A A 2 conventional = ˆ . 
+2 That is, if the nominal interest rate is normally zero, then conventional monetary policy has no power in response to an adverse shock. 
+The value of the short-term interest rate i 1 that generates full employment satisfies ( ) ˆ ˆ 49 1 1 1 1 1 1 2 2 2 2 +()= +       +       i A A A A β β σ σ               + () 1 1 ˆ .i At this value of the interest rate, consumption, investment, and output all equal their values in the flexible-price equilibrium. 
+The limiting case in which s approaches zero may be instructive. 
+In this case equation 49 simplifies to ( ) ˆ ˆ .50 1 1 1 1 1 2 2 1 + () = + +       + () i A A i Thus, when our measure of confidence A 2 falls below what was anticipated when prices were set, the nominal interest rate must move in the same direction. 
+How far A 2 can fall before the central bank hits the zero lower bound depends solely on the normal interest rate i ˆ 1 . 
+IV.B. 
+Long-Term Monetary Expansion If A 2 falls below A 2conventional , the central bank will be unable to achieve the flexible-price equilibrium with conventional monetary policy. 
+As recent events have shown, monetary authorities may look beyond conventional policy in this situation. 
+One much-discussed option is to try to affect the long-term nominal interest rate. 
+We consider that option in a later section, where we specify a variation on this baseline model in which the economy has three periods, not two. 
+In this baseline model, the central bank has one tool other than the shortterm interest rate: the long-term level of the money supply M 2 . 
+Equation 42 implies that any shock to future technology can be fully offset by changes to M 2 . 
+Formally, the value of M 2 required to restore the flexible-price equilibrium after the shock A 2 < A 2conventional when i 1 = 0 satisfies ( ) .51 1 1 1 1 2 1 2 2 1 1 M P A A A K= +()+             θ β σ Note that the right-hand side of equation 51 is decreasing in A 2 , so that (as expected) a large negative shock to future technology calls for a longterm nominal expansion. 
+3 3. The role of future monetary policy in influencing the short-run equilibrium has, of course, been widely discussed. 
+See, for example, Krugman (1998) and Eggertsson and Woodford (2003). 
+IV.C. 
+Summary of Optimal Policy When Monetary Policy Is Unrestricted A sufficiently flexible and credible monetary policy is always sufficient to stabilize output following an adverse demand shock, even if the zero lower bound on the short-term interest rate binds. 
+Once monetary policy has restored the flexible-price equilibrium, the role of fiscal policy is entirely passive and is determined by classical principles that equate the marginal utility of government purchases to the marginal utility of private consumption. 
+One noteworthy, and perhaps surprising, result concerns the influence of these expansionary moves in monetary policy on inflation. 
+In this model the current price level P 1 is fixed, but equation 36 shows how monetary policy influences the future price level P 2 . 
+A cut in the short-term nominal interest rate i 1 reduces the future price level. 
+The explanation is that the lower interest rate stimulates investment and increases future potential output; for any given future money supply M 2 , higher potential output means a lower price level. 
+Similarly, an increase in M 2 does not raise the future price level because it stimulates current output and investment; the increase in future potential output offsets the inflationary pressure of a greater money supply. 
+Thus, although the various tools of monetary policy can increase aggregate demand and output in this economy, they do not increase future inflation until the economy reaches full employment. 
+Of course, as has been made clear in recent debates over U.S. monetary policy, the ability of the central bank to fulfill its potential is vulnerable to real-world constraints on policymaking. 
+The central bank may not be willing or able to commit to the expansionary long-term money supply M 2 that is required for stabilization. 
+As a consequence, monetary policy may be insufficient to restore the flexible-price equilibrium, raising the question of whether and how fiscal policy might supplement it. We turn to that question in the next section. 
+V. Optimal Fiscal Policy When Monetary Policy Is Restricted Imagine an economy that has been hit by an adverse shock to A 2 . 
+The central bank has set i 1 = 0, but that policy move has been insufficient to restore output to full employment. 
+In addition, imagine that the central bank is for some reason unable to commit to an expansion of the future money supply M 2 . 
+(In the notation of the previous section, this implies A 2 < A 2conventional , i 1 = 0, and M 2 = M ˆ 2 .) How might fiscal policy respond to such a scenario? 
+We consider two fiscal stimulus policies in this section, each intended to raise one of the components of aggregate demand. 
+First, we consider an increase in G 1 , government purchases in the first period. 
+Second, we examine a subsidy s aimed at boosting first-period investment I 1 . 
+Both of these policies are financed by an increase in lump-sum taxes. 
+The timing of these taxes is immaterial because we have assumed that all households are forward looking. 
+In a later section we relax the assumption of completely forward-looking households. 
+As the households in that example choose consumption in part based on a rule of thumb tied to current disposable income, adjusting the timing of taxes has the potential to raise consumption C 1 . 
+4 V.A. 
+The Government’s Fiscal Policy Problem In this scenario the government faces the following optimization problem: max , ,G T s t t t u C v G u C v G { } = { } () + () + () + ()[ 1 2 1 1 2 2 β ]]{ } , where s is an investment subsidy such that the cost of one unit of investment to a firm in the first period is (1 - s), and the values for {C 1 , C 2 , K 2 } as a function of government policies are chosen optimally by households and firms. 
+The government is constrained by the following balanced-budget condition: ( ) .52 1 0 1 1 1 1 2 2 2 1 P T G sI P T G i − − () + − () +() = Some of the equations that determined equilibrium in the model of section II must be altered to take into account the investment subsidy. 
+Equation 10, which results from the firm’s profit maximization, becomes ( ) ,53 1 1 1 2 2 1 −()+()=s i A P P and the government budget constraint (equation 6) becomes equation 52. 4. One can imagine other fiscal instruments as well. 
+In particular, a retail sales tax (or subsidy) naturally comes to mind. 
+The effects of such an instrument in this model depend on what price is assumed to be sticky. 
+If the before-tax price is sticky, then a sales tax gives policymakers the ability to control directly the after-tax price, which is the price relevant for demand. 
+This in turn allows policymakers to overcome all the inefficiencies that arise from sticky prices. 
+After a decline in aggregate demand, a cut in the sales tax can reduce prices to the level consistent with full employment. 
+On the other hand, if the after-tax price is assumed to be sticky, then a sales tax has no use as a short-run stabilization tool. 
+We begin with the simplest fiscal stimulus: an increase in current government purchases G 1 . 
+For now we set the investment subsidy s to zero. 
+But we will return to it shortly. 
+V.B. 
+Government Purchases under Flexible Prices As a benchmark, recall the condition on fiscal policy in the flexible-price allocation (equation 23): ′ ( ) =′ ( ) u C v G t t t for all . 
+The most important implication of this relationship is that public and private consumption move together. 
+Intuitively, if a shock induces households to save more and spend less, it raises the marginal utility of consumption. 
+The optimal response of fiscal policy under flexible prices is to follow the private sector’s lead by lowering government expenditure. 
+As a result of the decline in G 1 , consumption falls less in all periods than it would have if fiscal policy were to remain fixed at its preshock levels. 
+For future reference, the optimal level of government spending under flexible prices is G A A A A 1 2 2 2 1 1 1 flex 2 = 1 θ β θ β σ σ       +( )+             A K 1 . 
+1 Under our maintained assumption that s < 1, optimal government spending falls in response to the negative shock to future technology A 2 . 
+V.C. 
+Government Purchases under Short-Run Sticky Prices We now return to a setting with sticky prices. 
+As was shown in equations 31 and 32, if the economy is operating below full employment, the equilibrium levels of consumption do not depend on the choice of G 1 . 
+That is, as long as some productive resources are idle, an increase in public consumption has an opportunity cost of zero. 
+Therefore, as long as the marginal utility of government services is positive, the government should increase spending until the economy reaches full employment. 
+The government spending multiplier here is precisely 1. This result is akin to the balanced-budget multiplier in the traditional Keynesian incomeexpenditure model. 
+Here, as in that model, an increase in government spending puts idle resources to work and raises income. 
+Consumers, meanwhile, see their income rise but recognize that their taxes will rise by the same amount to finance that new, higher level of government spending. 
+As a result, consumption and investment are unchanged, and the increase in income precisely equals the increase in government spending. 
+5 Formally, one can show that the following first-order conditions characterize the government’s optimum: 6 ′ () =′ () v G A v G 1 2 2 β ′ ( ) ′ ( ) u C v G t t t > for all . 
+Because government spending puts idle resources to use, optimal spending on public consumption rises above the point that equates its marginal utility to that of private consumption. 
+7 The optimal level of government spending in the first period is G A A A A 1 2 2 2 2 1 1 1 sticky =       +             β β σ σ 11 1 1 1 1 1 1 1 2 2 2 − + ( ) +             + ( ) + ˆ ˆ i A A A β θ β σ                             σ ˆ . 
+A A K 2 1 1 One can show that optimal government spending exceeds the level that would be set at the flexible-price equilibrium. 
+That is, G 1 sticky > G 1 flex . 
+Whether the optimal G 1 sticky is a stimulus relative to preshock G 1 is a bit more complicated. 
+For a shock that just barely pushes into the zero-lower-bound region (that is, A 2 equal to or slightly worse than the threshold in equation 48), the 5. Woodford (2011) discusses how New Keynesian models tend to produce government spending multipliers that equal unity if the real interest rate is held constant. 
+In a later section, we present an extension of our model that yields a multiplier greater than 1. 6. Readers interested in a more explicit (if laborious) demonstration of these and other results should consult the online appendix. 
+7. One surprising implication is that government consumption in the second period also expands beyond the classical benchmark. 
+The reason is that, according to equation 33, increased second-period government consumption stimulates first-period investment. 
+Why? 
+Intuitively, higher g 2 tends to reduce second-period consumption for a given output, which in turn tends to increase the second-period price level (recall that M 2 = P 2 C 2 ). Higher expected inflation would tend to reduce the real interest rate, stimulating investment. 
+In the final equilibrium, however, investment and potential output expand sufficiently to leave C 2 and P 2 unaffected. 
+optimal G 1 sticky falls below preshock G 1 , indicating the optimality of fiscal contraction. 
+In this case the central bank has the capacity to offset most of the shock with conventional monetary easing, and government spending can fall below its preshock level toward its new, lower, flexible-price level. 
+For larger shocks, however, optimal G 1 sticky will be greater than preshock G 1 , indicating the optimality of fiscal expansion. 
+In this case there is a lot of idle capacity for fiscal policy to use up. One can derive a full set of equations comparing the equilibrium with optimal fiscal policy as described here with the flexible-price equilibrium. 
+They establish that C C 1 1 sticky flex < C C 2 2 sticky flex < I I 1 1 sticky flex = G G 1 1 sticky flex > G G 2 2 sticky flex > Y Y 1 1 sticky flex = Y Y 2 2 sticky flex = . 
+The bottom line is that when monetary policy fails to achieve full employment, it is optimal for the government to put the economy’s idle resources to work by increasing its spending. 
+This fiscal policy is second-best, however, because it fails to produce the same allocation of resources achieved under flexible prices. 
+Public consumption will be higher in both periods, but private consumption will be lower. 
+As a result, households will end up with a lower level of welfare. 
+V.D. 
+Investment Subsidy Next we expand the government’s fiscal tool kit by allowing it to subsidize investment by choosing s > 0. Like government purchases, the investment subsidy can cause idle capital to be brought into production. 
+When output is below its full-employment level in the first period, a positive investment subsidy is welfare improving. 
+That is true whether government spending is unchanged or is set to its new flexible-price optimum. 
+(See the online appendix for details.) In general, the subsidy that generates full employment is a complicated function of the economy’s parameters. 
+One special case, however, clarifies the intuition for the role of the investment subsidy. 
+In much traditional Keynesian analysis, the real interest rate does not much affect private consumption. 
+One might interpret this as suggesting that the elasticity of intertemporal substitution is very small. 
+If we take the limit as s → 0, then the optimal investment subsidy is ( ) ,54 1 s i= − where i 1 is the interest rate chosen in equation 50 that reproduces the flexible-price equilibrium. 
+Government spending in this equilibrium is once again set on classical principles. 
+Equation 54 shows that the government sets the investment subsidy rate equal to the opposite of the optimal negative nominal interest rate. 
+Intuitively, the investment subsidy allows the government to provide the same incentives for investment as the negative interest rate would have, if the latter were possible, thereby reproducing the flexible-price equilibrium. 
+8 For the more general case of positive s, we rely on numerical simulations to judge the welfare consequences of policy change. 
+We offer such calculations in the next subsection. 
+V.E. 
+Comparing Welfare Gains with Output Gains from Fiscal Tools It is common for policy debates to focus on the output stimulus achievable by various policy options. 
+Using our results above, we now turn to a numerical evaluation of whether this focus on “bang for the buck” is a good guide to policymaking. 
+As an alternative, we also calculate a welfare-based measure of policy effectiveness. 
+Suppose the economy begins at full employment and the zero lower bound. 
+If it is then hit by a negative shock to A 2 , conventional monetary policy is ineffective, and we assume that future monetary expansion is impossible. 
+We want to compare several alternative fiscal policies, all aimed at achieving full employment: —an increase in current government spending G 1 , holding future government spending G 2 constant 8. The use of tax instruments as a substitute for monetary policy is also examined in recent work by Correia and others (2010). 
+—an increase in both current and future government spending, maintaining the government’s intertemporal Euler equation —an investment subsidy, holding government spending constant —an investment subsidy, allowing government spending to optimally adjust. These four policies are all compared with a benchmark in which fiscal policy is held fixed at its preshock level. 
+For each policy we calculate a version of what is usually called the multiplier, or “bang for the buck.” This statistic is the increase in current output (Y 1 ) divided by the increase in the current government budget deficit. 
+9 We also calculate a welfare-based measure of the returns to each fiscal policy option. 
+In particular, we calculate the percent increase in current consumption (C 1 ) in the benchmark economy that would raise welfare in the benchmark economy to that under the indicated fiscal policy option. 
+Table 1 shows the results of these calculations for a variety of parameter values. 
+Three parameters are important to the model. 
+First, our baseline value for the intertemporal elasticity of substitution is s = 0.5, well within standard ranges for macroeconomic models, and we consider both higher and lower values for s. Second, our baseline value for the household’s relative taste for government consumption is q = 0.24. 
+As we showed above, q equals the ratio G/C at the flexible-price equilibrium, and this ratio is 0.24 in the U.S. national income accounts for 2009. 
+We consider higher and lower values for q as well. 
+Finally, our baseline value for the size of the shock to future technology is 25 percent, but we also consider shocks of 10 percent and 40 percent. 
+The results in table 1 suggest that the conventional emphasis on the output multiplier may be substantially misleading as a guide to optimal policy. 
+In none of the variants considered does the policy with the largest multiplier also generate the greatest welfare gain. 
+One pattern is particularly striking: across all parameter values that we consider, the policy that is best for welfare (the fourth policy option in the table) is the worst according to the bang-for-the-buck metric. 
+The reason is that this policy recommends a large investment subsidy in the first period, generating a deficit nearly twice as large as the next-largest deficit among the other three policies. 
+Although it generates much less bang for 9. The increase in the deficit is calculated as the increase in G 1 plus any loss in revenue from the investment subsidy s. Implicitly, this holds current lump-sum tax revenue T 1 fixed. 
+Recall that the timing of tax payments is irrelevant to the equilibrium of the model economy because all households are forward looking.Table 1. Impact of Selected Fiscal Policy Options under Alternative Model Assumptions and Metrics Fiscal policy option Increase current Performance purchases Optimal mix of Investment Optimal mix of Unrestricted Model variant metric only (G 1 ) G 1 and G 2 subsidy (s) G 1 and G 2 and s monetary policy b Baseline a Welfare gain (%) 4.1 4.1 6.7 8.5 8.6 Fiscal multiplier 1.0 1.2 1.1 0.6 NAElasticity of intertemporal substitutionLow (s = 0.33) Welfare gain (%) 4.3 4.3 12.9 15.8 15.9 Fiscal multiplier 1.0 1.7 1.2 0.8 NAHigh (s = 0.67) Welfare gain (%) 1.3 1.5 1.6 3.0 3.0 Fiscal multiplier 1.0 0.4 1.0 0.2 NATaste for government consumptionLow (q = 0.18) Welfare gain (%) 4.8 5.1 9.1 10.4 10.6 Fiscal multiplier 1.0 1.5 1.2 0.8 NAHigh (q = 0.30) Welfare gain (%) 2.9 2.9 4.3 6.6 6.7 Fiscal multiplier 1.0 0.9 1.0 0.4 NAShock to future technologySmall (10 percent) Welfare gain (%) 2.2 2.3 2.7 2.9 2.9 Fiscal multiplier 1.0 1.3 1.2 0.7 NALarge (40 percent) Welfare gain (%) 4.4 4.4 9.5 16.6 17.0 Fiscal multiplier 1.0 1.0 1.0 0.4 NA Source: Authors’ calculations.a. 
+Baseline assumptions are s = 0.5, q = 0.24, and a shock to future technology of 25 percent.b. 
+Results of an unrestricted monetary policy that yields the flexible-price equilibrium; NA = not applicable. 
+the buck, this investment subsidy allows policymakers to stabilize output with lower public consumption. 
+This raises private consumption in both the first and the second periods, relative to the other policy options, and moves the economy closer to the flexible-price equilibrium. 
+The final column of table 1 shows that this policy generates nearly as large a welfare gain as would fully flexible monetary policy. 
+VI. Unconventional Monetary Policy in a Model with Three Periods In this section we add a third period to the baseline model. 
+As the main features of the model are unchanged, our purpose in adding a third period is specific: to expand the set of tools available to the central bank. 
+The Federal Reserve has recently pursued policies aimed at lowering long-term nominal interest rates. 
+Adding a third period to the model allows us to clarify the role of such a policy in stabilizing aggregate demand. 
+Three periods imply two nominal interest rates, which we denote i 1 and i 2 . 
+The latter is a future short-term interest rate; hence, by standard termstructure relationships, a change in i 2 will move long-term rates in the first period in the same direction. 
+The long-term money supply is now denoted M 3 . 
+We focus on the case when the price level in the first period is fixed; prices are flexible in the second and third periods. 
+To keep things simple, we omit all fiscal policy in this section (that is, q = 0 for all t, so G t = 0 as well). 
+The expression for equilibrium output when output is demand constrained is the following: Y A A A A A A 1 3 3 2 2 3 2 3 1 1 1 = +       +             β β σ σ   + () + () M P i i 3 1 1 2 1 1 . 
+This expression shows the monetary policy tools that can offset a shock to aggregate demand. 
+If s < 1, a fall in future productivity (A 2 or A 3 ) reduces output for a given monetary policy. 
+The central bank has three tools to offset such a shock. 
+It can lower the current short-term interest rate i 1 , it can reduce long-term interest rates by reducing the future short-term rate i 2 , or it can raise the long-term nominal anchor M 3 . 
+Two conclusions about the efficacy of monetary policy are apparent. 
+First, if the long-term nominal anchor M 3 is held fixed, the ability to influence long-term interest rates expands the central bank’s scope for restoring the optimal allocation of resources. 
+Formally, one can derive thresholds for A 2 above which conventional and unconventional policies are sufficient to restore the flexible-price equilibrium. 
+One can show that A A 2 2long-term interest conventional < . 
+Second, as before, if the central bank can control the long-term nominal anchor M 3 , there is no limit to its ability to restore the flexible-price equilibrium. 
+VII. 
+Government Investment So far, all government spending in this model has been for public consumption. 
+We now consider one way in which public investment spending might be incorporated into the model. 
+We return to our baseline model with two periods, with one addition. 
+In addition to private investment, we also have investment by the government, denoted G I . 
+Government consumption is now denoted G C . 
+The production function is Y A K A K t t F t F t G t G ≤ + ( ) κ , where K t F and K t G are the private and public capital stocks, and A t F and A t G are exogenous technology parameters specific to private (firm) and public (government) capital. The function k(z) reflects the idea that the two forms of capital are not perfect substitutes in production. 
+To ensure a sensible interior solution, we assume k′(z) > 0 and k″(z) < 0. Under flexible prices, the solution to the government’s optimal policy problem satisfies the following conditions: ′ () =′ () u C v G C 1 1 ′ () =′ () u C v G C 2 2 ( )55 1 2 2 ′ ( ) =′ ( ) v G A v G C F C β ( ) .56 2 2 2 ′( ) =κ K A A G F G The first three of these should be familiar by now, as they are the same classical conditions as in the baseline model. 
+The last is a new condition showing that optimal fiscal policy sets the marginal product of public capital equal to that of private capital. It implies that the optimal amount of public capital depends on the relative productivities of private and public capital. For example, a fall in the productivity of private capital (A 2 F ), holding the productivity of public capital (A 2 G ) constant, increases optimal investment in public capital. If prices are sticky, the following equations describe the economy’s equilibrium: C A A M i P F F 1 2 1 2 2 1 1 1 1 =       + () β σ C A M i P F 2 2 2 1 1 1 = + () I g M i P A A G C G F I 1 2 2 1 1 2 2 1 1 1 1 = −()+() − () κ P i A P F 2 1 2 1 1 = + () Y A A g g M i F F C C 1 2 1 2 2 2 2 1 1 1 1 1 1 = +       −() −()+() β σ PP G A A G G C G F I I 1 1 2 2 1 1 + − () +κ Y A g M i P F C 2 2 2 2 1 1 1 1 = − () + () . 
+These are close analogues to equations 31 through 34, modified to include government investment. 
+If monetary policy is unrestricted, the central bank can use this solution to derive optimal policy and achieve the first-best flexible-price equilibrium. 
+We focus on the case, however, in which monetary policy is limited, in order to examine the possible role of fiscal policy. 
+Optimal fiscal policy changes surprisingly little with the introduction of government investment. 
+In particular, it remains true, as in our previous analysis under sticky prices, that ′ () >′ () u C v G C 1 1 ′ ( ) > ′ ( ) u C v G C 2 2 , that is, the government increases public consumption beyond the point that a classical criterion would indicate. 
+However, the conditions specified in equations 55 and 56 continue to hold. 
+Investment in public capital is still determined by equating the marginal products of the two types of capital. One might ask, Why doesn’t public investment rise even further to help soak up some of the idle capacity? 
+It turns out that, in this model, public investment crowds out private investment. 
+In particular, private investment at the zero lower bound is determined by I g M P A A G C G F I 1 2 2 1 2 2 1 1 1 = − () − () κ . 
+At the optimum, as determined by equation 56, ∂I 1 /∂G I 1 = -1. The intuition behind this result is the following. 
+When the government increases public investment, other things equal, it tends to increase second-period output and consumption. 
+An increase in second-period consumption for a given money supply tends to push down second-period prices, raising the firstperiod real interest rate. 
+Private investment falls, leaving the effective capi- tal stock, K A A K F G F G 2 2 2 2 + () κ , unchanged. 
+As a result, public investment is an ineffective stabilization tool and therefore continues to be set on classical principles. 
+10 As with the baseline model, an investment subsidy can implement the flexible-price optimum in this model in the limit as s → 0. The optimal subsidy matches the size of the negative nominal interest rate that would implement the flexible-price equilibrium if negative rates were possible, as in equation 54. VIII. 
+Tax Policy in a Non-Ricardian Setting Throughout the analysis so far, households have been assumed to be forwardlooking utility maximizers, and thus their behavior accords with Ricardian equivalence. 
+Changes in tax policy have important effects in the model if 10. The mechanism here resembles Eggertsson’s (2010) “paradox of toil,” according to which positive supply-side incentives reduce expected inflation, raise real interest rates, and depress aggregate demand and short-run output. 
+they influence incentives (as in the case of investment subsidies), but not to the extent that they merely alter the timing of tax liabilities. 
+Many economists, however, are skeptical about Ricardian equivalence. 
+Moreover, much evidence suggests that consumption tracks current income more closely than can be explained by the standard model of inter temporal optimization (see, for example, Campbell and Mankiw 1989). 
+In this section we build non-Ricardian behavior into our model by assuming that households choose consumption in the first period in part as maximizers and in part as followers of a simple rule of thumb. 
+Such behavior can cause the timing of taxes to affect the economy’s equilibrium through consumption demand, and it opens new possibilities for optimal fiscal policy. 
+Formally, a share (1 - l) of each household’s consumption in a given period is determined by what a maximizing household above would choose, while a share l is set equal to a fraction r of current disposable income. 
+We denote these two components of consumption C t M for the maximizing share and C t R for the rule-of-thumb share, where C Y T t R t t = − () ρ , and a household’s total consumption is C C C t t M t R = − () +1 λ λ . 
+We choose a value for r that sets C t M = C t R before any shocks. 
+That is, the proportionality coefficient in the rule of thumb is assumed to have adjusted so that the level of consumption was initially optimal. But in response to a shock, households will continue to follow this rule of thumb, potentially causing consumption to deviate from the utility-maximizing level. 
+Adding rule-of-thumb behavior has minor implications for the conditions determining equilibrium. 
+The one equation directly affected by it is the household’s intertemporal Euler condition, where now only the maximizing component of consumption satisfies this condition. 
+As in the analysis of the Ricardian baseline model, we characterize optimal monetary and fiscal policy in a variety of settings after the economy has suffered an unexpected shock to future technology A 2 . 
+We assume that the budget was balanced (G 1 = T 1 ) before the shock. 
+The first result to note is that optimal fiscal policy is the same in the flexible-price scenario and in the fixed-price scenario with fully effective monetary policy. 
+In both cases output remains at the full-employment level. 
+This is similar to what we have seen previously. 
+However, in this non-Ricardian model, the optimal timing of optimal tax policy responds to the shock to A 2 . 
+To the extent that households follow the rule of thumb for consumption, they fail to reduce their first-period consumption appropriately in response to their lower wealth. 
+To set first-period consumption equal to its optimal value, the government should raise taxes T 1 . 
+Formally, the optimal fiscal policy is described by these equations: T A A A A 1 2 2 2 2 1 1 1 1 = + () +       +            θ θ β β σ σ  +()+             1 1 1 2 2 21 1 θ β σ A A A K G A A A A 1 2 2 2 2 1 1 1 1 =       +()+             θ β θ β σ σ AA K 1 1 . 
+The optimal budget balance would be T G A A A K 1 1 2 2 21 1 1 1 1 − = +             β σ . 
+In words, a decline in the economy’s wealth due to a reduction in future productivity should induce a budget surplus. 
+Just as the forward-looking consumers start saving more in response to new circumstances, the government also tightens its own belt by reducing spending to its flexible-price equilibrium level and setting taxes above that level, thereby increasing public saving as well. 
+Now consider the case in which prices are sticky and monetary policy is restricted to a conventional one of reducing the short-term interest rate. 
+If the shock to aggregate demand is sufficiently large, this monetary policy may be insufficient to restore the economy to full employment and the optimal allocation of resources. 
+In this case fiscal policy may play a valuable role in increasing aggregate demand. 
+The reduced-form solution for output as a function of policy is the following: Y G T A A A 1 1 1 2 2 2 1 1 1 1 1 1 = − − − + −       −λρ λρ λρ λρ β λρ σ (() +       − () + + −() G A A A T A 2 2 2 2 2 2 1 1 1 1 1 λρ β λρ λρ σ ββ λρ σ       − + () A M i P 2 2 1 1 1 1 . 
+Notice that if l > 0, the timing of taxes influences equilibrium output. 
+Moreover, the government purchases multiplier now exceeds unity. 
+What is particularly noteworthy is that the government spending and tax multipliers in this model (the coefficients on the first two terms) resemble those in the traditional Keynesian income-expenditure model, where lr takes the place of the marginal propensity to consume. 
+However, it is not possible to vary G 1 or T 1 without also changing some other fiscal variable to satisfy the government budget constraint. 
+One can show that optimal fiscal policy in this setting satisfies the following conditions: ′ () =′ () u C v G 1 1 ′ ( ) =′ ( ) v G A v G 1 2 2 β . 
+These conditions are two of the same classical principles that characterize fiscal policy in the baseline flexible-price equilibrium. 
+There is, however, an important exception: the intertemporal Euler equation for private consumption is no longer included in the conditions for the optimum. 
+The reason is that when the economy has idle resources, the real interest rate fails to appropriately reflect the price of current relative to future consumption. 
+Thus, optimal policy in this non-Ricardian setting induces households to consume more than they would on their own if they were intertemporally maximizing. 
+To get a better sense for these results, it is useful to compare the optimal allocation in this non-Ricardian sticky-price model with that in the corresponding Ricardian sticky-price model examined earlier. 
+We denote the current section’s model with the superscript “nonR.” One can show the following: C C 1 1 nonR sticky > C C 2 2 nonR sticky = I I 1 1 nonR sticky < G G 1 1 nonR sticky < G G 2 2 nonR sticky < Y Y 1 1 nonR sticky = Y Y 2 2 nonR sticky < . 
+These inequalities show that optimal fiscal policy in this non-Ricardian model can move the equilibrium allocations of consumption and government purchases closer to the baseline flexible-price optimum. 
+In particular, because the government here can use taxes to stimulate consumption demand, it relies less on increases in government purchases. 
+If we reintroduce the investment subsidy into the model, the results change even more dramatically. 
+In particular, fiscal policymakers now have sufficient tools to fully restore the flexible-price equilibrium. 
+The online appendix shows the proof, but the intuition is straightforward. 
+Because fiscal policy can influence consumption through the lump-sum tax, investment through the investment subsidy, and government purchases directly, it has complete control over the allocation of resources. 
+When A 2 falls, optimal policy in the first period calls for a decrease in government spending (because society is poorer), an increase in taxes (so that the non-Ricardian component of consumption responds appropriately to the lower permanent income), and an investment subsidy (to stimulate investment spending and aggregate demand). 
+Thus, sufficiently flexible fiscal policy can yield the first-best outcome even when monetary policy cannot. 
+IX. Some Tentative Policy Conclusions The goal of this paper has been to explore optimal monetary and fiscal policy for an economy experiencing a shortfall in aggregate demand. 
+The model we have used is in many ways conventional. It includes short-run sticky prices, long-run flexible prices, and intertemporal optimization and forward-looking behavior on the part of firms and households. 
+It is simple enough to be tractable yet rich enough to offer some useful guidelines for policymakers. 
+These guidelines are tentative because, after all, our model is only a model. 
+Yet with this caveat in mind, it will be useful to state the model’s conclusions as clearly and starkly as possible. 
+One unambiguous implication of the analysis is that whether and how any policy instrument is used depends on which other instruments are available. 
+To summarize the results, it is fair to say that there is a hierarchy of instruments for policymakers to take off the shelf when the economy has insufficient aggregate demand to maintain full employment of its productive resources. 
+The first level of the hierarchy applies when the zero lower bound on the short-term interest rate is not binding. 
+In this case, conventional monetary policy is sufficient to restore the economy to full employment. 
+That is, all that is needed is for the central bank to cut the short-term interest rate. 
+Fiscal policy should be set based on classical principles of cost-benefit analysis, rather than Keynesian principles of demand management. 
+Government consumption should be set to equate its marginal utility with the marginal utility of private consumption. 
+Government investment should be set to equate its marginal product with the marginal product of private investment. 
+The second level of the hierarchy applies when the short-term interest rate hits against the zero lower bound. 
+In this case, unconventional monetary policy becomes the next policy instrument to be used to restore full employment. 
+A reduction in long-term interest rates may be sufficient when a cut in the short-term interest rate is not. 
+And an increase in the long-term nominal anchor is, in this model, always sufficient to put the economy back on track. 
+This policy might be interpreted, for example, as the central bank targeting a higher level of nominal GDP growth. 
+With this monetary policy in place, fiscal policy remains classically determined. 
+The third level of the hierarchy is reached when monetary policy is severely constrained. 
+In particular, the short-term interest rate has hit the zero bound, and the central bank is unable to commit to future monetary policy actions. 
+In this case, fiscal policy may play a role. 
+The model, however, does not point toward conventional fiscal policy, such as cuts in taxes and increases in government spending, to prop up aggregate demand. 
+Rather, fiscal policy should aim at incentivizing interest-sensitive components of spending, such as investment. 
+In essence, optimal fiscal policy tries to do what monetary policy would if it could. 
+The fourth and final level of the hierarchy is reached when monetary policy is severely constrained and fiscal policymakers can rely on only a limited set of fiscal tools. 
+If targeted tax policy is for some reason unavailable, then policymakers may want to expand aggregate demand by increasing government spending, as well as cutting the overall level of taxation to encourage consumption. 
+In a sense, conventional fiscal policy is the demand management tool of last resort. 
+X. A Methodological Epilogue Economists rely on simple models to develop and hone their intuition about how the economy works. 
+When considering the role of fiscal policy for dealing with an economy in recession, the first thought of many economists is the famous income-expenditure model, also known as the “Keynesian cross,” which they learned as undergraduates. 
+With a minimum of algebra and geometry, the model shows how fiscal policy can increase aggregate demand and thereby close the gap between output and its potential. Indeed, some of the more sophisticated econometric models used for macroeconomic policy analysis are founded on the logic of this simple model. 
+The conventional application of these macroeconomic models for normative purposes, however, is hard to reconcile with more basic economic principles. 
+Ultimately, all policy should aim to improve some measure of welfare, such as the utility of the typical individual in society. 
+The output gap matters not in itself but rather because it must in some way be an input into welfare. 
+An often-cited aphorism of James Tobin’s (1977, p. 468) is that “it takes a heap of Harberger Triangles to fill an Okun Gap.” 11 The saying is invoked to suggest that when the economy is suffering from the effects of recession, microeconomic inefficiencies should become a lower priority than bringing the economy back to potential. This conclusion, however, may be too glib. 
+Policymakers have various tools at their disposal with which they can influence aggregate demand. 
+Which tools they use to bring the economy back to full employment can profoundly influence the level of welfare achieved. 
+That is, welfare is a function of both Okun’s gaps and Harberger triangles, and policymakers need to be mindful of this fact when they conduct demand management. 
+11. For economists under the age of 40, who may be less familiar with these archaic terms: a Harberger triangle is the area in a supply-and-demand diagram that measures the deadweight loss of a tax or other market distortion. 
+An Okun’s gap is the loss in output and employment that occurs when the economy falls below potential because of insufficient aggregate demand. 
+The policy guidelines we have derived in this paper are based on the standard tools of welfare economics. 
+Much debate over fiscal policy compares the policy alternatives using metrics that are quite different from a welfare measure. 
+In particular, the commonly used fiscal multiplier, or “bang for the buck,” which measures how much GDP rises for each dollar added to the budget deficit, is a potentially misleading guide to evaluating alternative policies. 
+The reason is that welfare depends not only on the level of output, but also on its composition among the various components of spending. 
+In other words, policymakers should aim to close the Okun’s gap not at the smallest budgetary cost but, instead, while creating the smallest Harberger triangles. 
+Finally, we remind the reader that our specific policy conclusions are based on a particularly simple model. 
+We have chosen this approach because simple models can clarify thinking more powerfully than complex ones. 
+Our model includes those elements that we believe are most crucial for the topic at hand. 
+But there is no doubt that many features of the real economy have been left out. 
+To be specific: We have not included financial frictions or problems of financial intermediation. 
+We have not incorporated any openeconomy features. 
+We have lump-sum rather than distortionary taxes. 
+We assume no uncertainty. 
+We incorporate sticky prices, but we do not take into account that firms’ price setting is staggered or that different sectors may have different degrees of price rigidity. 
+We have not formally modeled the political process that allows some policy tools to be used more easily than others. 
+Future work may well modify our framework and, in doing so, call some of our tentative conclusions into question. 
+We hope that the simple and transparent model presented here provides a useful starting point for those future investigations. 
+ACKNOWLEDGMENTS We are grateful to Olivier Blanchard, Gauti Eggertsson, Chris Sims, and the editors for comments. 
+Neither of us has any relevant potential conflicts of interest to report. 
+References Barro, Robert J., and Herschel I. Grossman. 
+1971. 
+“A General Disequilibrium Model of Income and Employment.” American Economic Review 61, no. 1: 82–93. 
+Blanchard, Olivier, Giovanni Dell’Ariccia, and Paolo Mauro. 
+2010. 
+“Rethinking Macroeconomic Policy.” IMF Staff Position Note 2010/03. 
+Washington: International Monetary Fund (February). 
+Campbell, John Y., and N. Gregory Mankiw. 
+1989. 
+“Consumption, Income, and Interest Rates: Reinterpreting the Time Series Evidence.” In NBER Macroeconomics Annual 1989, edited by Olivier J. Blanchard and Stanley Fischer. 
+MIT Press. 
+Christiano, Lawrence J., Martin Eichenbaum, and Charles L. Evans. 
+2005. 
+“Nominal Rigidities and the Dynamic Effects of a Shock to Monetary Policy.” Journal of Political Economy 113, no. 1: 1–45. 
+Correia, Isabel, Emmanuel Farhi, Juan Pablo Nicolini, and Pedro Teles. 
+2010. 
+“Unconventional Fiscal Policy at the Zero Bound.” Working Paper 16758. 
+Cambridge, Mass.: National Bureau of Economic Research. 
+Eggertsson, Gauti. 
+2010. 
+“The Paradox of Toil.” Staff Report no. 433. 
+New York: Federal Reserve Bank of New York. 
+Eggertsson, Gauti B., and Michael Woodford. 
+2003. 
+“The Zero Bound on Interest Rates and Optimal Monetary Policy.” BPEA, no. 1: 139–211. 
+Krugman, Paul R. 1998. 
+“It’s Baaack: Japan’s Slump and the Return of the Liquidity Trap.” BPEA, no. 2: 137–87. 
+Malinvaud, Edmond. 
+1977. 
+The Theory of Unemployment Reconsidered. 
+Oxford, United Kingdom: Basil Blackwell. 
+Smets, Frank, and Raf Wouters. 
+2003. 
+“An Estimated Dynamic Stochastic General Equilibrium Model of the Euro Area.” Journal of the European Economic Association 1, no. 5: 1123–75. 
+Tobin, James. 
+1977. 
+“How Dead Is Keynes?” Economic Inquiry 15, no. 4: 459–68. 
+Woodford, Michael. 
+2011. 
+“Simple Analytics of the Government Expenditure Multiplier.” American Economic Journal: Macroeconomics 3, no. 1: 1–35. 
+250 Comments and Discussion COMMENT BY OLIVIER BLANCHARD The recent crisis has made clear that it is time to revisit the role of fiscal policy as a potential macroeconomic stabilization tool. 
+In this context I like the intent of this paper by Gregory Mankiw and Matthew Weinzierl. 
+I also like their approach and their model. 
+One can learn a lot from simple, two-period models when they are intelligently conceived, and I have indeed learned a lot from this one. 
+Before I discuss their paper, however, let me accuse the authors of a crime of omission. 
+They should have referred to Paul Samuelson’s 1951 paper, “Principles and Rules in Modern Fiscal Policy: A Neo-Classical Reformulation.” Aside from the contrast between Samuelson’s inimitable style and the present paper’s use of equat ions, the two papers are eerily paral lel i n the ir approach , starting from first principles but doing so in a Keynesian environment. 
+The two pap ers differ in their conclusions, the source of this difference being Samuelson’s skepticism about monetary policy, which leaves a large role for fisca l policy, versus Manki w and Weinzierl’s optimism about monetary policy, which correspondingly reduces the role of fiscal policy. 
+Indeed, I see Mankiw and Weinzierl’s main contribution as the proposition that monetary policy is such a powerful weapon that there is little need for fiscal policy. 
+The paper raises a number of other questions, for example whether there are magic bullets against the liquidity trap. 
+But I shall leave those aside and focus on the “preeminence of monetary policy” proposition. 
+In their model the case is indeed a strong one. 
+As they themselves say, the question is then of how special their model is. Let me begin by defining three alternative output concepts. 
+The first is the actual level of output; the second the natural level of output, defined as that which would prevail given all existing distortions except nominal rigidities; the third is the optimal, or “welfare relevant,” level of output, defined as that which would be achieved were there no distortions. 
+(These definitions raise many issues and would have to be made more precise in any particular model. 
+But they will do for my purposes.) Given those definitions, let me now restate Mankiw and Weinzierl’s central proposition: if monetary policy can be used to attain both the natural level of output and its composition, and if the shocks to which policy is responding do not affect the gap between the natural and the optimal level of output, then there is no role for countercyclical fiscal policy. 
+In the authors’ benchmark model (and in the standard New Keynesian framework, where the only distortions are monopolistic competition and Calvo pricing), the above two conditions are met. 
+In response to a decline in animal spirits, maintaining output at the natural level requires a change in the interest rate, and this is what monetary policy is about. 
+And in their model t he natural and the o ptimal level of ou tput are the same, s o that maintaining output at the natural level is the right thing to do. Beyond the benchmark, however, how likely are these two conditions to be met? 
+What I shall do here is consider a few cases in which one or both conditions fail and then discuss whether this gives a role to fiscal policy. 
+My assertions should be taken as highly speculative; this is the privilege of being a discussant rather than an author. 
+Consider the first condition. 
+When can monetary policy be used to replicate the natural level of output as well as its composition? 
+Mankiw and Weinzierl consider one case in which it cannot, namely, when interest rates hit the zero bound and the central bank cannot commit to future policy. 
+But one can think of many other cases in which monetary policy cannot fully undo the effects of a shock. 
+Consider, for example, a financial shock in which half of the financial intermediation system fails. 
+Then monetary policy clearly cannot be used to eliminate the effects. 
+If it aims for the natural level of output, it will have to achieve it by having very high output in the sector that still has access to financial intermediation, to compensate for its impotence in the sector that does not. 
+Does this introduce a role for fiscal policy? 
+Across-the-board increases in spending or, if Ricardian equivalence fails, across-the-board decreases in taxes, can help but cannot fully solve the problem, as they are likely to affect both sectors equally. 
+There is, however, no reason to limit fiscal policy in this way. 
+The right policy, as in some of the authors’ examples, is targeted subsidies aimed at the ailing sector. 
+Now consider the second condition. 
+What about shocks that affect the gap between the natural and the optimal level of output? 
+Take, for example, an increase in the price of oil in the presence of real wage rigidities. 
+1 In this case the natural level of output falls: in the presence of real wage rigidities, the decrease in the real wage implied by the increase in the price of oil leads to a decrease in the natural level of employment, and thus a decrease in the natural level of output. 
+The optimal level of output may either decrease or remain constant, depending on the specifics of preferences and technology. 
+If it decreases, it decreases by less than the natural level. 
+Monetary policy can replicate the natural level of output. 
+But this is typically not optimal, as the natural level may now be far below the optimal level. 
+Optimal monetary policy in this case aims at achieving a level of output higher than the natural level, but it does so at the cost of higher inflation. 
+Does this give a role to fiscal policy? 
+Again, across-the-board increases in spending, or decreases in taxes, are unlikely to be very useful. 
+Like monetary policy, they will increase output, but at the cost of higher inflation as well. 
+However, just as in the previous example, targeted subsidies or cuts in taxes, aimed at reducing the decrease in the (after-tax) real wage, can potentially improve the outcome. 
+Admittedly, in the two examples I have outlined, fiscal policy has it too easy. 
+With a sufficiently large set of instruments, it can aim at the underlying distortions and, at least in principle, offset them. 
+But neither example offers a strong case for general increases in spending or decreases in taxes. 
+Can one think of more convincing examples? 
+A standard textbook argument for the use of both monetary and fiscal policy is that, combined in the right way, they can achieve both internal and external balance, returning both output and the current account balance to their natural level. 
+For example, if output is below its natural level and the current account shows a large surplus, the right combination of expansionary monetary and fiscal policy can increase output and reduce the surplus. 
+Does this textbook argument survive Mankiw and Weinzierl’s derivation from first principles? 
+This is less obvious than it might seem. 
+Take, for example, a shock that, as in the paper, takes the form of a decrease in expected future income, which leads to a decrease in output and, as imports decrease, a current account surplus. 
+In this case, just as in the authors’ benchmark model, monetary policy can do the job alone: a decrease in the interest rate can return output to its natural level; as it does, so will imports, and so will the current account balance. 
+There is no need for fiscal policy. 
+What this suggests is the need, if the textbook argument is to hold, 1. I use this example mainly because I am familiar with it from my work with Jordi Galí (Blanchard and Galí 2007). 
+to invoke more complex shocks, for example, one that leads to both an overall decrease in spending and an inefficient shift in demand away from domestic goods (that is, one not based on a shift in preferences). 
+Then monetary policy can address the overall decrease in spending, and government spending on domestic goods can address the inefficiency problem. 
+Can one think of convincing examples of such shocks? 
+I could not, but this may be for lack of imagination on my part. 
+Yet another frequently heard argument for the joint use of monetary and fiscal policy is the presence of instrument uncertainty: neither type of policy is a sure thing, so better to use both. 
+This argument is surely correct. 
+Under multiplicative uncertainty, however, it will still be the case that, for the reasons the authors give, monetary policy is the policy of choice. 
+But the greater the uncertainty about the effect of monetary policy, and the smaller the uncertainty about the effect of fiscal policy, the greater the role for fiscal policy. 
+The argument may also hold even under additive uncertainty, if the loss function is asymmetric or if the responses of the economy to policy are nonlinear. 
+This was clearly central in the thinking of policymakers in 2008 and 2009: to avoid what they perceived as a potentially catastrophic collapse of output, they decided to deploy all the weapons they had, not only using both monetary and fiscal policy but, within monetary policy, using many tools in conjunction. 
+Where does all this leave me? 
+In thinking through the examples, I was surprised that I could not make a stronger case for fiscal policy, and so my posterior on the Mankiw-Weinzierl proposition is stronger than my prior. 
+I would state my posterior this way: when, as I think is indeed the case, the main shocks behind economic fluctuations are shocks to animal spirits (whether or not they come from changes in expected productivity, or out of nowhere), then indeed monetary policy can go a long way toward offsetting the shock, and there may not be much use for conventional fiscal policy. 
+With respect to other shocks, monetary policy will typically not work as well. 
+But broad fiscal policy measures, be they across-the-board changes in spending or in taxes, may not do much better. 
+Fiscal policy may have a role, but typically through more narrowly targeted measures. 
+REFERENCES FOR THE BLANCHARD COMMENT Blanchard, Olivier, and Jordi Galí. 
+2007. 
+“Real Wage Rigidities and the New Keynesian Model.” Journal of Money, Credit and Banking 39, no. 1: 35–65. 
+Samuelson, Paul A. 1951. 
+“Principles and Rules in Modern Fiscal Policy: A NeoClassical Reformulation.” In Money, Trade, and Economic Growth. 
+New York: Macmillan. 
+COMMENT BY GAUTI B. EGGERTSSON I like this paper by Gregory Mankiw and Matthew Weinzierl, and not only for presenting a simple and elegant model that is easy to follow. 
+I also like the topic, which is optimal stabilization policy—in the classic “aggregate demand management” sense—using both monetary and fiscal policy instruments, with special consideration of what happens once the short-term nominal interest rate has fallen to zero. 
+This is certainly a topic close to my heart: the very first paper I wrote in my career as an economist (Eggertsson 2001) was on this topic and relates quite closely to some of the results presented here. 
+1 That paper was written within what has now become known as the standard New Keynesian framework. 
+Here I will contrast the results from that unpublished paper with those of this paper. 
+Although this may seem a somewhat self-indulgent distraction, I hope to show that this exercise provides some additional insights, not only by underlining the generali ty of the curre nt paper’s results, which I t hink extend much beyond the two-period model the authors propose, but also by highlighting some important limitations. 
+Although the authors touch on many issues, I will focus on their suggested four lines of defense against large shocks, which I summarize below. 
+To anticipate my conclusions: broadly speaking, I agree with the authors’ characterization. 
+What I will show is that the principles they lay out also generalize naturally to a standard New Keynesian framework, building on the earlier work cited above. 
+In the process I want to emphasize various nuances that may appear a little less ob vious in the authors’ two-period model. 
+What I take from these nuances is this: stabi lization policy can be very difficult when the shock is large enough to lower the short-term interest rate to zero. 
+I n fact, my se nse is that all fou r lines of de fense have been penetra ted in recent years in the United States, at the very least in the sense that the economy now looks far from its first- best state despite some recovery measures. 
+My takeaway is that a better understanding is needed of both the political and the economic constraints imposed on stabilization policy. 
+To summarize the paper: Mankiw and Weinzierl articulate four lines of defense available to a policymaker in response to a shock to demand, and they arrange these in what they call a hierarchy of policy alternatives. 
+The first line of defense is cutting the short-term nominal interest rate. 
+The fact that the short-term nominal interest rate cannot be negative brings the authors 1. Somewhat embarrassingly, I never got around to submitting that paper anywhere, so it remains unpublished. 
+to the second line of defense, which is to cut long-term interest rates. 
+If this path, too, is infeasible, then the authors suggest, as the third line of defense, variations in taxes to increase private spending. 
+Finally, if all else fails, the authors propose government spending as a stimulus of last resort. 
+Mankiw and Weinzierl sketch out the basic battle plan within the context of a two-period model with perfect competition but where prices have been exogenously fixed in the first period. 
+Before discussing the four lines of defense, I shall outline a simple alternative environment, where I want to put the results in context. 
+Consider an economy in which households live over an infinite horizon instead of only two periods. 
+Assume that firms in this economy employ the members of these households and produce differentiated goods, which are then sold to the households. 
+Finally, as the main twist in this environment, assume that prices are set at staggered intervals and that firms satisfy whatever demand prevails at these prices, thus bringing monetary nonneutrality into the model. 
+Whereas Mankiw and Weinzierl assume rigid prices in the first period and fully flexible prices in the second, I follow here the more recent New Keynesian tradition in assuming, as does Guillermo Calvo (1983), that each firm sets a price for its output that is fixed for a stochastic number of periods. 
+I will n ot go into the deta ils of the model here (see, for example, Eggertsson 2001) but instead summarize the model in its linearized-quadratic form. 
+Let p t denote inflation, ˆ Y t the deviation of output as a fraction of its steady state, ˆ G t the deviation of government spending from its steady state as a fraction of steady-state output, i t the logarithm of 1 plus the short-term nominal interest rate, E t an expectations operator, and r e t an exogenous disturbance term. 
+The model can be summarized by the following two linear equations (the first from the household’s optimal consumption decision and the second from the firm’s pricing decision) and the zero bound on the short-term nominal interest rate: ( ) ˆ ˆˆ ˆ 1 1 1 1 Y Y i r G G t t t t t t t e t t t = − − − ( ) + − + + + E E Eσ π ( ) ˆ ˆ 2 1 π κ δκ β π t t t t t Y G= − + + E ( ) ,3 0i ≥ where the coefficients b and d are between 0 and 1 and the coefficients k and s are positive. 
+Altho ugh I will not go into th e d etails of t he underlying microfoundations , I do want to hi ghlight the underlying utility function of the representa tive household, and especia lly a second-order approximation of it. This will be helpful for understanding the results and deriving optimal polic y. The househ old’s utility is E t t t t t t t u C w G v h i diβ ψ = ∞ ∑ ∫ ( )−( )−( )( )       0 0 1 , where C t is private consumption (a Dixit-Stiglitz aggregator of differentiated goods), G t is public consumption, h t (i) is hours worked, b is a discount factor, and y t is a shock that leads to variations in r e t (all functions satisfy standard properties). 
+Eggertsson (2001) shows that a second-order expansion of this utility function gives 2 ( ) ˆˆ ,4 0 2 2 2 − + +    = ∞ ∑ E t t t t y t G t Y Gβ π λ λ where the coefficients l y and l G are greater than zero. 
+Without further ado, let me now move to the first line of defense in the presence of a large adverse shock. 
+THE FIRST LINE OF DEFENSE: CUTTING SHORT-TERM INTEREST RATES. 
+Consider the response of the government to a negative shock, r e t < - r (where - r is the steady-state value for r e t ), which for simplicity is assumed to be independent and identically distributed (i.i.d.). 
+One could interpret this exogenous disturbance term as the real interest rate in the first-best equilibrium (but with G ˆ t = 0, price rigidities can cause the equilibrium to move away from the first-best state). 
+For simplicity, hold the future fixed at steady state so that E t p t+1 = E t ˆ Y t+1 = 0. If the interest rate is held constant, this negative shock reduces ˆ Y t by equation 1 and triggers deflation by equation 2. A quick review of equations 1 through 3 suggests, however, that the shock can be offset by cutting the nominal interest rate one for one; that is, i t = r e t . 
+Given this response, and moving to ˆ G t , the objective (expression 4) can then be maximized simply by setting ˆ G t = 0. In other words, the first line of defense should be one-for-one interest rate cuts to offset the shock, with government spending set at its optimal steady-state level (determined 2. For simplicity I expand the model around a first-best steady state. 
+To achieve this steady state, one needs to achieve the first best by introducing subsidies that do away with monopoly distortions of the goods-producing firms. 
+by the steady relationship - u c = - w G ; that is, fiscal policy is set according to what Mankiw and Weinzierl call “classical principles,” where the marginal utility of public spending is equated to the marginal utility of private spending). 
+By setting the instruments in this way, the government achieves the first-best allocation where ˆ G t = Y ˆ t = p t = 0. Some special conditions are required for this result to hold. 
+But I think the gist of it is correct and that it applies quite broadly. 
+3 It seems rather natural to me to respond to temporary variations in the “efficient rate of interest” by varying the nominal interest rate, rather than by changing the size of the government over the business cycle. 
+In the model above, this result holds for a variety of shocks, be they shocks to preferences or productivity shocks. 
+It is also irrelevant here that r e t was assumed to be i.i.d. in the example above; the result extends to a general stochastic process for r e t . 
+Clearly, however, the first line of defense fails when the shock is large enough so that r e t < 0, as this would violate the zero bound on the short-term nominal interest rate. 
+THE SECOND LINE OF DEFENSE: CUTTING LONG-TERM INTEREST RATES. 
+Although the first line of defense is identical in the standard New Keynesian model and in the current paper, some differences start to emerge when the second line of defense is considered, and this is one reason why it is worth contrasting these two models. 
+Mankiw and Weinzierl argue that once the zero bound on the short-term interest rate is binding, the natural thing to do next is to reduce long-term rates in both models. 
+As stressed in Eggertsson and Michael Woodford (2003), this policy is identical to making a commitment about lowering future short-term rates, since long-term rates in the model are equal to the average of current and future short-term rates. 
+Within the context of the model the authors present, there is no reason to doubt that the government can—and should—do this. 
+In the New Keynesian model, however, the limitations of this approach become a bit clearer. 
+Why? 
+Because there is an inherent credibility problem with the government committing to low future short-term rates in the model above. 
+This credibility problem results from the fact that prices are set at staggered intervals, as opposed to just once, one period in advance, as in Mankiw and Weinzierl’s paper, and this implies that the welfare function (expression 4) penalizes actual inflation. 
+Consider a policy that maximizes the objective in expression 4 subject to the constraints laid out in equations 1 through 3. Consider now a shock 3. Most importantly here, I have assumed steady-state subsidies that do away with the distort ions ass ociated with mon opoly. 
+I f those were kept in place, we would be in the wor ld of second-bes t, with an inefficient steady state, and the logic would be a bit more com plicated. 
+r e t = r e L < 0 in period 0 that reverts to a steady state of r e t = - r > 0 with probability µ in every period. 
+This is the problem studied in Eggertsson (2001) and in Eggertsson and Woodford (2003). 
+My figure 1 illustrates the optimal commitment by showing the behavior of the endogenous variables for one particular realization of r e t , namely, when it reverts to steady state in period 15, taken from Eggertsson and Woodford (2003). 
+As can be seen, the optimal commitment in the New Keynesian model is to commit to a future output boom and inflation once the shock is over, in order to reduce the output contraction and deflation at the time of the shock. 
+The central bank achieves this, as can be seen in the top panel, by committing to keeping the short-term nominal interest rate at zero for several periods after the economy has reverted to steady state. 
+If the government is a discretionary policymaker, however, this is not credible. 
+Why? 
+Simply because the government has an incentive to renege on its promise to allow inflation and an output boom once the shock is over. 
+At that time it can achieve zero inflation and a zero output gap going forward, and thus achieve the first-best state from that time on, whereas the commitment equilibrium implies a welfare loss at that time (which the government is willing to incur in order to get a better outcome while trapped). 
+The dashed line in figure 1 shows the optimal policy under discretion, where the government is unable to make any commitments about future nominal short-term rates, and as the figure reveals, this outcome is highly suboptimal. When I first studied this credibility problem as a graduate student, I liked to refer to it as an application of “the fable of the fox and the lion.” A lion falls into a deep trap and cannot get out. 
+A fox passes by, and the lion promises the fox that it will hunt any other animal in the forest and give it to the fox for dinner, if the fox will help it out of the trap. 
+The fox, however, understands that once it has saved the lion, the lion has no incentive to fulfill its promise and instead, being quite hungry after sitting for so long in the trap, will eat the fox for dinner. 
+The result, then, is that the fox walks on its merry way, while the lion starves to death, unable to credibly commit to the future action that would save it. In this example, as with the central bank in the liquidity trap, the problem is attenuated by the fact that getting oneself in a trap is a relatively rare event, so that it is difficult to establish a reputation for dealing with it as promised. 
+Moreover, the solution involves promi sing things in the future that are not co nsistent with how the lion (or the central bank) has behaved in the past, and at the time the promise is made, no particular action is required, only words. 
+In summary, the New Keynesian model confirms the second line of defense proposed by Mankiw and Weinzierl but adds the wrinkle that it Figure 1. Optimal Monetary Policy under Commitment and under Discretion in the New Keynesian Model Percent per year Periods Periods Periods Monetary commitment Monetary discretion 5 10 15 20 25 5 10 15 20 25 Inflation Percent per year Short-term nominal interest rate Percent deviation from steady state Output 4 5 2 3 1 0 –2 2 4 –4 –6 –8 5 10 15 20 25 0 –5 –10 Source: Eggertsson and Woodford (2003), p. 180. 
+involves a relatively serious credibility problem for policymakers. 
+This leads to the third line of defense. 
+THE THIRD LINE OF DEFENSE: CHANGING SPENDING INCENTIVES THROUGH TAXES. 
+The third line of defense is to use tax incentives to increase private spending. 
+The authors here mostly discuss how tax changes can affect private investment. 
+It might be useful to clarify this logic within the context of the framework presented above, where I have in fact abstracted from investment altogether. 
+In principle, there is nothing special here about investment. 
+The problem in a liquidity trap is a collapse in private spending, and thus any component of spending—investment or consumption— can in principle be increased to offset it. Let us add to the model above a tax on consumption t c (which is levied exclusive of the posted sticky price) and a tax on labor t w . 
+In this case equations 1 and 2 become ( ) ˆ ˆˆ ˆ 5 1 1 Y Y i r t t t t t t t e t t c t = − − − ( ) − − + + E E E Eσ π τ τ tt c + ( ) 1 ( ) ˆ 6 π κ βE π t tt Y= + ˆ ˆ 1 κ τ τ t t c t w + + ( ) + Interestingly, as discussed in Eggertsson and Woodford (2006), this extension does not change the second-order approximation of utility in expression 4. What this extension shows is that the first-best solution can now be implemented by cutting sales taxes in response to the shock, while simultaneously increasing labor taxes. 
+In pa rticular, as pointed out by Eggertsson and Woodford (2006), if the tax instruments above are available to the government, the first-best equilibrium can be replicated by setting taxes as follows: ˆ.τ t s t T e T t r r= − [ ] = ∞ ∑ E ˆ ˆ τ τ t w t s = − The intuition for this result is simple. 
+The problem once the zero bound is binding is that there is not enough private spending. 
+It is exactly for that reason that nominal interest rate cuts are helpful: they make spending today cheaper relative to spending tomorrow. 
+When interest rate cuts are no longer feasible, the incentive to spend today rather than in the future can instead be created by reducing the sales tax. 
+This, however, has an additional effect: it gives people the incentive to work more today, thus triggering deflationary pressures by reducing real wages and so reducing the marginal costs faced by firms. 
+It is to offset this deflationary effect that an increase in labor taxes is also called for: this works in an inflationary direction, thus replicating the first-best state. 
+As a side benefit, the policy is deficit neutral. The result that Mankiw and Weinzierl derive is similar to this one, except that they focus on how the government can affect another component of private spending, namely, investment. 
+4 The first point I want to emphasize in this context is that using tax incentives in this way is perfectly consistent with old-style Keynesian economics: it was, for example, a theme in an early Brookings Paper by Franco Modigliani and Charles Steindel (1977). 
+In this respect there is nothing unconventional about this policy. 
+Ta x incentives here w ork mainly by increasing aggregate spending. 
+The more substantive issue, I suspect, is that some important limitations on variations in taxes are likely to make this third line of defense insufficient. 
+With respect to the simple example from Eggertsson and Woodford (2006), for example, the political and physical constraints are somewhat obvious in the U.S. context. 
+Sales taxes are levied at the state level, and hence a coordinated temporary cut would be challenging. 
+Moreover, as a practical matter, there may also be a zero bound on sales taxes: it is difficult to imagine a negative sales tax (that is, a subsidy on consumption goods), since people could then profit from buying and selling the same items over and over. 
+Are there any limits on investment tax credits as a solution to an economy-wide demand contraction? 
+My conjecture is that the answer is yes. 
+To start with, these credits are most commonly implemented by allowing firms to deduct investment expenditures from taxes paid on profits. 
+In a deep recession, however, profits may be low or nonexistent, thus blunting the impact of the credit. 
+In theory, of course, one can imagine many ways to get around this, but as a practical matter it may not be so simple. 
+Moreover, investment spending is usually financed with money borrowed from banks. 
+The collapse in investment during a crisis is usually due in part to the fact that the interest rate at which firms can borrow becomes very high, even if the risk-free interest rate falls to zero. 
+This increase in spreads may be prohibitively large, because of both default risk and a liquidity premium, and thus even a very aggressive tax credit may not stimulate investment enough to stabilize the economy. 
+Yet another limitation of investment tax credits is worth mentioning. 
+In the authors’ model, the economy is depressed in the first period but is assumed to return to full employment in the second. 
+Investment in the first 4. Correia and others (2011) show how the result above extends to the fully nonlinear model and how it applies once investment is introduced in the model. 
+period is then useful in the second period, when the economy is operating at capacity. 
+In a depression, however, the investment decisions facing firms may be quite different from those in normal times. 
+In particular, one can imagine that in many cases the firms making the investments anticipate that the recession will still be in full swing by the time the invested capital can be used for production. 
+In an economy that is expected to be operating below capacity for some time, then, it might be difficult to give firms strong enough incentives to invest. 5 To sum up, it seems far from clear at the moment that the U.S. tax system is flexible enough to eliminate a large contraction in demand. 
+This leads to the fourth and last line of defense. 
+THE FOURTH LINE OF DEFENSE: GOVERNMENT SPENDING. 
+In discussing this last line of defense, rather than study isolated experiments, it might be interesting to explain what the fully optimal government spending profile looks like when no other fiscal instruments are available for stabilization apart from the nominal interest rate (hence taxes are lump sum). 
+I find this helpful to give further insight into how this policy might work in this class of models. 
+I think it also clarifies some important advantages of fiscal policy over monetary policy, in that it is less subject to the dynamic inconsistency problem illustrated in the fable about the fox and the lion. 
+The optimal fiscal policy under commitment can be found by maximizing expression 4 subject to equations 1 through 3. This gives rise to the following first-order conditions: ( )7 0 2 2 1 1 1 π ψ ψ β σψ t t t t + − − = − − ( ) ^ 8 0 1 1 1 1 2 λ ψ β ψ κψ Y t t t t Y + − − = − − ( ) ^ 9 0 1 1 1 1 2 λ ψ β ψ ψ δκ G t t t t G − + − = − − ( ) , , ,10 0 0 0 1 1 ψ ψ t t t i i≥ ≥ = where y 1 and y 2 are the Lagrange multipliers associated with each constraint as in Eggertsson and Woodford (2003), and the last set of conditions are the complementary slackness conditions. 
+This is a natural generalization of that paper, extended to include government spending, but spending is determined by the first-order condition in equation 9. 5. Eggertsson (2011) studies the effect of investment credits in an economy where the zero bound is binding for several periods. 
+The result suggests that, despite the possibility of multiple-period recessions, this policy can still be quite effective at increasing demand. 
+Figure 2 shows the optimal commitment when the government can use both interest rates and government spending to stabilize output in response to a negative shock r e L < 0 that reverts to steady state with 10 percent probability in each period. 
+The figure shows the contingency in the case where the shock reverts to steady state in period 15. The calibration is the same as in Eggertsson and Woodford (2003), except that it allows for government spending corresponding to 20 percent of output in steady state. 
+6 Figure 2. Optimal Monetary and Fiscal Policy under Commitment Compared with Use of Monetary Policy Only 6. Here k = 0.02, s = 0.5, b = 0.99, r e L = -0.02/4, d = 2/3, µ = 0.1, l Y = 0.0025, l G = 0.000329, and G – /Y – = 0.2. 
+Source: Author’s model described in the text. 
+Periods With fiscal policy Without fiscal policy 5 10 15 20 25 Percent per year Short-term nominal interest rate 4 5 6 7 2 3 1 Periods 5 10 15 20 25 Percent per year Inflation 0.4 0.5 0.2 0.3 0.1 –0.1 0 Periods 5 10 15 20 25 Percent deviation from steady state Output 1 2 0 Periods 5 10 15 20 25 Percent deviation from steady state Government spending as fraction of steady-state output 0 1 –1 –2 As the figure reveals, optimal government spending policy in this case is to not only increase spending during the period of the shock, but also to commit to contracting spending once the economy has recovered. 
+The intuition for this result is as follows. 
+As equation 1 shows, demand can be increased either by increasing government consumption today or by committing to reduce the size of the government in the future. 
+The increase in government spending today increases aggregate demand today directly through the aggregate resource constraint (Y = C + G). The commitment to reduce the size of the government in the future, however, works somewhat differently. 
+It stimulates aggregate spending today by stimulating private consumption today. 
+Why does cutting future government spending increase consumption today? 
+Because the anticipation of a smaller government in the future leaves more room for private consumption in the future; that is, it increases future income and consumption. 
+This, in turn, works to increase current consumption, as consumers try to smooth consumption over time, and the higher future income and consumption thus stimulate current consumption according to the consumption Euler equation. 
+The figure suggests, perhaps somewhat surprisingly, that this second effect is the more important of the two under the optimal commitment in this numerical example. 
+7 Committing to a smalle r governm ent in the future once the shocks have sub sided suffers from th e same problem as the optimal monet ary commitment: it is n ot cred ible. 
+T he gove rnment has an incentive to promise a f uture retrenchm ent and then renege on the promise, se tting the size of govern ment at its first-best level as soon as the adverse shock has subsided. 
+This is shown in figure 3, whi ch illustrates the optimal polic y und er discr etion. 
+As the figure reveals, as soon as the shock is over, the government will keep spending at its steady-state optimal level. 
+Meanwhile, gove rnment spending is not subject to any zero bound during the period of the shock . 
+This mak es all the difference. 
+We see that because of this, go vernment spen ding increases quite dramatically , thus eliminating the disastrous ou tcome that o ccurs if the government uses monetary po licy alon e. The gove rnment increases its spending by about 6 percen t and as a result el iminates the drop in output (which was about 14 percent), sug gesting a “multiplier” of more than 2: every dollar 7. There is a bit of a difference between the standard New Keynesian model and Mankiw and Weinzierl’s paper here, as in their case a permanent increase in government spending is also expansionary. 
+I will not dwell on this difference since I suspect it is a relatively special feature of their model, which has only capital as a factor of production. 
+spent in the recessionary st ate creates more than 2 dollars of output in that state. 
+CONCLUSION. 
+The way I think of multipliers is as a comparative statistic. 
+A multiplier indicates what happens to y if x is increased, holding everything else constant. 
+This can make sense only within the context of specific examples where such comparisons are meaningful. 
+The authors argue that those statistics can be misleading if one wants to make welfare comparisons. 
+A policy with a low multiplier is not necessarily better than one with a high multiplier. 
+This is certainly correct, as Mankiw and Weinzierl’s numerical examples illustrate. 
+Nevertheless, I think the best that policy Figure 3. Optimal Monetary and Fiscal Policy under Discretion Compared with Use of Monetary Policy Only Source: Author’s model described in the text. 
+Periods With fiscal policy Without fiscal policy 5 10 15 20 25 Percent per year Short-term nominal interest rate 4 5 6 2 3 1 Periods 5 10 15 20 25 Percent per year Inflation 5 –5 0 Periods 5 10 15 20 25 –5 0 –10 Periods 5 10 15 20 25 6 4 2 Percent deviation from steady state Output Percent deviation from steady state Government spending as fraction of steady-state output can do at the moment is, first, to identify clearly what the problem is, and second, to identify in broad-brush terms what can be done about it. With respect to certain policies, I think the best one can do at the moment is to simply identify the basic directions of their effects. 
+Does increasing government spending in the short run help? 
+What about increasing government spending in the long run? 
+What about a variety of tax cuts? 
+What should be the role of a balanced budget in the short, medium, and long run? 
+Unfortunately, I think the economy is still so far from its first-best state, and our understanding of policy is so weak, that we need to be content with finding these basic signs. 
+And here I think multipliers can be helpful summary statistics that can get quite close to the heart of the matter. 
+After all, as the authors (citing Arthur Okun) remind us, it takes a lot of Harberger triangles to fill an Okun’s gap. 
+My overall impression about the policy debate during this episode is that it has not been so much about whether to use tax credits or government spending to increase demand, or whether committing to some degree of inflation would have helped. 
+Instead, it seems to me, the debate has been about whether “aggregate demand management” is a useful concept in the first place. 
+Hence, perhaps the debate has not been as focused as it should have been on how exactly aggregate demand should be increased. 
+This paper is a step in that direction, and I think it is the right step. 
+At this stage, I think it is of considerable value to illuminate the basic forces at work. 
+Much remains to be learned about the details of the tax code before we can claim to fully understand demand management. 
+REFERENCES FOR THE EGGERTSSON COMMENT Calvo, Guillermo A. 1983. 
+“Staggered Prices in a Utility-Maximizing Framework.” Journal of Monetary Economics 12, no. 3: 383–98. 
+Eggertsson, G auti. 
+2001. 
+“Real Governme nt Spending in a Liquidity Trap.” Princet on University. 
+www.ne wyorkfed.org/research/economists/egger tsson/ JMP2.pdf. ———. 
+2011. 
+“What Fiscal Policy is Effective at Zero Interest Rates?” In NBER Macroeconomic Annual. MIT Press. 
+Eggertsson, Gauti B., and Michael Woodford. 
+2003. 
+“The Zero Bound on Interest Rates and Optimal Monetary Policy.” BPEA, no. 1: 139–211. 
+———. 
+2006. 
+“Optimal Monetary and Fiscal Policy in a Liquidity Trap.” In NBER International Seminar on Macroeconomics 2004, edited by Richard H. Clarida, Jeffrey Frankel, Francesco Giavazzi, and Kenneth D. West. MIT Press. 
+Modigliani, Franco, and Charles Steindel. 
+1977. 
+“Is a Tax Rebate an Effective Tool for Stabilization Policy?” BPEA, no. 1: 175–203. 
+GENERAL DISCUSSION David Romer applauded the authors for approaching countercyclical policy in terms of its welfare implications, and for tailoring their model to the question at hand rather than bringing in a lot of superfluous apparatus. 
+In his view a question was whether the authors’ results were merely illustrative, showing what happens under a particular set of assumptions, or robust across a wide range of scenarios. 
+The test was whether one could come up with a realistic scenario in which conventional fiscal policy would rank higher on the list of policy options. 
+In one possible scenario, not far removed from actual recent events, the adverse shock stems from a general realization that the housing stock has been overbuilt. 
+In such a scenario one would want to apply fiscal stimulus, in the form of increased government consumption and investment, to encourage the production of goods and services other than housing. 
+The authors’ model, however, assumed perfect substitutability between government and private capital, which seemed to Romer the wrong way to proceed. 
+Romer also argued that it was wrong to characterize, as the paper implicitly did, the recent fiscal stimulus as $800 billion of government consumption spending. 
+Christopher Sims described the authors’ model as one that combines a government budget constraint with a simple fiscal equation in which all taxes are lump sum. 
+That enforces the connection between monetary and fiscal policy. 
+Thus, the monetary policy actions analyzed in the paper could equally well be described as a sequence of choices of the level of revenue, with accounting identities then forcing corresponding movements in the money supply and investment. 
+A conventional assumption, Sims noted, is that the monetary authorities have a commitment technology that enables them to choose a course of action and stick to it, and then fiscal policy can be described as instantly and automatically adjusting the lump-sum tax to validate the chosen time path of monetary policy. 
+But one could flip that model around to make fiscal policy unpredictable and difficult to reverse and monetary policy changeable and to some extent rational. One can then ask what happens under the further assumption that, in the end, monetary policy has to do whatever is necessary to be consistent with fiscal policy. 
+It turns out that the optimal policy, at least in simpler versions of the model, is to cut taxes in the first period, forcing the monetary authorities to lower interest rates, thus increasing employment. 
+Martin Baily congratulated the authors for the paper’s remarkably clear exposition but suggested that its very clarity made some apparent idiosyncrasies of its model stand out all the more. 
+First, the model has no financial sector, and as such does not capture the situation as of the spring of 2008, when the financial sector essentially froze up. The idea that in such a situation an investment tax credit would have turned investment around, or that lowering interest rates would have turned consumption around, seemed to Baily fanciful. 
+Another idiosyncrasy, Baily continued, was the paper’s use of an extremely simple quantity equation. 
+Baily felt that such a simple equation made it almost impossible to do any interesting macroeconomics, because it omitted most of what matters. 
+Laurence Ball added that in his view the implication of the paper’s quantity equation—that a larger money supply automatically led to higher nominal spending, without any invocation of an interest rate or other channel—was theoretically arbitrary and not supported empirically. 
+As he saw it, the burden of proof was on the authors to show that such a linkage exists, rather than on others to cite counterexamples. 
+John Haltiwanger followed up on Olivier Blanchard’s distinction between the natural level of output and the optimal, distortion-free level of output. 
+A key theme in international comparative studies that he and others had been pursuing was that various types of misallocation of resources account for many of the differences observed across countries. 
+In a healthy advanced economy like the United States, there is less misallocation because the economy is constantly reinventing itself through creative destruction. 
+Recently, however, the wheels have come off this process, Haltiwanger argued: the massive destruction caused by the financial crisis has not been followed by a wave of creative investment. 
+Instead, uncertainty about what was coming next led businesses and investors to move to the sidelines. 
+That uncertainty arose precisely because a serious misallocation had occurred, and it was unclear what policy could or would do to rectify the situation. 
+In such a case, Haltiwanger continued, one opt ion is to do what Blanchard had suggested, that is, a bit of everything, fiscal and monetary. 
+But Haltiwanger fear ed that such an ap proach might ac tually worsen allocative distortions, just as the easy money policy after the 2001 recession had led to a misallocation of investment toward certain kinds of activity— housing in particular—thus sowing the seeds for the problems that exploded so spectacularly a few years later. 
+Michael Woodford was sympathetic with most of the paper but was uncomfortable with its treatment of the so-called second line of defense. 
+The paper left the impression that the Federal Reserve was perfectly willing, if necessary, to go beyond conventional interest rate policy and promise future policies that would deliver inflation, but in the recent crisis the Fed had in fact stated explicitly that it would not tolerate even a temporary rise in inflation above its normal target. 
+By omitting to take into account the political constraints on the Federal Reserve, the paper made it appear plausible that fiscal policy—specifically, increased government purchases—need not be part of the response. 
+A further constraint on the effectiveness of this second line of defense was the question of whether the public could be induced to believe in the central bank’s commitment to using it. Phillip Swagel commented on one practical difficulty with an investment tax credit, namely, that like other business tax credits, it would presumably not be made refundable. 
+Consequently, only profitable firms could use the credit, and because many firms are not profitable in a recession, the effect of the credit would be blunted. 
+The same held for policies that allowed immediate expensing of capital investment. 
+Swagel recalled that these issues had come up at the Treasury when the administration was trying to design what became the stimulus package of early 2008. 
+Large-scale spending initiatives were viewed as likely to be wasteful, and increased expensing was expected to have a modest impact, for the reason already given. 
+So the decision was made to give tax rebates, whose impact is still being debated. 
+The idea of having the Treasury buy mortgage-backed securities from the government-sponsored enterprises in order to lower mortgage interest rates was also considered in the fall of 2008; this was permitted under the Housing and Economic Recovery Act passed in the summer of 2008. 
+In the end, this was done instead by the Federal Reserve. 
+Justin Wolfers pointed out that the authors’ model was very much in the spirit of Robert Lucas’s 2003 American Economic Association presidential address, which argued that the welfare effects of business cycles are clearly second-order phenomena. 
+To Wolfers that seemed to make the model an odd choice for an analysis of how to offset business cycles. 
+In addition, the paper’s argument against active fiscal policy was not that it is incapable of closing an Okun’s gap, the gap between actual and potential output, but that in doing so it creates Harberger triangles, that is, deadweight losses from the distortions caused by government intervention. 
+If macroeconomists are right that Harberger triangles are generally small relative to an Okun’s gap, that seemed to undermine the authors’ objection. 
+Finally, Wolfers argued that the reason that monetary policy in the model does not also produce Harberger triangles is that the model has only one consumption good. 
+If instead it had two consumption goods, one with sticky prices and one with flexible prices, then monetary policy, too, would create Harberger triangles, and the question would become whether monetary or fiscal policy created the larger ones, and the answer to that is not obvious. 
+The discussion of alternative macroeconomic stabilization tools on the fiscal side reminded Steven Davis of Singapore’s Central Provident Fund, a large, government-run mandatory saving program to which workers and their employers each contribute up to 20 percent of the worker’s earnings. 
+From time to time, in response to adverse shocks, Singapore has adjusted these rates sharply downward. 
+Thus, although these contributions are not, strictly speaking, taxes, they can be seen as an instrument of fiscal policy, helpi ng alle viate liquidity constraints for both workers and businesses during downturns, and so resemble the more targeted kind of fiscal policy alternatives that Blanchard had discussed. 
+Davis noted that some U.S. federal programs do this kind of targeting to some extent: unemployment insurance, for example, helps the financially constrained families of unemployed workers smooth their consumption. 
+If one believes that fiscal policy should do more such targeting, one potentially effective way might to be to redesign the unemployment insurance system so that it also offers loans at subsidized interest rates to those eligible. 
+Robert Gordon, observing that the discussion had so far focused on demand shocks, sought to introduce some symmetry by raising the issue of adverse supply shocks in a world with either nominal or real wage rigidity. 
+The kind of supply shock most familiar to Americans is an oil price shock, which, Gordon noted, happened to approximate the kind of two-good model that Wolfers had mentioned, in which one good (oil) has freely flexible prices while the other (labor) has a sticky price. 
+Such a shock can present monetary policy with a dilemma that has nothing to do with the zero lower bound on interest rates. 
+The central bank must in that case choose some combination of a decline in output below potential and higher inflation, and even then, if cost-of-living escalators are prevalent, it cannot accommodate inflation and must instead adopt the corner solution of letting the Okun gap widen. 
+If, Gordon continued, there were already a high energy tax in place, as in many European countries today, and if the oil price shock were not too large, then an alternative, targeted fiscal policy might be to lower the energy tax to offset the rise in the oil price. 
+The question then would become how to pay for that tax cut so as to maintain budget neutrality, and the answer presumably would be some kind of broad-based lump-sum tax or increase in the income tax. 
+An additional, complementary policy when cost-of-living escalators are a problem is simply to prohibit them. 
+Citing other recent work by Blanchard that sought to explain why recent oil shocks have caused so much less economic damage than those of the 1970s, Gordon suggested that part of the answer was that cost-of-living provisions are less pervasive today than they were then. 
+Donald Kohn followed up on Martin Baily’s observation that the authors’ model contained no financial sector. 
+It seemed to him that such a model might be useful in analyzin g the recession that had followed t he dot-com crash but would likely not be so useful in understanding the 2007–09 recession. 
+In particular, because the model lumps together government and private consumption in a single consumption measure, it might not accurately portray an economy in which financial constraints bind differently on households than on the government. 
+Introducing a financial sector might not change the authors’ ranking of policy options, but some sense of how financial markets fit in would surely be useful. 
+Kohn also wondered how, if the authors’ ranking was correct, one might justify the countercyclical measures that, as Swagel had noted, the administration had introduced in the spring of 2008, when interest rates were still above zero. 
+One possible justification was the one that Blanchard had mentioned, that the uncertainties facing policymakers argued for trying a bit of everything. 
+But another was the differences in lags between monetary and fiscal policy. 
+If a piece of stimulus legislation can be pushed through Congress quickly, its effects might be felt sooner than those of a change in the federal funds rate. 
+Another challenge with monetary policy, Kohn noted, was the difficulty of communicating a commitment to keeping a future interest rate when that action is by nature conditional. When there is widespread uncertainty about where the economy is headed and what will need to be done down the road, such a commitment may need to be broken. 
+Undoing any premature commitment could be very hard. 
+Finally, Kohn addressed the idea that, during a severe downturn, the central bank should commit to higher inflation. 
+He felt that such a strategy made less sense in the real world than in economists’ models. 
+In the models, expectations are formed rationally, and when the central bank makes and announces a commitment, the commitment is believed. 
+In fact, little is really known about how inflation expectations are formed or what the costs are of letting expectations become unanchored. 
+Benjamin Friedman suggested that the authors state more specifically what kind of investment they would favor if it did prove necessary to resort to countercyclical fiscal policy. 
+Since much investment is by households, would they approve of tax subsidies to buy automobiles? 
+Or subsidies for home ownership beyond those already in the tax code? 
+Friedman also asked the authors to specify whether the variable M in their equ ations represented deposits or reserves. 
+The pape r in dicated that M is money held by households, that is, deposits, but the ab ility to use unconventional monetary policy dep ended on the model’s prop osition that, in the second period, the central bank can set M at whatever level it chooses. 
+If M is deposits, that implies that the central bank can somehow induce banks to lend, because that, after all, is how deposits are created. 
+So the model seemed to beg the question of whether unconventional monetary policy can work: if the central bank is assumed to be able to make banks lend, then it is not surprising that unconventional policy works. 
+But that is an assumption, not the conclusion of any analysis; to “conclude” from the model that unconventional monetary policy is effective is at best misleading. 
+Friedman suspected that introducing even a very simple banking system into the model would clarify the matter—and would lead to unconventional monetary policy emerging far less powerful than the authors claimed. 
+Eric Swanson cited the authors’ statement, early in the paper, that labor could be added to the model in various ways but would not substantially affect the model’s equations, and he pointed out that, in contrast, how labor is in troduced wou ld affect the welfare implications. 
+He noted that the authors’ simple model implied that more unemployment was actually welfare enhancing, holding consumption fixed, which raises important issues about the usefulness of the authors’ welfare criterion. 
+Indeed, traditional measures of “bang for the buck” might still be preferable. 
+George Perry questioned the authors’ claim that monetary policy does not create distortions but that fiscal policy that changes government spending does. 
+Perry believed that monetary policy does create distortions if it works, because part of the mechanism by which it works is the exchange rate. 
+If the rest of the world is facing much the same economic conditions, then aggressive use of monetary policy by the United States must surely have a distorting, beggar-thy-neighbor effect. 
+In contrast, a change in government spending by one country benefits all. 
+Perry agreed with Woodford and Kohn that it was hard for a central bank to convince the public that it was committed to raising inflation. 
+But he went further, reasoning that, to the extent that some parts of the market reacted, the effect was likely to be perverse. 
+Financial market professionals who do the lending have sharp antennae and are quick to detect and react to changing prospects for inflation. 
+Other businesses and the general public— the potenti al borrowers—are less likely to resp ond. 
+S o if a cent ral ba nk promise of higher inflation influences anyone, it is more likely to be banks and other lenders rather than their potential borrowers. 
+Such an asymmetry would lead to less rather than more borrowing and spending. 

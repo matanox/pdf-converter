@@ -1,0 +1,279 @@
+Large-scale brain dynamics in disorders of consciousness Nicholas D Schiff 1,2 , Tanya Nauvel 1 and Jonathan D Victor 1,2 Brain injury profoundly affects global brain dynamics, and these changes are manifest in the electroencephalogram (EEG). 
+Despite the heterogeneity of injury mechanisms and the modularity of brain function, there is a commonality of dynamical features that characterize the EEG along the gamut from coma to recovery. 
+After severest injury, EEG activity is concentrated below 1 Hz. In minimally conscious state during wakefulness, there is a peak of activity in the 3–7 Hz range, often coherent across the brain, and often also activity in the beta (15–30 Hz) range. 
+These spectral changes likely result from varying degrees of functional deafferentation at thalamic and cortical levels. 
+EEG-based indices of brain dynamics that go beyond these simple spectral measures may provide further diagnostic information and physiologic insights. 
+Addresses 1 Brain and Mind Research Institute, Weill Cornell Medical College, 1300 York Avenue, New York, NY 10065, United States 2 Department of Neurology, Weill Cornell Medical College, 1300 York Avenue, New York, NY 10065, United States Corresponding authors: Victor, Jonathan D (jdvicto@med.cornell.edu) Current Opinion in Neurobiology 2014, 25:7–14 This review comes from a themed issue on Theoretical and computational neuroscience Edited by Adrienne Fairhall and Haim Sompolinsky For a complete overview see the Issue and the Editorial Available online 23rd November 2013 0959-4388/$ – see front matter, # 2013 Elsevier Ltd. 
+All rights reserved. 
+http://dx.doi.org/10.1016/j.conb.2013.10.007 Introduction Patients who survive severe brain injury are often left with a chronic disturbance of consciousness. 
+The consequent suffering and disability has a major impact on the individual patient and their family. 
+The aggregate burden to society is accentuated by two factors: traumatic brain injury primarily affects young people, and ongoing improvements in medical intensive care have increased survival rates, especially after very severe injuries. 
+Over the last decade, it has become increasingly evident that even with a severe initial deficit, the outlook is not hopeless: many patients have a spontaneous late recovery (even after many years), and some treatment options show promise. 
+Improved understanding of the physiologic basis and phenomenology of these disturbances therefore is crucial: to provide accurate diagnosis and prognostication, and to guide and assess potential treatments. 
+Determination of consciousness requires more than behavioral observation In severe brain injury, making even basic diagnostic distinctions is challenging. 
+The critical distinction between the vegetative state (VS) and the minimally conscious state (MCS) is the presence of at least some elements of consciousness, even if inconsistent (see Box 1 for definitions and characteristics of these states and related entities). 
+Reliance on clinical observations to identify elements of consciousness is questionable [1  ]: it presumes an intact motor system, but severe damage to the motor system (or motor disability consequent to prolonged immobility) is common in this population. 
+This puts a premium on methods of assessing brain function that do not rely on motor output [2–5]. 
+One such approach is functional imaging. 
+Functional magnetic resonance imaging (fMRI) studies have demonstrated that some VS and MCS patients can generate complex activations consistent with motor imagery, and even communicate via such signals [2,3,6], despite a lack of verbal or gestural communication systems. 
+Translation of such methods to the electroencephalogram (EEG) has demonstrated that brain signals linked to motor imagery can be measured in brain-injured subjects using this modality as well [4]. 
+However, fMRI and EEG measurements carried out over short periods of time are of limited value in patients with severe brain injuries, because of their marked and frequent fluctuations in state. 
+Because of such state fluctuations, evidence of cognitive responses may be present at one time, and not at another [4]. 
+Moreover, statistical methods that do not take state fluctuations of background activity into account may lead to false positive findings in EEG assessments of severely brain-injured subjects [7  ]. These considerations motivate augmenting behavioral observation with direct measures of brain activity that allow not only for assessment of interaction with the environment, but also of state and state fluctuations. 
+The EEG is a particularly attractive modality for this purpose: it is non-invasive, it is relatively inexpensive, it allows for repeated or extended measurements at the bedside, and it can resolve dynamics at the timescale of neuronal activity. 
+(For a comprehensive introduction to EEG, see [8].) Our review therefore focuses on EEG measures of brain activity, and an emerging framework for linking these measures to the neurophysiology of the normal and injured brain. 
+Why focus on global dynamics? 
+Since many cognitive and behavioral functions are modular and localized, an emphasis on global dynamics might Available online at www.sciencedirect.com ScienceDirect at first seem puzzling. 
+Our reasons for this focus are twofold. 
+First, although brain injury often affects modular functions, these effects often depend idiosyncratically on the specific injury pattern (e.g., the vascular territory involved, or the location of the traumatic injury). 
+In contrast, the effects of brain injury on arousal and attentional modulation are pervasive and general, and, as we suggest below, are likely to have an underlying pathophysiology that is independent of the mode or details of the injury. 
+The second reason is that global deficits are arguably more significant for functional recovery: preservation of specific modular functions in the absence of intact arousal mechanisms is a devastating injury [9], while loss of a modular function may be susceptible to remediation via prosthetics and functional substitution. 
+A perspective on EEG analysis As a measure of brain dynamics, the EEG is in some sense an embarrassment of riches: typical recordings provide signals with a bandwidth ranging over a broad frequency range (e.g., 1–70 Hz), recorded at dozens or even hundreds of scalp locations, over a period of minutes to hours. 
+Reducing these high-dimensional datasets to a small number of meaningful quantities is a critical challenge. 
+The challenge is exacerbated by the presence of nonstationarities (i.e., the state changes mentioned above) and the many environmental and physiologic artifacts that contaminate clinical recordings — and the possibility that state changes and artifacts may be inter-related. 
+While there is no simple solution, we would like to suggest a set of guidelines. 
+First, for identification of state changes and artifact, it is essential to inspect the raw signal itself, along with video images of the patient. 
+Second, for dimensional reduction, there is an advantage to approaches that have only minimal dependence on specific physiologic models, and well-characterized statistical properties — spectral analysis (Figure 1A) is a prime example [10–12], as we illustrate below. 
+Finally, while statistical vetting is a necessity, such validation can be highly dependent on the statistical model [7  ]. Therefore, a physiologic or mechanistic interpretation of EEG observables provides important reassurance that a set of inferences is based on more than a chance association. 
+With these considerations, this article reviews not just the phenomenology of EEG dynamics in the injured brain, but also summarizes current thinking about mechanism. 
+Large-scale EEG dynamics in structural brain injuries We begin by considering the phenomenology of global EEG dynamics in the severely injured brain that characterize and differentiate the states along the gamut from coma to normal function. 
+We focus on the power spectrum and related measures [10–12], as this enables a link to the likely pathophysiological underpinnings, which we then describe. 
+Finally, we consider other quantitative indices derived from the EEG that show promise as probes of global dynamics in severe brain injury. 
+Phenomenology Although a wide variety of EEG patterns may appear with structural brain injuries and even in normal wake and sleep states, broad regularities are readily identifiable, particularly at the extremes of very severe injury and normal brain function [8,13]. 
+Figure 1B illustrates typical EEG power spectra obtained from human subjects in coma, MCS, and normal wakefulness. 
+In coma (Figure 1B1), power is concentrated at very low (<1 Hz) frequencies; above 3 Hz, there is a gradual 8 Theoretical and computational neuroscience Box 1 Characteristics of major disorders of consciousness and related entities associated with brain injury. 
+Adapted with permission from Goldfine et al. [54], which provides a clinically oriented review of these states. 
+Coma is always transient (though it may last weeks); severely injured patients transition spontaneously from coma to VS or alternatively to MCS, and may further improve to CS and full recovery. 
+Syndrome Definition Behavioral characteristics Coma State of unarousable unresponsiveness Eyes closed; motor function consists of reflex and postural responses only Vegetative state (VS) State of intermittent arousal without evidence of consciousness Spontaneous cycling through eyes-closed and eyesopen states, spontaneous eye and limb movements without evidence of goal-oriented behavior or sensory responsiveness Minimally conscious state (MCS) State of intermittent or inconsistent evidence of consciousness Intermittent or inconsistent response to verbal command, verbal output, or object use; intermittent or inconsistent purposeful eye movements Confusional state (CS) State of impaired consciousness with preserved functional object use or consistent communication Disorientation; fluctuating levels of impairment; functional object use or consistent communication Locked in state (LIS) State of complete or almost complete loss of motor output; not a disorder of consciousness The misleading appearance of a disorder of consciousness due to lack of motor output; communication via brain–computer interface, EEG, functional brain imaging, autonomic responses, or subtle eye movements is possible Brain dynamics in disorders of consciousness Schiff, Nauvel and Victor 9 Figure 1 10 20 30 40 50 0.2 0.4 0.6 0.8 1 10 20 30 40 50 -20 -10 0 0 10 20 30 40 50 -40 -30 -20 -10 0 Electroencephalographic (EEG) patterns and corresponding spectra EEG spectra across states of consciousness (1) Alpha oscillations (2) Beta oscillations (1) Vegetative state (2) Minimally conscious state (3) Normal wakefulness Coherence quantifies synchronization across channels (1) Coherent at 8Hz (2) Coherent at 20Hz and incoherent at 12Hz 10 20 30 40 50 -20 -10 0 10 20 30 40 50 -20 -10 0 0 Time (s) Frequency (Hz) 0 1 −40 0 40 Power (dB) Amplitude (µV) Power (dB) Power (dB) Power (dB) Frequency (Hz) -8 -4 0 4 8 0 1 10 20 30 40 50 -20 -10 0 0 Power (dB) Frequency (Hz) 10 20 30 40 50 -30 -20 -10 0 0 Power (dB) Frequency (Hz) Frequency (Hz) Frequency (Hz) Frequency (Hz) Coherence 0 10 20 30 40 50 -20 -10 0 0 Power (dB) Frequency (Hz) 12 Hz 20 Hz 10 20 30 40 500 0.2 0.4 0.6 0.8 1 Frequency (Hz) Coherence 12 Hz 20 Hz 0 Amplitude (µV) Time (s) (a) (b)(c) Current Opinion in Neurobiology Electroencephalographic (EEG) patterns across states of consciousness. 
+(A) The power spectrum describes the frequency content of a single channel of EEG. 
+The example of panel A1 shows prominent oscillations at approximately 10 Hz (alpha range), both in the raw tracing (left) and the power spectrum (right). 
+The example of panel A2 shows oscillations at approximately 25 Hz (beta range), superimposed on smaller and slower fluctuations; correspondingly, the power spectrum has two main peaks, a large one at approximately 25 Hz and a smaller one at 7 Hz. A1: normal subject, channel Oz (Laplacian derivation); A2: minimally conscious patient subject, bipolar channel Fz-Cz. 
+Note that the power spectrum is calculated from many samples of EEG, totaling 489s for A1 and 348s for A2, but only one typical second of the raw trace is shown. 
+(B) EEG power spectra identify major features of brain dynamics across levels of consciousness. 
+In vegetative state (panel B1), power is concentrated below 1 Hz and the rest of the spectrum is largely featureless. 
+In minimally conscious state (panel B2, but also panels A2 and C1), there is a prominent peak in the 3–7 Hz range, and often a peak in the 15–30 Hz (beta) range. 
+In normal wakefulness (panel B3), there is a peak in the alpha range (8–12 Hz), and variable peaks in the beta range. 
+B1: patient subject, channel Oz (Laplacian derivation); B2: patient subject, channel Fz (Laplacian derivation); B3: normal subject, channel Pz (Laplacian derivation). 
+(C) The coherence identifies the degree of synchronization of activity in pairs of EEG channels. 
+Panel C1: EEG spectra from two locations (POz, upper trace, and P4, lower trace, Laplacian derivations) have similar dynamics (left) and the coherence (right) shows that the dominant theta-range peak is highly synchronous on these channels. 
+Panel C2: EEG spectra from two locations (F8-FC6, upper trace, and F4-FC2, lower trace) also have similar dynamics (left) but the coherence (right) shows that the activity in the 20 Hz range is synchronous, while that in the 12 Hz range is not (arrows). 
+In this patient, the 12 Hz activity corresponds to sleep spindles, which are asynchronous. 
+This asynchrony of sleep spindles is an abnormal finding, likely due to the presence of central thalamic infarctions. 
+C1: Minimally conscious patient subject recorded during wakefulness; C2: Another minimally conscious patient subject recorded during sleep. 
+All power spectra and coherences performed in Chronux (http://chronux.org/) [11], and error bars (barely visible in panels A and B) indicate 95% confidence intervals. 
+and nearly featureless decline. 
+This example, taken from a patient in VS following a very severe anoxic injury, is representative of all EEG channels in this subject. 
+Such power spectra (power concentrated below 1 Hz, and uniform across the scalp) are characteristic of patients with the most severe forms of structural injuries produced by trauma, hypoxia or other causes. 
+In contrast, an example EEG power spectrum during normal wakefulness contains a complex mix of frequencies (Figure 1B3). 
+As is typical of the normal EEG power spectrum, there are peaks in the alpha band (8–12 Hz) and the beta band (15–30 Hz). 
+The relative and absolute sizes of these peaks normally vary with location (with alpha being more prominent over parietal and occipital areas, and beta more prominent over frontal areas), and also across subjects. 
+Figure 1A1 is another example, in which the alpha peak is more prominent and the beta activity is nearly absent. 
+The EEG power spectrum in MCS following severe structural brain injury (Figure 1A2, 1B2, 1C1 left) reveals a third pattern: a strong peak in the theta (4–7 Hz) range, usually near 7 Hz (as in this example) but occasionally as low as 3 Hz, and present diffusely over the scalp. 
+While theta rhythms can be present in normal subjects, they occur only in specific circumstances: either transiently in the frontal midline during effortful cognition, or more broadly over frontocentral EEG channels during drowsiness [8]. 
+The diffuse spatial distribution of the theta rhythm in Figure 1B2, along with its presence during wakefulness, identify it as pathologic pattern, characteristic of MCS patients (Drover et al., abstract, Society for Neuroscience, Washington DC, November 2011; Forgacs et al., abstract, Society for Neuroscience, San Diego, November 2013). 
+Pathophysiologic mechanisms Converging evidence from physiological and clinical studies suggests a linkage between the alterations in EEG dynamics seen in Figure 1B, along with other characteristic features of the EEG in severe brain injury, and the consequences of varying degrees of deafferentation and disconnection. 
+Low-frequency activity The concentration of power below 1 Hz seen in VS (Figure 1B3) likely reflects total deafferentation of the cortex. 
+Such slow oscillations are known to arise in two very different scenarios: total anatomical deafferentation in the feline ‘slab’ model, in which all long-range white matters to a cortical region are transected [14], and the total functional deafferentation of deep anesthesia [15]. 
+Similar patterns of slow oscillations are present in two other circumstances characterized by severe functional deafferentation: across structurally intact frontal-parietal cortices during temporal lobe seizures [16  ,17], and during normal slow-wave sleep, in which functional deafferentation results from disfacilitation of neocortical neurons [18]. 
+Although sleep and anesthesia share some features, they are very distinct in origin and mechanism. 
+A much closer functional relationship exists, however, between anesthesia and the altered consciousness produced by brain injuries [19  ]. Because anesthesia is readily controlled, it provides for unique insights into the physiologic processes underlying global brain dynamics. 
+Within the context of anesthetic coma induced by propofol, the slow oscillation has recently been the subject of a detailed study that included multi-unit recordings from humans [20  ]. This work revealed unexpected local and global dynamical structure in neuronal firing patterns within each slow oscillation of the EEG. 
+Specifically, at a scale of <4 mm, neuronal populations can show spiking activity that fluctuates between silence and rates typically encountered during wakefulness. 
+These fluctuations are sharply gated by the slow oscillation. 
+Moreover, they appear asynchronously across the cortex, suggesting functional isolation. 
+Propofol anesthesia is also associated with another dynamical feature: a spectral power peak centered at 11 Hz over frontocentral EEG channels, that is coherent (i.e., synchronous) across the brain [21  ]. Computational modeling suggests that this rhythm may arise via a dual mechanism that silences the typical dominant posterior 10 Hz (alpha) rhythm of normal wakefulness and produces an ‘anteriorized’ alpha-range oscillation via thalamic nuclei projecting to the frontal lobe [22  ]. Recent work [23] indicates that these dynamics seen in propofol anesthesia underlie another pathologic EEG pattern seen in coma, namely, burst suppression. 
+The burst suppression pattern, seen in patients with severe structural or anoxic brain injury, consists of alternation between periods of electrical silence and periods of apparently irregular high-voltage activity, each lasting several seconds. 
+Ching et al. [23] showed that the spectral characteristics of the bursts match those of propofolassociated activity, namely, a globally coherent oscillation at 11 Hz along with slow wave oscillations that are asynchronous across the brain [24  ]. The electrically silent periods that alternate with this activity appear to be linked to failure of ATP production across populations of neurons [23]. 
+Theta-range activity In states that are intermediate between that of coma and normal wakefulness, a variety of spectral features are observed. 
+The most common is a peak in theta power (Figure 1A2, 1B2, 1C1 left), which has been identified in patients with both global (Williams et al. [25  ]) and focal 10 Theoretical and computational neuroscience [26] structural brain injuries, and is characteristic of MCS during wakefulness. 
+Two mechanisms are known to be capable of producing strong power in the theta range after severe or moderate deafferentation at the level of the neocortex and thalamus. 
+The first is cellular: in the setting of deafferentation present in neocortical slice preparations, layer V pyramidal cells have intrinsic membrane oscillations at approximately 7 Hz. The second is circuit-based: deafferentation of the thalamus from its cortical inputs leads to bursting in the wakeful state [27] and increased theta power in the EEG [28  ,29]. 
+These mechanisms have distinguishing characteristics. 
+The circuit mechanism is likely to be associated with a lesser degree of deafferentation, and the thalamic bursting component is expected to produce 15–30 Hz (beta) power in the EEG. 
+In the cellular mechanism, likely to be operative in the presence of more severe deafferentation, weak coupling of intrinsically oscillating neurons is expected to produce long-range synchronization of theta activity [30] manifest in a theta-range peak in coherence (as in Figure 1C1 right). 
+The presence of theta-range as well as beta-range peaks in the examples of Figure 1A2 and 1B2 suggests a contribution from both mechanisms. 
+Models The power spectral features that are present in the normal wake and sleep EEG can be captured by mathematical and computational models. 
+Neural mass models [31– 35,36  ] are especially appropriate for this purpose, as they seek to account for overall qualitative features of EEG dynamics without requiring fine-grained anatomical detail, but approaches postulating specific neuronal connectivities [23] have also proven successful. 
+Neural mass models can form the basis of both for ‘forward’ and ‘inverse’ approaches. 
+In forward approaches, models are constructed based on a simplified description of brain connectivity, and the analytic behavior of the model is investigated to determine whether this caricature provides a useful framework for understanding brain dynamics. 
+The simplification may consist of a continuum approximation to the whole brain [37], or, models that emphasize the connectivities of specific brain areas or populations. 
+The series of models developed by Robinson et al. [34] exemplifies the latter approach: it focuses on the interactions of four populations: corticothalamic layer V neurons, cortical inhibitory neurons, thalamic reticular neurons, and thalamic relay neurons. 
+With each of these populations modeled as separate ‘masses,’ the model accounts for the typical spectral power distributions fo und in normal wakefulness, the sleep stages, theta-dominated drowsiness and burst suppression, and in addition accounts for the spatial coherence structure of the normal EEG during wakefulness [38]. 
+These models thus serve as a foundation for formalizing the linkage between the physiology of neuronal populations and the dynamics that can be observed in the EEG. 
+Building on the Robinson framework, Drover et al. [39] developed a neural mass model of a reduced corticothalamic system consisting of two sets of cortical populations linked at the thalamic level. 
+The rationale for considering a two-cortical-region model is the hypothesis that one of the functions of the intralaminar thalamus is to set up patterns of cortical interactions that are appropriate to specific behaviors [40]. 
+Such interactions typically link a sensory and a motor area, with one region driving the other, depending on task demands. 
+When this linkage was modeled as the result of a partially shared reticular nucleus (i.e., shared inhibition), the resulting dynamics demonstrated transitions between several modes of corticocortical coupling: one mode in which the two cortical regions were both active and synchronized, and two modes in which one cortical region dominates and drives the other. 
+When the linkage consisted of shared excitation (e.g., via a partially shared thalamic relay nucleus), only the synchronous mode was present. 
+In a pilot study that examined the EEG of a patient with severe chronic brain injury and a reproducible behavioral improvement with zolpidem [25  ,41  ], the authors found that this behavioral improvement was associated with an increase in the number of mode transitions involving frontal brain regions, which correlated with an increase in metabolic activity as measured by PET scans. 
+This modeling study provides a rationale for examining not only standard (time-averaged) spectra and coherences, but how they fluctuate in time [41  ], as the latter may be an indirect indicator of thalamic activity that cannot be directly observed in the EEG. 
+The model’s predictions of the power spectra and coherences of EEG activity were derived from a standard linearized analysis at the fixed points of the neural mass model. 
+But importantly, the predictions about their fluctuations over time — the spectrograms and coherograms — were derived from examining the stability of the fixed points of the neural mass model, and how these fixed points relate to each other. 
+Thus, the nonlinear nature of the neural mass model played a crucial role in this analysis. 
+Neural mass models also form the starting point for ‘inverse’ approaches, such as dynamic causal modeling [35,42]. 
+Here, a series of candidate neural mass models are constructed, based on hypotheses concerning the relevant anatomical connectivity. 
+The mass model is then augmented by a biophysical or hemodynamic model that couples the neural mass variables to the observables (i.e., the EEG or the BOLD response). 
+Finally, a model selection procedure (the ‘inversion’) is used to determine which candidate connectivity model is most likely to account for the observed data. 
+Brain dynamics in disorders of consciousness Schiff, Nauvel and Victor 11 This approach has recently been applied to the spectral changes in the EEG that underlie the transition to unconsciousness during propofol anesthesia [43  ]. Specifically, the investigators considered three models of increasing complexity: (i) connected anterior and posterior cortical masses, (ii) addition of a thalamic mass connected to both cortical masses, and (iii) subdivision of the thalamic mass into two parts, one connected to the anterior cortical mass and one connected to the posterior cortical mass. 
+As described above, the transition to unconsciousness was associated with an increase in low-frequency activity in the delta-band and alpha-band. 
+Bayesian model selection favored model (ii): a thalamic mass connected to an anterior and a posterior cortical mass. 
+In the context of this model, propofol produced a selective loss of anterior-t o-post erior cortical connectivity, with retention of posterior-to-anterior connectivity and thalamocortical connectivity, extending and refining the observations of Lewis et al. [24  ]. Thus, dynamic causal modeling goes beyond standard spectral analysis by seeking to identify the direction of functional connectivity and thereby make predictions about causality. 
+As reviewed elsewhere [44  ], the strategy taken to extract directional information from the observed data signals relies on specific parametric features of a neural mass model, such as the expected propagation times between brain areas. 
+This is in contrast to the information-theoretic approach of Granger causality analysis [45], which is fundamentally nonparametric. 
+Note also that while the underlying neural mass models themselves are nonlinear, the nonlinearity is not crucial to these inferences — the model is studied in a linearized regime, and inferences are based on observed power spectra and coherences. 
+Other approaches to characterizing global dynamics Other extensions of standard spectral characterizations — bispectra, bicoherences, and their higher-order analogues — focus on whether activity at one frequency is coupled to activity at another [10]. 
+Phase-amplitude coupling is a specific kind of cross-frequency interaction that has attracted much interest, and for which specialized indices have been developed [46]. 
+Applying these indices to EEG recordings during propofol induction of anesthesia, Mukamel et al. [47] identified state-dependent coupling of the amplitude of the alpha-range activity to the phase of the low-frequency activity. 
+Graph-theoretic methods have also been advanced as a dimensional reduction tool that characterizes spatial characteristics of the EEG, in resting wakefulness [48] and in epilepsy [33], and, recently, in brain injury (T Nauvel et al., abstract, Society for Neuroscience, New Orleans, November 2012). 
+Although preliminary, these findings suggest that graphical methods may be able to identify broad patterns characteristic of recovery from brain injury. 
+Examining EEG responses to stimulation provides an additional approach to understanding brain dynamics. 
+Using methods of dynamic causal modeling and source localization, Boly et al. [49  ] studied the mismatch negativity response in patients in VS, MCS, and healthy controls. 
+The dynamic causal model deduced from data from VS subjects was distinguished from the model deduced from data from MCS subjects and controls by a lack of feedback from an inferred frontal component to one in the temporal lobe. 
+King et al. [50] examined singletrial EEG responses in VS, MCS, and confusional state (CS) patients, and found that multivariate pattern classifiers could distinguish among these states. 
+Rosanova et al. [51  ] and Ferrarelli et al. [52] showed that the dynamics of EEG responses to repetitive transcranial magnetic stimulation (TMS) showed a reliable and systematic dependence on the level of consciousness, across a range of states including VS, MCS, sleep states, locked-in-state (LIS), and normal subjects. 
+At the extremes, patients in VS following structural brain injuries had TMS responses that were more local or had shorter timecourses and simpler dynamics than those recorded during dreaming, LIS, and normal wakefulness. 
+Finally, Casali et al. [53  ] combined EEG measures of resting brain and responses to pulses of transcranial magnetic stimulation (TMS), to derive an index (based on algorithmic complexity) that correlated well with level of consciousness. 
+Conclusion Severe brain injury often results in major disability, and its aggregate effects place a profound burden on the patient, family and society. 
+Evaluation of the level of consciousness and cognitive abilities of patients is critical to prognostication, routine care, and clinical investigation. 
+However, behavioral observation is unreliable, in large part because of the motor impairment often associated with brain injury. 
+The EEG bypasses this potential confound. 
+Its high temporal resolution allows for a focus on dynamics, and much progress has been made in identifying the basic features of large-scale brain dynamics that are common to different levels of injury and disorders of consciousness. 
+To date, most of these efforts have focused on standard spectral measures (i.e., power spectra and coherences), and in linking these measures with pathophysiologic processes. 
+Recent advances in the understanding of anesthetic-induced loss of consciousness, along with computational and mathematical modeling, suggest that other kinds of dynamical measures, sensitive to fluctuations and correlations among spectral features, may provide further diagnostic accuracy and mechanistic insight. 
+Acknowledgements This work was supported by NIH-NICHD HD51912 and the James S. McDonnell Foundation (NDS, PI). 
+Some of the conceptual framework in this review was presented at the Society for Neuroscience Annual Meeting (2011), Drover, J.D., Conte, M.M., Goldfine, A.M., Voss, H.U., Victor, J.D., 12 Theoretical and computational neuroscience and Schiff, N.D. (2011). 
+Are low frequency oscillations in the EEG of severely injured brains a marker for functional reserve of cortical neurons? 
+(Abstract) Program No. 675.07. 2011. 
+References and recommended reading Papers of particular interest, published within the period of review, have been highlighted as:  of special interest  of outstanding interest 1.  Schnakers C, Vanhaudenhuyse A, Giacino J, Ventura M, Boly M, Majerus S, Moonen G, Laureys S: Diagnostic accuracy of the vegetative and minimally conscious state: clinical consensus versus standardized neurobehavioral assessment. 
+BMC Neurol 2009, 9:35. 
+This study shows that 40% of patients diagnosed as in vegetative state by routine bedside examination techniques have behavioral evidence of consciousness when expert examination is performed. 
+2. Monti MM, Vanhaudenhuyse A, Coleman MR, Boly M, Pickard JD, Tshibanda L, Owen AM, Laureys S: Willful modulation of brain activity in disorders of consciousness. 
+New Engl J Med 2010, 362:579-589. 
+3. Bardin JC, Fins JJ, Katz DI, Hersh J, Heier LA, Tabelow K, Dyke JP, Ballon DJ, Schiff ND, Voss HU: Dissociations between behavioural and functional magnetic resonance imagingbased evaluations of cognitive function after brain injury. 
+Brain J Neurol 2011, 134:769-782. 
+4. Goldfine AM, Victor JD, Conte MM, Bardin JC, Schiff ND: Determination of awareness in patients with severe brain injury using EEG power spectral analysis. 
+Clin Neurophysiol 2011, 122:2157-2168. 
+5. Cruse D, Chennu S, Ferna´ndez-Espejo D, Payne WL, Young GB, Owen AM: Detecting awareness in the vegetative state: electroencephalographic evidence for attempted movements to command. 
+PLoS ONE 2012, 7:e49933. 
+6. Bardin JC, Schiff ND, Voss HU: Pattern classification of volitional functional magnetic resonance imaging responses in patients with severe brain injury. 
+Arch Neurol 2012, 69:176-181. 
+7.  Goldfine AM, Bardin JC, Noirhomme Q, Fins JJ, Schiff ND, Victor JD: Reanalysis of ‘‘Bedside detection of awareness in the vegetative state: a cohort study’’. 
+Lancet 2013, 381:289-291. 
+The authors show that in seeking evidence of awareness in the EEG of brain-injured patients, assumptions of trial-independence and stationarity may lead to incorrect conclusions. 
+8. Schomer DL, da Silva FL: Niedermeyer’s Electroencephalography: Basic Principles, Clinical Applications, and Related Fields. 
+Lippincott Williams & Wilkins; 2012. 
+9. Schiff N, Ribary U, Plum F, Llina´s R: Words without mind. 
+J Cogn Neurosci 1999, 11:650-656. 
+10. Thomson DJ: Spectrum estimation and harmonic analysis. 
+Proc IEEE 1982, 70:1055-1096. 
+11. Mitra P, Bokil H: Observed Brain Dynamics. 
+Oxford University Press; 2007. 
+12. Mitra PP, Pesaran B: Analysis of dynamic brain imaging data. 
+Biophys J 1999, 76:691-708. 
+13. Lee-Chiong T, Wiley J: Sleep: A Comprehensive Handbook. 
+J Wiley and Sons; 2006. 
+14. Timofeev I, Grenier F, Bazhenov M, Sejnowski TJ, Steriade M: Origin of slow cortical oscillations in deafferented cortical slabs. 
+Cereb Cortex 2000, 10:1185-1199. 
+15. Steriade M, Nun˜ez A, Amzica F: A novel slow (<1 Hz) oscillation of neocortical neurons in vivo: depolarizing and hyperpolarizing components. 
+J Neurosci 1993, 13:3252-3265. 
+16.  Blumenfeld H: Impaired consciousness in epilepsy. 
+Lancet Neurol 2012, 11:814-826. 
+This paper reviews experimental and clinical evidence for mechanisms underlying unconsciousness in human epilepsies. 
+The author proposes that functional thalamic deafferentation causes slow wave oscillations in the frontocentral EEG during seizure-induced unconsciousness. 
+17. Englot DJ, Yang L, Hamid H, Danielson N, Bai X, Marfeo A, Yu L, Gordon A, Purcaro MJ, Motelow JE et al.: Impaired consciousness in temporal lobe seizures: role of cortical slow activity. 
+Brain J Neurol 2010, 133:3764-3777. 
+18. Timofeev I, Grenier F, Steriade M: Disfacilitation and active inhibition in the neocortex during the natural sleep-wake cycle: an intracellular study. 
+Proc Natl Acad Sci 2001, 98:1924-1929. 
+19.  Brown EN, Lydic R, Schiff ND: General anesthesia, sleep, and coma. 
+New Engl J Med 2010, 363:2638-2650. 
+This is a comprehensive review of anesthesia mechanisms, and focuses on a comparison of the anesthetic state, coma, and sleep. 
+The review develops the evidence that anesthesia and coma result from similar largescale circuit mechanisms. 
+20.  Lewis LD, Weiner VS, Mukamel EA, Donoghue JA, Eskandar EN, Madsen JR, Anderson WS, Hochberg LR, Cash SS, Brown EN, Purdon PL: Rapid fragmentation of neuronal networks at the onset of propofol-induced unconsciousness. 
+Proc Natl Acad Sci 2012, 109:E3377-E3386. 
+The authors examined local and global dynamical structure in neuronal firing patterns within the slow oscillations of the EEG during anesthesia. 
+They found that firing rates fluctuate between silence and rates typically encountered during wakefulness, and were gated by the slow oscillation. 
+21.  Cimenser A, Purdon PL, Pierce ET, Walsh JL, Salazar-Gomez AF, Harrell PG, Tavares-Stoeckel C, Habeeb K, Brown EN: Tracking brain states under general anesthesia by using global coherence analysis. 
+Proc Natl Acad Sci 2011, 108:8832-8837. 
+The authors analyzed global EEG patterns during the transition to and from propofol anesthesia, and found that loss of consciousness was tightly correlated with the appearance of a coherent oscillation at approximately 11 Hz, centered over frontocentral channels. 
+22.  Vijayan S, Ching S: Thalamocortical mechanisms for the anteriorization of alpha rhythms during propofol-induced unconsciousness. 
+J Neurosci 2013, 33:11070-11075. 
+In a computational modeling study, the authors developed evidence for two mechanisms that underlie the transition from the normal EEG to the globally coherent alpha-range pattern. 
+23. Ching S, Purdon PL, Vijayan S, Kopell NJ, Brown EN: A neurophysiological-metabolic model for burst suppression. 
+Proc Natl Acad Sci 2012, 109:3095-3100. 
+24.  Lewis L, Ching S, Weiner V, Peterfreund R, Eskandar EN, Cash S, Brown EN, Purdon PL: Local cortical dynamics of burst suppression in the anaesthetized brain. 
+Brain 2013, 136:2727-2737. 
+This study of human intracranial electrode recordings during burst suppression induced by propofol anesthesia is the first demonstration that bursts appear asynchronously across the cortex and that the complex spectral content of the burst event recapitulates that of the background EEG before the onset of burst suppression. 
+25.  Williams ST, Conte MM, Goldfine AM, Noirhomme Q, Gosseries O, Thonnard M, Beattie B, Hersh J, Katz D, Victor J et al.: Common resting brain dynamics indicate a possible mechanism underlying zolpidem response in severe brain injury. 
+eLife 2013 http://dx.doi.org/10.7554/eLife.01157. 
+This quantitative EEG study provides the first evidence for a detailed neurophysiological mechanism underlying the paradoxical zolpidem response seen in some brain-injured subjects. 
+It also discusses evidence for the graded effects of deafferentation on the shape of the power spectrum of the EEG in patients with severe brain injuries. 
+26. Hall SD, Yamawaki N, Fisher AE, Clauss RP, Woodhall GL, Stanford IM: GABA(A) alpha-1 subunit mediated desynchronization of elevated low frequency oscillations alleviates specific dysfunction in stroke—a case report. 
+Clin Neurophysiol 2010, 121:549-555. 
+27. Jeanmonod D, Magnin M, Morel A: Low-threshold calcium spike bursts in the human thalamus. 
+Brain 1996, 119:363-375. 
+28.  Llina ´ s R, Ribary U, Jeanmonod D, Kronberg E, Mitra PP: Thalamocortical dysrhythmia: a neurological and neuropsychiatric syndrome characterized by magnetoencephalography. 
+Proc Natl Acad Sci 1999, 96:15222-15227. 
+Brain dynamics in disorders of consciousness Schiff, Nauvel and Victor 13 This study provides the first demonstration of increased theta power in the magnetoencephalogram of human subjects with a variety of neuropsychiatric disorders and presents a model for how partial deafferentation of the thalamus produces these changes. 
+29. Sarnthein J, Jeanmonod D: High thalamocortical theta coherence in patients with Parkinson’s disease. 
+J Neurosci 2007, 27:124-131. 
+30. Rosenblum M, Pikovsky A: Synchronization: from pendulum clocks to chaotic lasers and chemical oscillators. 
+Contemp Phys 2003, 44:401-416. 
+31. David O, Friston KJ: A neural mass model for MEG/EEG: coupling and neuronal dynamics. 
+NeuroImage 2003, 20:1743-1755. 
+32. Rennie CJ, Robinson PA, Wright JJ: Unified neurophysical model of EEG spectra and evoked potentials. 
+Biol Cybern 2002, 86:457-471. 
+33. Robinson P, Rennie C, Wright J, Bourke P: Steady states and global dynamics of electrical activity in the cerebral cortex. 
+Phys Rev E 1998, 58:3557-3571. 
+34. Robinson P, Rennie C, Rowe D: Dynamics of large-scale brain activity in normal arousal states and epileptic seizures. 
+Phys Rev E 2002, 65:041924. 
+35. Moran R, Pinotsis DA, Friston K: Neural masses and fields in dynamic causal modeling. 
+Front Comp Neurosci 2013, 7:57. 
+36.  Deco G, Jirsa VK, Robinson PA, Breakspear M, Friston K: The dynamic brain: from spiking neurons to neural masses and cortical fields. 
+PLoS Comput Biol 2008, 4:e1000092. 
+This is a detailed review of the development and theory of mean-field models, neural field models, and includes examples of simulations and applications. 
+37. Jirsa VK: Neural field dynamics with local and global connectivity and time delay. 
+Philos Trans A: Math Phys Eng Sci 2009, 367:1131-1143. 
+The authors develop a neural mass model consisting of a continuum model of cortex along with long-range point-to-point connectivity, and show that this can account for the spectral features of normal EEG. 
+38. Thatcher R, Krause P, Hrybyk M: Cortico-cortical associations and EEG coherence: a two-compartmental model. 
+Electroen Clin Neuro 1986, 64:123-143. 
+39. Drover JD, Schiff ND, Victor JD: Dynamics of coupled thalamocortical modules. 
+J Comput Neurosci 2010, 28:605-616. 
+40. Purpura KP, Schiff ND: Thalamic intralaminar nuclei in visual awareness. 
+Neuroscientist 1997, 3:8-14. 
+41.  Victor JD, Drover JD, Conte MM, Schiff ND: Mean-field modeling of thalamocortical dynamics and a model-driven approach to EEG analysis. 
+Proc Natl Acad Sci 2011, 108:15631-15638. 
+The authors analyze a neural mass model of thalamocortical interactions, showing that it generates spontaneous changes in cortical coherence states, and motivating an analysis of time-varying coherence in brain injury. 
+42. Friston KJ, Harrison L, Penny W: Dynamic causal modelling. 
+NeuroImage 2003, 19:1273-1302. 
+43.  Boly M, Moran R, Murphy M, Boveroux P, Bruno M-A, Noirhomme Q, Ledoux D, Bonhomme V, Brichant J-F, Tononi G et al.: Connectivity changes underlying spectral EEG changes during propofol-induced loss of consciousness. 
+J Neurosci 2012, 32:7082-7090. 
+Via dynamic causal modeling, the authors characterize the changes in global brain dynamics associated with propofol-induced loss of consciousness, and find that there is a selective loss of anterior-to-posterior functional connectivity. 
+44.  Friston K, Moran R, Seth AK: Analysing connectivity with Granger causality and dynamic causal modelling. 
+Curr Opin Neurobiol 2013, 23:172-178. 
+This review describes two approaches to inferring directed connectivity, and clearly presents the contrasts between the Granger causality approach and dynamic causal modeling. 
+45. Granger CWJ: Investigating causal relations by econometric models and cross-spectral methods. 
+Econometrica 1969, 37:424. 
+46. Canolty RT, Knight RT: The functional role of cross-frequency coupling. 
+Trends Cogn Sci 2010, 14:506-515. 
+47. Mukamel EA, Wong KF, Prerau MJ, Brown EN, Purdon PL: Phasebased measures of cross-frequency coupling in brain electrical dynamics under general anesthesia. 
+Proc IEEE 2011:1981-1984. 
+48. Chu CJ, Kramer MA, Pathmanathan J, Bianchi MT, Westover MB, Wizon L, Cash SS: Emergence of stable functional networks in long-term human electroencephalography. 
+J Neurosci 2012, 32:2703-2713. 
+49.  Boly M, Garrido MI, Gosseries O, Bruno M-A, Boveroux P, Schnakers C, Massimini M, Litvak V, Laureys S, Friston K: Preserved feedforward but impaired top-down processes in the vegetative state. 
+Science 2011, 332:858-862. 
+A dynamic causal modeling approach is used to characterize differences in EEG response to the mismatch negativity paradigm in healthy controls and a group of severely brain injured human subjects. 
+Subject in vegetative state is distinguished from minimally conscious state and control subjects by a lack of an inferior frontal lobe source that provides a feedback signal to the temporal lobe. 
+50. King JR, Faugeras F, Gramfort A, Schurger A, El Karoui I, Sitt JD, Rohaut B, Wacongne C, Labyt E, Bekinschtein T et al.: Single-trial decoding of auditory novelty responses facilitates the detection of residual consciousness. 
+NeuroImage 2013, 83C:726-738. 
+51.  Rosanova M, Gosseries O, Casarotto S, Boly M, Casali AG, Bruno M, Mariotti M, Boveroux P, Tononi G, Laureys S, Massimini M: Recovery of cortical effective connectivity and recovery of consciousness in vegetative patients. 
+Brain 2012, 135:1308-1320. 
+Time-averaging of the EEG signal after repetitive TMS pulses is shown to generate reproducible wave patterns of activity that show reliable sensitivity to the level of consciousness in healthy controls and structurally brain-injured subjects. 
+52. Ferrarelli F, Massimini M, Sarasso S, Casali A, Riedner BA, Angelini G, Tononi G, Pearce RA: Breakdown in cortical effective connectivity during midazolam-induced loss of consciousness. 
+Proc Natl Acad Sci 2010, 107:2681-2686. 
+53.  Casali AG, Gosseries O, Rosanova M, Boly M, Sarasso S, Casali KR, Casarotto S, Bruno M-A, Laureys S, Tononi G, Massimini M: A theoretically based index of consciousness independent of sensory processing and behavior. 
+Sci Trans Med 2013, 5:198ra105. 
+The authors develop a novel measure, the perturbational complexity index (PCI), to quantify the TMS EEG response by assessing the extent to which it is not stereotyped. 
+They then show its value as a unified measurement scale to grade level of consciousness. 
+54. Goldfine AM, Schiff ND: Consciousness: its neurobiology and the major classes of impairment. 
+Neurol Clin 2011, 29:723-737. 
+14 Theoretical and computational neuroscience Current Opinion in Neurobiology 2014, 25:7–14 www.sciencedirect.com 

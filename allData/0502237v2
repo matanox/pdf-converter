@@ -1,0 +1,153 @@
+arXiv:astro-ph/0502237v2 22 Feb 2005 
+The homogeneity and isotropy of the Universe – also known as the Coper nican principle – is a major postulate of modern cosmology. 
+Obviously this assumption does not imply exact homogeneity and isotropy, but merely that the observed c osmological inhomog e neities are random fluctuations around a uniform background, extracted from a homogeneo us and isotr opic statistical ensemble. 
+One may expect that the ever improving observations of CMB fluctuations should lead to the greatest vindication o f this principle. 
+Yet, there have been a number of disturbing claims of evidence for a preferred direction in the Universe [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], making use of the state of the art WMAP first year results [11]. 
+These claims have potentially very damaging implications for the standard model of cosmology. 
+It has been suggested that a preferred direction in CMB fluctuations may signal a non-trivia l cosmic to pology (e.g. [1, 12, 13, 14]), a matter currently far from settled. 
+The preferred axis could als o be the result of anisotropic ex pansion, possibly due to strings, walls or magnetic fields [15], or even the result of an intrinsically inhomogeneous Universe [16]. 
+Such claims remain controversial; more mundanely the obse rved “axis of e vil” could be the result of galactic foreground contamination or large scale unsubtracted systematics (see [17, 18, 19, 20] for past exa mples). 
+A closer inspection of the emergence of this preferred axis is at any rate imperative. 
+In address ing the issue of statistical isotropy it is of paramount importance to work in harmonic space, a matter that has not always been fully appreciated. 
+Consider a full-sky map, ∆T T (ˆr). 
+It is well known that the space of such functions is not an irr educible representation of the rotation group, i.e. it contains invariant subspac es, the so-called harmonic multipoles. 
+One should therefore perform an expansion into Spherical Harmonic functions (eigenfunctions of L 2 and L z , where L is the angular momentum operator) ∆T T (ˆr) =  ℓ δT ℓ =  ℓm a ℓm Y ℓm (ˆr) (1) and examine the problem multipole by multipole. 
+Each multipole ℓ is an ir reducible representation of SO(3) and a systematic examination of statistical isotropy can now be carried out. 
+The close relation between statistical anisotropy and non-Gaussianity (loosely the emer gence of structured shapes) has been extensively discussed in the literature [21, 22]. 
+For an isotropic Gaussian process each a ℓm is an independent Gaussian random variable characterised by variance C ℓ . 
+In each realization the power C ℓ is randomly, uniformly distributed among all ms, and therefore there is no evident “shape” to the multipole. 
+One finds conflict with this prediction if, for a given multipole ℓ, one identifies an axis n ℓ for which an uncanny amount of power is concentrated in a given m-mode, once the z-axis is aligned with n. In general reo rienting the axis destroys this featur e , so the onset of m-preference is also a measure of s tatistical anisotropy. 
+For example planar configurations (see [1, 2, 27]) have a z-axis’ orientation where all the power is concentrated in the m = ±ℓ modes. 
+They maximally break cylindrical symmetry around the z-axis. 
+On the contrary, cylindrically symmetric configurations (“Jupiters”) have a z−axis orientation where all the power is in the m = 0 mode , so that the sphere is divided into latitude bands, or zones, without any longitude variation in the temperature. 
+Even in these extreme cases if we reorient the axis the power spreads to other m-modes and the mpreference is obscured. 
+So the issue of m preference is closely linked with that of anisotropy. 
+It was suggested in [1] that a possible statistic for anisotropy is T ℓ = max n  m m 2 |a ℓm | 2 (2) the average of L 2 z maximized by an a ppropriate choice of z-axis; the outcome of this statistic is twofold: the value T ℓ and the axis n ℓ . 
+This statistic favours high ms and so it works well in s e arches for planarity (i.e. m = ±ℓ). 
+However the emergence of a pr e ferred axis could come about from undue concentration of power in any m, a remark that is the main point of this letter. 
+We consider the a lternative statistic: r ℓ = max mn C ℓm (2ℓ + 1)C (3) FIG. 1: The ℓ = 5 multipole for a cleaned map in galactic coordinates (top) and aligned with (b, l) ≈ (50, −91) (middle.) We have superposed the multipole vectors, and the chain linking them. 
+For comparison we plotted the ℓ = 3 multipole in its preferred frame. 
+where C ℓ0 = |a ℓ0 | 2 and C ℓm = 2|a ℓm | 2 for m > 0 (notice that 2 modes contribute for m = 0). This statistic provides three basic quantities: the direction n ℓ , the “shape” m ℓ , and the ratio r ℓ of power absorbed by multipole m ℓ in direction n ℓ . 
+The statistic is never ambiguous except for planar ℓ = 2 configurations, which may be interpreted as m = 2 or m = 1 modes with axis n 2 rotated by 90 ◦ . 
+As a convention we adopt the (ℓ = 2, m = 2) rendition for this configuration. 
+In addition to the shape, direction, and strength of a given multipole we may also define inter-ℓ quantities, such as the angle between preferred axes for adjacent multipoles. 
+We have applied this method to a variety of maps: the cleaned and Wiener filtere d maps of [23]; the internal linear combination maps [6] (see also [36]); the power equalized maps of [24]. 
+Taking cleaned and Wiener filtered maps, for ℓ = 2, 3 our method promptly reproduces the results of [1, 27]: we find planar multipoles aligned with (b, l) ≈ (60, −100). 
+For higher ℓ we find some surprising novelties. 
+As an example, in Fig. 1 we plot ℓ = 5 (top two panels). 
+Galactic coordinates obs cure the fact that the multipole is very approximately a pure m = 3 mode aligned with (b, l) = (50, −91). 
+This is revealed by our statistic and we have plotted the multipole when reoriented along its preferred axis. 
+For comparison we plotted the ℓ = 3 mode aligned with its preferred axis. 
+A complete application of this scheme to higher multipoles is shown in Fig. 2. The multipo le alignment found for ℓ = 2, ..., 5 does not extend to higher multipoles (even tho ugh there is a ro ugh alignment of multipoles ℓ = 6, ..., 11 around a strip on the b ≈ 15 latitude). 
+However it is highly inconsistent with isotropy. 
+We performed Monte Carlo simulations for Gaussian maps with the best fit power spectrum, subject to the WMAP noise and beam. 
+We then considered the average value of all possible angles between vectors n ℓ for ℓ = 2, ..., 5. This is of the order of 20 ◦ for the data. 
+We find that only 5 out of 5000 simulations have an average value smaller than this. 
+Thus we may reject isotropy on these scale s at the 99.9% confidence level. 
+Other apparent anomalous feature s, however, are not as statistically significant as they appear. 
+The ratios r ℓ , for instance, are completely consistent with Gaussianity, as the top panel of Fig.2 shows. 
+For example, for ℓ = 3 we find that in the pre ferred frame 94% of the power is concentrated in the m = 3 mode. 
+This was seen in [1] as anomalous, at the 93% confidence level. 
+Indeed this is true if we insist upon planarity. 
+If on the contrary we allow for a nis otropy due to any kind of m-preference, then the majority of the simulations actually find a m and n with a higher concentration of power in a single m; i.e. the observed rℓis in fact low. 
+Likewise, the apparent prefer e nce for low m multipoles (see Fig. 2) is not exceptional, once a more rigorous evaluation of the feature is obtained from Monte Carlo simulations (notice that the favoured ms are not uniformly distributed.) However we do find another unusual feature with some statistical significance. 
+Phase correlations have been pro posed as a discriminator for localized non-Gaussian features in the sky [25]. 
+In our formalism we may define ℓ azimuthal phases by examining the phases of the a ℓm , for m > 0, as measure d in the preferr e d frame. 
+Most impo rtant will be the phase of a ℓm for the m tha t receives most of the power in this frame. 
+This may be used to fix the x and y axes of the preferred frame; b e c ause there is an overall sign ambiguity between different ℓ and FIG. 2: A plot of m-preference results up to ℓ = 20. We seek the direction n ℓ (galactic coordinates in th e bottom two plots) where a given m (second plot from the top) receives the highest proportion of the power (with ratio r ℓ plotted in the top panel). 
+We have also plotted the Monte Carlo inferred variance for r ℓ . 
+We plotted results for cleaned (solid), Wiener filtered (dash), and internal linear combination (dotted) maps as described in text. 
+m modes, phases separated by π should be identified. 
+Inter-ℓ features may then be studied using the full set of Euler angles relating the pr e ferred Cartesian frames for different multipoles. 
+We find a very close alignment of the phases for the ℓ = 3 and ℓ = 5 modes. 
+This should be blatant from Fig. 1, where we see that the longitudinal stripes of the two modes align ver y strongly. 
+Comparison with MonteCarlo simulations reveals that this feature is unusual to 94.5%. 
+Other phases don’t correlate significantly. 
+This c oncludes the presentation of our basic results, which may be summarised as follows. 
+The planar shape of the low ℓ multipoles is not sta tistically significant, once we allow the simulations to seek an axis maximizing power in a single, but general m. However the alignment of the preferred axis is indeed very significant and extends up to ℓ = 5. An additional azimuthal phase correlation brings to 99.995% the confidence level for rejecting Gaussianity and statistical isotropy. 
+We now examine the robustness o f these results. 
+Firstly they may be confirmed us ing an alternative technique: the Maxwell multipole vectors. 
+These were first introduced by Maxwell [2 6] over a century ago and have found a recent revival within the CMB community [27, 28, 29, 30, 31, 32, 33]. 
+They encode the 2ℓ degrees of freedom contained in a multipole beside the power spectrum (see [29, 30, 34] and [3] for how these split into invariants and “eigenvecto rs”). 
+Multipole vectors may potentially pick up m-preference since for pure Y ℓm configurations ℓ − m multipole vectors align with the preferred direction n, with the remaining m spreading a t eq ual angles in the orthogonal plane – we call this a “handle and disc” structure, and it provides a more visual approach to detecting m-prefe rence. 
+We consider these headless vectors in terms of pairs of points on the unit sphere. 
+A handle is made through a clustering of points; a disc through a set of points tracing out an equator on the sphere. 
+We look for these patterns by searching for the shortes t routes between the points. 
+The method does not provide a thorough search for m- preference, but can be used as a more visual tool to confirm and explore already noted features. 
+In Fig. 1 we show how the method fares with ℓ = 3 where we find a single disk, and ℓ = 5 where we find a nearly exactly planar disk of 3 vectors and a handle of 2. More generally we confirm all the anomalous features described above. 
+Where the two methods disagree there is no hint for m- preference. 
+How dependent are these results on the chosen dataset, i.e. on the concrete rendition of the large-scale anisotropies after the galac tic emissions have been removed? 
+We find that most publicly available maps agree on the features outlined above and only differ significantly beyond ℓ = 12. The cleaned and Wiener filtered maps of [23] in fact agree almost exactly up to ℓ = 12 (see Fig. 2). Some features below ℓ = 12, however, are not as robust when we consider other maps. 
+The quadrupole features, for instance, may be ea sily erased in the renditions of [6, 24] (see Fig. 2). The planarity of the ℓ = 6 mode is present in some renditions (and is detected by our statistic) but not in others. 
+Thus we should regard these features as more fickle. 
+This leaves us with the obvious question: what could cause the strange directionality of the large angle CMB fluctuations? 
+Most obviously they could be due to systematic errors or galactic foregrounds. 
+We subjected galactic templates [36] for synchrotron, free-free and dust emissions to this analysis (Fig. 3). Unsur prisingly we found a stro ng non-Gaussian signal; howeve r nothing correlated with the direction or signal detected in the CMB maps. 
+Spe c ifically we found preference for m = 0 modes for even ℓ and for m = 1 for odd ℓ. This preference is invariably found at b = 90, i.e. with per fect alignment with the g alaxy axis. 
+T he synchrotron and dust maps have very similar morphologies; the free-free emission is quite different and leads to more Gaussian r ℓ ratios. 
+None of this correlates with the features claimed for the CMB, even when the templates are mixed with a Gaussian component. 
+We also considered the simulated noise maps described in [37]. 
+T hese include all known systematic effects. 
+We found that none of the available 110 simulated maps displayed any of the effects discussed in this paper. 
+Should the observe d preferred axis be real our remarks may be crucial in identifying the culprit theory. 
+We found that although there is a preferred direction for low mulFIG. 3: m-preference results up to ℓ = 20 for the V-band of galactic templates. 
+We have included free-free (solid) syncroton (dot-dash) and dust (long-dash) maps; for reference we have rep roduced results for the cleaned maps (dotted line). 
+tipoles (and to some extent a preferred Cartesian axis) this does not pick a specific m. Hence we don’t need a mode l favouring specific shapes (e.g. plana rity); merely a mode l with a preferre d axis. 
+If the low ℓ fluctuations are due to the gravitational potential on the la st scattering surface we can go further. 
+The process may be describe d in terms of the potential Fourier modes Φ(k, η ls ); each of these modes is reflected in the CMB in a pattern with exact m = 0 shape, with n aligned with ˆ k. One must supe rpose several such modes to obtain a given ℓ, s pecifically: a ℓm = A  Φ(k, η ls )i ℓ j ℓ (k∆η ls )Y ⋆ ℓm ( ˆ k) (4) Superposing a large numb er of modes leads to no preferred direction or m preference. 
+Should the number of mode s be limited to a lattice, though, a preferred sha pe and/or preferred axis will emerge. 
+For a cubic lattice the low ℓ may become superpositions of mainly three modes a ℓm = A 1 δ m0 +A 2 Y ⋆ ℓm ( π 2 , 0)+ A 3 Y ⋆ ℓm ( π 2 , π 2 ) and a solution in terms of A i may now be found for a g iven observed m-preference. 
+But it could also be that we live in a slab space, where there is a la rge number of modes in all but one direction. 
+This will erase any preference for a specific m, while keeping the pr e ferred direction. 
+The choice between the two possibilities hinges crucially on the phase corre lation found for ℓ = 3 and ℓ = 5, with the implication that there may be a preferred frame (rather than just a preferred axis). 
+We find this feature the most tantalising aspect of our analysis. 
+Acknowledgements We thank Kris Gorski, Andrew Jaffe, Jo˜ao Medeiros and Max Tgemark for helpful comments. 
+Some o f the results in this pap er were derived using the HEALPix package ([35]), and calculations were performed on COSMOS, the UK cosmology supercomputer facility. 
+[1] A. de Oliveira-Costa et al., 2004, Phys. 
+Rev, D69, 063516 [2] Schwarz D. et al., Phys.Rev.Lett. 93: 221301, 2004. 
+[3] J. Ralston and P. Jain, Int. 
+J. Mod. 
+Phys. 
+D13, 1857, 2004. 
+[4] Eriksen H.K. et al., 2004, Astrophys. 
+J, 605, 14 [5] Eriksen H.K. et al., 2004, astro-ph/0401276; astro-ph/0407271 [6] H. Eriksen et al, ApJ, 612, 633, 2004 [astro-ph/0403098]. 
+[7] Hansen F.K., Banday A.J., G´orski K.M.,2004,astro-ph/0404206 [8] Land K., Magueijo J., 2004, astro-ph/0405519 [9] Hansen F.K. et al., 2004, astro-ph/0402396 [10] Vielva P. et al., 2003, astro-ph/0310273 [11] Bennett C.L. et al., 2003, Astrophys. 
+J. Suppl, 148, 1 [12] J Weeks et al, Mon. 
+Not. 
+Roy. 
+Astron. 
+So c. 352, 258, 2004. 
+[13] B. Roukema et al, astro-ph/0402608. 
+[14] N. Cornish et al, Phys. 
+Rev. 
+Lett. 
+92, 201302, 2004. 
+[15] A. Berera, R. Buniy and T. Kephart, h ep-th/0311223. 
+[16] J. Moffat, astro-ph/0502110. 
+[17] Ferreira P., Magueijo J., G´orski K., 1998, Ast rophys.J, 503, 1 [18] A.J. 
+Banday, S. Zaroubi, K.M. 
+Gorski, astro-ph/9908070. 
+[19] J. Magueijo, 2000, Astrophys. 
+J. Lett, 528, 57 [20] Magueijo J., Medeiros J., 2004, MNRAS 351, L1-4 [21] Magueijo J., 1995, Phys. 
+Lett, B342, 32. Erratum-ibid, B352, 499. 
+[22] P. Ferreira and J. Magueijo, Phys. 
+Rev. 
+D56: 4578-4591, 1997. 
+[23] M. Tegmark, A. de Oliveira-Costa and A. Hamilton, Phys.Rev. 
+D68: 123523, 2003. 
+[24] P. Bielewicz, K. Gorski and A. J. Banday, astro-ph/0405007. 
+[25] Coles P. et al., 2003, astro-ph/0310252; P. Coles, astro-ph/0502088. 
+[26] J. Maxwell, A treatise on Electricity and Magentism, Vol.1, Dover Publications, N Y, 1954. 
+[27] Copi C.J., Huterer D., Starkman G.D., Phys.Rev. 
+D70, 043515, 2004. 
+[28] M. R. Dennis, J. Phys. 
+A 37 (2004) 9487-9500. 
+[29] K. Land and J. Magueijo, astro-ph/0407081. 
+[30] M. R. Dennis, math-ph/0410004. 
+[31] G. Katz and J. Weeks, Phys.Rev. 
+D70, 063527, 2004. 
+[32] J. Weeks, astro-ph/0412231. 
+[33] M. Lachieze-Rey, astro-ph/0409081. 
+[34] K. Land and J. Magueijo, preprint. 
+[35] G´orski K.M., Hivon E., Wandelt B. 1998, astro-ph/9812350 [36] C.L. 
+Bennett, et al., 2003, ApJS, 148, 97. [37] G. Hinshaw, et al., 2003, ApJS, 148, 63. 

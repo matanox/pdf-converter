@@ -29,9 +29,10 @@ executable = "pdf2htmlEX";
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1";
 
 exports.go = function(context, localCopy, docLogger, req, res) {
-  var fileContent, hash, hasher, name;
-  context.name = name = localCopy.replace("../local-copies/pdf/", "").replace(".pdf", "");
-  logging.logGreen(context.name);
+  var baseFolder, fileContent, hash, hasher, name, outFolder;
+  name = context.name;
+  baseFolder = '../data/pdf/1-html/';
+  outFolder = baseFolder + name;
   hasher = crypto.createHash('md5');
   fileContent = fs.readFileSync(localCopy);
   util.timelog(context, "hashing input file");
@@ -40,7 +41,7 @@ exports.go = function(context, localCopy, docLogger, req, res) {
   util.timelog(context, "hashing input file");
   logging.cond("input file hash is: " + hash, "hash");
   return riak.get('html', hash, function(error, formerName) {
-    var execCommand, input, outFolder, path;
+    var execCommand, input;
     if (error != null) {
       util.timelog(context, "from upload to serving");
       docMeta.storePdfMetaData(context, localCopy, docLogger);
@@ -48,12 +49,12 @@ exports.go = function(context, localCopy, docLogger, req, res) {
       storage.store(context, "pdf", fileContent, docLogger);
       util.timelog(context, "Conversion to html");
       logging.cond("starting the conversion from pdf to html", 'progress');
+      util.mkdir(outFolder, name);
       execCommand = executable + " ";
-      outFolder = "../local-copies/" + "html-converted/";
-      execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + "/" + name + '"';
+      execCommand += '"' + localCopy + '"' + " " + executalbeParams + " " + "--dest-dir=" + '"' + outFolder + '"';
       dataWriter.write(context, 'pdfToHtml', execCommand);
       return exec(execCommand, function(error, stdout, stderr) {
-        var input, outFolderResult, path, resultFile, _i, _len, _ref;
+        var input;
         logging.cond("finished the conversion from pdf to html", 'progress');
         dataWriter.write(context, 'pdfToHtml', executable + "'s stdout: " + stdout);
         dataWriter.write(context, 'pdfToHtml', executable + "'s stderr: " + stderr);
@@ -64,16 +65,20 @@ exports.go = function(context, localCopy, docLogger, req, res) {
           res.write("We are sorry, an unexpected error has occured processing your document");
           return res.end();
         } else {
-          outFolderResult = outFolder + name + '/';
-          _ref = fs.readdirSync(outFolderResult);
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            resultFile = _ref[_i];
-            if (fs.statSync(outFolderResult + resultFile).isFile()) {
-              util.mkdir(dataWriter.docsDataDir, name);
-              util.mkdir(dataWriter.docsDataDir + '/' + name, 'html-converted');
-              fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(dataWriter.docsDataDir + '/' + name + '/' + 'html-converted' + '/' + resultFile));
-            }
-          }
+          /*
+          # save the converted-to html as data as well
+          outFolderResult = outFolder + name + '/'
+          for resultFile in fs.readdirSync(outFolderResult)
+            if fs.statSync(outFolderResult + resultFile).isFile() 
+              #if util.extensionFilter(resultFile)
+              util.mkdir(outFolder)
+              util.mkdir(outFolder, name)
+              fs.createReadStream(outFolderResult + resultFile).pipe(fs.createWriteStream(outFolderResult + resultFile))
+          
+          # KEEP THIS FOR LATER: redirectToShowHtml('http://localhost:8080/' + 'serve-original-as-html/' + name + "/" + outFileName)
+          # redirectToShowRaw('http://localhost/' + 'extract' +'?file=' + name + "/" + outFileName)
+          */
+
           util.timelog(context, "Conversion to html");
           riak.save('html', hash, name, function(error) {
             if (error != null) {
@@ -82,20 +87,18 @@ exports.go = function(context, localCopy, docLogger, req, res) {
 
             }
           });
-          path = outFolder;
           input = {
-            'html': path + name + '/' + name + ".html",
-            'css': path + name + '/'
+            'html': outFolder + '/' + name + ".html",
+            'css': outFolder + '/'
           };
           return require('./extract').go(context, req, input, res, docLogger);
         }
       });
     } else {
       logging.cond('input file has already passed pdf2htmlEX conversion - skipping conversion', 'fileMgmt');
-      path = '../local-copies/' + 'html-converted/';
       input = {
-        'html': path + formerName + '/' + formerName + ".html",
-        'css': path + formerName + '/'
+        'html': baseFolder + formerName + '/' + formerName + ".html",
+        'css': baseFolder + formerName + '/'
       };
       return require('./extract').go(context, req, input, res, docLogger);
     }

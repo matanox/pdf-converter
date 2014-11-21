@@ -57,7 +57,7 @@ spawnClusterWorkers = function() {
     logging.logGreen("Cluster worker " + worker.id + " now sharing on " + address.address + ":" + address.port + " (pid " + worker.process.pid + ")");
     selfMonitor = require('./selfMonitor').start('worker ' + worker.id);
     if (env !== 'production') {
-      testFile = 'gender differences 2013';
+      testFile = '../data/pdf/0-input/1003.1141.pdf';
       if (firstFork) {
         firstFork = false;
         testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID();

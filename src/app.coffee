@@ -78,7 +78,9 @@ spawnClusterWorkers = () ->
       #testFile = 'Can Nature Make Us More Caring'    
       #testFile = 'wauthier13'    
       #testFile = 'xt7duLM0Q3Ow2gIBOvED'    
-      testFile = 'gender differences 2013'    
+      
+      #testFile = 'gender differences 2013'    
+      testFile = '../data/pdf/0-input/1003.1141.pdf'    
 
       # fire self test only for self cluster worker coming to life
       if firstFork

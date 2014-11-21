@@ -1,0 +1,75 @@
+2212-6716 © 2012 Published by Elsevier Ltd. 
+doi: 10.1016/j.aasri.2012.06.002 
+© 2012 Published by Elsevier B.V. 
+Selection and/or peer review under responsibility of American Applied Science Research Institute KeyWords: Phellinus Linteus; fermentation; model * Corresponding author. 
+Tel.: 021-62200534; fax:021-62208750 E-mail address: zhuzp123@sohu.com. 1. Introduction Phellinus igniarius (L.ex Fr.) Quel is a traditional and perennial medicinal fungus. 
+Its fruiting body can be used as the medicine[1]. 
+Due to the constraints of biological characteristics and external environment, the fruiting bodies of the wild Phellinus Linteus are scarce and they are not easily cultivated. 
+The study has indicated that the Phellinus Linteus polysaccharide is the main medicinal components of Phellinus igniarius Quel, which has the good anti-tumor effect[2]. 
+And the effect of the mycelium polysaccharide after fermentation is the same as the one of fruiting body polysaccharide[3]. 
+As the fermentation cycle is short and the fermentation is not constrained by seasons and environment, the development cost of Phellinus Linteus can be greatly reduced. 
+Therefore, the development of Phellinus Linteus mainly refers to the fermentation development[4, 5]. The fermentation yield of mycelium is closely related to the fermentation conditions. 
+In this paper, the fine strains after mutagenesis have been selected as the test materials. 
+And the orthogonal rotation combination design has been adopted to build the model for fermentation process. 
+The model analysis is helpful to optimize the fermentation conditions, which can lay the foundation for the actual production. 
+2. Experimental methods and results 2.1 Cultivation of fermentation seeds 200mL seed medium is installed in 500mL flask. 
+The slope strains are put into it and they should be statically cultivated in 28ć incubator. 
+The flask should be shaken in the morning and evening. 
+When the medium is evenly covered by the white flocculent mycelium, the cultivation is finished. 
+It should be put into the refrigerator at 4ć. The seed medium is consisted of 35g glucose, 10g peptone, 5g yeast extract, 1g potassium dihydrogen phosphate, 0.5g magnesium sulfate and 1000mL water. 
+1000mL water in experimental fermentation medium contains 51.6g wheat flour, 13.8g rice bran, 0.94g potassium dihydrogen phosphate and 0.54g magnesium. 
+The fermentation lasts for seven days. 
+It is required to filter the mycelium after the fermentation. 
+They should be dried and weighted after being cleaned by tap water. 
+The average values are considered as the experimental results. 
+2.2 Optimization of fermentation conditions (1) Design of experiment[6] Based on the single-factor test, it is required to adopt the four-factor quadratic regression orthogonal rotation combination testing program to optimize the experimental factors. 
+The specific test factor levels can be shown in Table 1. Tab. 
+1 Coding table of each factor zj x1˄bottling capacity mL˅ x2˄inoculum size mL˅ x3˄temperature ć˅ x4 (rotation speed r/min) ໛⊼ r=1.682 n=21,mc=8 mr=8,mo=5 n=21 x0j=(x-r+xrj) Ƹj=(xrj-xoj) r 160 22 32 164 1 140 18 30 150 0 110 12 27 130 -1 80 6 24 110 -r 60 2 22 96 ᇞ j 30 6 3 20 zj=(xj-xoj)/ᇞ j (2) The mathematical foundations of optimized model analysis In order to optimize the composition of the medium, the experimental data should be fitted by the polynomial regression analysis method so as to get the quadratic polynomial. It is an empirical model that describes the relationship between the response variable and the independent variable. 
+ 1 2 0 111 1 ppp p jj kjkj jjj jkjk j yb bz bzz bz      ¦¦¦ ¦ (1) In formula (1), y refers to the predicted response value; b o , b j , b jj are respectively the offset, the linear offset and the second-order offset; b ij is the interaction coefficient and z j refers to the specification variable coded value. 
+The conversion formula (2) between it and the actual value x j of the experimental level of natural variables can be shown as follows: 0jj j j xx z  ' (2) (3) The establishment of optimized model It is required to adopt the four-factor quadratic regression orthogonal rotation design to optimize the fermentation medium. 
+The levels of experimental factors can be shown in Table 1. Each experiment should be repeated two times and the average value is obtained. 
+The structure matrix and the test results can be shown in Table 2. Tab. 
+2 Test factors, levels and results Test No. Bottling capacity Inoculum size Temperature Rotation speed Yield (mg/mL) 1 -1 -1 -1 1 17.19 2 1 -1 -1 1 11.60 3 -1 1 -1 -1 19.82 4 1 1 -1 -1 17.66 5 -1 -1 1 -1 12.11 6 1 -1 1 -1 7.58 7 -1 1 1 1 12.99 8 1 1 1 1 20.61 9 -1.682 0 0 0 16.90 10 1.682 0 0 0 20.42 11 0 -1.682 0 0 16.34 12 0 1.682 0 0 23.60 13 0 0 -1.682 0 17.28 14 0 0 1.682 0 9.16 15 0 0 0 -1.682 10.18 16 0 0 0 1.682 15.25 17 0 0 0 0 21.25 18 0 0 0 0 20.06 19 0 0 0 0 23.97 20 0 0 0 0 20.43 21 0 0 0 0 22.67 The SAS8.0 software has been employed to analyze the experimental results. 
+The regression equation that affects the mycelia yield can be shown as: y              ]  ]  ] ]  ] ] ] ] ] ] ]  ]  ] ]  ] ]  ]  ] ]  ] (3) In order to investigate the fitness of regression equation (3), the obtained regression model should be conducted the variance analysis. 
+The results can be shown in Table 3. Tab. 
+3 Variance analysis of the test Source DF SS MS F Pr > F0.01 Model 14 443.7604 31.69717 8.518519 0.007423 (Linear) 4 154.6306 38.65766 10.38913 0.007273 (Quadratic) 4 228.6245 57.15613 15.36054 0.002629 (Cross Product) 6 60.50528 10.08421 2.710102 0.125181 Error 6 22.32583 3.720972 (Lack of fit) 2 11.72991 5.864957 2.214043 0.225249 (Pure Error) 4 10.59592 2.64898 Total 20 466.0863 Mean 17.00333 R-square 95.21% Adj. 
+R-square 84.03% RMSE 1.928982 CV 11.34473 The results of F test and lack of fit test have shown that the lack of fit items are not significant in equation (3), which indicates that there is no significant influence of other factors in this experiment. 
+The model is appropriate and the lack of fit is denied. 
+The regressive items are significant at the 0.01 level, which indicates that the selected four factors have significantly affected the fermentation yield of Phellinus Linteus. 
+The determination coefficient R-square[7] of the equation is 95.21% and the correction determination coefficient Adj. 
+R-square is 84.03%. 
+Both of them are higher, which shows that the credibility of this model is higher and it fits well with the actual situation. 
+Then, the changes of the test can be better explained. 
+In order to further analyze the influence of the equation on indicators, it is required to conduct the t-test for each coefficient in regression equation (3). 
+The results can be shown in Table 4. Tab. 
+4 Analysis of the regression coefficient Term Estimate Std Err t Pr > |t|0.05 X1 0.0922555 0.521979 0.176742 0.865526 X2 2.1584134 0.811038 2.661298 0.037459 X3 -2.414084 0.811038 -2.97654 0.024747 X1.5073297 0.811038 1.85852 0.112454 X1X1 -0.820464 0.498993 -1.64424 0.151231 X1X2 1.9475 0.681998 2.855579 0.028969 X1X3 1.355 0.681998 1.986809 0.094131 XX1.09 0.681998 1.598245 0.161104 X2X2 -0.35731 0.498993 -0.71606 0.500859 X2X3 -0.85483 1.059672 -0.80669 0.450627 X2X4 0.7915844 1.059672 0.747009 0.483293 XX 3 -2.743797 0.498993 -5.49867 0.001517 X3X4 0.6665866 1.059672 0.62905 0.552497 X4X4 -2.922344 0.498993 -5.85649 0.001095 According to the t-test results of each coefficient in the regression equation, it is required to exclude the insignificant items. 
+At the same time, when the actual variables are substituted, the regression equation will be obtained, which can be shown as follows:      \   [  [  [ [  [  [ [ [ (4) 2.3 The model analysis and discussion (1) Analysis of main effect As the factors in this design have been conducted the dimensionless linear encoder processing and there is no relationship between the first item regression coefficient b j and the regression coefficients of interaction items and quadratic items, the absolute value of the regression coefficient can directly compare the influence of the first item of each factor on the mycelium fermentation yield. 
+From formula (3), it is found that the factor that affects the fermentation yield most is the fermentation temperature, followed by the inoculum size, the rotation speed and the bottling volume. 
+(2) Analysis of interaction effect From formula (3), it is found that z1z2 is the only significant interaction item, which indicates that there exists a significant interaction between the inoculum size and the bottling capacity. 
+When the bottling capacity is lower, the inoculum size will be increased. 
+The fermentation yield of Phellinus Linteus is slowly increased and it has been decreased in some intervals. 
+When the bottling capacity is higher, the fermentation yield of Phellinus Linteus will be rapidly increased with the increase of inoculum size, which is more in line with the actual production situation. 
+(3) Simulation optimization of the optimum fermentation conditions It is required to conduct the solver through the encoding. 
+The theoretical extreme value of fermentation mycelium production is 24.51mg/mL. 
+The corresponding optimal fermentation conditions are: the bottling volume is 120mL, the inoculum size is 17mL, the temperature is 26ć and the rotation speed is 135r/min. 
+(4) Experiment verification of optimizing conditions The verification experiments should be performed in the optimal fermentation conditions. 
+The mycelium yield is 24.47r0.8(n=3)mg/mL, which is consistent with the theoretical value. 
+Acknowledgements A Project Supported by Scientific Research Fund of Zhejiang Provincial Education Department (Y201120923). 
+References: [1] Ministry of Health of the People’s Republic of China and State Administration of Traditional Chinese Medicine of the People’s Republic of China. 
+Chinese Herbal, Volumeĉ[M]. 
+Shanghai: Shanghai Science and Technology Press, 1999. 
+[2] Kim GY, Choi GS, Lee SH, et al. Acidic polysaccharide isolated from Phellinus linteus enhances through the up-regulation of nitric oxide and tumor necrosis factor-alpha from peritoneal macrophages [J]. 
+J Ethnopharmacol, 2004, 95(1): 69-76. 
+[3] Zheng LJ, Wang Q, Ji JQ et al. Study Evolution of Phellinus Igniarius[J]. 
+Research and Practice of Chinese Medicines, 2005, 19(3): 61-64. 
+[4] Kim SW, Hwang H, Park JP, et al. Mycelial growth and exobiopolymer production by submerged culture of various edible emushrooms under different media [J]. 
+Lett Appl Microbiol, 2002, 34(1): 56-61. 
+[5] Hwang HJ, Kim SW, Choi JW, et al. Production and characterization of exopoly -saccharides from submerged culture of Phellinus linteus KCTC6190 [J]. 
+Enzyme and Microbial Tec-hnology, 2003, 33: 309319. 
+[6] Yuan Zhifa, Zhou Jingyu. 
+Experimental Design and Analysis[M]. 
+Beijing: Higher Education Press, 2000. 
+[7] Deng Zuxin. 
+SAS System and Data Analysis[M]. 
+Beijing: Electronic Industry Press, 2002. 
+on to include a subheading within the Appendix if you wish. 

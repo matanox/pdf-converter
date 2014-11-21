@@ -729,6 +729,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     }
   }
   dataWriter.writeArray(context, 'sentences', sentences);
+  fs.writeFile('../data/pdf/2-as-text/' + context.name, sentences.join('\n'));
   metaTypeLog = function(type) {
     var text, _aj, _len19;
     text = '';

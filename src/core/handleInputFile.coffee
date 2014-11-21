@@ -27,7 +27,10 @@ fetch = (inkUrl, outFile, docLogger, req, res, callOnSuccess) ->
           docLogger.info "fetching from InkFilepicker returned error " + error 
     ).pipe(fs.createWriteStream(outFile))
 
-setOutFile = (baseFileName) -> "../local-copies/" + "pdf/" + baseFileName + ".pdf"
+initOutDirs = (baseFileName) -> 
+  baseDir = '../data/pdf'
+  util.mkdir(baseDir, '2-as-data')
+  util.mkdir(baseDir, '2-as-text')
 
 exports.go = (req, res) -> 
   
@@ -43,18 +46,21 @@ exports.go = (req, res) ->
       return
 
     # initialize a context object, to be passed around
+    fullFileName = req.query.localLocation
+    baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1).replace('.pdf', '')
+
     context = 
       runID : req.query.runID
+      name  : baseFileName
 
-    baseFileName = req.query.localLocation.replace('.pdf', '')
-
-    logging.logGreen("""Started handling input file: #{baseFileName}. Given run id is: #{context.runID}""")      
+    logging.logGreen("""Started handling input file: #{fullFileName}. Given run id is: #{context.runID}""")      
 
     docLogger = util.initDocLogger(baseFileName)
     docLogger.info('logger started')   
 
-    outFile = setOutFile(baseFileName)
-    convert.go(context, outFile, docLogger, req, res)
+    #outFile = initOutDirs(baseFileName)
+    initOutDirs(baseFileName)
+    convert.go(context, fullFileName, docLogger, req, res)
     return
 
   #
