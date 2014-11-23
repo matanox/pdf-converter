@@ -88,8 +88,7 @@ exports.write = (context, dataType, data, cnsl) ->
   #
   # mirror to console if requested
   #
-  if cnsl?
-    logging.logBlue data
+  if cnsl? then logging.logBlue data
 
   unless files[inputFileName]?
     files[inputFileName] = {} 

@@ -1,5 +1,5 @@
 #
-# Some headers to be expected in an article
+# Some words to be expected in headers in an article
 #
 
 expected = 
@@ -11,8 +11,8 @@ expected =
   'General Discussion'
   'Results',
   'Conclusion',
-  'Conclusions',
-  'References'
+  'References',
+  'Limitation'
 ]
 
 # derives uppercase variants

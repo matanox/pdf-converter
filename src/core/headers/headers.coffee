@@ -23,77 +23,151 @@ tripleIterator = (tokens, func) ->
 
     i = i + 1
 
-isTitleNumeral = (text) ->
-  if not isNaN(parseInt(text.charAt(0))) # is first char a digit?
-    return true
-
-  return false
-
 #
 # is the token distinct in font family, size, compared to its immediate environment?
 #
-separateness = (prev, curr) ->
-  logging.logBlue "separateness test"
-  logging.logBlue """size: #{curr.finalStyles['font-size']} font: #{curr.finalStyles['font-family']} v.s. 
-                       size: #{prev.finalStyles['font-size']} font: #{prev.finalStyles['font-family']} """
+separateness = (first, second) ->
+  #logging.logBlue "separateness test"
+  #logging.logBlue """size: #{curr.finalStyles['font-size']} font: #{curr.finalStyles['font-family']} v.s. 
+  #                     size: #{prev.finalStyles['font-size']} font: #{prev.finalStyles['font-family']} """
 
-  if curr.finalStyles['font-size'] isnt prev.finalStyles['font-size']
+  if first.finalStyles['font-size'] isnt second.finalStyles['font-size']
     return true
-  if curr.finalStyles['font-family'] isnt prev.finalStyles['font-family']
+  if first.finalStyles['font-family'] isnt second.finalStyles['font-family']
     return true
-
 
   return false
 
+sameness = (first, second) -> not separateness(first, second)
+styleContinuity = sameness
 
+#
+# return index of last token in style-continuous sequence starting at index t
+#
+getContinuouslyStyled = (tokens,t) ->
+  while t + 1 < tokens.length and styleContinuity(tokens[t], tokens[t+1])
+    ender = t+1
+    t += 1
+  return ender
+
+#
+# returns true if token exists and fulfills condition
+#
+test = (tokens, t, f) -> t < tokens.length and f(tokens[t])
+  
+#
+# tests next non-delimiter if any
+#
+testNext = (tokens, t, f) ->
+
+  if test(tokens, t+1, (token) -> token.metaType is 'delimiter')
+    if test(tokens, t+2, (token) -> token.metaType is 'regular')
+      if f(tokens[t+2])
+        return true
+
+  return false
+
+#
+# tests if has a next non-delimiter
+#
+hasNext = (tokens, t, f) ->
+  if test(tokens, t+1, (token) -> token.metaType is 'delimiter')
+    if test(tokens, t+2, (token) -> token.metaType is 'regular')
+      return true
+
+  return false
+
+optionallyCasedInTitle = ['and', 'for', 'in', 'of', 'the']
+
+isTitlishCase = (token) -> 
+  token.case in ['upper', 'title'] or not isNaN(parseFloat(token.text)) or token.text in optionallyCasedInTitle
+
+isTitlishCaseSequence = (tokens, start, end) ->
+  for t in [start..end]
+    if tokens[t].metaType is 'regular' and not isTitlishCase(tokens[t]) 
+      return false
+
+  return true
+
+startsWithDigit = (text) ->
+        ([1..9].some((i) -> parseInt(text.charAt(0)) == i)) # does it start with a digit between 1 and 9 ?
+
+#
+# check if text contains any of a list of expected header words
+#
+hasExpectedsequence = (text) ->
+  found = false
+  for e in expected
+    if text.indexOf(e) > -1
+      found = true
+  return found
+
+#
+# TODO: catch all headers not just those easy to catch.
+#       that would require a refactor of this function and likely some recursion.
+#
 module.exports = (context, tokens) -> 
-  name = context.name
 
-  #console.dir expected
+  getLevelStyle = (token) -> 
+    levelStyle = 
+      finalStyles:
+        "font-size":   token.finalStyles['font-size'], 
+        "font-family": token.finalStyles['font-family']
 
   anyFound = false
-
-  headers = []
+  headers = [] # not used
 
   # work with just the regular (non-delimiter) tokens
   regularTokens = tokens.filter((token) -> return token.metaType is 'regular')
 
-  tripleIterator(regularTokens, (prev, curr, next) ->
-      # check if token is one of the expected header level 1 list
-      if expected.indexOf(curr.text) is -1
-        return
-   
-      # check if token has a case implying possibly being a title
-      unless curr.case in ['upper', 'title']   
-        return
+  for token, t in tokens
+    if t < tokens.length
+      prev = tokens[t-1]
+  
+    ###
+    if token.text? and token.text is 'References'
+      console.dir tokens[t-1]
+      logging.logBlue "References token:"
+      console.dir token
+    ###
 
-      if curr.paragraphOpener
-        if separateness(prev, curr)
-          anyFound = true
-          dataWriter.write context, 'headers', { 
-              tokenId: curr.id, 
-              header:  curr.text, 
-              level:   1
-              detectionComment: 'paragraph opener'
-            }, true
-          return
+    # catch header not starting with numeral
+    if token.paragraphOpener
+      unless separateness(prev, token) then continue # require style change
+      
+      sequenceAsText = ''
+      seqEnd = getContinuouslyStyled(tokens, t)
+      for h in [t..seqEnd] 
+        sequenceAsText += if tokens[h].metaType is 'regular' then tokens[h].text else ' '
 
-      if isTitleNumeral(prev.text)
-        #logging.logRed prev.paragraph
-        if prev.paragraphOpener
-          anyFound = true
-          dataWriter.write context, 'headers', { 
-              tokenId: curr.id, 
-              header:  curr.text, 
-              level:   1
-              detectionComment: 'following numeral paragraph opener'
-            }, true
-          return
-    )
+      unless isTitlishCaseSequence(tokens, t, seqEnd) then continue # require titlish case
 
+      if sequenceAsText.indexOf("Introduction") > -1
+        logging.logBlue 'level1 style captured'
+        level1Style = getLevelStyle(token)
+
+      unless hasExpectedsequence(sequenceAsText) or 
+             (level1Style? and sameness(token, level1Style)) then continue # require partial match to expected headers list          
+
+      detectionComments = []
+      if hasExpectedsequence(sequenceAsText) then detectionComments.push 'expected header text'
+      if (level1Style? and sameness(token, level1Style)) then detectionComments.push 'mirrors introduction header style'
+
+      # getting here, declare this a beginning of a header 
+      anyFound = true
+      dataWriter.write context, 'headers', { 
+          tokenId: token.id, 
+          header:  sequenceAsText, 
+          level:   1
+          detectionComment: detectionComments.join " & "
+        }
+
+      logging.logBlue "detected header - " + detectionComments.join(" & ") + ": " + sequenceAsText
+
+  # console logging to help with single file run
   unless anyFound
-    logging.logRed """no headers detected for #{name} (#{noHeadersDocs} total)"""
     noHeadersDocs += 1
+    logging.logRed """no headers detected for #{context.name} (#{noHeadersDocs} total)"""
 
 
 

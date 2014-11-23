@@ -768,15 +768,15 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 #  for token, t in tokens
 #    if token.text is 'References' then logging.logYellow """References is #{token.paragraph} and #{tokens[t-1].text} is #{tokens[t-1].paragraph} """
 
-  for token in tokens
-    if token.text is 'run.' then logging.logYellow "run still here"
-    if token.text is 'References' then logging.logYellow "Referencse still here"
+  #for token in tokens
+  #  if token.text is 'run.' then logging.logYellow "run still here"
+  #  if token.text is 'References' then logging.logYellow "Referencse still here"
 
   docLogger.info(tokens.length)
   iterator(tokens, (a, b, i, tokens) ->                             
     if b.lineOpener
       if a.lineCloser
-        if b.text is 'References' then logging.logYellow "@References"
+        #if b.text is 'References' then logging.logYellow "@References"
         if a.metaType is 'regular' # line didn't include an ending delimiter 
           #docLogger.info('undelimited end of line detected')
           # if detected, unite a line boundary 'hypen-split'
