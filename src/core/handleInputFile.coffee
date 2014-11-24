@@ -31,6 +31,7 @@ initOutDirs = (baseFileName) ->
   baseDir = '../data/pdf'
   util.mkdir(baseDir, '2-as-data')
   util.mkdir(baseDir, '2-as-text')
+  util.mkdir(baseDir, '2-as-JATS')
 
 exports.go = (req, res) -> 
   

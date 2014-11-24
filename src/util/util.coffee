@@ -165,8 +165,8 @@ exports.pushIfTrue = (array, functionResult) ->
       return true
     return false
 
-exports.simpleLogSequence = (tokens, sequence, heading) -> 
-  console.log heading+':' if heading?
+exports.flattenSequenceText = (tokens, sequence, heading) -> 
+  console.log heading + ':' if heading?
   output = ''
   for t in [sequence.startToken..sequence.endToken]
     token = tokens[t]
@@ -175,7 +175,7 @@ exports.simpleLogSequence = (tokens, sequence, heading) ->
     else 
       output += ' '
 
-  console.log output
+  return output
 
 exports.markTokens = (tokens, sequence, mark) -> 
   for t in [sequence.startToken..sequence.endToken]

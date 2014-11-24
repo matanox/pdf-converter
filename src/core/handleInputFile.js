@@ -33,7 +33,8 @@ initOutDirs = function(baseFileName) {
   var baseDir;
   baseDir = '../data/pdf';
   util.mkdir(baseDir, '2-as-data');
-  return util.mkdir(baseDir, '2-as-text');
+  util.mkdir(baseDir, '2-as-text');
+  return util.mkdir(baseDir, '2-as-JATS');
 };
 
 exports.go = function(req, res) {

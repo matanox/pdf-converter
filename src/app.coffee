@@ -81,8 +81,13 @@ spawnClusterWorkers = () ->
       
       #testFile = 'gender differences 2013'    
       #testFile = '../data/pdf/0-input/1003.1141.pdf'    
+      #testFile = '../data/pdf/0-input/1408.5882.pdf'    
+      #testFile = '../data/pdf/0-input/FlSGlLJSRuLdHBSGvhGw.pdf'    
+      #testFile = '../data/pdf/0-input/wauthier13.pdf'    
       #testFile = '../data/pdf/0-input/1310.4546.pdf'    
-      testFile = '../data/pdf/0-input/1408.5882.pdf'    
+      #testFile = '../data/pdf/0-input/1310.1531.pdf'    
+      testFile = '../data/pdf/0-input/A Bootstrapping Approach to Unsupervised Detection of Cue Phrase.pdf'    
+      testFile = '../data/pdf/0-input/1-s2.0-S000169181400078X-main.pdf'    
 
       # fire self test only for self cluster worker coming to life
       if firstFork

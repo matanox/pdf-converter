@@ -182,7 +182,7 @@ exports.pushIfTrue = function(array, functionResult) {
   return false;
 };
 
-exports.simpleLogSequence = function(tokens, sequence, heading) {
+exports.flattenSequenceText = function(tokens, sequence, heading) {
   var output, t, token, _i, _ref, _ref1;
   if (heading != null) {
     console.log(heading + ':');
@@ -196,7 +196,7 @@ exports.simpleLogSequence = function(tokens, sequence, heading) {
       output += ' ';
     }
   }
-  return console.log(output);
+  return output;
 };
 
 exports.markTokens = function(tokens, sequence, mark) {

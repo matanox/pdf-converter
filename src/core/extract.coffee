@@ -19,6 +19,7 @@ analytic         = require '../util/analytic'
 dataWriter       = require '../data/dataWriter'
 refactorTools    = require '../refactorTools'
 headers          = require './headers/headers'
+xml              = require '../data/xml'
 
 mode = 'basic'
 refactorMode = true
@@ -43,6 +44,9 @@ titleAndAbstract = (context, tokens) ->
 
   util.timelog(context, 'Title and abstract recognition')
 
+  # 
+  # get first page tokens
+  #
   firstPage = []
   for token in tokens
     if token.page is '1'
@@ -61,7 +65,7 @@ titleAndAbstract = (context, tokens) ->
   dataWriter.write context, 'stats',  'first page is ' + firstPageEnd + ' tokens long'
 
   #
-  # Calculate most common font sizes
+  # Get all font sizes across the entire document - shouldn't this be just from the first page??!?
   #
   fontSizes = []
   for token in tokens
@@ -74,9 +78,12 @@ titleAndAbstract = (context, tokens) ->
 
   mainFontSize = parseFloat(util.first(fontSizesDistribution).key) 
 
+  #
   # Figure line beginnings and endings - currently not in use
-  # Unlike core text, here we don't expect intricacies like
+  #
+  # Note: unlike core text, here we don't expect intricacies like
   # two or more text columns for the same text sequence
+  #
   lineOpeners = []
   for t in [1..tokens.length-1] when parseInt(tokens[t].page) is 1
     a = tokens[t-1]
@@ -87,7 +94,7 @@ titleAndAbstract = (context, tokens) ->
       lineOpeners.push(t)  # pushes the index of b
 
   #
-  # Detect sequences 
+  # Derive text sequences
   #
   sequences = []
 
@@ -98,6 +105,9 @@ titleAndAbstract = (context, tokens) ->
     'startLeft':   parseFloat(tokens[0].positionInfo.left),
     'startBottom': parseFloat(tokens[0].positionInfo.bottom)
 
+  #
+  # Loop to bunch tokens into text sequences
+  #
   for t in [1..firstPageEnd]
 
     token = tokens[t]
@@ -109,38 +119,43 @@ titleAndAbstract = (context, tokens) ->
       rowLeftCurr = parseFloat(token.positionInfo.left)
       #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
 
-    # Same font size and family?  
+    #
+    # Considers splitting by typography and horizontal distance from previous
+    #
+
+    # does the font defer in font, compared to current sequence?
     if (token.finalStyles['font-size'] isnt sequence['font-size']) or 
     (token.finalStyles['font-family'] isnt sequence['font-family'])
-      # Same row?
-      unless token.positionInfo.bottom is prev.positionInfo.bottom
-        # New row but same horizontal start location as previous row?
-        unless (token.lineOpener and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # some grace      
+      # if so, is it on the same row though?
+      unless Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) < parseFloat(token.finalStyles['font-size'])*0.25
+        # does it have the same horizontal start location as the previous row?
+        unless (token.lineOpener and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # allow some grace....
+          #
+          # well, getting here, this should probably be the beginning of a new sequence
+          #
           split = true
 
     #
-    # Check the proportion of the effective line space compared to the font height - 
+    # Considers splitting by vertical distance from previous
     #
-    # this is a terrible hack and it needs to refine by better fathoming the relationship between
-    # actual visual pixel line spacing, v.s. the play between the height, font-size, bottom css 
+    # Note: this is a terrible hack and it needs to refine by better fathoming the relationship 
+    # between actual visual pixel line spacing, v.s. the play between the height, font-size, bottom css 
     # properties, and the css transform matrix as used in pdf2htmlEX output. 
     #
     # NOTE: 0.25 is the css transform matrix horizontal and vertical scaling factor, used
-    #       by pdf2htmlEX css. i.e. actual font pixel size is 0.25 that of the declared 
+    #       by pdf2htmlEX css. i.e. actual font pixel size is 0.25 of the declared 
     #       font-size property.
     #
-    if parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom) > parseFloat(token.finalStyles['font-size'])*0.25*2
+    if Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) > parseFloat(token.finalStyles['font-size'])*0.25*2
       split = true
     
     if split
-
       #console.dir token
-
       # close off terminated sequence       
       sequence.endToken    = t-1  
       sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
       sequences.push sequence
-      #util.simpleLogSequence(tokens, sequence, 'detected sequence')
+      #util.flattenSequenceText(tokens, sequence, 'detected sequence')
 
       # start next sequence
       sequence = 
@@ -157,16 +172,26 @@ titleAndAbstract = (context, tokens) ->
     sequence.numOfTokens = sequence.endToken - sequence.startToken + 1
     sequences.push sequence
 
-  # sort sequences according from top left to bottom right - to simplify next steps
+  # sort sequences from top to bottom, then from left to right
   sequences.sort( 
     (a, b) -> 
       # is same vertical location, sort by horizontal location
-      if b.startBottom is a.startBottom # consider adding 'grace' variance here
-        return b.startLeft - a.startLeft
+      if b.startBottom is a.startBottom # consider adding 'grace' here
+        return a.startLeft - b.startLeft
 
       # sort by vertical location
       return b.startBottom - a.startBottom 
     )
+
+
+  # Great way to log all detected first page sequences!
+  logFirstPageSequences = () ->
+    for sequence, s in sequences
+      console.log s
+      console.log sequence.startBottom
+      logging.logBlue util.flattenSequenceText(tokens, sequence)
+  
+  logFirstPageSequences()
 
   minAbstractTokensNum    = 50 
   minTitleTokensNum       = 6
@@ -180,12 +205,11 @@ titleAndAbstract = (context, tokens) ->
   # until a long enough sequence is detected.
   # 
   # Note: this assumes that the title uses a single font.
-  #       in some edge cases, this can fail. The sequencing 
-  #       and algorithm can be refined to solve for that.
   #       
 
+  # sort fonts descending 
   fontSizesUnique = util.unique(fontSizes, true)
-  fontSizesUnique.sort( (a, b) -> return b - a )  # sort descending and discard duplicates
+  fontSizesUnique.sort( (a, b) -> return b - a )  
   #console.dir fontSizesUnique
 
   i = 0  # look for largest font size sequence
@@ -195,7 +219,7 @@ titleAndAbstract = (context, tokens) ->
     for sequence in sequences   # get sequence using it
       #console.log parseFloat(sequence['font-size']) + ' ' + fontSizesUnique[i]
       #console.log sequence.startBottom
-      #util.simpleLogSequence(tokens, sequence, 'sequence')
+      #util.flattenSequenceText(tokens, sequence, 'sequence')
       if parseFloat(sequence['font-size']) is fontSizesUnique[i]
         #console.log sequence.numOfTokens
         if sequence.startBottom > 500
@@ -208,13 +232,19 @@ titleAndAbstract = (context, tokens) ->
   # get abstract by looking for the header 'abstract'
   #
 
-
   skipDelimiters = (tokens, startToken, endToken) ->
     for t in [startToken..endToken]
       if tokens[t].metaType is 'regular'
         return tokens[t]
 
     return null
+
+  ###
+
+  detection by 'ABSTRACT' header recognition - perhaps this is superfluous
+  otherwise, should not assume next sequence after 'ABSTRACT' header is the abstract,
+  as that is incorrect in some Elsevier. Checking for minimum length is a better
+  way to pick the abstract with that Elsevier example.
 
   for sequence, s in sequences     
     token = skipDelimiters(tokens, sequence.startToken, sequence.endToken)
@@ -226,10 +256,12 @@ titleAndAbstract = (context, tokens) ->
           if s < sequences.length-1 # if not last detected sequence, although should be impossible anyway
             #logging.logRed 'abstract header has section following it'
             abstract = sequences[s+1]
+            logging.logYellow 'abstract detected via abstract title: ' + util.flattenSequenceText(tokens, abstract)
             break 
+  ###
 
   #
-  # get abstract by the following criterion -
+  # otherwise, get abstract by the following criterion -
   # first 'long' sequence on first page
   #
   # bottom-wise first will be detected relying on the array having been sorted already
@@ -237,13 +269,18 @@ titleAndAbstract = (context, tokens) ->
 
   unless abstract?
     for sequence in sequences     
-      if sequence.numOfTokens > minAbstractTokensNum
-        abstract = sequence
-        break
+      if sequence.numOfTokens > minAbstractTokensNum 
+        if ctype.sentenceOpenerChar(sequence.startText.charAt(0))
+          abstract = sequence
+          logging.logYellow ''
+          logging.logYellow 'Article: ' + name
+          logging.logYellow 'Detected abstract:\n' + util.flattenSequenceText(tokens, abstract)
+          logging.logYellow ''
+          break
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
-    #util.simpleLogSequence(tokens, abstract, 'abstract')
+    #util.flattenSequenceText(tokens, abstract, 'abstract')
   else 
     console.warn 'abstract not detected'
 
@@ -270,7 +307,7 @@ titleAndAbstract = (context, tokens) ->
 
   if title?
     util.markTokens(tokens, title, 'title')  
-    #util.simpleLogSequence(tokens, title, 'title')
+    #util.flattenSequenceText(tokens, title, 'title')
   else 
     console.warn 'title not detected'
 
@@ -303,6 +340,7 @@ titleAndAbstract = (context, tokens) ->
 # Core of this module
 #
 generateFromHtml = (context, req, input, res ,docLogger, callback) ->  
+
   name = context.name
 
   util.timelog(context, 'Extraction from html stage A')
@@ -880,6 +918,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       # if util.pushIfTrue(token.calculatedProperties, ctype.testInterspacedTitleWord(token.text))
       #   dataWriter.write context, 'partDetection', 'Interspaced Title Word detected for word: ' + token.text
   
+  # mix in header indications into token sequence
   headers(context, tokens)
 
   #
@@ -908,14 +947,26 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   util.timelog context, 'Sentence tokenizing'  
 
   #
-  # data-log all sentences, with paragraph splits indicated as well (abstract excluded).
+  # data-log all sentences, with paragraph splits and with sections derived by headers
   #
 
   sentences = []
+  inSection = false
+  xmlBuilder = xml.init 
 
   for group in groups
     sentence = ''
     for token in group
+
+      # mark section edges in xml
+      if token.sectionOpener
+        if inSection then xmlBuilder += xml.signal('section', 'closer')
+        xmlBuilder += xml.signal('section', 'opener', {sectionType: token.sectionType, sectionName: token.sectionOpenerName})
+        inSection = true
+
+      # mark paragraph edges in xml
+      #if token.paragraphOpener then xmlBuilder += xml.signal('paragraph', 'closer') + xml.signal('paragraph', 'opener') 
+      #if token.paragraphCloser then xmlBuilder += xml.signal('paragraph', 'closer')      
 
       if token.text is 'run.References' then logging.logYellow "REFERENCES IN SENTENCE"
 
@@ -928,11 +979,11 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       continue
 
     sentences.push sentence
+    xmlBuilder += xml.escape(sentence)
     
-    # mark end of paragraph in the data-writing
-    if group[group.length-1].paragraphCloser
-      sentence += '\n'
-      #dataWriter.write context, 'sentences', sentence
+  xmlBuilder += xml.signal('section', 'closer')   # close off last section
+  xmlBuilder = xml.wrapAsJats(xmlBuilder)
+  fs.writeFile('../data/pdf/2-as-JATS/' + context.name + '.xml', xmlBuilder)
 
   dataWriter.writeArray context, 'sentences', sentences
   fs.writeFile('../data/pdf/2-as-text/' + context.name, sentences.join('\n'))
@@ -977,7 +1028,8 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   console.dir(documentQuantifiers)
 
   #
-  # Adding marker highlighting
+  # Adding marker highlighting - this is now disabled, and implementation
+  # should consider a different programming language
   #
 
   util.timelog(context, 'Markers visualization') 

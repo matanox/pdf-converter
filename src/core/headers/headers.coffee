@@ -4,7 +4,7 @@
 
 dataWriter = require '../../data/dataWriter'
 logging    = require '../../util/logging' 
-
+xml        = require '../../data/xml'
 expected   = require './expected'
 
 noHeadersDocs = 0
@@ -93,14 +93,13 @@ startsWithDigit = (text) ->
         ([1..9].some((i) -> parseInt(text.charAt(0)) == i)) # does it start with a digit between 1 and 9 ?
 
 #
-# check if text contains any of a list of expected header words
+# check if text contains any of a list of expected header words (if it does, returns it
 #
-hasExpectedsequence = (text) ->
-  found = false
+expectedSequence = (text) ->
   for e in expected
     if text.indexOf(e) > -1
-      found = true
-  return found
+      return e
+  return null
 
 #
 # TODO: catch all headers not just those easy to catch.
@@ -114,8 +113,7 @@ module.exports = (context, tokens) ->
         "font-size":   token.finalStyles['font-size'], 
         "font-family": token.finalStyles['font-family']
 
-  anyFound = false
-  headers = [] # not used
+  anyFound  = false
 
   # work with just the regular (non-delimiter) tokens
   regularTokens = tokens.filter((token) -> return token.metaType is 'regular')
@@ -124,21 +122,13 @@ module.exports = (context, tokens) ->
     if t < tokens.length
       prev = tokens[t-1]
   
-    ###
-    if token.text? and token.text is 'References'
-      console.dir tokens[t-1]
-      logging.logBlue "References token:"
-      console.dir token
-    ###
-
-    # catch header not starting with numeral
     if token.paragraphOpener
       unless separateness(prev, token) then continue # require style change
       
       sequenceAsText = ''
       seqEnd = getContinuouslyStyled(tokens, t)
       for h in [t..seqEnd] 
-        sequenceAsText += if tokens[h].metaType is 'regular' then tokens[h].text else ' '
+        sequenceAsText += if tokens[h].metaType is 'regular' then tokens[h].text else (if (h isnt seqEnd) then ' ' else '')
 
       unless isTitlishCaseSequence(tokens, t, seqEnd) then continue # require titlish case
 
@@ -146,14 +136,18 @@ module.exports = (context, tokens) ->
         logging.logBlue 'level1 style captured'
         level1Style = getLevelStyle(token)
 
-      unless hasExpectedsequence(sequenceAsText) or 
+      matchedExpectation = expectedSequence(sequenceAsText)
+      unless matchedExpectation or 
              (level1Style? and sameness(token, level1Style)) then continue # require partial match to expected headers list          
 
       detectionComments = []
-      if hasExpectedsequence(sequenceAsText) then detectionComments.push 'expected header text'
+      if matchedExpectation then detectionComments.push 'expected header text'
       if (level1Style? and sameness(token, level1Style)) then detectionComments.push 'mirrors introduction header style'
 
-      # getting here, declare this a beginning of a header 
+      #
+      # getting here, interpret this a beginning of a header 
+      #
+
       anyFound = true
       dataWriter.write context, 'headers', { 
           tokenId: token.id, 
@@ -162,6 +156,11 @@ module.exports = (context, tokens) ->
           detectionComment: detectionComments.join " & "
         }
 
+      token.sectionOpener = true
+      token.sectionOpenerName = sequenceAsText
+      token.sectionType = matchedExpectation or 'undetermined'
+
+      logging.logGreen token.sectionType
       logging.logBlue "detected header - " + detectionComments.join(" & ") + ": " + sequenceAsText
 
   # console logging to help with single file run

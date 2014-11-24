@@ -21,6 +21,12 @@ exports.isAlphabetChar = isAlphabetChar
 isLowerCaseChar = (char) ->
   char is char.toLowerCase()
 
+isPunctuationChar = (char) -> 
+  ['.' ,',', ';', '?', '!'].indexOf(char) != -1 # is char a punctuation mark
+
+exports.sentenceOpenerChar = (char) ->
+  isAlphabetChar(char) and isUpperCaseChar(char)
+
 exports.isLowerCaseChar = isLowerCaseChar
 
 isUpperCaseChar = (char) -> not isLowerCaseChar(char)

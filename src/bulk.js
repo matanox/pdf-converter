@@ -19,7 +19,7 @@ nconf.defaults({
   host: "localhost",
   directory: '../data/pdf/0-input/',
   flood: false,
-  parallelism: 2,
+  parallelism: 1,
   maxFiles: process.argv[2] || 10000
 });
 
