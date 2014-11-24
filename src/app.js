@@ -57,8 +57,7 @@ spawnClusterWorkers = function() {
     logging.logGreen("Cluster worker " + worker.id + " now sharing on " + address.address + ":" + address.port + " (pid " + worker.process.pid + ")");
     selfMonitor = require('./selfMonitor').start('worker ' + worker.id);
     if (env !== 'production') {
-      testFile = '../data/pdf/0-input/A Bootstrapping Approach to Unsupervised Detection of Cue Phrase.pdf';
-      testFile = '../data/pdf/0-input/1-s2.0-S000169181400078X-main.pdf';
+      testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf';
       if (firstFork) {
         firstFork = false;
         testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID();

@@ -160,8 +160,8 @@ module.exports = (context, tokens) ->
       token.sectionOpenerName = sequenceAsText
       token.sectionType = matchedExpectation or 'undetermined'
 
-      logging.logGreen token.sectionType
-      logging.logBlue "detected header - " + detectionComments.join(" & ") + ": " + sequenceAsText
+      #logging.logGreen token.sectionType
+      #logging.logBlue "detected header - " + detectionComments.join(" & ") + ": " + sequenceAsText
 
   # console logging to help with single file run
   unless anyFound

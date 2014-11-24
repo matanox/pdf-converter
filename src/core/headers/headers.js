@@ -174,8 +174,6 @@ module.exports = function(context, tokens) {
       token.sectionOpener = true;
       token.sectionOpenerName = sequenceAsText;
       token.sectionType = matchedExpectation || 'undetermined';
-      logging.logGreen(token.sectionType);
-      logging.logBlue("detected header - " + detectionComments.join(" & ") + ": " + sequenceAsText);
     }
   }
   if (!anyFound) {

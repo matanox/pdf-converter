@@ -184,9 +184,6 @@ exports.pushIfTrue = function(array, functionResult) {
 
 exports.flattenSequenceText = function(tokens, sequence, heading) {
   var output, t, token, _i, _ref, _ref1;
-  if (heading != null) {
-    console.log(heading + ':');
-  }
   output = '';
   for (t = _i = _ref = sequence.startToken, _ref1 = sequence.endToken; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; t = _ref <= _ref1 ? ++_i : --_i) {
     token = tokens[t];

@@ -166,7 +166,6 @@ exports.pushIfTrue = (array, functionResult) ->
     return false
 
 exports.flattenSequenceText = (tokens, sequence, heading) -> 
-  console.log heading + ':' if heading?
   output = ''
   for t in [sequence.startToken..sequence.endToken]
     token = tokens[t]

@@ -85,9 +85,12 @@ spawnClusterWorkers = () ->
       #testFile = '../data/pdf/0-input/FlSGlLJSRuLdHBSGvhGw.pdf'    
       #testFile = '../data/pdf/0-input/wauthier13.pdf'    
       #testFile = '../data/pdf/0-input/1310.4546.pdf'    
+      #testFile = '../data/pdf/0-input/A Bootstrapping Approach to Unsupervised Detection of Cue Phrase.pdf'    
+      #testFile = '../data/pdf/0-input/1-s2.0-S000169181400078X-main.pdf'    
       #testFile = '../data/pdf/0-input/1310.1531.pdf'    
-      testFile = '../data/pdf/0-input/A Bootstrapping Approach to Unsupervised Detection of Cue Phrase.pdf'    
-      testFile = '../data/pdf/0-input/1-s2.0-S000169181400078X-main.pdf'    
+      #testFile = '../data/pdf/0-input/0502237v2.pdf'    
+      #testFile = '../data/pdf/0-input/Scaling down dimensions.pdf'    
+      testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf'    
 
       # fire self test only for self cluster worker coming to life
       if firstFork

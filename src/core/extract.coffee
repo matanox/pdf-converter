@@ -36,6 +36,27 @@ iterator = (tokens, iterationFunc) ->
     b = tokens[i]
     i = i + iterationFunc(a, b, i, tokens) 
 
+
+UnplausiblyAbstract = (tokens, sequence) -> 
+
+  sum = (a,b) -> a + b
+
+  textTokens = []
+  for t in [sequence.startToken..sequence.endToken] when tokens[t].text?
+    textTokens.push tokens[t]
+
+  #textTokens.map((t) -> console.log(t.text + '\n'))
+
+  upperCaseStarts = textTokens.map((t) => if ctype.isUpperCaseChar(t.text.charAt(0)) then 1 else 0).reduce(sum)
+
+  includesComma = textTokens.map((t) => 
+    if t.text.indexOf(',') >= 0 then 1 else 0).reduce(sum)
+
+  if upperCaseStarts > 1/3 * textTokens.length then return true
+  if includesComma   > 1/4 * textTokens.length then return true
+
+  return false
+
 #
 # extract article title and abstract
 #
@@ -119,21 +140,32 @@ titleAndAbstract = (context, tokens) ->
       rowLeftCurr = parseFloat(token.positionInfo.left)
       #lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom)
 
+    ###
     #
     # Considers splitting by typography and horizontal distance from previous
     #
+  
+    Let us try doing without considering font change as a sequence splitter and relying
+    on more salient ones, as most sequences should/would defer by location anyway.
+    since typography is allowed to change inside an abstract...
 
     # does the font defer in font, compared to current sequence?
     if (token.finalStyles['font-size'] isnt sequence['font-size']) or 
     (token.finalStyles['font-family'] isnt sequence['font-family'])
-      # if so, is it on the same row though?
-      unless Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) < parseFloat(token.finalStyles['font-size'])*0.25
+      #
+      # if so, is it on the same row though? 
+      # the math on this line tries to approximate whether the current token
+      # is just a superscript/subscript offset away or really a different line 
+      unless Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) < parseFloat(prev.finalStyles['font-size'])*0.25
+        logging.logRed Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) 
+        logging.logRed parseFloat(prev.finalStyles['font-size'])*0.25
         # does it have the same horizontal start location as the previous row?
         unless (token.lineOpener and Math.abs(rowLeftLast - rowLeftCurr) < 2)  # allow some grace....
           #
           # well, getting here, this should probably be the beginning of a new sequence
           #
           split = true
+    ###
 
     #
     # Considers splitting by vertical distance from previous
@@ -146,7 +178,7 @@ titleAndAbstract = (context, tokens) ->
     #       by pdf2htmlEX css. i.e. actual font pixel size is 0.25 of the declared 
     #       font-size property.
     #
-    if Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) > parseFloat(token.finalStyles['font-size'])*0.25*2
+    if Math.abs(parseFloat(prev.positionInfo.bottom) - parseFloat(token.positionInfo.bottom)) > parseFloat(token.finalStyles['font-size'])*0.25*1.5
       split = true
     
     if split
@@ -193,8 +225,8 @@ titleAndAbstract = (context, tokens) ->
   
   logFirstPageSequences()
 
-  minAbstractTokensNum    = 50 
-  minTitleTokensNum       = 6
+  minAbstractTokensNum    = 100  # this includes delimiters, so approx. 50 words
+  minTitleTokensNum       = 6    # this includes delimiters too
 
   #
   # Detect the title 
@@ -270,16 +302,19 @@ titleAndAbstract = (context, tokens) ->
   unless abstract?
     for sequence in sequences     
       if sequence.numOfTokens > minAbstractTokensNum 
-        if ctype.sentenceOpenerChar(sequence.startText.charAt(0))
-          abstract = sequence
-          logging.logYellow ''
-          logging.logYellow 'Article: ' + name
-          logging.logYellow 'Detected abstract:\n' + util.flattenSequenceText(tokens, abstract)
-          logging.logYellow ''
-          break
+        #console.dir sequence
+        if ctype.sentenceOpenerChar(tokens[sequence.startToken].text.charAt(0))
+          unless UnplausiblyAbstract(tokens, sequence)
+            abstract = sequence
+            logging.logYellow ''
+            logging.logYellow 'Article: ' + name
+            logging.logYellow 'Detected abstract:\n' + util.flattenSequenceText(tokens, abstract)
+            logging.logYellow ''
+            break
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
+    logging.logRed abstract.endToken - abstract.startToken
     #util.flattenSequenceText(tokens, abstract, 'abstract')
   else 
     console.warn 'abstract not detected'
@@ -658,7 +693,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
         lineSpaces.push parseFloat(a.positionInfo.bottom) - parseFloat(b.positionInfo.bottom) 
 
     if b.lineOpener
-      if b.text is 'References' then logging.logGreen """has indentation change and preceded by #{a.text}"""
+      if b.text is 'References' then logging.logGreen """References line opener has indentation change and preceded by #{a.text}"""
 
   lineSpaceDistribution = analytic.generateDistribution(lineSpaces)
   
@@ -683,7 +718,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     nextOpener = tokens[lineOpeners[i+1]] # previous row opener  
     prevToken  = tokens[lineOpeners[i]-1] # token immediately preceding current row opener
 
-    if currOpener.text is 'References' then logging.logYellow "REFERENCES"
+    # if currOpener.text is 'References' then logging.logYellow "REFERENCES"
     
     # skip new paragraph recognition within the article title -
     # as titles tend to span few lines while being center justified,
@@ -693,7 +728,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
     # is there an indentation change?
     if parseInt(currOpener.positionInfo.left) > parseInt(prevOpener.positionInfo.left)
-      if currOpener.text is 'References' then logging.logYellow """has indentation change and preceded by #{prevToken.text}. Metatypes are: #{currOpener.metaType}, #{prevToken.metaType}"""
+      if currOpener.text is 'References' then logging.logYellow """References line opener has indentation change and preceded by #{prevToken.text}. Metatypes are: #{currOpener.metaType}, #{prevToken.metaType}"""
 
       # is it a column transition?
       if currOpener.columnOpener
@@ -968,8 +1003,6 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       #if token.paragraphOpener then xmlBuilder += xml.signal('paragraph', 'closer') + xml.signal('paragraph', 'opener') 
       #if token.paragraphCloser then xmlBuilder += xml.signal('paragraph', 'closer')      
 
-      if token.text is 'run.References' then logging.logYellow "REFERENCES IN SENTENCE"
-
       if token.meta in ['title', 'abstract']
         continue
 
@@ -1153,11 +1186,12 @@ done = (error, res, tokens, context, docLogger) ->
     dataWriter.close(name)
 
     compare = require '../compare/compare'
-    #compare.diff(name, 'headers')
-    setTimeout((() -> 
-        compare.diff(context, 'sentences')
-        compare.diff(context, 'headers')), 
-      3000)
+    
+    unless context.runID.indexOf('self-test-on-startup') >= 0
+      setTimeout((() -> 
+          compare.diff(context, 'sentences')
+          compare.diff(context, 'headers')), 
+        3000)
 
   if error?
     res.writeHead 505
