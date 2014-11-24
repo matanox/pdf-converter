@@ -5,8 +5,8 @@ logging = require('../util/logging');
 
 util = require('../util/util');
 
-exports.wrapAsJats = function(content) {
-  return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><article xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:mml=\"http://www.w3.org/1998/Math/MathML\"><body>" + content + "</body></article>";
+exports.wrapAsJatsArticle = function(content) {
+  return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><article xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:mml=\"http://www.w3.org/1998/Math/MathML\">" + content + "</article>";
 };
 
 XMLescaping = [
@@ -39,6 +39,22 @@ exports.escape = function(string) {
 
 signal = exports.signal = function(type, action, paramObj) {
   switch (type) {
+    case 'abstract':
+      if (action === 'opener') {
+        return '<front><article-meta><abstract><object-id>dummy</object-id><p>';
+      }
+      if (action === 'closer') {
+        return '</p></abstract></article-meta></front>';
+      }
+      break;
+    case 'body':
+      if (action === 'opener') {
+        return '<body>';
+      }
+      if (action === 'closer') {
+        return '</body>';
+      }
+      break;
     case 'paragraph':
       if (action === 'opener') {
         return '<p>';

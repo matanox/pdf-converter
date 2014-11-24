@@ -314,7 +314,7 @@ titleAndAbstract = (context, tokens) ->
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
-    logging.logRed abstract.endToken - abstract.startToken
+    #logging.logRed abstract.endToken - abstract.startToken
     #util.flattenSequenceText(tokens, abstract, 'abstract')
   else 
     console.warn 'abstract not detected'
@@ -372,6 +372,25 @@ titleAndAbstract = (context, tokens) ->
   util.timelog(context, 'initial handling of first page fluff')
 
 #
+# data-log a metaType
+#
+writeByMetaType = (context, tokens, type) ->
+  text = ''
+  for token in tokens
+    if token.meta is type
+      switch token.metaType 
+        when 'regular'
+          text += token.text + ' '
+
+  if text.length > 0
+    dataWriter.write context, type, text
+    return true
+
+  else
+    console.warn """cannot data-write #{type} because no tokens are marked as #{type}"""
+    return false
+    
+#
 # Core of this module
 #
 generateFromHtml = (context, req, input, res ,docLogger, callback) ->  
@@ -379,6 +398,8 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   name = context.name
 
   util.timelog(context, 'Extraction from html stage A')
+
+  xmlBuilder = xml.init # initialize output
 
   #
   # Read the input html 
@@ -982,12 +1003,25 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   util.timelog context, 'Sentence tokenizing'  
 
   #
-  # data-log all sentences, with paragraph splits and with sections derived by headers
+  # output title and abstract 
   #
+  xmlBuilder += xml.signal('abstract', 'opener')
+  for token in tokens when token.meta is 'abstract'
+    if token.metaType is 'regular' then xmlBuilder += token.text
+    else xmlBuilder += ' '
 
+  xmlBuilder += xml.signal('abstract', 'closer')
+
+  # data-log abstract, title
+  writeByMetaType(context, tokens, 'abstract')
+  writeByMetaType(context, tokens, 'title')
+
+  #
+  # output all sentences, with paragraph splits and with sections derived by headers
+  #
   sentences = []
   inSection = false
-  xmlBuilder = xml.init 
+  xmlBuilder += xml.signal('body', 'opener')
 
   for group in groups
     sentence = ''
@@ -995,7 +1029,9 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
       # mark section edges in xml
       if token.sectionOpener
-        if inSection then xmlBuilder += xml.signal('section', 'closer')
+        if inSection 
+          xmlBuilder += xml.signal('section', 'closer')
+          inSection = false
         xmlBuilder += xml.signal('section', 'opener', {sectionType: token.sectionType, sectionName: token.sectionOpenerName})
         inSection = true
 
@@ -1014,38 +1050,17 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     sentences.push sentence
     xmlBuilder += xml.escape(sentence)
     
-  xmlBuilder += xml.signal('section', 'closer')   # close off last section
-  xmlBuilder = xml.wrapAsJats(xmlBuilder)
+  if inSection then xmlBuilder += xml.signal('section', 'closer') # close off last section if any
+  xmlBuilder += xml.signal('body', 'closer')
+
+  xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
   fs.writeFile('../data/pdf/2-as-JATS/' + context.name + '.xml', xmlBuilder)
 
   dataWriter.writeArray context, 'sentences', sentences
   fs.writeFile('../data/pdf/2-as-text/' + context.name, sentences.join('\n'))
+
+
  
-  #
-  # data-log all that has meta-tag
-  #
-  metaTypeLog = (type) ->
-    text = ''
-    for token in tokens
-      if token.meta is type
-        switch token.metaType 
-          when 'regular'
-            text += token.text + ' '
-
-    if text.length > 0
-      dataWriter.write context, type, text
-      return true
-
-    else
-      console.warn """cannot data-write #{type} because no tokens are marked as #{type}"""
-      return false
-    
-  #
-  # data-log abstract, title, if detected
-  #
-  metaTypeLog('abstract')
-  metaTypeLog('title')
-
   if mode is 'basic'
     #
     # return the tokens to caller

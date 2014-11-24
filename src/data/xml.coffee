@@ -6,8 +6,8 @@ util       = require '../util/util'
 # taking a simple approach of building it from strings, not through a fancy XML api for now
 #
 
-exports.wrapAsJats = (content) ->
-  """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"><body>"""  + content +  "</body></article>"
+exports.wrapAsJatsArticle = (content) ->
+  """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML">"""  + content +  "</article>"
 
 XMLescaping = [{from: "&",  to: "&amp;"},
                {from: "<",  to: "&lt;"},
@@ -22,6 +22,15 @@ exports.escape = (string) ->
 
 signal = exports.signal = (type, action, paramObj) ->
   switch type 
+
+    when 'abstract'
+      if action is 'opener' then return '<front><article-meta><abstract><object-id>dummy</object-id><p>'
+      if action is 'closer' then return '</p></abstract></article-meta></front>'
+
+    when 'body'
+      if action is 'opener' then return '<body>'
+      if action is 'closer' then return '</body>'
+
     when 'paragraph'
       if action is 'opener' then return '<p>'
       if action is 'closer' then return '</p>'
