@@ -14,6 +14,9 @@ crypto = require 'crypto'
 dataWriter = require '../data/dataWriter'
 #output = require '../output'
 
+nconf = require('nconf')
+HTMLinputPath = nconf.get("locations")["pdf-extraction"]["asHTML"]
+
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1" 
 
@@ -23,7 +26,7 @@ executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascr
 exports.go = (context, localCopy, docLogger, req, res) ->
 
   name = context.name
-  baseFolder = '../data/pdf/1-html/' 
+  baseFolder = HTMLinputPath
   outFolder = baseFolder + name
   #console.log """About to convert file #{name} from pdf to html"""
 

@@ -11,6 +11,12 @@ fs         = require 'fs'
 winston    = require 'winston'
 logging    = require '../util/logging' 
 
+nconf = require('nconf')
+dataOutDir = nconf.get("locations")["pdf-extraction"]["asData"]
+textOutDir = nconf.get("locations")["pdf-extraction"]["asText"]
+JATSOutDir = nconf.get("locations")["pdf-extraction"]["asJATS"]
+
+
 #
 # * Fetches the upload from Ink File Picker (writing it into local file).
 # * If it works - invoke the passed along callback function.
@@ -28,10 +34,9 @@ fetch = (inkUrl, outFile, docLogger, req, res, callOnSuccess) ->
     ).pipe(fs.createWriteStream(outFile))
 
 initOutDirs = (baseFileName) -> 
-  baseDir = '../data/pdf'
-  util.mkdir(baseDir, '2-as-data')
-  util.mkdir(baseDir, '2-as-text')
-  util.mkdir(baseDir, '2-as-JATS')
+  util.mkdirRecursive(dataOutDir)
+  util.mkdirRecursive(textOutDir)
+  util.mkdirRecursive(JATSOutDir)
 
 exports.go = (req, res) -> 
   

@@ -20,6 +20,11 @@ dataWriter       = require '../data/dataWriter'
 refactorTools    = require '../refactorTools'
 headers          = require './headers/headers'
 xml              = require '../data/xml'
+nconf            = require('nconf')
+
+nconf = require('nconf')
+JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"]
+TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"]
 
 mode = 'basic'
 refactorMode = true
@@ -991,7 +996,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   abbreviations = 0
   groups = [] # sequence of all groups
   group = []  
-  for token,t in tokens
+  for token,t in tokens when token.meta isnt 'header'
     if token.metaType is 'regular' 
       connect_token_group({group:group, token:token})
       if sentenceSplitter.endOfSentence(tokens, t) # Is this a sentence ending?
@@ -1007,7 +1012,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   #
   xmlBuilder += xml.signal('abstract', 'opener')
   for token in tokens when token.meta is 'abstract'
-    if token.metaType is 'regular' then xmlBuilder += token.text
+    if token.metaType is 'regular' then xmlBuilder += xml.escape(token.text)
     else xmlBuilder += ' '
 
   xmlBuilder += xml.signal('abstract', 'closer')
@@ -1029,6 +1034,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
       # mark section edges in xml
       if token.sectionOpener
+        logging.logRed 'section opener'
         if inSection 
           xmlBuilder += xml.signal('section', 'closer')
           inSection = false
@@ -1054,10 +1060,10 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   xmlBuilder += xml.signal('body', 'closer')
 
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
-  fs.writeFile('../data/pdf/2-as-JATS/' + context.name + '.xml', xmlBuilder)
+  fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder)
 
   dataWriter.writeArray context, 'sentences', sentences
-  fs.writeFile('../data/pdf/2-as-text/' + context.name, sentences.join('\n'))
+  fs.writeFile(TextoutPath + context.name, sentences.join('\n'))
 
 
  

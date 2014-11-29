@@ -226,6 +226,8 @@ exports.mkdir = (path, subDir) ->
     if err.code isnt 'EEXIST' # is the error code indicating the directory already exists? if so all is fine
       throw err               # on different error, re-throw the error
 
+exports.mkdirRecursive = (path) => require('mkdirp').mkdirp(path, (err) -> if err then throw(err))
+
 exports.extensionFilter = (filename) ->
   extensions = ['html', 'htm', 'css', 'js']
   for extension in extensions

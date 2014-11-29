@@ -128,6 +128,7 @@ module.exports = (context, tokens) ->
       sequenceAsText = ''
       seqEnd = getContinuouslyStyled(tokens, t)
       for h in [t..seqEnd] 
+        tokens[h].type = 'header'
         sequenceAsText += if tokens[h].metaType is 'regular' then tokens[h].text else (if (h isnt seqEnd) then ' ' else '')
 
       unless isTitlishCaseSequence(tokens, t, seqEnd) then continue # require titlish case

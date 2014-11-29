@@ -144,6 +144,7 @@ module.exports = function(context, tokens) {
       sequenceAsText = '';
       seqEnd = getContinuouslyStyled(tokens, t);
       for (h = _j = t; t <= seqEnd ? _j <= seqEnd : _j >= seqEnd; h = t <= seqEnd ? ++_j : --_j) {
+        tokens[h].type = 'header';
         sequenceAsText += tokens[h].metaType === 'regular' ? tokens[h].text : (h !== seqEnd ? ' ' : '');
       }
       if (!isTitlishCaseSequence(tokens, t, seqEnd)) {

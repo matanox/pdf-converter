@@ -27,7 +27,10 @@ util     = require '../util/util'
 rdbms    = require '../storage/rdbms/rdbms' 
 fs       = require 'fs'
 
-exports.docsDataDir = docsDataDir = '../data/pdf/2-as-data'
+nconf = require('nconf')
+PDFinputPath = nconf.get("locations")["pdf-extraction"]["asData"]
+
+exports.docsDataDir = docsDataDir = PDFinputPath
 
 files = {} # dictionary to hinge writers used for each input pdf file
 

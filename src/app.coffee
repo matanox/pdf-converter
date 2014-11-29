@@ -18,7 +18,10 @@
 #
 fs = require('fs')
 nconf = require('nconf')
-nconf.argv().env().file({file: 'loggingConf.json'})
+nconf.argv().env()
+nconf.add('logging-configuration', {type: 'file', file: 'loggingConf.json'})
+nconf.add('other-configuration', {type: 'file', file: '../config/config.json'})
+PDFinputPath = nconf.get("locations")["pdf-input"]
 nconf.defaults 
   host: 'localhost'
   env:  'development'
@@ -90,7 +93,8 @@ spawnClusterWorkers = () ->
       #testFile = '../data/pdf/0-input/1310.1531.pdf'    
       #testFile = '../data/pdf/0-input/0502237v2.pdf'    
       #testFile = '../data/pdf/0-input/Scaling down dimensions.pdf'    
-      testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf'    
+      #testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf'    
+      testFile = PDFinputPath + 'global vectors for word representation.pdf'    
 
       # fire self test only for self cluster worker coming to life
       if firstFork
