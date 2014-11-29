@@ -43,9 +43,9 @@ util = require('./util/util');
 
 logging = require('./util/logging');
 
-host = nconf.get('host');
+host = nconf.get('http-services')["pdfExtractor"]["host"];
 
-port = process.env.PORT || 3080;
+port = nconf.get('http-services')["pdfExtractor"]["port"] || process.env.PORT;
 
 env = nconf.get('env');
 

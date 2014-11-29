@@ -43,8 +43,8 @@ util          = require './util/util'
 logging = require './util/logging' 
 
 # Get-or-default basic networking config
-host = nconf.get 'host'
-port = process.env.PORT or 3080
+host = nconf.get('http-services')["pdfExtractor"]["host"]
+port = nconf.get('http-services')["pdfExtractor"]["port"] or process.env.PORT
 env = nconf.get 'env' # previously express app.get
 
 # Node.js cluster modules
