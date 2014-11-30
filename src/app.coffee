@@ -94,7 +94,9 @@ spawnClusterWorkers = () ->
       #testFile = '../data/pdf/0-input/0502237v2.pdf'    
       #testFile = '../data/pdf/0-input/Scaling down dimensions.pdf'    
       #testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf'    
-      testFile = PDFinputPath + 'global vectors for word representation.pdf'    
+      #testFile = PDFinputPath + 'global vectors for word representation.pdf'    
+      testFile = PDFinputPath + 'Generate%20Compressed%20Sentences%20with%20Stanford%20Typed%20Dependencies%20towards%20Abstractive%20Summarization.pdf'
+
 
       # fire self test only for self cluster worker coming to life
       if firstFork

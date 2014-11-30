@@ -67,7 +67,7 @@ spawnClusterWorkers = function() {
     logging.logGreen("Cluster worker " + worker.id + " now sharing on " + address.address + ":" + address.port + " (pid " + worker.process.pid + ")");
     selfMonitor = require('./selfMonitor').start('worker ' + worker.id);
     if (env !== 'production') {
-      testFile = PDFinputPath + 'global vectors for word representation.pdf';
+      testFile = PDFinputPath + 'Generate%20Compressed%20Sentences%20with%20Stanford%20Typed%20Dependencies%20towards%20Abstractive%20Summarization.pdf';
       if (firstFork) {
         firstFork = false;
         testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID();

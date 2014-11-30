@@ -23,7 +23,7 @@ xml              = require '../data/xml'
 nconf            = require('nconf')
 
 nconf = require('nconf')
-JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"]
+JATSoutPath = nconf.get("locations")["ready-for-semantic"]["from-pdf"]
 TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"]
 
 mode = 'basic'
@@ -1036,9 +1036,10 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
       if token.sectionOpener
         logging.logRed 'section opener'
         if inSection 
+          xmlBuilder += xml.signal('paragraph', 'closer') # This does not really rely on paragraph detection, just arbitrary
           xmlBuilder += xml.signal('section', 'closer')
-          inSection = false
         xmlBuilder += xml.signal('section', 'opener', {sectionType: token.sectionType, sectionName: token.sectionOpenerName})
+        xmlBuilder += xml.signal('paragraph', 'opener')   # This does not really rely on paragraph detection, just arbitrary
         inSection = true
 
       # mark paragraph edges in xml
@@ -1056,7 +1057,10 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     sentences.push sentence
     xmlBuilder += xml.escape(sentence)
     
-  if inSection then xmlBuilder += xml.signal('section', 'closer') # close off last section if any
+  if inSection
+    xmlBuilder += xml.signal('paragraph', 'closer') # This does not really rely on paragraph detection, just arbitrary
+    xmlBuilder += xml.signal('section', 'closer') # close off last section if any
+    inSection = false
   xmlBuilder += xml.signal('body', 'closer')
 
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
@@ -1221,37 +1225,43 @@ done = (error, res, tokens, context, docLogger) ->
     shutdown()
     return
 
-  chunkResponse = true
+  sendTokens = () ->
+    chunkResponse = true
 
-  chunkRespond = (payload, res) ->
-    sentSize = 0
-    maxChunkSize = 65536 # 2^16
-    for i in [0..payload.length / maxChunkSize]
-      chunk = payload.substring(i*maxChunkSize, Math.min((i+1)*maxChunkSize, payload.length))
-      logging.cond """sending chunk of length #{chunk.length}""", 'communication'
-      sentSize += chunk.length
-      res.write(chunk)
-    res.end()
-    assert.equal(sentSize, payload.length, "payload chunking did not send entire payload")
+    chunkRespond = (payload, res) ->
+      sentSize = 0
+      maxChunkSize = 65536 # 2^16
+      for i in [0..payload.length / maxChunkSize]
+        chunk = payload.substring(i*maxChunkSize, Math.min((i+1)*maxChunkSize, payload.length))
+        logging.cond """sending chunk of length #{chunk.length}""", 'communication'
+        sentSize += chunk.length
+        res.write(chunk)
+      res.end()
+      assert.equal(sentSize, payload.length, "payload chunking did not send entire payload")
 
-  if tokens? 
-    if tokens.length>0
-      util.timelog context, 'pickling'
-      serializedTokens = JSON.stringify(tokens)
-      dataWriter.write context, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
-      dataWriter.write context, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
-      util.timelog context, 'pickling'
+    if tokens? 
+      if tokens.length>0
+        util.timelog context, 'pickling'
+        serializedTokens = JSON.stringify(tokens)
+        dataWriter.write context, 'stats', """#{tokens.length} tokens pickled into #{serializedTokens.length} long bytes stream"""
+        dataWriter.write context, 'stats',  """pickled size to tokens ratio: #{parseFloat(serializedTokens.length)/tokens.length}"""
+        util.timelog context, 'pickling'
 
-      if chunkResponse
-        chunkRespond(serializedTokens, res)
-      else
-        res.end(serializedTokens)
+        if chunkResponse
+          chunkRespond(serializedTokens, res)
+        else
+          res.end(serializedTokens)
 
+        shutdown()
+        return
+
+    else
+      res.send(500)  
       shutdown()
-      return
 
-  res.send(500)  
+  # only shutdown, do not reply with tokens for now, as they go through a file anyway
   shutdown()
+  res.end("""Done processing #{context.name}. See output in output folders #{JATSoutPath}, #{TextoutPath}""")
 
 exports.go = (context, req, input, res ,docLogger) ->
   name = context.name

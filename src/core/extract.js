@@ -35,7 +35,7 @@ nconf = require('nconf');
 
 nconf = require('nconf');
 
-JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"];
+JATSoutPath = nconf.get("locations")["ready-for-semantic"]["from-pdf"];
 
 TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"];
 
@@ -832,13 +832,14 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
       if (token.sectionOpener) {
         logging.logRed('section opener');
         if (inSection) {
+          xmlBuilder += xml.signal('paragraph', 'closer');
           xmlBuilder += xml.signal('section', 'closer');
-          inSection = false;
         }
         xmlBuilder += xml.signal('section', 'opener', {
           sectionType: token.sectionType,
           sectionName: token.sectionOpenerName
         });
+        xmlBuilder += xml.signal('paragraph', 'opener');
         inSection = true;
       }
       if ((_ref8 = token.meta) === 'title' || _ref8 === 'abstract') {
@@ -853,7 +854,9 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
     xmlBuilder += xml.escape(sentence);
   }
   if (inSection) {
+    xmlBuilder += xml.signal('paragraph', 'closer');
     xmlBuilder += xml.signal('section', 'closer');
+    inSection = false;
   }
   xmlBuilder += xml.signal('body', 'closer');
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder);
@@ -948,7 +951,7 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
 exports.generateFromHtml = generateFromHtml;
 
 done = function(error, res, tokens, context, docLogger) {
-  var chunkRespond, chunkResponse, name, serializedTokens, shutdown;
+  var name, sendTokens, shutdown;
   name = context.name;
   shutdown = function() {
     var compare;
@@ -969,38 +972,43 @@ done = function(error, res, tokens, context, docLogger) {
     shutdown();
     return;
   }
-  chunkResponse = true;
-  chunkRespond = function(payload, res) {
-    var chunk, i, maxChunkSize, sentSize, _i, _ref;
-    sentSize = 0;
-    maxChunkSize = 65536;
-    for (i = _i = 0, _ref = payload.length / maxChunkSize; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-      chunk = payload.substring(i * maxChunkSize, Math.min((i + 1) * maxChunkSize, payload.length));
-      logging.cond("sending chunk of length " + chunk.length, 'communication');
-      sentSize += chunk.length;
-      res.write(chunk);
-    }
-    res.end();
-    return assert.equal(sentSize, payload.length, "payload chunking did not send entire payload");
-  };
-  if (tokens != null) {
-    if (tokens.length > 0) {
-      util.timelog(context, 'pickling');
-      serializedTokens = JSON.stringify(tokens);
-      dataWriter.write(context, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
-      dataWriter.write(context, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
-      util.timelog(context, 'pickling');
-      if (chunkResponse) {
-        chunkRespond(serializedTokens, res);
-      } else {
-        res.end(serializedTokens);
+  sendTokens = function() {
+    var chunkRespond, chunkResponse, serializedTokens;
+    chunkResponse = true;
+    chunkRespond = function(payload, res) {
+      var chunk, i, maxChunkSize, sentSize, _i, _ref;
+      sentSize = 0;
+      maxChunkSize = 65536;
+      for (i = _i = 0, _ref = payload.length / maxChunkSize; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        chunk = payload.substring(i * maxChunkSize, Math.min((i + 1) * maxChunkSize, payload.length));
+        logging.cond("sending chunk of length " + chunk.length, 'communication');
+        sentSize += chunk.length;
+        res.write(chunk);
       }
-      shutdown();
-      return;
+      res.end();
+      return assert.equal(sentSize, payload.length, "payload chunking did not send entire payload");
+    };
+    if (tokens != null) {
+      if (tokens.length > 0) {
+        util.timelog(context, 'pickling');
+        serializedTokens = JSON.stringify(tokens);
+        dataWriter.write(context, 'stats', "" + tokens.length + " tokens pickled into " + serializedTokens.length + " long bytes stream");
+        dataWriter.write(context, 'stats', "pickled size to tokens ratio: " + (parseFloat(serializedTokens.length) / tokens.length));
+        util.timelog(context, 'pickling');
+        if (chunkResponse) {
+          chunkRespond(serializedTokens, res);
+        } else {
+          res.end(serializedTokens);
+        }
+        shutdown();
+      }
+    } else {
+      res.send(500);
+      return shutdown();
     }
-  }
-  res.send(500);
-  return shutdown();
+  };
+  shutdown();
+  return res.end("Done processing " + context.name + ". See output in output folders " + JATSoutPath + ", " + TextoutPath);
 };
 
 exports.go = function(context, req, input, res, docLogger) {
