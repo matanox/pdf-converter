@@ -44,17 +44,18 @@ initOutDirs = function(baseFileName) {
 };
 
 exports.go = function(req, res) {
-  var baseFileName, context, docLogger, fullFileName, inkUrl, outFile;
+  var baseFileName, context, docLogger, fullFileName, inkUrl, outFile, runID;
   if (req.query.localLocation != null) {
-    if (!req.query.runID) {
-      logging.logRed("Bad request. runID parameter missing in request.");
-      res.send(500);
-      return;
+    if (req.query.runID) {
+      runID = req.query.runID;
+    } else {
+      runID = util.simpleGenerateRunID();
+      logging.logRed("Augmenting request with runID " + runID);
     }
     fullFileName = req.query.localLocation;
     baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/') + 1).replace('.pdf', '');
     context = {
-      runID: req.query.runID,
+      runID: runID,
       name: baseFileName
     };
     logging.logGreen("Started handling input file: " + fullFileName + ". Given run id is: " + context.runID);

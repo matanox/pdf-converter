@@ -41,22 +41,24 @@ initOutDirs = (baseFileName) ->
 exports.go = (req, res) -> 
   
   #
-  # Handle api request for local file
-  # This api is for testing without hitting inkUrl
+  # Handle api request one file
   # 
+
   if req.query.localLocation?
 
-    unless req.query.runID
-      logging.logRed("""Bad request. runID parameter missing in request.""")
-      res.send(500) 
-      return
+    if req.query.runID
+      runID = req.query.runID
+    else
+      #logging.logRed("""Bad request. runID parameter missing in request.""")
+      runID = util.simpleGenerateRunID()
+      logging.logRed("""Augmenting request with runID #{runID}""")
 
     # initialize a context object, to be passed around
     fullFileName = req.query.localLocation
     baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1).replace('.pdf', '')
 
     context = 
-      runID : req.query.runID
+      runID : runID
       name  : baseFileName
 
     logging.logGreen("""Started handling input file: #{fullFileName}. Given run id is: #{context.runID}""")      
