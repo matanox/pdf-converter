@@ -159,6 +159,10 @@ else
 
   app.get '/handleInputFile', require('../src/core/handleInputFile').go
 
+  app.get '/all', (req, res) ->
+    bulk = require './bulk'
+    res.end("Done processing all files... but you probably timed out by now")
+
   #
   # Dev-environment-only stuff
   #

@@ -107,6 +107,11 @@ if (cluster.isMaster) {
   app.use(express["static"](path.join(__dirname, 'public')));
   app.use(errorHandling.errorHandler);
   app.get('/handleInputFile', require('../src/core/handleInputFile').go);
+  app.get('/all', function(req, res) {
+    var bulk;
+    bulk = require('./bulk');
+    return res.end("Done processing all files... but you probably timed out by now");
+  });
   if (env !== 'production') {
     primus = require('./primus/primus');
   }

@@ -17,30 +17,35 @@ nconf.argv().env();
 
 nconf.defaults({
   host: "localhost",
-  directory: '../data/pdf/0-input/',
   flood: false,
   parallelism: 2,
   maxFiles: process.argv[2] || 10000
 });
 
-host = nconf.get('host');
+nconf = require('nconf');
 
-port = process.env.PORT || 3080;
+directory = nconf.get("locations")["pdf-input"];
 
-logging.logGreen("Connecting to hostname " + (nconf.get('host')) + ", port " + port);
+host = nconf.get('http-services')["pdfExtractor"]["host"];
 
-directory = nconf.get('directory');
+port = nconf.get('http-services')["pdfExtractor"]["port"] || process.env.PORT;
 
-logging.logGreen('Invoking over input files from ' + util.terminalClickableFileLink(directory));
+if (appInvoked) {
+  logging.logGreen("http calling self at hostname " + (nconf.get('host')) + ", port " + port);
+} else {
+  logging.logGreen("Connecting to hostname " + (nconf.get('host')) + ", port " + port);
+}
+
+logging.logGreen('Iterating over input files from ' + util.terminalClickableFileLink(directory));
 
 flood = nconf.get('flood');
 
 switch (flood) {
   case true:
-    logging.logPerf('Running in flood mode');
+    logging.logPerf('Working in flood mode');
     break;
   case false:
-    logging.logPerf('Running in controlled load mode');
+    logging.logPerf('Working in controlled load mode');
     break;
   default:
     logging.logYellow('Invalid value for the flood argument');
@@ -177,5 +182,5 @@ if (toRequest.length > 0) {
     }
   }
 } else {
-  logging.logYellow('No files to process in directory. Existing.');
+  logging.logYellow('No files to process in directory, doing nothing.');
 }

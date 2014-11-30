@@ -279,7 +279,7 @@ titleAndAbstract = function(context, tokens) {
             abstract = sequence;
             logging.logYellow('');
             logging.logYellow('Article: ' + name);
-            logging.logYellow('Detected abstract:\n' + util.flattenSequenceText(tokens, abstract));
+            logging.logYellow('Detected abstract (non-final parsing):\n' + util.flattenSequenceText(tokens, abstract));
             logging.logYellow('');
             break;
           }
