@@ -39,6 +39,7 @@ errorHandling = require './errorHandling'
 authorization = require './authorization'
 logging       = require './util/logging' 
 util          = require './util/util' 
+bulk          = require './bulk'
 
 logging = require './util/logging' 
 
@@ -160,8 +161,7 @@ else
   app.get '/handleInputFile', require('../src/core/handleInputFile').go
 
   app.get '/all', (req, res) ->
-    bulk = require './bulk'
-    res.end("Done processing all files... but you probably timed out by now")
+    bulk.go(res)
 
   #
   # Dev-environment-only stuff
