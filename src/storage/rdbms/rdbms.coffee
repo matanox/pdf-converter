@@ -46,7 +46,7 @@ docTablesDefinition =
       header:           'short-string'
       detectionComment: 'short-string'
    ,
-    name  : 'auto-properties'
+    name  : 'autoProperties'
     fields: 
       propName:  'short-string'
       propValue: 'short-string'
