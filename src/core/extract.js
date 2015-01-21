@@ -35,7 +35,7 @@ nconf = require('nconf');
 
 nconf = require('nconf');
 
-JATSoutPath = nconf.get("locations")["ready-for-semantic"]["from-pdf"];
+JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"];
 
 TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"];
 
@@ -274,14 +274,18 @@ titleAndAbstract = function(context, tokens) {
     for (_o = 0, _len3 = sequences.length; _o < _len3; _o++) {
       sequence = sequences[_o];
       if (sequence.numOfTokens > minAbstractTokensNum) {
-        if (ctype.sentenceOpenerChar(tokens[sequence.startToken].text.charAt(0))) {
-          if (!UnplausiblyAbstract(tokens, sequence)) {
-            abstract = sequence;
-            logging.logYellow('');
-            logging.logYellow('Article: ' + name);
-            logging.logYellow('Detected abstract (non-final parsing):\n' + util.flattenSequenceText(tokens, abstract));
-            logging.logYellow('');
-            break;
+        if (tokens[sequence.startToken].text == null) {
+          logging.logRed('logical bug in abstract detection encountered for article; abstract may not be detected for this article');
+        } else {
+          if (ctype.sentenceOpenerChar(tokens[sequence.startToken].text.charAt(0))) {
+            if (!UnplausiblyAbstract(tokens, sequence)) {
+              abstract = sequence;
+              logging.logYellow('');
+              logging.logYellow('Article: ' + name);
+              logging.logYellow('Detected abstract (non-final parsing):\n' + util.flattenSequenceText(tokens, abstract));
+              logging.logYellow('');
+              break;
+            }
           }
         }
       }
@@ -862,7 +866,8 @@ generateFromHtml = function(context, req, input, res, docLogger, callback) {
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder);
   fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder);
   dataWriter.writeArray(context, 'sentences', sentences);
-  fs.writeFile(TextoutPath + context.name, sentences.join('\n'));
+  fs.writeFile(TextoutPath + '/' + context.name, sentences.join('\n'));
+  logging.logYellow('written as text and as JATS');
   if (mode === 'basic') {
     callback(null, res, tokens, context, docLogger);
     return;

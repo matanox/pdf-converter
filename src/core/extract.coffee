@@ -23,7 +23,7 @@ xml              = require '../data/xml'
 nconf            = require('nconf')
 
 nconf = require('nconf')
-JATSoutPath = nconf.get("locations")["ready-for-semantic"]["from-pdf"]
+JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"]
 TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"]
 
 mode = 'basic'
@@ -308,14 +308,17 @@ titleAndAbstract = (context, tokens) ->
     for sequence in sequences     
       if sequence.numOfTokens > minAbstractTokensNum 
         #console.dir sequence
-        if ctype.sentenceOpenerChar(tokens[sequence.startToken].text.charAt(0))
-          unless UnplausiblyAbstract(tokens, sequence)
-            abstract = sequence
-            logging.logYellow ''
-            logging.logYellow 'Article: ' + name
-            logging.logYellow 'Detected abstract (non-final parsing):\n' + util.flattenSequenceText(tokens, abstract)
-            logging.logYellow ''
-            break
+        unless tokens[sequence.startToken].text?
+          logging.logRed 'logical bug in abstract detection encountered for article; abstract may not be detected for this article'
+        else
+          if ctype.sentenceOpenerChar(tokens[sequence.startToken].text.charAt(0))
+            unless UnplausiblyAbstract(tokens, sequence)
+              abstract = sequence
+              logging.logYellow ''
+              logging.logYellow 'Article: ' + name
+              logging.logYellow 'Detected abstract (non-final parsing):\n' + util.flattenSequenceText(tokens, abstract)
+              logging.logYellow ''
+              break
 
   if abstract?
     util.markTokens(tokens, abstract, 'abstract')
@@ -1064,13 +1067,13 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   xmlBuilder += xml.signal('body', 'closer')
 
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
+
   fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder)
-
   dataWriter.writeArray context, 'sentences', sentences
-  fs.writeFile(TextoutPath + context.name, sentences.join('\n'))
+  fs.writeFile(TextoutPath + '/' + context.name, sentences.join('\n'))
+  
+  logging.logYellow 'written as text and as JATS'
 
-
- 
   if mode is 'basic'
     #
     # return the tokens to caller
