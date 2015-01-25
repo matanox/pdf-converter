@@ -34,7 +34,7 @@ exports.endOfSentence = function(tokens, t) {
       }
     }
     if (acronym(string)) {
-      if (t + 1 < tokens.length) {
+      if (t + 2 < tokens.length) {
         if (tokens[t + 1].metaType === 'delimiter') {
           if (tokens[t + 2].metaType === 'regular') {
             nextString = tokens[t + 2].text;

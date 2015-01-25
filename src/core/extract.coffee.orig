@@ -1076,9 +1076,13 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
 
   fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder)
   dataWriter.writeArray context, 'sentences', sentences
+<<<<<<< HEAD
+  fs.writeFile(TextoutPath + context.name, sentences.join('\n'))
+=======
   fs.writeFile(TextoutPath + '/' + context.name, sentences.join('\n'))
   
   logging.logYellow 'written as text and as JATS'
+>>>>>>> 3a689ef4408f256bcb7abfa6a8b4175b7072a64f
 
   if mode is 'basic'
     #

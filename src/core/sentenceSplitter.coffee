@@ -36,7 +36,7 @@ exports.endOfSentence = (tokens, t) ->
     if acronym(string)
       
       # is it followed by a token starting with an upper case?
-      if t + 1 < tokens.length
+      if t + 2 < tokens.length
         if tokens[t+1].metaType is 'delimiter'
           if tokens[t+2].metaType is 'regular'
             nextString = tokens[t+2].text
