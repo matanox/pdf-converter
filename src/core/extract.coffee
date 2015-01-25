@@ -1078,7 +1078,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   #
   # a finer flow scheme would not block but rathar group all write callbacks of a batch
   # invocation, and allow an http response once they all finished, or provide
-  # notification per processed article
+  # notification per processed article (see async callback here http://nodejs.org/api/fs.html#fs_fs_writefile_filename_data_options_callback)
   #
   fs.writeFileSync(JATSoutPath + context.name + '.xml', xmlBuilder, doner(err))
   fs.writeFileSync(TextoutPath + '/' + context.name, sentences.join('\n'))
