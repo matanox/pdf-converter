@@ -1063,14 +1063,18 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     inSection = false
   xmlBuilder += xml.signal('body', 'closer')
 
+  #
+  # TODO: implement writeFile callbacks and hook to counter object
+  #       that knows when all writes are done, so that next stage
+  #       in the overall REST pipeline outside node.js knows when all is done
+  #
+
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
   fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder)
 
   dataWriter.writeArray context, 'sentences', sentences
   fs.writeFile(TextoutPath + context.name, sentences.join('\n'))
 
-
- 
   if mode is 'basic'
     #
     # return the tokens to caller

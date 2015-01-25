@@ -1,0 +1,1000 @@
+   98  ./NVIDIA-Linux-x86_64-340.65.run 
+   99  sudo ./NVIDIA-Linux-x86_64-340.65.run 
+  100  compiz
+  101  exit
+  102  l
+  103  mkdir repos
+  104  cd repos
+  105  mkdir articlio
+  106  exit
+  107  cd ../..
+  108  chmod a+x xsetwacom.sh 
+  109  exit
+  110  free -m
+  111  exit
+  112  chromium
+  113  whereis chromium
+  114  exit
+  115  htop
+  116  df -m
+  117  exit
+  118  history
+  119  history | grep nvidia
+  120  sudo apt-get install nvidia-340
+  121  cat /var/log/nvidia-installer.log 
+  122  sudo apt-get install nvidia-current
+  123  sudo apt-get remove nvidia-340
+  124  sudo apt-get install nvidia-current
+  125  ps -ef | grep nvidia
+  126  kill 2769
+  127  sudo kill 2769
+  128  kill 2769
+  129  ps -ef | grep nvidia
+  130  sudo apt-get install nvidia-current
+  131  free -m
+  132  swapon
+  133  gparted
+  134  sudo gparted
+  135  free -m
+  136  sbt
+  137  echo "deb http://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+  138  sudo apt-get update
+  139  subl /etc/apt/sources.list
+  140  history | grep apt
+  141  sudo gedit /etc/apt/sources.list
+  142  sudo apt-get update
+  143  sudo apt-get install sbt
+  144  sbt -version
+  145  compiz
+  146  gconftool
+  147  gconftool --help\
+  148  gconftool-2
+  149  gconftool --help
+  150  gconftool --help-all
+  151  gconftool-2
+  152  gconf-editor
+  153  sudo apt-get install gconf-editor
+  154  gconf-editor
+  155  CompizConfig
+  156  gconf-editor
+  157  sudo apt-get install compizconfig-settings-manager
+  158  history | grep eclipse
+  159  history | grep desktop
+  160  subl ~/.local/share/applications/scala_ide.desktop 
+  161  subl
+  162  mysql
+  163  mysqk
+  164  mysql
+  165  sudo apt-get install dselect
+  166  sudo dpkg --get_selections > selectionsnew.txt
+  167  gedit selectionsnew.txt
+  168  history | grep dpkg
+  169  sudo dpkg --set-selections < /media/matan/E8CF-1340/desktop\ clone\ stuff/packages.txt 
+  170  sudo dselect
+  171  mysql
+  172  sudo dpkg --set-selections < /media/matan/E8CF-1340/desktop\ clone\ stuff/packages.txt 
+  173  sudo dselect
+  174  df -m
+  175  exit
+  176  subl .bashrc
+  177  ll
+  178  l
+  179  exit
+  180  gedit /usr/share/applications/defaults.list
+  181  sublime
+  182  subl /usr/share/applications/defaults.list
+  183  chmod   /usr/share/applications/defaults.list
+  184  chmod u+w /usr/share/applications/defaults.list
+  185  sudo chmod u+w /usr/share/applications/defaults.list
+  186  subl /usr/share/applications/defaults.list
+  187  ll /usr/share/applications/defaults.list
+  188  sudo chmod g+w /usr/share/applications/defaults.list
+  189  ll /usr/share/applications/defaults.list
+  190  sudo chmod +w /usr/share/applications/defaults.list
+  191  ll /usr/share/applications/defaults.list
+  192  sudo chmod a+w /usr/share/applications/defaults.list
+  193  sudo chmod a-w /usr/share/applications/defaults.list
+  194  ll /usr/share/applications/defaults.list
+  195  ll
+  196  l .bash*
+  197  subl .bashrc
+  198  exit
+  199  subl /lib/udev/rules.d/60-keyboard.rules
+  200  sudoedit /etc/udev/hwdb.d/61-keyboard-local.hwdb
+  201  cat /etc/udev/hwdb.d/61-keyboard-local.hwdb
+  202  sudo udevadm hwdb --update
+  203  lsusb
+  204  l /etc/udev/hwdb.d
+  205  cat /lib/udev/hwdb.d/60-keyboard.hwdb 
+  206  cat /etc/udev/hwdb.d/62-keyboard-local.hwdb
+  207  subl /etc/udev/hwdb.d/62-keyboard-local.hwdb
+  208  sudoedit /etc/udev/hwdb.d/62-keyboard-local.hwdb
+  209  cat /etc/udev/hwdb.d/62-keyboard-local.hwdb
+  210  sudo udevadm hwdb --update
+  211  sudo dpkg -P ttf-mscorefonts-installer 
+  212  sudo apt-get install ttf-mscorefonts-installer  
+  213  exit
+  214  sudo gparted
+  215  exit
+  216  df -m
+  217  l /data
+  218  l /adf
+  219  l /data
+  220  l /
+  221  l /data
+  222  cd /data
+  223  l
+  224  ll
+  225  exit
+  226  df -m
+  227  l /data
+  228  exit
+  229  sudo gparted
+  230  exit
+  231  df -m
+  232  l /data
+  233  exit
+  234  cat /mnt/root/etc/fstab
+  235  blkid
+  236  l /mnt
+  237  l /etc/fstab
+  238  cat /etc/fstab
+  239  cp /etc/fstab /etc/fstab-backup
+  240  sudocp /etc/fstab /etc/fstab-backup
+  241  sudo cp /etc/fstab /etc/fstab-backup
+  242  sudo gedit /etc/fstab
+  243  exit
+  244  sudo gedit etc/fstab
+  245  l etc
+  246  sudo gedit /etc/fstab
+  247  cat /boot/grub/grub.cfg 
+  248  gedit /boot/grub/grub.cfg 
+  249  cat /boot/grub/grub.cfg | grep sdb
+  250  cat /boot/grub/grub.cfg | grep sda
+  251  l /boot/grub/
+  252  cat /boot/grub/gfxblacklist.txt 
+  253  l /boot/grub/
+  254  l /boot/grub/grubenv 
+  255  cat /boot/grub/grubenv 
+  256  l /boot/grub/grubenv 
+  257  l /boot/grub/
+  258  sudo add-apt-repository ppa:danielrichter2007/grub-customizer
+  259  sudo apt-get update
+  260  gksudo gparted
+  261  fdisk
+  262  fdisk -l
+  263  history
+  264  sudo fdisk /dev/sda
+  265  gksudo gparted
+  266  sudo update-grub
+  267  cat /boot/grub/grub.cfg | grep sda
+  268  cat /boot/grub/grub.cfg | grep sdb
+  269  sudo update-grub
+  270  l /dev/sdb1
+  271  sudo apt-get install grub-customizer
+  272  l /etc/grub.d/
+  273  cat /etc/grub.d/40_custom 
+  274  cat /boot/grub/grub.cfg 
+  275  cat /boot/grub/grub.cfg  | grep sdb
+  276  boot-repair
+  277  sudo add-apt-repository ppa:yannubuntu/boot-repair
+  278  sudo apt-get update
+  279  sudo apt-get install -y boot-repair && boot-repair
+  280  cat /boot/grub/grub.cfg  | grep sdb
+  281  exit
+  282  sudo dpkg -P ttf-mscorefonts-installer  
+  283  sudo apt-get install ttf-mscorefonts-installer  
+  284  sudo cp /etc/default/grub /etc/default/grub-backup
+  285  sudo gedit /etc/default/grub
+  286  boot-repair
+  287  cat /boot/grub/grub.cfg 
+  288  cat /boot/grub/grub.cfg  | grep sdb
+  289  exit
+  290  grub-repair
+  291  exit
+  292  boot-repair
+  293  cat /boot/grub/grub.cfg  | grep sdb
+  294  sudo dpkg --configure -a
+  295  sudo apt-get install -fy
+  296  sudo apt-get purge -y --force-yes grub*-common grub-common:i386 shim-signed linux-signed*
+  297  sudo apt-get install -y --force-yes grub-pc linux-generic
+  298  cat /boot/grub/grub.cfg  | grep sdb
+  299  cat /boot/grub/grub.cfg  | grep sda
+  300  ll /boot/grub/
+  301  df -m
+  302  l /ssd
+  303  cat /etc/fstab
+  304  l /ssd
+  305  l /data
+  306  df -m
+  307  exit
+  308  df -m
+  309  l /data
+  310  l /ssd
+  311  boot-repair
+  312  cat /boot/grub/grub.cfg  | grep sda
+  313  cat /boot/grub/grub.cfg  | grep sdb
+  314  df -m
+  315  exit
+  316  sudo gedit /etc/default/grub
+  317  gedit /boot/grub/grub.cfg 
+  318  sudo subl /boot/grub/grub.cfg 
+  319  gksudo gedit /etc/grub.d/40_custom
+  320  cat gedit /etc/grub.d/40_custom
+  321  sudo update-grub
+  322  cat gedit /etc/grub.d/40_custom
+  323  gksudo gedit /etc/grub.d/40_custom
+  324  sudo u
+  325  sudo update-grub2
+  326  ll /etc/init.d/
+  327  l /boot/grub
+  328  l /boot/grub/gfxblacklist.txt 
+  329  cat /boot/grub/gfxblacklist.txt 
+  330  cat /boot/grub/grub.cfg 
+  331  cat /etc/default/grub
+  332  cat /sys/block/sda/queue/physical_block_size
+  333  cat /sys/block/sda/queue/logical_block_size
+  334  df -m
+  335  fdisk -l /dev/sdb
+  336  fdisk -l /dev/sdb1
+  337  fdisk -l /dev/sda
+  338  fdisk -l /dev/sda1
+  339  sudo fdisk -l /dev/sda1
+  340  sudo fdisk -l /dev/sdb
+  341  sudo fdisk -l /dev/sda
+  342  sudo fdisk -l /dev/sdb
+  343  ll /etc/init.d/grub-common 
+  344  l /etc/grub.d
+  345  ll /etc/grub.d/
+  346  cat /etc/grub.d/30_os-prober 
+  347  cat /etc/grub.d/30_os-prober | grep sda
+  348  cat /etc/grub.d/30_os-prober | grep sdb
+  349  more /etc/grub.d/30_os-prober
+  350  sudo grub-install  dev/sdb
+  351  df -m
+  352  sudo grub-install /dev/sdb
+  353  sudo grub-install /dev/sdb1
+  354  df -m
+  355  l /boot/grub
+  356  ll /boot/grub
+  357  disks
+  358  cat /etc/default/grub
+  359  sudo gedit /etc/default/grub
+  360  sudo update-grub
+  361  grub
+  362  l /etc/grub.d
+  363  cat /etc/grub.d/40_custom
+  364  cat /etc/grub.d/41_custom
+  365  cat /etc/grub.d/10_custom
+  366  cat /etc/grub.d/10_linux 
+  367  df -m
+  368  l /dev/sdb
+  369  ll /dev/sdb
+  370  ll /dev/sda
+  371  install-grub /dev/sdb
+  372  grub-install
+  373  grub-install /dev/sdb
+  374  sudo grub-install /dev/sdb
+  375  cat /etc/default/grub
+  376  exit
+  377  l /ssd
+  378  l /ssd/boot/grub/
+  379  l /ssd/boot/grub/grub.cfg 
+  380  cat /ssd/boot/grub/grub.cfg 
+  381  cat /ssd/boot/grub/grub.cfg  | grep sda
+  382  cat /ssd/boot/grub/grub.cfg  | grep sdb
+  383  cat /ssd/boot/grub/grub.cfg  | grep sda
+  384  cat /ssd/boot/grub/grub.cfg  | grep ubuntu
+  385  cat /ssd/boot/grub/grub.cfg  | grep 14
+  386  cat /ssd/boot/grub/grub.cfg  | buntu
+  387  cat /ssd/boot/grub/grub.cfg  | grep buntu
+  388  cat /ssd/boot/grub/grub.cfg  | grep sdb
+  389  cat /ssd/boot/grub/grub.cfg  | grep 14
+  390  cp /ssd/boot/grub/grub.cfg
+  391  cat /boot/grub/grub.cfg 
+  392  mv /boot/grub/grub.cfg /boot/grub/grub.cfg.backup
+  393  sudo cp /boot/grub/grub.cfg /boot/grub/grub.cfg.backup
+  394  sudo subl /boot/grub/grub.cfg
+  395  sudo grub-update
+  396  sudo update-grub
+  397  sudo subl /boot/grub/grub.cfg
+  398  l /etc/grub.d
+  399  gksudo gedit /etc/grub.d/40_custom
+  400  sudo fdisk -l
+  401  sudo blkid
+  402  sudo update-grub
+  403  cat  gedit /etc/grub.d/40_custom
+  404  exit
+  405  df -m
+  406  l /ssd
+  407  l /data
+  408  mysql -u root
+  409  hostname
+  410  cat /etc/hostname
+  411  cat /etc/hosts
+  412  sudo hostname matan
+  413  hostname
+  414  exit
+  415  mysql -u root
+  416  hostname
+  417  subl /etc/hostname 
+  418  sudo gedit /etc/hostname
+  419  exit
+  420  hostname
+  421  mysql -u root
+  422  ps -ef 
+  423  htop
+  424  ps -ef | grep mysql
+  425  ps -ef | grep rethink
+  426  ps -ef | grep couch
+  427  ps -ef | grep mongo
+  428  htop
+  429  git
+  430  shutter
+  431  r
+  432  rstudio
+  433  chromium
+  434  chromium-stable
+  435  chromium-browser
+  436  l /dev
+  437  l /dev/usb
+  438  l ~/.xbindkeysrc
+  439  xbindkeys
+  440  xbindkeys-config
+  441  stat .bash_logout
+  442  stat ~/.bash_logout
+  443  l
+  444  stat*
+  445  stat *
+  446  cd ../
+  447  stat articlio/
+  448  cat /etc/cron.weekly/
+  449  l /etc/cron.weekly/
+  450  cat /etc/cron.weekly/fstrim 
+  451  exit
+  452  l /data
+  453  ll /data
+  454  exit
+  455  htop
+  456  free -m
+  457  htop
+  458  l /data/Ubuntu-OS-backup/
+  459  ll l /data/Ubuntu-OS-backup/
+  460  df -m
+  461  exit
+  462  cd /dat
+  463  cd  /data
+  464  l
+  465  cd Ubuntu-OS-backup/
+  466  ll
+  467  tar
+  468  tar --usage
+  469  l
+  470  ll
+  471  cd ../
+  472  ll
+  473  cd Ubuntu-OS-backup/
+  474  ll
+  475  tar 
+  476  ll
+  477  tar "Disk Image of sdb1 (2015-01-15 1049).img"
+  478  zip
+  479  zip Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img 
+  480  bz2
+  481  bz
+  482  zip
+  483  zip Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img 
+  484  7z
+  485  7z a Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img 
+  486  7z a 
+  487  7a
+  488  yA
+  489  7a
+  490  7A
+  491  7z
+  492  7z Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img.zip Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img 
+  493  7z Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img.7z Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img 
+  494  l
+  495  7z "Disk Image of sdb1 (2015-01-15 1049).img.7z" "Disk Image of sdb1 (2015-01-15 1049).img"
+  496  7z a "Disk Image of sdb1 (2015-01-15 1049).img.7z" "Disk Image of sdb1 (2015-01-15 1049).img"
+  497  7z a <"Disk Image of sdb1 (2015-01-15 1049).img.7z" "Disk Image of sdb1 (2015-01-15 1049).img"
+  498  ll
+  499  7z a "Disk Image of sdb1 (2015-01-15 1049).img.7z" "Disk Image of sdb1 (2015-01-15 1049).img"
+  500  time 7z a "Disk Image of sdb1 (2015-01-15 1049).img.7z" "Disk Image of sdb1 (2015-01-15 1049).img"
+  501  ll
+  502  l -lsm
+  503  l
+  504  l -h
+  505  ll
+  506  rm Disk\ Image\ of\ sdb1\ \(2015-01-15\ 1049\).img
+  507  ll
+  508  df -m
+  509  free -m
+  510  htop
+  511  cd ../
+  512  l
+  513  exit
+  514  mksquash
+  515  cd /
+  516  ll
+  517  mkdir repos
+  518  l
+  519  sudo mkdir repos
+  520  ll
+  521  pwd
+  522  cd repos
+  523  cd ~/
+  524  ll
+  525  rm repos
+  526  rmdir repos
+  527  l repos
+  528  rm repos/articlio/
+  529  rmdir repos/articlio/
+  530  l repos/articlio/
+  531  l -la repos/articlio/
+  532  cat repos/articlio/.Rhistory 
+  533  rm -rf repos
+  534  l repos
+  535  cd /
+  536  ll repos
+  537  chmod a+x repos
+  538  sudo chmod a+x repos
+  539  hostname
+  540  cat /etc/hosts
+  541  etc/hostname
+  542  cat etc/hostname
+  543  cat /etc/hosts
+  544  sudo ls
+  545  ping matan
+  546  ping matan2
+  547  hostname
+  548  hostname matan2
+  549  sudo hostname matan2
+  550  hostname
+  551  sudo ls
+  552  cat etc/hostname
+  553  sudo subl etc/hostname
+  554  gedit subl etc/hostname
+  555  gedit etc/hostname
+  556  sudo gedit etc/hostname
+  557  gksudo gedit etc/hostname
+  558  exit
+  559  hostname
+  560  ping matan
+  561  cat /etc/hostname
+  562  cat /etc/hosts
+  563  ping matan2
+  564  hostname
+  565  cat /etc/hosts
+  566  gksudo gedit /etc/hosts
+  567  cat /etc/hosts
+  568  ping matan
+  569  hostname
+  570  exit
+  571  gnome-gmail
+  572  sudo apt-get install gnome-gmail
+  573  gnome-gmail
+  574  exit
+  575  cd ~
+  576  l eclipse-luna-scala-2.11/
+  577  cd eclipse-luna-scala-2.11/
+  578  ll
+  579  l -la
+  580  cd e
+  581  l -la
+  582  cd eclipse/
+  583  l -la
+  584  l .metadata/
+  585  ll
+  586  cd .metadata/
+  587  ll
+  588  l -la
+  589  cd .plugins/
+  590  ll
+  591  cd org.eclipse.core.runtime/
+  592  ll
+  593  cd .settings/
+  594  ll
+  595  exit
+  596  ll
+  597  git clone ssh://github.com/matanster/ldb.git
+  598  ll
+  599  df -m
+  600  l -la ~/.ssh
+  601  ssh-keygen -t rsa -C "dev.matan@gmail.com"
+  602  sudo apt-get install xclip
+  603  xclip -sel clip < ~/.ssh/id_rsa.pub
+  604  git clone git@github.com:matanster/ldb.git
+  605  l
+  606  git clone git@github.com:matanster/reporter.git
+  607  l
+  608  git clone git@github.com:matanster/transformation-pipeline.git
+  609  ll
+  610  cd ldb
+  611  sbt
+  612  sbt eclipse
+  613  sbt sbteclipse
+  614  sbt
+  615  l ~/.sbt/0.13/staging/
+  616  l ~/.sbt/0.13/
+  617  cd ~/.sbt/0.13/
+  618  mkdir plugins
+  619  cd plugins/
+  620  subl plugins.sbt
+  621  cat plugins.sbt
+  622  subl plugins.sbt
+  623  cat plugins.sbt
+  624  exit
+  625  htop
+  626  exit
+  627  cd ldb/
+  628  sbt
+  629  keytouch
+  630  KeyTouch
+  631  showkey
+  632  showkey -k
+  633  ls -l /dev/input/by-id
+  634  ls -l /dev/input/by-id
+  635  sudo evtest /dev/input/event2
+  636  sudo evtest /dev/input/event1
+  637  sudo evtest /dev/input/event4
+  638  ls -l /dev/input/by-id
+  639  sudo evtest /dev/input/event4
+  640  l ~/.xinputrc
+  641  cat ~/.xinputrc
+  642  ls -l /dev/input/by-id
+  643  l ~/.*
+  644  ls ~/.*
+  645  ls ~/
+  646  ls -l /dev/input/
+  647  ls -l /dev/input/by-path
+  648  ls -l /dev/
+  649  ls -l /dev/input/by-id
+  650  sudo evtest /dev/input/event4
+  651  exit
+  652  gconftool
+  653  gconftool --help
+  654  gconftool --help-key-type
+  655  exit
+  656  cat ~/.ssh/id_rsa.pub
+  657  ssh root@104.130.226.18
+  658  cd /repos
+  659  subl ~/.bash_rc
+  660  subl ~/.bashrc 
+  661  l
+  662  mkdir articlio
+  663  cd ../
+  664  ll
+  665  ll data
+  666  cd /repos
+  667  ll
+  668  cd ../
+  669  chmod a+w repos
+  670  sudo chmod a+w repos
+  671  ll
+  672  ll repos
+  673  cd repos
+  674  mkdir articlio
+  675  ll
+  676  cd articlio
+  677  l
+  678  cd reporter/
+  679  sbt
+  680  exit
+  681  sudo apt-get install software-properties-common
+  682  sudo apt-add-repository ppa:ansible/ansible
+  683  sudo apt-get install
+  684  sudo apt-get update
+  685  sudo apt-get install ansible
+  686  ansible
+  687  pwd
+  688  ansible all -m ping --ask-pass
+  689  ansible
+  690  ansible --list-hosts
+  691  cat /etc/ansible/hosts
+  692  l /etc/ansible/
+  693  cat /etc/ansible/ansible.cfg 
+  694  apt-get install git
+  695  sudo apt-get install git
+  696  exit
+  697  cd ../
+  698  cd articlio/reporter/
+  699  git status
+  700  cat .settings/org.scala-ide.sdt.core.prefs 
+  701  rm .settings/
+  702  rm .settings/org.scala-ide.sdt.core.prefs 
+  703  cat .classpath 
+  704  git status
+  705  sbt eclipse
+  706  exit
+  707  l
+  708  cd reporter/
+  709  sbt eclipse
+  710  git pull origin
+  711  cd ../ldb/
+  712  git pull origin
+  713  git status
+  714  l .settings/org.scala-ide.sdt.core.prefs 
+  715  at .settings/org.scala-ide.sdt.core.prefs 
+  716  cat .settings/org.scala-ide.sdt.core.prefs 
+  717  rm .settings/org.scala-ide.sdt.core.prefs 
+  718  git status
+  719  cat .classpath 
+  720  git status
+  721  exit
+  722  mysql 
+  723  mysql -u root
+  724  exit
+  725  l /etc/gnome/defaults.list 
+  726  cat /etc/gnome/defaults.list 
+  727  cat /etc/gnome/defaults.list | grep gedit
+  728  cd /etc/gnome/
+  729  l
+  730  cp defaults.list defaults.list.backup 
+  731  sudo cp defaults.list defaults.list.backup 
+  732  sudo subl defaults.list
+  733  l /usr/share/applications
+  734  l /usr/share/applications/sub*
+  735  l
+  736  exit
+  737  git clone git@github.com:matanster/articlio.git
+  738  l
+  739  cd articlio/
+  740  ll
+  741  whereis sbt
+  742  l /usr
+  743  l /usr/share
+  744  exit
+  745  cd articlio/
+  746  git status
+  747  script/gitit.sh "Initial commit"
+  748  sbt
+  749  sbt compile
+  750  sbt run
+  751  git status
+  752  sbt compile
+  753  sbt eclipse
+  754  sbt
+  755  sbt ~run
+  756  sbt
+  757  sbt ~compile
+  758  sbt
+  759  sbt eclipse
+  760  cd articlio/
+  761  git status
+  762  git init
+  763  git status
+  764  l
+  765  sbt
+  766  script/gitit.sh 'try to fuse play and spray; comment out vertx and rid of old clutters'
+  767  script/github.sh 
+  768  git status
+  769  script/gitit.sh 'try to fuse play and spray; comment out vertx and rid of old clutters'
+  770  git add .
+  771  script/gitit.sh 'try to fuse play and spray; comment out vertx and rid of old clutters'
+  772  git remote -v
+  773  git push origin master
+  774  script/gitit.sh 'try to fuse play and spray; comment out vertx and rid of old clutters'
+  775  script/github.sh 
+  776  exit
+  777  git config --global user.email "dev.matan@gmail.com"
+  778  git config --global user.name "matan"
+  779  whereis sbt
+  780  l usr
+  781  l /usr
+  782  l /usr/share
+  783  l /usr/share/libgksu
+  784  exit
+  785  htop
+  786  exit
+  787  mysql-workbench-bin
+  788  wbcopytables
+  789  wbcopytables localhost
+  790  wbcopytables -h
+  791  exit
+  792  mysql-workbench
+  793  exit
+  794  df -m
+  795  exit
+  796  git status
+  797  cd ldb
+  798  git status
+  799  cat .gitignore | grep ldb
+  800  exit
+  801  cd ldb/
+  802  subl .gitignore
+  803  l
+  804  ll
+  805  l ldb
+  806  exit
+  807  df -m
+  808  free -m
+  809  htop
+  810  nmap
+  811  sudo apt-get install nmap
+  812  nmap ubuntu.local
+  813  nmap localhost
+  814  exit
+  815  htop
+  816  ll
+  817  cd articlio/
+  818  ll
+  819  cd ../
+  820  ssh ubuntu.local
+  821  l
+  822  cd ../../data
+  823  l
+  824  scp
+  825  scp -r matan@ubuntu.local:/media/matan/data/openDatasets .
+  826  scp -r matan@ubuntu.local:/media/matan/data/openDatasetsa .
+  827  scp -r matan@ubuntu.local:/media/matan/data/openDatasets .
+  828  scp -r matan@ubuntu.local:/media/matan/data/openDatasets
+  829  scp -r matan@ubuntu.local:/media/matan/data/openDatasets ./
+  830  scp -r matan@ubuntu.local:/media/matan/data/openDatasets 
+  831  scp -r matan@ubuntu.local:/media/matan/data/openDatasets .
+  832  l
+  833  ls -la
+  834  l
+  835  ll
+  836  touch a
+  837  chmod a+w .
+  838  sudo chmod a+w .
+  839  touch a
+  840  rm a
+  841  ll
+  842  scp -r matan@ubuntu.local:/media/matan/data/openDatasets .
+  843  exit
+  844  mysql -u root
+  845  exit
+  846  cd articlio/
+  847  ll
+  848  cd ldb
+  849  sbt run
+  850  ll
+  851  subl ../.gitignore 
+  852  subl .git
+  853  subl .gitignore
+  854  subl ../.gitignore 
+  855  sbt
+  856  git status
+  857  cd ../../
+  858  cd ldb
+  859  l ../articlio/
+  860  sbt
+  861  git status
+  862  sbt
+  863  git status
+  864  sbt compile
+  865  sbt
+  866  git status
+  867  sbt
+  868  sbt run
+  869  sbt 
+  870  sbt run
+  871  [A
+  872  sbt
+  873  sbt run
+  874  sbt
+  875  sbt run
+  876  git status
+  877  ll
+  878  script/github.sh 
+  879  git remote -v
+  880  subl script/github.sh 
+  881  script/github.sh 
+  882  git statusf
+  883  script/gitit.sh 
+  884  script/github.sh 
+  885  sbt run
+  886  exit
+  887  cd articlio/reporter
+  888  sbt run
+  889  sbt
+  890  l
+  891  cd ../
+  892  l reporter/
+  893  ll
+  894  cd ../
+  895  l reporter
+  896  cd reporter/
+  897  sbt
+  898  ll
+  899  cd ../
+  900  ll
+  901  rm .config
+  902  rm -rf .config
+  903  cd reporter
+  904  sbt
+  905  sbt run
+  906  git status
+  907  script/gitit.sh 
+  908  script/github.sh 
+  909  sbt run
+  910  exit
+  911  ll
+  912  exot
+  913  exit
+  914  cd ~/Downloads
+  915  cd ~/Desktop/;
+  916  ll
+  917  cd e
+  918  cd eclipse\ luna\ scala\ 2.11/
+  919  cd eclipse/
+  920  ll
+  921  l .metadata
+  922  cat .metadata/version.ini 
+  923  exit
+  924  export
+  925  exit
+  926  sudo apt-get install nautilus-open-terminal
+  927  cd ~
+  928  cat .bash*
+  929  ll
+  930  l .bash*
+  931  cat .bashrc
+  932  gconf-editor
+  933  sudo apt-get install nautilus-actions
+  934  nautilus-actions
+  935  exit
+  936  cd data/eLife-JATS/1-formatted/
+  937  ll
+  938  history | grep python
+  939  python -m SimpleHTTPServer
+  940  exit
+  941  cd reporter/
+  942  sbt run
+  943  exit
+  944  cd ldb
+  945  sbt run
+  946  exit
+  947  cd asdf
+  948  exit
+  949  pwd
+  950  exit
+  951  pwd
+  952  exit
+  953  pwd
+  954  subl ~/.bashrc
+  955  exit
+  956  l /opt
+  957  cd /opt
+  958  ll -la
+  959  cd ../
+  960  cat /etc/fstab
+  961  subl ~/.bashrc 
+  962  df -m
+  963  cd ldb
+  964  sbt
+  965  cd ../
+  966  l
+  967  cd ldb
+  968  sbt
+  969  sbt run
+  970  script/gitit.sh 'add column to ldb'
+  971  script/github.sh 
+  972  sbt run
+  973  htop
+  974  cd ../reporter/
+  975  sbt run
+  976  htop
+  977  exit
+  978  cd ../
+  979  mkdir pdf-converter
+  980  rmdir pdf-converter/
+  981  git clone git@github.com:matanster/pdf-converter.git
+  982  cd pdf-converter/
+  983  ll
+  984  ./start.sh 
+  985  node
+  986  sudo apt-get update
+  987  sudo apt-get install nodejs
+  988  node
+  989  node -v
+  990  nodejs 
+  991  node.js -v
+  992  node.js -version
+  993  node.js -h
+  994  node -v
+  995  nodejs -v
+  996  sudo apt-get install npm
+  997  ./start.sh 
+  998  npm install -g nodemon
+  999  sudo npm install -g nodemon
+ 1000  npm install -g nodemon
+ 1001  sudo npm install -g nodemon
+ 1002  ls /usr/local/
+ 1003  ls /usr/local/lib
+ 1004  ls -la /usr/local/lib
+ 1005  npm install -g nodemon
+ 1006  sudo npm install -g nodemon
+ 1007  npm ls
+ 1008  npm install
+ 1009  node
+ 1010  nodejs
+ 1011  whereis nodejs
+ 1012  node
+ 1013  history
+ 1014  sudo apt-get remove nodejs
+ 1015  sudo apt-get remove npm
+ 1016  npm
+ 1017  sudo apt-get remove npm
+ 1018  npm
+ 1019  curl -sL https://deb.nodesource.com/setup | sudo bash -
+ 1020  sudo apt-get install nodejs
+ 1021  npm
+ 1022  npm ls
+ 1023  nodejs -v
+ 1024  node -v
+ 1025  sudo apt-get install build-essential
+ 1026  npm install
+ 1027  npm ls
+ 1028  npm install
+ 1029  npm ls
+ 1030  npm install
+ 1031  npm uninstall
+ 1032  npm
+ 1033  npm uninstall
+ 1034  npm help uninstall
+ 1035  npm help install
+ 1036  npm ls
+ 1037  git status
+ 1038  subl package.json
+ 1039  npm install lodash 
+ 1040  npm install lodasasdfasdfasdf
+ 1041  npm ls
+ 1042  npm install lodash --save
+ 1043  npm install validator --save
+ 1044  npm install socket.io-client --save
+ 1045  npm ls
+ 1046  npm install protobufjs --save
+ 1047  npm ls
+ 1048  npm ls | grep proto
+ 1049  npm install policyfile --save
+ 1050  npm install base64id --save
+ 1051  npm ls
+ 1052  npm uninstall policyfile
+ 1053  npm ls
+ 1054  npm install
+ 1055  npm ls
+ 1056  npm update
+ 1057  npm uninstall
+ 1058  npm uninstall *
+ 1059  npm update
+ 1060  npm ls
+ 1061  npm install
+ 1062  npm ls
+ 1063  ./start.sh 
+ 1064  ll
+ 1065  ./start.sh 
+ 1066  npm install -g nodemon
+ 1067  sudo npm install -g nodemon
+ 1068  ./start.sh 
+ 1069  npm install -g coffee-script
+ 1070  sudo npm install -g coffee-script
+ 1071  git status
+ 1072  cd ../
+ 1073  rm -rf pdf-converter/
+ 1074  history | grep clone
+ 1075  git clone git@github.com:matanster/pdf-converter.git
+ 1076  cd pdf-converter/
+ 1077  ll
+ 1078  npm update
+ 1079  ./start.sh 
+ 1080  l logs
+ 1081  mkdir logs
+ 1082  ./start.sh 
+ 1083  sudo apt-get-repository ppa:coolwanglu/pdf2htmlex
+ 1084  sudo add-apt-repository ppa:coolwanglu/pdf2htmlex
+ 1085  pdf2htmlex
+ 1086  pdf2htmlEX
+ 1087  sudo apt-get pdf2htmlEX
+ 1088  sudo apt-get install pdf2htmlEX
+ 1089  sudo apt-get update
+ 1090  sudo apt-get install pdf2htmlEX
+ 1091  pdf2htmlEX
+ 1092  whereis pdf2htmlEX
+ 1093  ./start.sh 
+ 1094  sudo apt-get install libfontforge-dev
+ 1095  pdf2htmlEX
+ 1096  ./start.sh 
+ 1097  history > setup.txt

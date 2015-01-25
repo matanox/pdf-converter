@@ -312,6 +312,8 @@ init = function() {
   });
 };
 
+exports.init = init
+
 exports.reinit = reinit = function() {
   return exec('src/storage/rdbms/rdbms-recreate.sh', null, function(error, success) {
     if (error) {
