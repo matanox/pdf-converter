@@ -1066,18 +1066,22 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
     inSection = false
   xmlBuilder += xml.signal('body', 'closer')
 
-  #
-  # TODO: implement writeFile callbacks and hook to counter object
-  #       that knows when all writes are done, so that next stage
-  #       in the overall REST pipeline outside node.js knows when all is done
-  #
-
   xmlBuilder = xml.wrapAsJatsArticle(xmlBuilder)
 
-  fs.writeFile(JATSoutPath + context.name + '.xml', xmlBuilder)
+  #
+  # write out key results for downstream semantic engine
+  #
   dataWriter.writeArray context, 'sentences', sentences
-  fs.writeFile(TextoutPath + '/' + context.name, sentences.join('\n'))
   
+  #
+  # write these out synchronously, so http consumer can act on them once it got its http response
+  #
+  # a finer flow scheme would not block but rathar group all write callbacks of a batch
+  # invocation, and allow an http response once they all finished, or provide
+  # notification per processed article
+  #
+  fs.writeFileSync(JATSoutPath + context.name + '.xml', xmlBuilder, doner(err))
+  fs.writeFileSync(TextoutPath + '/' + context.name, sentences.join('\n'))
   logging.logYellow 'written as text and as JATS'
 
   if mode is 'basic'
