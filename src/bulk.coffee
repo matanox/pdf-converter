@@ -20,7 +20,6 @@ nconf.argv().env()
 nconf.defaults 
   host        : "localhost"
   flood       : false
-  parallelism : 2
   maxFiles    : process.argv[2] or 10000  # first command-line argument if any
 
 #host = nconf.get 'host'#
@@ -30,7 +29,7 @@ directory = nconf.get("locations")["pdf-input"]
 host = nconf.get('http-services')["pdfExtractor"]["host"]
 port = nconf.get('http-services')["pdfExtractor"]["port"] or process.env.PORT
 
-exports.go = (res) ->
+exports.go = (res) -> 
   if appInvoked? 
     logging.logGreen """calling self at hostname #{nconf.get('host')}, port #{port}"""
   else
@@ -49,7 +48,11 @@ exports.go = (res) ->
       logging.logRed 'Invalid value for the flood argument'
       #process.exit(0)
       
-  parallelism = nconf.get 'parallelism'
+  #parallelism = nconf.get 'parallelism'
+  numCPUs = require('os').cpus().length;
+  logging.logGreen """#{numCPUs} CPUs detected on host"""
+
+  parallelism = numCPUs - 1
   logging.logPerf """Degree of parallelism: #{parallelism}"""
 
   maxFiles = nconf.get 'maxFiles'
