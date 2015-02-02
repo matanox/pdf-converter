@@ -56,7 +56,7 @@ numCPUs = require('os').cpus().length;
 # Spawn cluster workers
 #
 spawnClusterWorkers = () ->
-  workers = 2
+  workers = numCPUs - 1
   logging.logGreen """#{numCPUs} CPUs detected on host"""
   logging.logGreen """Spawning #{workers} cluster workers..."""
 
