@@ -15,7 +15,7 @@ dataWriter = require '../data/dataWriter'
 #output = require '../output'
 
 nconf = require('nconf')
-HTMLinputPath = nconf.get("locations")["pdf-extraction"]["asHTML"]
+HTMLinputPath = nconf.get("locations")["pdf-source-extraction"]["HTML"]
 
 executable = "pdf2htmlEX"
 executalbeParams = "--embed-css=0 --embed-font=0 --embed-image=0 --embed-javascript=0 --decompose-ligature=1" 

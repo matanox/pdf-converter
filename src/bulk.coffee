@@ -25,9 +25,9 @@ nconf.defaults
 #host = nconf.get 'host'#
 #port = process.env.PORT or 3080
 nconf = require('nconf')
-directory = nconf.get("locations")["pdf-input"]
-host = nconf.get('http-services')["pdfExtractor"]["host"]
-port = nconf.get('http-services')["pdfExtractor"]["port"] or process.env.PORT
+directory = nconf.get("locations")["pdf-source-input"]
+host = nconf.get('http-services')["pdf-sourceExtractor"]["host"]
+port = nconf.get('http-services')["pdf-sourceExtractor"]["port"] or process.env.PORT
 
 exports.go = (res) -> 
   if appInvoked? 

@@ -12,9 +12,9 @@ winston    = require 'winston'
 logging    = require '../util/logging' 
 
 nconf = require('nconf')
-dataOutDir = nconf.get("locations")["pdf-extraction"]["asData"]
-textOutDir = nconf.get("locations")["pdf-extraction"]["asText"]
-JATSOutDir = nconf.get("locations")["pdf-extraction"]["asJATS"]
+dataOutDir = nconf.get("locations")["pdf-source-extraction"]["Data"]
+textOutDir = nconf.get("locations")["pdf-source-extraction"]["Text"]
+JATSOutDir = nconf.get("locations")["pdf-source-extraction"]["JATS"]
 
 
 #

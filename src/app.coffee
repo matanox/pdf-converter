@@ -21,7 +21,7 @@ nconf = require('nconf')
 nconf.argv().env()
 nconf.add('logging-configuration', {type: 'file', file: 'loggingConf.json'})
 nconf.add('other-configuration', {type: 'file', file: '../config/config.json'})
-PDFinputPath = nconf.get("locations")["pdf-input"]
+PDFinputPath = nconf.get("locations")["pdf-source-input"]
 nconf.defaults 
   host: 'localhost'
   env:  'development'
@@ -44,8 +44,8 @@ bulk          = require './bulk'
 logging = require './util/logging' 
 
 # Get-or-default basic networking config
-host = nconf.get('http-services')["pdfExtractor"]["host"]
-port = nconf.get('http-services')["pdfExtractor"]["port"] or process.env.PORT
+host = nconf.get('http-services')["pdf-sourceExtractor"]["host"]
+port = nconf.get('http-services')["pdf-sourceExtractor"]["port"] or process.env.PORT
 env = nconf.get 'env' # previously express app.get
 
 # Node.js cluster modules
@@ -157,6 +157,9 @@ else
 
   app.use errorHandling.errorHandler
   #app.use express.errorHandler() if env is 'production' # TODO: test if this is better than my own.
+
+  app.get '/', (req, res) ->
+    res.send('this is the articlio node.js service...')
 
   app.get '/handleInputFile', require('../src/core/handleInputFile').go
 

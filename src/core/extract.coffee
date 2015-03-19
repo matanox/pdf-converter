@@ -23,8 +23,8 @@ xml              = require '../data/xml'
 nconf            = require('nconf')
 
 nconf = require('nconf')
-JATSoutPath = nconf.get("locations")["pdf-extraction"]["asJATS"]
-TextoutPath = nconf.get("locations")["pdf-extraction"]["asText"]
+JATSoutPath = nconf.get("locations")["pdf-source-extraction"]["JATS"]
+TextoutPath = nconf.get("locations")["pdf-source-extraction"]["Text"]
 
 mode = 'basic'
 refactorMode = true
@@ -1080,7 +1080,7 @@ generateFromHtml = (context, req, input, res ,docLogger, callback) ->
   # invocation, and allow an http response once they all finished, or provide
   # notification per processed article (see async callback here http://nodejs.org/api/fs.html#fs_fs_writefile_filename_data_options_callback)
   #
-  fs.writeFileSync(JATSoutPath + context.name + '.xml', xmlBuilder, doner(err))
+  fs.writeFileSync(JATSoutPath + context.name + '.xml', xmlBuilder) #, doner(err))
   fs.writeFileSync(TextoutPath + '/' + context.name, sentences.join('\n'))
   logging.logYellow 'written as text and as JATS'
 
