@@ -68,7 +68,7 @@ spawnClusterWorkers = () ->
   # In dev mode, self-test on startup, just once
     logging.logGreen """Cluster worker #{worker.id} now sharing on #{address.address}:#{address.port} (pid #{worker.process.pid})"""
     selfMonitor = require('./selfMonitor').start('worker ' + worker.id)    
-    unless env is 'production' 
+    #unless env is 'production' 
       #testFile = 'AzPP5D8IS0GDeeC1hFxs'
       #testFile = 'xt7duLM0Q3Ow2gIBOvED'
       #testFile = 'leZrsgpZQOSCCtS98bsu'
@@ -96,16 +96,16 @@ spawnClusterWorkers = () ->
       #testFile = '../data/pdf/0-input/Scaling down dimensions.pdf'    
       #testFile = '../data/pdf/0-input/Classifying Arguments by Scheme.pdf'    
       #testFile = PDFinputPath + 'global vectors for word representation.pdf'    
-      testFile = PDFinputPath + 'Generate%20Compressed%20Sentences%20with%20Stanford%20Typed%20Dependencies%20towards%20Abstractive%20Summarization.pdf'
+      #testFile = PDFinputPath + 'Generate%20Compressed%20Sentences%20with%20Stanford%20Typed%20Dependencies%20towards%20Abstractive%20Summarization.pdf'
 
 
       # fire self test only for self cluster worker coming to life
-      if firstFork
-        firstFork = false
-        testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID()
-        #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
-        http.get(testUrl, (res) ->
-          logging.logBlue 'Cluster response to its own synthetic client is: ' + res.statusCode)
+      # if firstFork
+      #  firstFork = false
+      #  testUrl = 'http://localhost' + ':' + port + '/handleInputFile?localLocation=' + testFile + '&runID=self-test-on-startup*' + util.simpleGenerateRunID()
+      #  #testUrl = 'http://localhost' + ':' + app.get('port') + '/tokenSync' + '?regenerate=true'
+      #  http.get(testUrl, (res) ->
+      #    logging.logBlue 'Cluster response to its own synthetic client is: ' + res.statusCode)
   ) 
 
   cluster.on('exit', (worker, code, signal) -> 
