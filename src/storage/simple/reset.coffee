@@ -1,5 +1,7 @@
 #
-# Clean up the riak db
+# Note: this is not working for Riak 2.0, advisable not to patch it up.
+#
+# Clean up the riak db 
 #
 # A utility source file, not (currently) invoked by the application
 #
@@ -17,12 +19,12 @@ delete_keys = (bucket, keys) ->
   console.log """looking for keys in bucket #{bucket}"""
   keys.forEach((key) ->
     console.log """bucket '#{bucket}': deleting key #{key}"""
-    delete_key(bucket, key))
+    delete_key(bucket, key, () -> console.log("done")))
 
 clearBucket = (bucket) ->
-  riak.keys(bucket, (err) -> console.dir err)
+  riak.keys(bucket, (err) -> console.dir err if err?)
     .on('keys', (keys) -> delete_keys(bucket, keys))
-    .on('end', () -> null)
+    .on('end', () -> console.log("done"))
     .start()
 
 purge = () ->

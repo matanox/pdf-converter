@@ -62,7 +62,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
         docMeta.storePdfFontsSummary context, localCopy, docLogger
 
         #logging.logRed fileContent.length
-        storage.store context, "pdf", fileContent, docLogger
+        #storage.store context, "pdf", fileContent, docLogger
 
         util.timelog context, "Conversion to html"
         logging.cond "starting the conversion from pdf to html", 'progress'
@@ -120,14 +120,14 @@ exports.go = (context, localCopy, docLogger, req, res) ->
             ###
             util.timelog context, "Conversion to html"
 
-            riak.save('html', hash, name, (error) -> 
+            # riak.save('html', hash, name, (error) -> 
               # should not data write or time log here, as document handling shutdown() does not 
               # wait for this async call to end (waiting for riak would seem nonsensical, i.e. what if 
               # the call hangs? - not worth implementing a generic shutdown waitFor & timeouts mechanism right now.
-              if error?
-                 console.log 'pdfToHtml', """failed storing file hash for #{name} to clustered storage"""
-              else
-            )
+            #  if error?
+            #     console.log 'pdfToHtml', """failed storing file hash for #{name} to clustered storage"""
+            #  else
+            #)
 
             input = 
               'html' : outFolder + '/' + name + ".html"
