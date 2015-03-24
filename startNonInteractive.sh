@@ -1,1 +1,1 @@
-coffee src/app.coffee
+coffee src/app.coffee $1
