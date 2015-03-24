@@ -28,7 +28,7 @@ rdbms    = require '../storage/rdbms/rdbms'
 fs       = require 'fs'
 
 nconf = require('nconf')
-PDFinputPath = nconf.get("locations")["pdf-source-extraction"]["Data"]
+PDFinputPath = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["Data"])
 
 exports.docsDataDir = docsDataDir = PDFinputPath
 

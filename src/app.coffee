@@ -22,8 +22,7 @@ nconf.argv().env().argv()
 nconf.add('logging-configuration', {type: 'file', file: 'loggingConf.json'})
 nconf.add('other-configuration', {type: 'file', file: '../config/config.json'})
 
-dataFilesRoot = nconf.get("dataFilesRoot") or "../data/"
-PDFinputPath = dataFilesRoot + nconf.get("locations")["pdf-source-input"]
+PDFinputPath = (require './storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-input"]) # just for self test
 
 nconf.defaults 
   host: 'localhost'
@@ -120,7 +119,7 @@ spawnClusterWorkers = () ->
 #
 if cluster.isMaster
 
-  logging.logGreen "Data files root: #{dataFilesRoot}"
+  logging.logGreen "Data files root: #{(require './storage/localManagedFiles').dataFilesRoot}"
   logging.logGreen "Local cluster starting in mode #{env}"
   logging.logGreen 'Using hostname ' + nconf.get('host')
   logging.logGreen 'Using port ' + port

@@ -12,9 +12,9 @@ winston    = require 'winston'
 logging    = require '../util/logging' 
 
 nconf = require('nconf')
-dataOutDir = nconf.get("locations")["pdf-source-extraction"]["Data"]
-textOutDir = nconf.get("locations")["pdf-source-extraction"]["Text"]
-JATSOutDir = nconf.get("locations")["pdf-source-extraction"]["JATS"]
+dataOutDir = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["Data"])
+textOutDir = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["Text"])
+JATSOutDir = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["JATS"])
 
 
 #
@@ -55,6 +55,7 @@ exports.go = (req, res) ->
 
     # initialize a context object, to be passed around
     fullFileName = req.query.localLocation
+    console.log("handeInputFile: #{fullFileName}")
     baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1).replace('.pdf', '')
 
     context = 

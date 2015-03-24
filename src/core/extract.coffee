@@ -23,8 +23,8 @@ xml              = require '../data/xml'
 nconf            = require('nconf')
 
 nconf = require('nconf')
-JATSoutPath = nconf.get("locations")["pdf-source-extraction"]["JATS"]
-TextoutPath = nconf.get("locations")["pdf-source-extraction"]["Text"]
+JATSoutPath = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["JATS"])
+TextoutPath = (require '../storage/localManagedFiles').rooted(nconf.get("locations")["pdf-source-extraction"]["Text"])
 
 mode = 'basic'
 refactorMode = true
