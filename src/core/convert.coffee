@@ -130,7 +130,7 @@ exports.go = (context, localCopy, docLogger, req, res) ->
             #)
 
             input = 
-              'html' : outFolder + '/' + name + ".html"
+              'html' : outFolder + '/' + name.replace('.pdf', '') + ".html"
               'css'  : outFolder + '/'
             require('./extract').go(context, req, input, res, docLogger)
             #redirectToExtract "http://localhost/" + "extract" + "?" + "name=" + name + "&" + "docLogger=" + docLogger

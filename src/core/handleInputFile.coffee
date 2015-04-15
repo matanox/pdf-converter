@@ -56,7 +56,8 @@ exports.go = (req, res) ->
     # initialize a context object, to be passed around
     fullFileName = req.query.localLocation
     console.log("handeInputFile: #{fullFileName}")
-    baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1).replace('.pdf', '')
+    #baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1).replace('.pdf', '')
+    baseFileName = fullFileName.substring(fullFileName.lastIndexOf('/')+1)
 
     context = 
       runID : runID
