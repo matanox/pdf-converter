@@ -16,7 +16,7 @@ to a same-named javascript (`.js`) file.
 
 To run the app in development, with auto-restart upon source code change: `./start.sh`
 
-To run all its [mocha](http://visionmedia.github.io/mocha/) tests (served from `/tests`): `./test.sh`
+To run all its [mocha](http://mochajs.org/) tests (served from `/tests`): `./test.sh`
 
 To install: clone this repo and `./install.sh` (and install mocha for testing, if not already installed)
 
